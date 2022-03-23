@@ -1,0 +1,12 @@
+{
+    "name": "qube-dao-contracts",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "author": "30mb1 <steam.30mb1@gmail.com>",
+    "license": "ISC",
+    "dependencies": {
+        "@broxus/contracts": "^1.0.4",
+        "locklift": "^1.5.1"
+    }
+}
