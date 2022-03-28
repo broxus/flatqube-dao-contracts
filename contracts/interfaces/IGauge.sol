@@ -5,6 +5,7 @@ interface IGauge {
     // Events
     event Deposit(address user, uint128 amount);
     event Withdraw(address user, uint128 amount);
+    event SafeWithdraw(address user, uint128 amount);
     event Claim(address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
 
     event RewardDeposit(address token_root, uint128 amount);
@@ -36,6 +37,7 @@ interface IGauge {
 
     struct QubeRewardData {
         RewardTokenData mainData;
+        bool enabled;
         // qube current reward speed
         uint128 rewardPerSecond;
         // qube reward speed for future epoch
@@ -67,13 +69,19 @@ interface IGauge {
         uint32 nonce;
     }
     function finishDeposit(
-        uint64 _nonce,
-        uint128[] vested
+        address user,
+        uint64 _nonce
     ) external;
     function finishWithdraw(
         address user,
         uint128 withdrawAmount,
-        uint128[] vested,
+        address send_gas_to,
+        uint32 nonce
+    ) external;
+    function finishClaim(
+        address user,
+        uint128 qube_amount,
+        uint128[] extra_amounts,
         address send_gas_to,
         uint32 nonce
     ) external;

@@ -33,6 +33,7 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
 
     // for additional tokens owner will be allowed to withdraw all funds after extraFarmEndTime + this
     uint32 withdrawAllLockPeriod;
+    // time when reward what updated last time
     uint32 lastRewardTime;
 
     // deposit token data

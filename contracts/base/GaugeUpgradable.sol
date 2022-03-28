@@ -12,7 +12,7 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
 
 
-contract GaugeUpgradable is GaugeStorage {
+abstract contract GaugeUpgradable is GaugeStorage {
     modifier onlyOwner() {
         require(msg.sender == owner, Errors.NOT_OWNER);
         _;
@@ -61,7 +61,7 @@ contract GaugeUpgradable is GaugeStorage {
     }
 
     function upgradeGaugeAccount(address send_gas_to) external virtual {
-        require (msg.value >= Errors.GAUGE_ACCOUNT_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
+        require (msg.value >= GAUGE_ACCOUNT_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         address gauge_account = getGaugeAccountAddress(msg.sender);

@@ -18,7 +18,7 @@ abstract contract GaugeBase is GaugeUpgradable {
         uint32[] _vesting_period,
         uint32[] _vesting_ratio
     ) internal {
-        for (uint i = 0; i < _reward_token_root[i].length; i++) {
+        for (uint i = 0; i < _reward_token_root.length; i++) {
             ExtraRewardData _reward;
             _reward.mainData.tokenRoot = _reward_token_root[i];
             _reward.mainData.vestingPeriod = _vesting_period[i];
@@ -265,7 +265,7 @@ abstract contract GaugeBase is GaugeUpgradable {
     }
 
     function claimReward(address send_gas_to, uint32 nonce) external {
-        require (msg.value >= MIN_CALL_MSG_VALUE + TOKEN_TRANSFER_VALUE * extraRewards.tokenRoot.length, Errors.LOW_WITHDRAW_MSG_VALUE);
+        require (msg.value >= MIN_CALL_MSG_VALUE + TOKEN_TRANSFER_VALUE * extraRewards.length, Errors.LOW_WITHDRAW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         updateRewardData();
@@ -322,7 +322,7 @@ abstract contract GaugeBase is GaugeUpgradable {
             uint32 lock_time = extraRewards[ids[i]].farmEndTime + extraRewards[ids[i]].mainData.vestingPeriod + withdrawAllLockPeriod;
             require (now >= lock_time, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
 
-            extra_amounts[ids[i]] = extraRewards[ids[i]].mainData.rewardTokenBalance;
+            extra_amounts[ids[i]] = extraRewards[ids[i]].mainData.tokenBalance;
         }
         tvm.rawReserve(_reserve(), 0);
 
@@ -377,139 +377,142 @@ abstract contract GaugeBase is GaugeUpgradable {
         );
     }
 
-    function finishSafeWithdraw(address user, uint128 amount, address send_gas_to) external override {
-        address expectedAddr = getGaugeAccountAddress(user);
-        require (expectedAddr == msg.sender, Errors.NOT_GAUGE_ACCOUNT);
+    function finishSafeWithdraw(address user, uint128 amount, address send_gas_to) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
         depositTokenBalance -= amount;
-
-        uint128[] _reward;
-        uint128[] _reward_debt;
-
         TvmCell tvmcell;
-        emit Withdraw(user, amount, _reward, _reward_debt);
-
+        emit SafeWithdraw(user, amount);
         _transferTokens(depositTokenWallet, amount, user, tvmcell, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function _getMultiplier(uint32 _farmStartTime, uint32 _extraFarmEndTime, uint32 from, uint32 to) internal view returns(uint32) {
+    function _getMultiplier(uint32 _extraFarmStartTime, uint32 _extraFarmEndTime, uint32 from, uint32 to) internal view returns(uint32) {
         require (from <= to, Errors.WRONG_INTERVAL);
-
-        if ((from > _extraFarmEndTime) || (to < _farmStartTime)) {
-            return 0;
-        }
-
-        if (to > _extraFarmEndTime) {
-            to = _extraFarmEndTime;
-        }
-
-        if (from < _farmStartTime) {
-            from = _farmStartTime;
-        }
-
+        // restrict by farm start and end time
+        to = math.min(to, _extraFarmEndTime);
+        from = math.max(from, _extraFarmStartTime);
+        // 'from' cant be bigger then 'to'
+        from = math.min(from, to);
         return to - from;
     }
 
-    function _getRoundEndTime(uint256 round_id) internal view returns (uint32) {
-        bool last_round = round_id == rewardRounds.length - 1;
+    function _getRoundEndTime(uint256 token_id, uint256 round_id) internal view returns (uint32) {
+        bool last_round = round_id == extraRewards[token_id].rewardRounds.length - 1;
         uint32 _extraFarmEndTime;
+        uint32 round_farmEndTime = extraRewards[token_id].farmEndTime;
         if (last_round) {
             // if this round is last, check if end is setup and return it, otherwise return max uint value
-            _extraFarmEndTime = extraFarmEndTime > 0 ? extraFarmEndTime : MAX_UINT32;
+            _extraFarmEndTime = round_farmEndTime > 0 ? round_farmEndTime : MAX_UINT32;
         } else {
             // next round exists, its start time is this round's end time
-            _extraFarmEndTime = rewardRounds[round_id + 1].startTime;
+            _extraFarmEndTime = extraRewards[token_id].rewardRounds[round_id + 1].startTime;
         }
         return _extraFarmEndTime;
     }
 
-    function calculateRewardData() public view returns (uint32 _lastRewardTime, uint256[] _accRewardPerShare, uint128[] _unclaimedReward) {
-        _lastRewardTime = lastRewardTime;
-        _accRewardPerShare = extraRewards.accRewardPerShare;
-        _unclaimedReward = extraRewards.unclaimedReward;
+    function _calculateExtraRewardForToken(uint256 token_id) internal view returns (uint256 _accRewardPerShare) {
+        uint32 _lastRewardTime = lastRewardTime;
+        _accRewardPerShare = extraRewards[token_id].mainData.accRewardPerShare;
 
+        RewardRound[] rewardRounds = extraRewards[token_id].rewardRounds;
         uint32 first_round_start = rewardRounds[0].startTime;
 
-        // reward rounds still not started, nothing to calculate
-        if (now < first_round_start) {
-            _lastRewardTime = now;
-            return (_lastRewardTime, _accRewardPerShare, _unclaimedReward);
+        // reward rounds still not started/update already occurred this block/no deposit balance => nothing to calculate
+        if (now < first_round_start || now == _lastRewardTime || depositTokenBalance == 0) {
+            return (_accRewardPerShare);
         }
 
-        if (now > _lastRewardTime) {
-            // special case - last update occurred before start of 1st round
-            if (_lastRewardTime < first_round_start) {
-                _lastRewardTime = math.min(first_round_start, now);
-            }
+        // special case - last update occurred before start of 1st round
+        if (_lastRewardTime < first_round_start) {
+            _lastRewardTime = math.min(first_round_start, now);
+        }
 
-            for (uint i = rewardRounds.length - 1; i >= 0; i--) {
-                // find reward round when last update occurred
-                if (_lastRewardTime >= rewardRounds[i].startTime) {
-                    // we found reward round when last update occurred, start updating reward from this point
-                    for (uint j = i; j < rewardRounds.length; j++) {
-                        // we didnt reach this round
-                        if (now <= rewardRounds[j].startTime) {
-                            break;
-                        }
-                        uint32 _roundEndTime = _getRoundEndTime(j);
-                        // get multiplier bounded by this reward round
-                        uint32 multiplier = _getMultiplier(rewardRounds[j].startTime, _roundEndTime, _lastRewardTime, now);
-                        uint128[] new_reward;
-                        for (uint k = 0; k < rewardRounds[j].rewardPerSecond.length; k++) {
-                            new_reward.push(rewardRounds[j].rewardPerSecond[k] * multiplier);
-                        }
-                        uint32 new_reward_time;
-                        if (_roundEndTime == extraFarmEndTime) {
-                            new_reward_time = now;
-                        } else {
-                            new_reward_time = math.min(_roundEndTime, now);
-                        }
-
-                        if (depositTokenBalance == 0) {
-                            for (uint k = 0; k < rewardRounds[j].rewardPerSecond.length; k++) {
-                                _unclaimedReward[k] += new_reward[k];
-                            }
-                            _lastRewardTime = new_reward_time;
-                            continue;
-                        }
-
-                        for (uint k = 0; k < rewardRounds[j].rewardPerSecond.length; k++) {
-                            uint256 scaled_reward = uint256(new_reward[k]) * SCALING_FACTOR;
-                            _accRewardPerShare[k] += scaled_reward / depositTokenBalance;
-                        }
-                        _lastRewardTime = new_reward_time;
+        // no need to worry about int overflow, we always break reaching i == 0
+        for (uint i = rewardRounds.length - 1; i >= 0; i--) {
+            // find reward round when last update occurred
+            if (_lastRewardTime >= rewardRounds[i].startTime) {
+                // we found reward round when last update occurred, start updating reward from this point
+                for (uint j = i; j < rewardRounds.length; j++) {
+                    uint32 _roundEndTime = _getRoundEndTime(token_id, j);
+                    // get multiplier bounded by this reward round
+                    uint32 multiplier = _getMultiplier(rewardRounds[j].startTime, _roundEndTime, _lastRewardTime, now);
+                    uint128 new_reward = rewardRounds[j].rewardPerSecond * multiplier;
+                    _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+                    // no need for further steps
+                    if (now <= _roundEndTime) {
+                        break;
                     }
-                    break;
+                    // set _lastRewardTime to end of current round,
+                    // we will continue calculation from this moment on next round iteration
+                    _lastRewardTime = _roundEndTime;
                 }
-                if (i == 0) {
-                    // break to avoid integer overflow
-                    break;
-                }
+                break;
             }
         }
-        return (_lastRewardTime, _accRewardPerShare, _unclaimedReward);
+    }
+
+    function _calculateExtraRewardData() internal view returns (uint256[] _accRewardPerShare) {
+        for (uint i = 0; i < extraRewards.length; i++) {
+            _accRewardPerShare.push(_calculateExtraRewardForToken(i));
+        }
+    }
+
+    function _calculateQubeRewardData() internal view returns (uint256 _accRewardPerShare) {
+        _accRewardPerShare = qubeReward.mainData.accRewardPerShare;
+        uint32 _lastRewardTime = lastRewardTime;
+        // qube rewards are disabled/we already updated on this block/no deposit balance/we reached next epoch end => nothing to calculate
+        if (qubeReward.enabled == false || _lastRewardTime == now || depositTokenBalance == 0 || lastRewardTime >= qubeReward.nextEpochEndTime) {
+            return _accRewardPerShare;
+        }
+        if (_lastRewardTime < qubeReward.nextEpochTime) {
+            // calculate only rewards up to current epoch end
+            uint32 to = math.min(now, qubeReward.nextEpochTime);
+            uint128 new_reward = qubeReward.rewardPerSecond * (to - _lastRewardTime);
+            _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+            if (now <= qubeReward.nextEpochTime) {
+                return _accRewardPerShare;
+            }
+            _lastRewardTime = qubeReward.nextEpochTime;
+        }
+
+        uint32 to = math.min(now, qubeReward.nextEpochEndTime);
+        uint128 new_reward = qubeReward.nextEpochRewardPerSecond * (to - _lastRewardTime);
+        _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+    }
+
+    function calculateRewardData() public view returns (uint32 _lastRewardTime, uint256[] extra_accRewardPerShare, uint256 qube_accRewardPerShare) {
+        extra_accRewardPerShare = _calculateExtraRewardData();
+        qube_accRewardPerShare = _calculateQubeRewardData();
+        _lastRewardTime = now;
     }
 
     function updateRewardData() internal {
-        (uint32 _lastRewardTime, uint256[] _accRewardPerShare, uint128[] _unclaimedReward) = calculateRewardData();
+        (uint32 _lastRewardTime, uint256[] extra_accRewardPerShare, uint256 qube_accRewardPerShare) = calculateRewardData();
+        for (uint i = 0; i < extraRewards.length; i++) {
+            extraRewards[i].mainData.accRewardPerShare = extra_accRewardPerShare[i];
+        }
+        qubeReward.mainData.accRewardPerShare = qube_accRewardPerShare;
         lastRewardTime = _lastRewardTime;
-        extraRewards.accRewardPerShare = _accRewardPerShare;
-        extraRewards.unclaimedReward = _unclaimedReward;
     }
 
 
     function deployGaugeAccount(address gauge_account_owner) internal returns (address) {
         TvmBuilder constructor_params;
 
-        constructor_params.store(gauge_account_version);
-        constructor_params.store(gauge_account_version);
+        constructor_params.store(gauge_account_version); // 32
+        constructor_params.store(gauge_account_version); // 32
 
-        constructor_params.store(uint8(extraRewards.tokenRoot.length));
-        constructor_params.store(qubeReward.vestingPeriod);
-        constructor_params.store(qubeReward.vestingRatio);
-        constructor_params.store(extraRewards.vestingRatio); // ref
-        constructor_params.store(extraRewards.vestingRatio); // ref
+        constructor_params.store(uint8(extraRewards.length)); // 8
+        constructor_params.store(qubeReward.mainData.vestingPeriod); // 32
+        constructor_params.store(qubeReward.mainData.vestingRatio); // 32
+        uint32[] extra_vestingPeriods;
+        uint32[] extra_vestingRatios;
+        for (uint i = 0; i < extraRewards.length; i++) {
+            extra_vestingPeriods.push(extraRewards[i].mainData.vestingPeriod);
+            extra_vestingRatios.push(extraRewards[i].mainData.vestingRatio);
+        }
+        constructor_params.store(extra_vestingPeriods); // 32 + ref
+        constructor_params.store(extra_vestingRatios); // 32 + ref
 
         return new Platform{
             stateInit: _buildInitData(_buildGaugeAccountParams(gauge_account_owner)),
@@ -528,15 +531,17 @@ abstract contract GaugeBase is GaugeUpgradable {
             uint64 _deposit_nonce = slice.decode(uint64);
             PendingDeposit deposit = deposits[_deposit_nonce];
             address gauge_account_addr = deployGaugeAccount(deposit.user);
-            for (uint i = 0; i < extraRewards.tokenRoot.length; i++) {
+            for (uint i = 0; i < extraRewards.length; i++) {
                 // user first deposit? try deploy wallet for him
-                ITokenRoot(extraRewards.tokenRoot[i]).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
+                ITokenRoot(extraRewards[i].mainData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
                     deposit.user,
                     TOKEN_WALLET_DEPLOY_GRAMS_VALUE // deploy grams
                 );
             }
             // try again
-            IGaugeAccount(gauge_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_deposit_nonce, deposit.amount, extraRewards.accRewardPerShare, lastRewardTime, extraFarmEndTime, gauge_account_version);
+//            IGaugeAccount(gauge_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+//                _deposit_nonce, deposit.amount, extraRewards.accRewardPerShare, lastRewardTime, extraFarmEndTime, gauge_account_version
+//            );
 
         }
     }

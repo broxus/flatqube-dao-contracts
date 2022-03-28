@@ -52,17 +52,17 @@ contract Gauge is GaugeBase {
         owner = _owner;
         withdrawAllLockPeriod = _withdrawAllLockPeriod;
 
-        qube_reward.mainData.tokenRoot = _qube;
-        qube_reward.mainData.vestingPeriod = _qubeVestingPeriod;
-        qube_reward.mainData.vestingRatio = _qubeVestingRatio;
+        qubeReward.mainData.tokenRoot = _qube;
+        qubeReward.mainData.vestingPeriod = _qubeVestingPeriod;
+        qubeReward.mainData.vestingRatio = _qubeVestingRatio;
 
         _initRewardData(_extraRewardRounds, _rewardTokenRoot, _vestingPeriod, _vestingRatio);
-        setUpTokenWallets();
+        _setUpTokenWallets();
 
         IFactory(factory).onGaugeDeploy{value: FACTORY_DEPLOY_CALLBACK_VALUE}(
             deploy_nonce, _owner, depositTokenRoot, _extraRewardRounds,
-            _rewardTokenRoot, qubeVestingPeriod, qubeVestingRatio,
-            vestingPeriod, vestingRatio, withdrawAllLockPeriod
+            _rewardTokenRoot, _qubeVestingPeriod, _qubeVestingRatio,
+            _vestingPeriod, _vestingRatio, withdrawAllLockPeriod
         );
     }
 
