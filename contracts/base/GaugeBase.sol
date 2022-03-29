@@ -24,6 +24,9 @@ abstract contract GaugeBase is GaugeUpgradable {
             _reward.mainData.vestingPeriod = _vesting_period[i];
             _reward.mainData.vestingRatio = _vesting_ratio[i];
             _reward.rewardRounds.push(_extraRewardRounds[i]);
+            extraRewards.push(_reward);
+            extraAccRewardPerShare.push(0);
+            extraFarmEndTimes.push(0);
         }
     }
 
@@ -318,8 +321,8 @@ abstract contract GaugeBase is GaugeUpgradable {
         uint128[] extra_amounts = new uint128[](extraRewards.length);
 
         for (uint i = 0; i < ids.length; i++) {
-            require (extraRewards[ids[i]].farmEndTime > 0, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
-            uint32 lock_time = extraRewards[ids[i]].farmEndTime + extraRewards[ids[i]].mainData.vestingPeriod + withdrawAllLockPeriod;
+            require (extraFarmEndTimes[ids[i]] > 0, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
+            uint32 lock_time = extraFarmEndTimes[ids[i]] + extraRewards[ids[i]].mainData.vestingPeriod + withdrawAllLockPeriod;
             require (now >= lock_time, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
 
             extra_amounts[ids[i]] = extraRewards[ids[i]].mainData.tokenBalance;
@@ -338,7 +341,7 @@ abstract contract GaugeBase is GaugeUpgradable {
             require (new_rounds[i].startTime >= now, Errors.BAD_REWARD_ROUNDS_INPUT);
             RewardRound[] _cur_rounds = extraRewards[ids[i]].rewardRounds;
             require (new_rounds[i].startTime >= _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_REWARD_ROUNDS_INPUT);
-            require (extraRewards[ids[i]].farmEndTime == 0, Errors.BAD_REWARD_ROUNDS_INPUT);
+            require (extraFarmEndTimes[ids[i]] == 0, Errors.BAD_REWARD_ROUNDS_INPUT);
 
             extraRewards[ids[i]].rewardRounds.push(new_rounds[i]);
         }
@@ -355,9 +358,9 @@ abstract contract GaugeBase is GaugeUpgradable {
             require (farm_end_times[i] >= now, Errors.BAD_FARM_END_TIME);
             RewardRound[] _cur_rounds = extraRewards[ids[i]].rewardRounds;
             require (farm_end_times[i] >=  _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_FARM_END_TIME);
-            require (extraRewards[ids[i]].farmEndTime == 0, Errors.BAD_REWARD_ROUNDS_INPUT);
+            require (extraFarmEndTimes[ids[i]] == 0, Errors.BAD_REWARD_ROUNDS_INPUT);
 
-            extraRewards[ids[i]].farmEndTime = farm_end_times[i];
+            extraFarmEndTimes[ids[i]] = farm_end_times[i];
         }
 
         tvm.rawReserve(_reserve(), 0);
@@ -399,7 +402,7 @@ abstract contract GaugeBase is GaugeUpgradable {
     function _getRoundEndTime(uint256 token_id, uint256 round_id) internal view returns (uint32) {
         bool last_round = round_id == extraRewards[token_id].rewardRounds.length - 1;
         uint32 _extraFarmEndTime;
-        uint32 round_farmEndTime = extraRewards[token_id].farmEndTime;
+        uint32 round_farmEndTime = extraFarmEndTimes[token_id];
         if (last_round) {
             // if this round is last, check if end is setup and return it, otherwise return max uint value
             _extraFarmEndTime = round_farmEndTime > 0 ? round_farmEndTime : MAX_UINT32;
@@ -412,7 +415,7 @@ abstract contract GaugeBase is GaugeUpgradable {
 
     function _calculateExtraRewardForToken(uint256 token_id) internal view returns (uint256 _accRewardPerShare) {
         uint32 _lastRewardTime = lastRewardTime;
-        _accRewardPerShare = extraRewards[token_id].mainData.accRewardPerShare;
+        _accRewardPerShare = extraAccRewardPerShare[token_id];
 
         RewardRound[] rewardRounds = extraRewards[token_id].rewardRounds;
         uint32 first_round_start = rewardRounds[0].startTime;
@@ -458,7 +461,7 @@ abstract contract GaugeBase is GaugeUpgradable {
     }
 
     function _calculateQubeRewardData() internal view returns (uint256 _accRewardPerShare) {
-        _accRewardPerShare = qubeReward.mainData.accRewardPerShare;
+        _accRewardPerShare = qubeReward.accRewardPerShare;
         uint32 _lastRewardTime = lastRewardTime;
         // qube rewards are disabled/we already updated on this block/no deposit balance/we reached next epoch end => nothing to calculate
         if (qubeReward.enabled == false || _lastRewardTime == now || depositTokenBalance == 0 || lastRewardTime >= qubeReward.nextEpochEndTime) {
@@ -480,18 +483,16 @@ abstract contract GaugeBase is GaugeUpgradable {
         _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
     }
 
-    function calculateRewardData() public view returns (uint32 _lastRewardTime, uint256[] extra_accRewardPerShare, uint256 qube_accRewardPerShare) {
-        extra_accRewardPerShare = _calculateExtraRewardData();
-        qube_accRewardPerShare = _calculateQubeRewardData();
+    function calculateRewardData() public view returns (uint32 _lastRewardTime, uint256[] _extraAccRewardPerShare, uint256 _qubeAccRewardPerShare) {
+        _extraAccRewardPerShare = _calculateExtraRewardData();
+        _qubeAccRewardPerShare = _calculateQubeRewardData();
         _lastRewardTime = now;
     }
 
     function updateRewardData() internal {
-        (uint32 _lastRewardTime, uint256[] extra_accRewardPerShare, uint256 qube_accRewardPerShare) = calculateRewardData();
-        for (uint i = 0; i < extraRewards.length; i++) {
-            extraRewards[i].mainData.accRewardPerShare = extra_accRewardPerShare[i];
-        }
-        qubeReward.mainData.accRewardPerShare = qube_accRewardPerShare;
+        (uint32 _lastRewardTime, uint256[] _extraAccRewardPerShare, uint256 _qubeAccRewardPerShare) = calculateRewardData();
+        extraAccRewardPerShare = _extraAccRewardPerShare;
+        qubeReward.accRewardPerShare = _qubeAccRewardPerShare;
         lastRewardTime = _lastRewardTime;
     }
 

@@ -20,7 +20,6 @@ interface IGauge {
     }
 
     struct RewardTokenData {
-        uint256 accRewardPerShare;
         address tokenRoot;
         address tokenWallet;
         uint128 tokenBalance;
@@ -32,12 +31,12 @@ interface IGauge {
     struct ExtraRewardData {
         RewardTokenData mainData;
         RewardRound[] rewardRounds;
-        uint32 farmEndTime;
     }
 
     struct QubeRewardData {
         RewardTokenData mainData;
         bool enabled;
+        uint256 accRewardPerShare;
         // qube current reward speed
         uint128 rewardPerSecond;
         // qube reward speed for future epoch
