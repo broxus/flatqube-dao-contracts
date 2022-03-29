@@ -400,7 +400,8 @@ abstract contract GaugeBase is GaugeUpgradable {
     }
 
     function _getRoundEndTime(uint256 token_id, uint256 round_id) internal view returns (uint32) {
-        bool last_round = round_id == extraRewards[token_id].rewardRounds.length - 1;
+        RewardRound rounds = extraRewards[token_id].rewardRounds;
+        bool last_round = round_id == rounds.length - 1;
         uint32 _extraFarmEndTime;
         uint32 round_farmEndTime = extraFarmEndTimes[token_id];
         if (last_round) {
@@ -408,7 +409,7 @@ abstract contract GaugeBase is GaugeUpgradable {
             _extraFarmEndTime = round_farmEndTime > 0 ? round_farmEndTime : MAX_UINT32;
         } else {
             // next round exists, its start time is this round's end time
-            _extraFarmEndTime = extraRewards[token_id].rewardRounds[round_id + 1].startTime;
+            _extraFarmEndTime = rounds[round_id + 1].startTime;
         }
         return _extraFarmEndTime;
     }
@@ -463,6 +464,9 @@ abstract contract GaugeBase is GaugeUpgradable {
     function _calculateQubeRewardData() internal view returns (uint256 _accRewardPerShare) {
         _accRewardPerShare = qubeReward.accRewardPerShare;
         uint32 _lastRewardTime = lastRewardTime;
+        // copy to local memory to avoid redundant deserialization of big struct
+        uint32 nextEpochTime = qubeReward.nextEpochTime;
+        uint32 nextEpochEndTime = qubeReward.nextEpochEndTime;
         // qube rewards are disabled/we already updated on this block/no deposit balance/we reached next epoch end => nothing to calculate
         if (qubeReward.enabled == false || _lastRewardTime == now || depositTokenBalance == 0 || lastRewardTime >= qubeReward.nextEpochEndTime) {
             return _accRewardPerShare;

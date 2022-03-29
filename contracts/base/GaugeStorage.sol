@@ -48,7 +48,7 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     QubeRewardData qubeReward;
     // reward params for additional tokens
     ExtraRewardData[] extraRewards;
-    // we store this outside of ExtraRewardData as an array because we need to send it to gaugeAccount in this form
+    // deserializing structure is very expensive, so that we store vars that we send to other contracts separately
     uint256[] extraAccRewardPerShare;
     uint32[] extraFarmEndTimes;
 
