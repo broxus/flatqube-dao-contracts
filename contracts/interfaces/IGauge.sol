@@ -8,33 +8,33 @@ interface IGauge {
     event SafeWithdraw(address user, uint128 amount);
     event Claim(address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
 
-    event RewardDeposit(address token_root, uint128 amount);
-    event ExtraFarmEndSet(uint128[] ids, uint32[] farm_end_times);
+    event RewardDeposit(uint256 id, uint128 amount);
+    event ExtraFarmEndSet(uint256[] ids, uint32[] farm_end_times);
     event GaugeAccountCodeUpdated(uint32 prev_version, uint32 new_version);
     event GaugeUpdated(uint32 prev_version, uint32 new_version);
-    event RewardRoundAdded(uint128[] ids, RewardRound[] reward_rounds);
+    event RewardRoundAdded(uint256[] ids, RewardRound[] reward_rounds);
 
     struct RewardRound {
         uint32 startTime;
         uint128 rewardPerSecond;
     }
 
-    struct RewardTokenData {
+    struct TokenData {
         address tokenRoot;
         address tokenWallet;
         uint128 tokenBalance;
         uint128 tokenBalanceCumulative;
-        uint32 vestingPeriod;
-        uint32 vestingRatio;
     }
 
     struct ExtraRewardData {
-        RewardTokenData mainData;
+        TokenData tokenData;
         RewardRound[] rewardRounds;
     }
 
     struct QubeRewardData {
-        RewardTokenData mainData;
+        TokenData tokenData;
+        uint32 vestingPeriod;
+        uint32 vestingRatio;
         bool enabled;
         uint256 accRewardPerShare;
         // qube current reward speed
@@ -48,6 +48,7 @@ interface IGauge {
         uint32 nextEpochEndTime;
     }
 
+    // TODO: up
     struct Details {
         uint32 lastRewardTime;
         address voteEscrow;

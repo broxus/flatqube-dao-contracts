@@ -20,13 +20,13 @@ abstract contract GaugeBase is GaugeUpgradable {
     ) internal {
         for (uint i = 0; i < _reward_token_root.length; i++) {
             ExtraRewardData _reward;
-            _reward.mainData.tokenRoot = _reward_token_root[i];
-            _reward.mainData.vestingPeriod = _vesting_period[i];
-            _reward.mainData.vestingRatio = _vesting_ratio[i];
+            _reward.tokenData.tokenRoot = _reward_token_root[i];
             _reward.rewardRounds.push(_extraRewardRounds[i]);
             extraRewards.push(_reward);
             extraAccRewardPerShare.push(0);
             extraFarmEndTimes.push(0);
+            extraVestingPeriods.push(_vesting_period[i]);
+            extraVestingRatios.push(_vesting_ratio[i]);
         }
     }
 
@@ -55,13 +55,13 @@ abstract contract GaugeBase is GaugeUpgradable {
         );
 
         // deploy qube wallet
-        ITokenRoot(qubeReward.mainData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.receiveTokenWalletAddress }(
+        ITokenRoot(qubeReward.tokenData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.receiveTokenWalletAddress }(
             address(this), // owner
             TOKEN_WALLET_DEPLOY_GRAMS_VALUE // deploy grams
         );
 
         for (uint i = 0; i < extraRewards.length; i++) {
-            ITokenRoot(extraRewards[i].mainData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.receiveTokenWalletAddress}(
+            ITokenRoot(extraRewards[i].tokenData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.receiveTokenWalletAddress}(
                 address(this), // owner address
                 TOKEN_WALLET_DEPLOY_GRAMS_VALUE // deploy grams
             );
@@ -82,12 +82,12 @@ abstract contract GaugeBase is GaugeUpgradable {
 
         if (msg.sender == depositTokenRoot) {
             depositTokenWallet = wallet;
-        } else if (msg.sender == qubeReward.mainData.tokenRoot) {
-            qubeReward.mainData.tokenWallet = wallet;
+        } else if (msg.sender == qubeReward.tokenData.tokenRoot) {
+            qubeReward.tokenData.tokenWallet = wallet;
         } else {
             for (uint i = 0; i < extraRewards.length; i++) {
-                if (msg.sender == extraRewards[i].mainData.tokenRoot) {
-                    extraRewards[i].mainData.tokenWallet = wallet;
+                if (msg.sender == extraRewards[i].tokenData.tokenRoot) {
+                    extraRewards[i].tokenData.tokenWallet = wallet;
                 }
             }
         }
@@ -130,15 +130,15 @@ abstract contract GaugeBase is GaugeUpgradable {
         bool have_debt;
         // check if we have enough special rewards, emit debt otherwise
         for (uint i = 0; i < extra_amounts.length; i++) {
-            if (extraRewards[i].mainData.tokenBalance < extra_amounts[i]) {
-                _extra_debt[i] = extra_amounts[i] - extraRewards[i].mainData.tokenBalance;
+            if (extraRewards[i].tokenData.tokenBalance < extra_amounts[i]) {
+                _extra_debt[i] = extra_amounts[i] - extraRewards[i].tokenData.tokenBalance;
                 _extra_amount[i] -= _extra_debt[i];
                 have_debt = true;
             }
         }
         // check if we have enough qube, emit debt otherwise
-        if (qubeReward.mainData.tokenBalance < qube_amount) {
-            _qube_debt = qube_amount - qubeReward.mainData.tokenBalance;
+        if (qubeReward.tokenData.tokenBalance < qube_amount) {
+            _qube_debt = qube_amount - qubeReward.tokenData.tokenBalance;
             _qube_amount -= _qube_debt;
             have_debt = true;
         }
@@ -157,14 +157,14 @@ abstract contract GaugeBase is GaugeUpgradable {
         // pay extra rewards
         for (uint i = 0; i < _extra_amount.length; i++) {
             if (_extra_amount[i] > 0) {
-                _transferTokens(extraRewards[i].mainData.tokenWallet, _extra_amount[i], receiver_addr, builder.toCell(), send_gas_to, 0);
-                extraRewards[i].mainData.tokenBalance -= _extra_amount[i];
+                _transferTokens(extraRewards[i].tokenData.tokenWallet, _extra_amount[i], receiver_addr, builder.toCell(), send_gas_to, 0);
+                extraRewards[i].tokenData.tokenBalance -= _extra_amount[i];
             }
         }
         // pay qube rewards
         if (_qube_amount > 0) {
-            _transferTokens(qubeReward.mainData.tokenWallet, _qube_amount, receiver_addr, builder.toCell(), send_gas_to, 0);
-            qubeReward.mainData.tokenBalance -= _qube_amount;
+            _transferTokens(qubeReward.tokenData.tokenWallet, _qube_amount, receiver_addr, builder.toCell(), send_gas_to, 0);
+            qubeReward.tokenData.tokenBalance -= _qube_amount;
         }
         return (_qube_amount, _extra_amount, _qube_debt, _extra_debt);
     }
@@ -229,11 +229,11 @@ abstract contract GaugeBase is GaugeUpgradable {
             );
         } else {
             for (uint i = 0; i < extraRewards.length; i++) {
-                if (msg.sender == extraRewards[i].mainData.tokenWallet) {
-                    extraRewards[i].mainData.tokenBalance += amount;
-                    extraRewards[i].mainData.tokenBalanceCumulative += amount;
+                if (msg.sender == extraRewards[i].tokenData.tokenWallet) {
+                    extraRewards[i].tokenData.tokenBalance += amount;
+                    extraRewards[i].tokenData.tokenBalanceCumulative += amount;
 
-                    emit RewardDeposit(extraRewards[i].mainData.tokenRoot, amount);
+                    emit RewardDeposit(i, amount);
                 }
             }
             remainingGasTo.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
@@ -322,10 +322,10 @@ abstract contract GaugeBase is GaugeUpgradable {
 
         for (uint i = 0; i < ids.length; i++) {
             require (extraFarmEndTimes[ids[i]] > 0, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
-            uint32 lock_time = extraFarmEndTimes[ids[i]] + extraRewards[ids[i]].mainData.vestingPeriod + withdrawAllLockPeriod;
+            uint32 lock_time = extraFarmEndTimes[ids[i]] + extraVestingPeriods[ids[i]] + withdrawAllLockPeriod;
             require (now >= lock_time, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
 
-            extra_amounts[ids[i]] = extraRewards[ids[i]].mainData.tokenBalance;
+            extra_amounts[ids[i]] = extraRewards[ids[i]].tokenData.tokenBalance;
         }
         tvm.rawReserve(_reserve(), 0);
 
@@ -334,7 +334,7 @@ abstract contract GaugeBase is GaugeUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function addRewardRounds(uint128[] ids, RewardRound[] new_rounds, address send_gas_to) external onlyOwner {
+    function addRewardRounds(uint256[] ids, RewardRound[] new_rounds, address send_gas_to) external onlyOwner {
         require (ids.length == new_rounds.length, Errors.BAD_REWARD_ROUNDS_INPUT);
 
         for (uint i = 0; i < ids.length; i++) {
@@ -352,7 +352,7 @@ abstract contract GaugeBase is GaugeUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setExtraFarmEndTime(uint128[] ids, uint32[] farm_end_times, address send_gas_to) external onlyOwner {
+    function setExtraFarmEndTime(uint256[] ids, uint32[] farm_end_times, address send_gas_to) external onlyOwner {
         require (ids.length == farm_end_times.length, Errors.BAD_FARM_END_TIME);
         for (uint i = 0; i < ids.length; i++) {
             require (farm_end_times[i] >= now, Errors.BAD_FARM_END_TIME);
@@ -400,7 +400,7 @@ abstract contract GaugeBase is GaugeUpgradable {
     }
 
     function _getRoundEndTime(uint256 token_id, uint256 round_id) internal view returns (uint32) {
-        RewardRound rounds = extraRewards[token_id].rewardRounds;
+        RewardRound[] rounds = extraRewards[token_id].rewardRounds;
         bool last_round = round_id == rounds.length - 1;
         uint32 _extraFarmEndTime;
         uint32 round_farmEndTime = extraFarmEndTimes[token_id];
@@ -468,21 +468,21 @@ abstract contract GaugeBase is GaugeUpgradable {
         uint32 nextEpochTime = qubeReward.nextEpochTime;
         uint32 nextEpochEndTime = qubeReward.nextEpochEndTime;
         // qube rewards are disabled/we already updated on this block/no deposit balance/we reached next epoch end => nothing to calculate
-        if (qubeReward.enabled == false || _lastRewardTime == now || depositTokenBalance == 0 || lastRewardTime >= qubeReward.nextEpochEndTime) {
+        if (qubeReward.enabled == false || _lastRewardTime == now || depositTokenBalance == 0 || lastRewardTime >= nextEpochEndTime) {
             return _accRewardPerShare;
         }
-        if (_lastRewardTime < qubeReward.nextEpochTime) {
+        if (_lastRewardTime < nextEpochTime) {
             // calculate only rewards up to current epoch end
-            uint32 to = math.min(now, qubeReward.nextEpochTime);
+            uint32 to = math.min(now, nextEpochTime);
             uint128 new_reward = qubeReward.rewardPerSecond * (to - _lastRewardTime);
             _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
-            if (now <= qubeReward.nextEpochTime) {
+            if (now <= nextEpochTime) {
                 return _accRewardPerShare;
             }
-            _lastRewardTime = qubeReward.nextEpochTime;
+            _lastRewardTime = nextEpochTime;
         }
 
-        uint32 to = math.min(now, qubeReward.nextEpochEndTime);
+        uint32 to = math.min(now, nextEpochEndTime);
         uint128 new_reward = qubeReward.nextEpochRewardPerSecond * (to - _lastRewardTime);
         _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
     }
@@ -508,16 +508,12 @@ abstract contract GaugeBase is GaugeUpgradable {
         constructor_params.store(gauge_account_version); // 32
 
         constructor_params.store(uint8(extraRewards.length)); // 8
-        constructor_params.store(qubeReward.mainData.vestingPeriod); // 32
-        constructor_params.store(qubeReward.mainData.vestingRatio); // 32
-        uint32[] extra_vestingPeriods;
-        uint32[] extra_vestingRatios;
-        for (uint i = 0; i < extraRewards.length; i++) {
-            extra_vestingPeriods.push(extraRewards[i].mainData.vestingPeriod);
-            extra_vestingRatios.push(extraRewards[i].mainData.vestingRatio);
-        }
-        constructor_params.store(extra_vestingPeriods); // 32 + ref
-        constructor_params.store(extra_vestingRatios); // 32 + ref
+
+        constructor_params.store(qubeReward.vestingPeriod); // 32
+        constructor_params.store(qubeReward.vestingRatio); // 32
+
+        constructor_params.store(extraVestingPeriods); // 32 + ref
+        constructor_params.store(extraVestingRatios); // 32 + ref
 
         return new Platform{
             stateInit: _buildInitData(_buildGaugeAccountParams(gauge_account_owner)),
@@ -538,7 +534,7 @@ abstract contract GaugeBase is GaugeUpgradable {
             address gauge_account_addr = deployGaugeAccount(deposit.user);
             for (uint i = 0; i < extraRewards.length; i++) {
                 // user first deposit? try deploy wallet for him
-                ITokenRoot(extraRewards[i].mainData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
+                ITokenRoot(extraRewards[i].tokenData.tokenRoot).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
                     deposit.user,
                     TOKEN_WALLET_DEPLOY_GRAMS_VALUE // deploy grams
                 );

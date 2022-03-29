@@ -51,6 +51,8 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     // deserializing structure is very expensive, so that we store vars that we send to other contracts separately
     uint256[] extraAccRewardPerShare;
     uint32[] extraFarmEndTimes;
+    uint32[] extraVestingPeriods;
+    uint32[] extraVestingRatios;
 
     address owner;
 
