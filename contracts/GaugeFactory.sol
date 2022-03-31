@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.58.2;
+pragma ton-solidity ^0.57.1;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
@@ -46,11 +46,11 @@ contract GaugeFactory is IFactory {
 //    // factory deployment seed
     uint128 public static nonce;
 
-    uint8 constant WRONG_PUBKEY = 1001;
-    uint8 constant NOT_OWNER = 1002;
-    uint8 constant NOT_GAUGE = 1003;
-    uint8 constant LOW_MSG_VALUE = 1004;
-    uint8 constant BAD_GAUGE_CONFIG = 1005;
+    uint16 constant WRONG_PUBKEY = 1001;
+    uint16 constant NOT_OWNER = 1002;
+    uint16 constant NOT_GAUGE = 1003;
+    uint16 constant LOW_MSG_VALUE = 1004;
+    uint16 constant BAD_GAUGE_CONFIG = 1005;
     uint128 constant GAUGE_DEPLOY_VALUE = 5 ton;
     uint128 constant GAUGE_UPGRADE_VALUE = 1 ton;
     uint128 constant CONTRACT_MIN_BALANCE = 1 ton;
