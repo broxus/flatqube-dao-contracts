@@ -3,7 +3,7 @@ pragma AbiHeader expire;
 
 import "./interfaces/IGauge.sol";
 import "./interfaces/IFactory.sol";
-import "./base/GaugeBase.sol";
+import "./base/gauge/GaugeBase.sol";
 import "./libraries/Errors.sol";
 
 

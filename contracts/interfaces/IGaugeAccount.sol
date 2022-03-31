@@ -3,7 +3,7 @@ pragma AbiHeader expire;
 
 
 interface IGaugeAccount {
-    event   GaugeAccountUpdated(uint32 prev_version, uint32 new_version);
+    event GaugeAccountUpdated(uint32 prev_version, uint32 new_version);
 
     struct GaugeAccountDetails {
         uint128[] pool_debt;
@@ -14,6 +14,10 @@ interface IGaugeAccount {
         address farmPool;
         address user;
         uint32 current_version;
+    }
+
+    struct RewardData {
+
     }
 
     function getDetails() external responsible view returns (GaugeAccountDetails);
