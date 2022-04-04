@@ -6,9 +6,9 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 
-import "../interfaces/IGaugeAccount.sol";
-import "../interfaces/IGauge.sol";
-import "../interfaces/IFactory.sol";
+import "../../interfaces/IGaugeAccount.sol";
+import "../../interfaces/IGauge.sol";
+import "../../interfaces/IFactory.sol";
 import "../GaugeAccount.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 

@@ -3,10 +3,10 @@ pragma AbiHeader expire;
 
 
 import "./GaugeRewards.sol";
-import "../interfaces/IGaugeAccount.sol";
-import "../libraries/PlatformTypes.sol";
-import "../libraries/Errors.sol";
-import "../GaugeAccount.sol";
+import "../../interfaces/IGaugeAccount.sol";
+import "../../libraries/PlatformTypes.sol";
+import "../../libraries/Errors.sol";
+import "../../GaugeAccount.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
 
