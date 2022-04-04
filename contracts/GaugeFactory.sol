@@ -37,6 +37,9 @@ contract GaugeFactory is IFactory {
     address public owner;
     address public pending_owner;
 
+    uint32 public default_qube_vesting_period;
+    uint32 public default_qube_vesting_ratio;
+
     address public QUBE;
 
     TvmCell public static GaugeAccountCode;
@@ -55,13 +58,16 @@ contract GaugeFactory is IFactory {
     uint128 constant GAUGE_UPGRADE_VALUE = 1 ton;
     uint128 constant CONTRACT_MIN_BALANCE = 1 ton;
 
-    constructor(address _owner, address _qube) public {
+    constructor(address _owner, address _qube, uint32 _qube_vesting_ratio, uint32 _qube_vesting_period) public {
         require (tvm.pubkey() != 0, WRONG_PUBKEY);
         require (tvm.pubkey() == msg.pubkey(), WRONG_PUBKEY);
         tvm.accept();
 
         owner = _owner;
         QUBE = _qube;
+
+        default_qube_vesting_period = _qube_vesting_period;
+        default_qube_vesting_ratio = _qube_vesting_ratio;
     }
 
 
@@ -161,17 +167,64 @@ contract GaugeFactory is IFactory {
         );
     }
 
+
     function deployGauge(
+        address gauge_owner,
+        address depositTokenRoot,
+        IGauge.RewardRound[] extraRewardRounds,
+        address[] rewardTokenRoot,
+        uint32[] vestingPeriod,
+        uint32[] vestingRatio,
+        uint32 withdrawAllLockPeriod
+    ) external {
+        _deployGauge(
+            gauge_owner,
+            depositTokenRoot,
+            default_qube_vesting_period,
+            default_qube_vesting_ratio,
+            extraRewardRounds,
+            rewardTokenRoot,
+            vestingPeriod,
+            vestingRatio,
+            withdrawAllLockPeriod
+        );
+    }
+
+    function deployGaugeOwner(
         address gauge_owner,
         address depositTokenRoot,
         uint32 qubeVestingPeriod,
         uint32 qubeVestingRatio,
-        IGauge.RewardRound[] extraRewardRounds
+        IGauge.RewardRound[] extraRewardRounds,
         address[] rewardTokenRoot,
         uint32[] vestingPeriod,
         uint32[] vestingRatio,
         uint32 withdrawAllLockPeriod
     ) external onlyOwner {
+        _deployGauge(
+            gauge_owner,
+            depositTokenRoot,
+            qubeVestingPeriod,
+            qubeVestingRatio,
+            extraRewardRounds,
+            rewardTokenRoot,
+            vestingPeriod,
+            vestingRatio,
+            withdrawAllLockPeriod
+        );
+    }
+
+    function _deployGauge(
+        address gauge_owner,
+        address depositTokenRoot,
+        uint32 qubeVestingPeriod,
+        uint32 qubeVestingRatio,
+        IGauge.RewardRound[] extraRewardRounds,
+        address[] rewardTokenRoot,
+        uint32[] vestingPeriod,
+        uint32[] vestingRatio,
+        uint32 withdrawAllLockPeriod
+    ) internal {
         tvm.rawReserve(_reserve(), 0);
         require (msg.value >= GAUGE_DEPLOY_VALUE, LOW_MSG_VALUE);
         require (rewardTokenRoot.length >= 1, BAD_GAUGE_CONFIG);
