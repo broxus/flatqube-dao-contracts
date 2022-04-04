@@ -112,4 +112,16 @@ contract Dummy {
             uint256 res = qwe + 123;
         }
     }
+
+    function testIter(uint a, uint c) external returns (uint b) {
+        tvm.accept();
+
+        uint q = 0;
+        for (QubeRewardData val: qube_arr) {
+            q++;
+            if (q == 500) {
+                return 123;
+            }
+        }
+    }
 }

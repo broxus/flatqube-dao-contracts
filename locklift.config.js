@@ -9,7 +9,7 @@ module.exports = {
     local: {
       ton_client: {
         network: {
-          server_address: 'http://localhost/',
+          server_address: 'http://localhost:5000',
         },
       },
       giver: {
