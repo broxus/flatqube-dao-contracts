@@ -68,7 +68,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
     }
 
 
-    function _updateRewardRounds(RewardRound[] rewardRounds) internal view returns (RewardRound[]) {
+    function _getUpdateRewardRounds(RewardRound[] rewardRounds) internal view returns (RewardRound[]) {
         uint32 _lastRewardTime = lastRewardTime;
         uint32 first_round_start = rewardRounds[0].startTime;
 
@@ -109,50 +109,24 @@ abstract contract GaugeRewards is GaugeUpgradable {
         return rewardRounds;
     }
 
-    function _calculateExtraRewardData() internal view returns (ExtraRewardData[] _extraRewards) {
-        _extraRewards = extraRewards;
-        for (uint i = 0; i < _extraRewards.length; i++) {
-            _extraRewards[i].rewardRounds = _updateRewardRounds(_extraRewards[i].rewardRounds);
+    function _getUpdatedExtraRewardRounds() internal view returns (mapping (uint => RewardRound[]) _extraRewardRounds) {
+        for (uint i = 0; i < extraRewards.length; i++) {
+            _extraRewardRounds[i] = _getUpdateRewardRounds(extraRewards[i].rewardRounds);
         }
     }
 
-    function _calculateQubeRewardData() internal view returns (uint256 _accRewardPerShare) {
-        _accRewardPerShare = qubeReward.accRewardPerShare;
-        uint32 _lastRewardTime = lastRewardTime;
-        // copy to local memory to avoid redundant deserialization of big struct
-        uint32 nextEpochTime = qubeReward.nextEpochTime;
-        uint32 nextEpochEndTime = qubeReward.nextEpochEndTime;
-        // qube rewards are disabled/we already updated on this block/no deposit balance/we reached next epoch end => nothing to calculate
-        if (qubeReward.enabled == false || _lastRewardTime == now || depositTokenBalance == 0 || lastRewardTime >= nextEpochEndTime) {
-            return _accRewardPerShare;
-        }
-        if (_lastRewardTime < nextEpochTime) {
-            // calculate only rewards up to current epoch end
-            uint32 to = math.min(now, nextEpochTime);
-            uint128 new_reward = qubeReward.rewardPerSecond * (to - _lastRewardTime);
-            _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
-            if (now <= nextEpochTime) {
-                return _accRewardPerShare;
-            }
-            _lastRewardTime = nextEpochTime;
-        }
-
-        uint32 to = math.min(now, nextEpochEndTime);
-        uint128 new_reward = qubeReward.nextEpochRewardPerSecond * (to - _lastRewardTime);
-        _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
-    }
-
-    function calculateRewardData() public view returns (uint32 _lastRewardTime, uint256[] _extraAccRewardPerShare, uint256 _qubeAccRewardPerShare) {
-
-        _extraAccRewardPerShare = _calculateExtraRewardData();
-        _qubeAccRewardPerShare = _calculateQubeRewardData();
+    function calculateRewardData() public view returns (uint32 _lastRewardTime, mapping (uint => RewardRound[]) _extraRewardRounds, RewardRound[] _qubeRewardRounds) {
+        _extraRewardRounds = _getUpdatedExtraRewardRounds();
+        _qubeRewardRounds = _getUpdateRewardRounds(qubeReward.rewardRounds);
         _lastRewardTime = now;
     }
 
     function updateRewardData() internal {
-        (uint32 _lastRewardTime, uint256[] _extraAccRewardPerShare, uint256 _qubeAccRewardPerShare) = calculateRewardData();
-        extraAccRewardPerShare = _extraAccRewardPerShare;
-        qubeReward.accRewardPerShare = _qubeAccRewardPerShare;
+        (uint32 _lastRewardTime, mapping (uint => RewardRound[]) _extraRewardRounds, RewardRound[] _qubeRewardRounds) = calculateRewardData();
+        for (uint i = 0; i < extraRewards.length; i++) {
+            extraRewards[i].rewardRounds = _extraRewardRounds[i];
+        }
+        qubeReward.rewardRounds = _qubeRewardRounds;
         lastRewardTime = _lastRewardTime;
     }
 }
