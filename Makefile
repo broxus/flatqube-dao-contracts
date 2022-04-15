@@ -1,10 +1,10 @@
 compile:
 	@echo Compiling:
-	npx locklift build --config locklift.config.js
+	npx locklift build
 
 
 file=test/*
 network=local
 tests:
 	@echo Running test $(file) on network $(network):
-	npx locklift test --config locklift.config.js --network $(network) --tests $(file)
+	npx locklift test --network $(network) --tests $(file) --external-build node_modules/broxus-ton-tokens-contracts/build

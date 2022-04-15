@@ -9,7 +9,7 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCa
 import "../../interfaces/IGaugeAccount.sol";
 import "../../interfaces/IGauge.sol";
 import "../../interfaces/IFactory.sol";
-import "../GaugeAccount.sol";
+import "../../GaugeAccount.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
@@ -49,8 +49,6 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     // reward params for additional tokens
     ExtraRewardData[] extraRewards;
     // deserializing structure is very expensive, so that we store vars that we send to other contracts separately
-    uint256[] extraAccRewardPerShare;
-    uint32[] extraFarmEndTimes;
     uint32[] extraVestingPeriods;
     uint32[] extraVestingRatios;
 

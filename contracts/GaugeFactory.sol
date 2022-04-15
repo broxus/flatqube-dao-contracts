@@ -40,7 +40,7 @@ contract GaugeFactory is IFactory {
     uint32 public default_qube_vesting_period;
     uint32 public default_qube_vesting_ratio;
 
-    address public QUBE;
+    address public qube;
 
     TvmCell public static GaugeAccountCode;
     TvmCell public static GaugeCode;
@@ -64,7 +64,7 @@ contract GaugeFactory is IFactory {
         tvm.accept();
 
         owner = _owner;
-        QUBE = _qube;
+        qube = _qube;
 
         default_qube_vesting_period = _qube_vesting_period;
         default_qube_vesting_ratio = _qube_vesting_ratio;
@@ -229,7 +229,7 @@ contract GaugeFactory is IFactory {
         require (msg.value >= GAUGE_DEPLOY_VALUE, LOW_MSG_VALUE);
         require (rewardTokenRoot.length >= 1, BAD_GAUGE_CONFIG);
         // qube should always be part of reward
-        require (rewardTokenRoot[0] == QUBE, BAD_GAUGE_CONFIG);
+        require (rewardTokenRoot[0] == qube, BAD_GAUGE_CONFIG);
 
         TvmCell stateInit = tvm.buildStateInit({
             contr: Gauge,
@@ -252,7 +252,7 @@ contract GaugeFactory is IFactory {
             wid: address(this).wid,
             flag: MsgFlag.ALL_NOT_RESERVED
         }(
-            gauge_owner, QUBE, depositTokenRoot,
+            gauge_owner, qube, depositTokenRoot,
             extraRewardRounds, rewardTokenRoot, qubeVestingPeriod,
             qubeVestingRatio, vestingPeriod, vestingRatio, withdrawAllLockPeriod
         );
@@ -295,6 +295,8 @@ contract GaugeFactory is IFactory {
         );
     }
 
+
+    // TODO: sync
     function upgrade(TvmCell new_code, address send_gas_to) public onlyOwner {
         require (msg.value >= GAUGE_UPGRADE_VALUE, LOW_MSG_VALUE);
 

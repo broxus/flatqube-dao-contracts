@@ -58,36 +58,18 @@ abstract contract GaugeRewards is GaugeUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function _getMultiplier(uint32 _extraFarmStartTime, uint32 _extraFarmEndTime, uint32 from, uint32 to) internal view returns(uint32) {
-        require (from <= to, Errors.WRONG_INTERVAL);
+    function _getMultiplier(uint32 _minFarmTime, uint32 _maxFarmTime, uint32 from, uint32 to) internal view returns(uint32) {
         // restrict by farm start and end time
-        to = math.min(to, _extraFarmEndTime);
-        from = math.max(from, _extraFarmStartTime);
+        to = math.min(to, _maxFarmTime);
+        from = math.max(from, _minFarmTime);
         // 'from' cant be bigger then 'to'
         from = math.min(from, to);
         return to - from;
     }
 
-    function _getRoundEndTime(uint256 token_id, uint256 round_id) internal view returns (uint32) {
-        RewardRound[] rounds = extraRewards[token_id].rewardRounds;
-        bool last_round = round_id == rounds.length - 1;
-        uint32 _extraFarmEndTime;
-        uint32 round_farmEndTime = extraFarmEndTimes[token_id];
-        if (last_round) {
-            // if this round is last, check if end is setup and return it, otherwise return max uint value
-            _extraFarmEndTime = round_farmEndTime > 0 ? round_farmEndTime : MAX_UINT32;
-        } else {
-            // next round exists, its start time is this round's end time
-            _extraFarmEndTime = rounds[round_id + 1].startTime;
-        }
-        return _extraFarmEndTime;
-    }
 
-    function _calculateExtraRewardForToken(uint256 token_id) internal view returns (uint256 _accRewardPerShare) {
+    function _updateRewardRounds(RewardRound[] rewardRounds) internal view returns (RewardRound[]) {
         uint32 _lastRewardTime = lastRewardTime;
-        _accRewardPerShare = extraAccRewardPerShare[token_id];
-
-        RewardRound[] rewardRounds = extraRewards[token_id].rewardRounds;
         uint32 first_round_start = rewardRounds[0].startTime;
 
         // reward rounds still not started/update already occurred this block/no deposit balance => nothing to calculate
@@ -106,11 +88,13 @@ abstract contract GaugeRewards is GaugeUpgradable {
             if (_lastRewardTime >= rewardRounds[i].startTime) {
                 // we found reward round when last update occurred, start updating reward from this point
                 for (uint j = i; j < rewardRounds.length; j++) {
-                    uint32 _roundEndTime = _getRoundEndTime(token_id, j);
+                    RewardRound round = rewardRounds[j];
+                    uint32 _roundEndTime = round.endTime > 0 ? round.endTime : MAX_UINT32;
                     // get multiplier bounded by this reward round
-                    uint32 multiplier = _getMultiplier(rewardRounds[j].startTime, _roundEndTime, _lastRewardTime, now);
-                    uint128 new_reward = rewardRounds[j].rewardPerSecond * multiplier;
-                    _accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+                    uint32 multiplier = _getMultiplier(round.startTime, _roundEndTime, _lastRewardTime, now);
+                    uint128 new_reward = round.rewardPerSecond * multiplier;
+                    round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+                    rewardRounds[j] = round;
                     // no need for further steps
                     if (now <= _roundEndTime) {
                         break;
@@ -122,11 +106,13 @@ abstract contract GaugeRewards is GaugeUpgradable {
                 break;
             }
         }
+        return rewardRounds;
     }
 
-    function _calculateExtraRewardData() internal view returns (uint256[] _accRewardPerShare) {
-        for (uint i = 0; i < extraRewards.length; i++) {
-            _accRewardPerShare.push(_calculateExtraRewardForToken(i));
+    function _calculateExtraRewardData() internal view returns (ExtraRewardData[] _extraRewards) {
+        _extraRewards = extraRewards;
+        for (uint i = 0; i < _extraRewards.length; i++) {
+            _extraRewards[i].rewardRounds = _updateRewardRounds(_extraRewards[i].rewardRounds);
         }
     }
 
@@ -157,6 +143,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
     }
 
     function calculateRewardData() public view returns (uint32 _lastRewardTime, uint256[] _extraAccRewardPerShare, uint256 _qubeAccRewardPerShare) {
+
         _extraAccRewardPerShare = _calculateExtraRewardData();
         _qubeAccRewardPerShare = _calculateQubeRewardData();
         _lastRewardTime = now;

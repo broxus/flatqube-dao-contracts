@@ -16,7 +16,9 @@ interface IGauge {
 
     struct RewardRound {
         uint32 startTime;
+        uint32 endTime;
         uint128 rewardPerSecond;
+        uint256 accRewardPerShare; // snapshot on the moment of round end
     }
 
     struct TokenData {
@@ -33,19 +35,10 @@ interface IGauge {
 
     struct QubeRewardData {
         TokenData tokenData;
+        RewardRound[] rewardRounds;
         uint32 vestingPeriod;
         uint32 vestingRatio;
         bool enabled;
-        uint256 accRewardPerShare;
-        // qube current reward speed
-        uint128 rewardPerSecond;
-        // qube reward speed for future epoch
-        uint128 nextEpochRewardPerSecond;
-        // timestamp when qubeRewardPerSecond will be changed
-        uint32 nextEpochTime;
-        // timestamp when next epoch will end
-        // we need this for case when next epoch wont end in time, so that farm speed will be 0 after that point
-        uint32 nextEpochEndTime;
     }
 
     // TODO: up
