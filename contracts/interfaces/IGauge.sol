@@ -31,6 +31,7 @@ interface IGauge {
     struct ExtraRewardData {
         TokenData tokenData;
         RewardRound[] rewardRounds;
+        bool ended;
     }
 
     struct QubeRewardData {

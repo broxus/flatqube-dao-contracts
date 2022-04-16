@@ -6,14 +6,14 @@ import "./interfaces/IFactory.sol";
 import "./base/gauge/GaugeBase.sol";
 import "./libraries/Errors.sol";
 
-
+// TODO: deploy from platform ?
 contract Gauge is GaugeBase {
     constructor(
         address _owner,
         address _qube,
         address _depositTokenRoot,
-        // array of 1st rounds for every token
-        RewardRound[] _extraRewardRounds,
+        uint32[] _extraRewardsStartTime,
+        uint32[] _extraRewardsRewardPerSecond,
         address[] _rewardTokenRoot,
         uint32 _qubeVestingPeriod,
         uint32 _qubeVestingRatio,
@@ -23,7 +23,8 @@ contract Gauge is GaugeBase {
     ) public {
         // all arrays should have the same dimension
         require (
-            _extraRewardRounds.length == _rewardTokenRoot.length &&
+            _extraRewardsStartTime.length == _extraRewardsRewardPerSecond.length &&
+            _extraRewardsRewardPerSecond.length == _rewardTokenRoot.length &&
             _rewardTokenRoot.length == _extraVestingPeriods.length &&
             _extraVestingPeriods.length == _extraVestingRatios.length,
             Errors.BAD_INPUT
@@ -44,8 +45,8 @@ contract Gauge is GaugeBase {
         }
 
         // check reward rounds
-        for (uint i = 0; i < _extraRewardRounds.length; i++) {
-            require (_extraRewardRounds[i].startTime > now, Errors.BAD_REWARD_ROUNDS_INPUT);
+        for (uint i = 0; i < _extraRewardsStartTime.length; i++) {
+            require (_extraRewardsStartTime[i] > now, Errors.BAD_REWARD_ROUNDS_INPUT);
         }
 
         depositTokenRoot = _depositTokenRoot;
@@ -56,13 +57,19 @@ contract Gauge is GaugeBase {
         qubeReward.vestingPeriod = _qubeVestingPeriod;
         qubeReward.vestingRatio = _qubeVestingRatio;
 
-        _initRewardData(_extraRewardRounds, _rewardTokenRoot, _extraVestingPeriods, _extraVestingRatios);
+        _initRewardData(
+            _extraRewardsStartTime,
+            _extraRewardsRewardPerSecond,
+            _rewardTokenRoot,
+            _extraVestingPeriods,
+            _extraVestingRatios
+        );
         _setUpTokenWallets();
 
         IFactory(factory).onGaugeDeploy{value: FACTORY_DEPLOY_CALLBACK_VALUE}(
-            deploy_nonce, _owner, depositTokenRoot, _extraRewardRounds,
-            _rewardTokenRoot, _qubeVestingPeriod, _qubeVestingRatio,
-            _extraVestingPeriods, _extraVestingRatios, withdrawAllLockPeriod
+            deploy_nonce, _owner, depositTokenRoot, _extraRewardsStartTime, _extraRewardsRewardPerSecond,
+            _rewardTokenRoot, _qubeVestingPeriod, _qubeVestingRatio, _extraVestingPeriods,
+            _extraVestingRatios, withdrawAllLockPeriod
         );
     }
 

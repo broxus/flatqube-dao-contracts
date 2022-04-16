@@ -11,6 +11,7 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
 
 
+// TODO: callbacks with nonce
 abstract contract GaugeBase is GaugeRewards {
     modifier onlyGaugeAccount(address user) {
         address expectedAddr = getGaugeAccountAddress(user);
@@ -196,6 +197,7 @@ abstract contract GaugeBase is GaugeRewards {
             }
 
             updateRewardData();
+            depositTokenBalance += amount;
 
             deposit_nonce += 1;
             deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, remainingGasTo, nonce);
@@ -223,11 +225,23 @@ abstract contract GaugeBase is GaugeRewards {
         }
     }
 
+    // TODO: UP ?
+    function revertDeposit(address user, uint64 _deposit_nonce) external onlyGaugeAccount(user) override {
+        tvm.rawReserve(_reserve(), 0);
+
+        PendingDeposit deposit = deposits[_deposit_nonce];
+        depositTokenBalance -= deposit.amount;
+
+        emit Deposit(deposit.user, deposit.amount);
+        delete deposits[_deposit_nonce];
+
+        deposit.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
     function finishDeposit(address user, uint64 _deposit_nonce) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
         PendingDeposit deposit = deposits[_deposit_nonce];
-        depositTokenBalance += deposit.amount;
 
         emit Deposit(deposit.user, deposit.amount);
         delete deposits[_deposit_nonce];

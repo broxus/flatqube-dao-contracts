@@ -6,20 +6,25 @@ import "./GaugeUpgradable.sol";
 
 abstract contract GaugeRewards is GaugeUpgradable {
     function _initRewardData(
-        RewardRound[] _extraRewardRounds,
-        address[] _reward_token_root,
-        uint32[] _vesting_period,
-        uint32[] _vesting_ratio
+        uint32[] _extraRewardsStartTime,
+        uint32[] _extraRewardsRewardPerSecond,
+        address[] _extra_reward_token_root,
+        uint32[] _extra_vesting_period,
+        uint32[] _extra_vesting_ratio
     ) internal {
-        for (uint i = 0; i < _reward_token_root.length; i++) {
+        for (uint i = 0; i < _extra_reward_token_root.length; i++) {
             ExtraRewardData _reward;
-            _reward.tokenData.tokenRoot = _reward_token_root[i];
-            _reward.rewardRounds.push(_extraRewardRounds[i]);
+            _reward.tokenData.tokenRoot = _extra_reward_token_root[i];
+
+            RewardRound first_round;
+            first_round.startTime = _extraRewardsStartTime[i];
+            first_round.rewardPerSecond = _extraRewardsRewardPerSecond[i];
+
+            _reward.rewardRounds.push(first_round);
             extraRewards.push(_reward);
-            extraAccRewardPerShare.push(0);
-            extraFarmEndTimes.push(0);
-            extraVestingPeriods.push(_vesting_period[i]);
-            extraVestingRatios.push(_vesting_ratio[i]);
+
+            extraVestingPeriods.push(_extra_vesting_period[i]);
+            extraVestingRatios.push(_extra_vesting_ratio[i]);
         }
     }
 
@@ -27,12 +32,17 @@ abstract contract GaugeRewards is GaugeUpgradable {
         require (ids.length == new_rounds.length, Errors.BAD_REWARD_ROUNDS_INPUT);
 
         for (uint i = 0; i < ids.length; i++) {
-            require (new_rounds[i].startTime >= now, Errors.BAD_REWARD_ROUNDS_INPUT);
-            RewardRound[] _cur_rounds = extraRewards[ids[i]].rewardRounds;
-            require (new_rounds[i].startTime >= _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_REWARD_ROUNDS_INPUT);
-            require (extraFarmEndTimes[ids[i]] == 0, Errors.BAD_REWARD_ROUNDS_INPUT);
+            ExtraRewardData _extraRewards = extraRewards[ids[i]];
+            RewardRound[] _cur_rounds = _extraRewards.rewardRounds;
 
-            extraRewards[ids[i]].rewardRounds.push(new_rounds[i]);
+            require (new_rounds[i].startTime >= now, Errors.BAD_REWARD_ROUNDS_INPUT);
+            require (new_rounds[i].startTime > _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_REWARD_ROUNDS_INPUT);
+            require (_extraRewards.ended == false, Errors.BAD_REWARD_ROUNDS_INPUT);
+
+            _cur_rounds[_cur_rounds.length - 1].endTime = new_rounds[i].startTime;
+            _cur_rounds.push(new_rounds[i]);
+
+            extraRewards[ids[i]].rewardRounds = _cur_rounds;
         }
 
         tvm.rawReserve(_reserve(), 0);
@@ -43,13 +53,21 @@ abstract contract GaugeRewards is GaugeUpgradable {
 
     function setExtraFarmEndTime(uint256[] ids, uint32[] farm_end_times, address send_gas_to) external onlyOwner {
         require (ids.length == farm_end_times.length, Errors.BAD_FARM_END_TIME);
-        for (uint i = 0; i < ids.length; i++) {
-            require (farm_end_times[i] >= now, Errors.BAD_FARM_END_TIME);
-            RewardRound[] _cur_rounds = extraRewards[ids[i]].rewardRounds;
-            require (farm_end_times[i] >=  _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_FARM_END_TIME);
-            require (extraFarmEndTimes[ids[i]] == 0, Errors.BAD_REWARD_ROUNDS_INPUT);
 
-            extraFarmEndTimes[ids[i]] = farm_end_times[i];
+        for (uint i = 0; i < ids.length; i++) {
+            ExtraRewardData _extraRewards = extraRewards[ids[i]];
+            RewardRound[] _cur_rounds = _extraRewards.rewardRounds;
+
+            require (farm_end_times[i] >= now, Errors.BAD_FARM_END_TIME);
+            require (farm_end_times[i] > _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_FARM_END_TIME);
+            require (_extraRewards.ended == false, Errors.BAD_REWARD_ROUNDS_INPUT);
+
+            _cur_rounds[_cur_rounds.length - 1].endTime = farm_end_times[i];
+
+            _extraRewards.ended = true;
+            _extraRewards.rewardRounds = _cur_rounds;
+
+            extraRewards[ids[i]] = _extraRewards;
         }
 
         tvm.rawReserve(_reserve(), 0);
@@ -68,65 +86,73 @@ abstract contract GaugeRewards is GaugeUpgradable {
     }
 
 
-    function _getUpdateRewardRounds(RewardRound[] rewardRounds) internal view returns (RewardRound[]) {
+    function _getUpdateRewardRounds(RewardRound[] rewardRounds, uint256 start_sync_idx) internal view returns (RewardRound[], uint256) {
         uint32 _lastRewardTime = lastRewardTime;
         uint32 first_round_start = rewardRounds[0].startTime;
 
         // reward rounds still not started/update already occurred this block/no deposit balance => nothing to calculate
         if (now < first_round_start || now == _lastRewardTime || depositTokenBalance == 0) {
-            return (_accRewardPerShare);
+            return (rewardRounds, start_sync_idx);
         }
 
-        // special case - last update occurred before start of 1st round
-        if (_lastRewardTime < first_round_start) {
-            _lastRewardTime = math.min(first_round_start, now);
-        }
-
-        // no need to worry about int overflow, we always break reaching i == 0
-        for (uint i = rewardRounds.length - 1; i >= 0; i--) {
-            // find reward round when last update occurred
-            if (_lastRewardTime >= rewardRounds[i].startTime) {
-                // we found reward round when last update occurred, start updating reward from this point
-                for (uint j = i; j < rewardRounds.length; j++) {
-                    RewardRound round = rewardRounds[j];
-                    uint32 _roundEndTime = round.endTime > 0 ? round.endTime : MAX_UINT32;
-                    // get multiplier bounded by this reward round
-                    uint32 multiplier = _getMultiplier(round.startTime, _roundEndTime, _lastRewardTime, now);
-                    uint128 new_reward = round.rewardPerSecond * multiplier;
-                    round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
-                    rewardRounds[j] = round;
-                    // no need for further steps
-                    if (now <= _roundEndTime) {
-                        break;
-                    }
-                    // set _lastRewardTime to end of current round,
-                    // we will continue calculation from this moment on next round iteration
-                    _lastRewardTime = _roundEndTime;
-                }
+        uint256 _new_sync_idx;
+        for (uint j = start_sync_idx; j < rewardRounds.length; j++) {
+            RewardRound round = rewardRounds[j];
+            uint32 _roundEndTime = round.endTime > 0 ? round.endTime : MAX_UINT32;
+            // get multiplier bounded by this reward round
+            uint32 multiplier = _getMultiplier(round.startTime, _roundEndTime, _lastRewardTime, now);
+            uint128 new_reward = round.rewardPerSecond * multiplier;
+            round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+            rewardRounds[j] = round;
+            // no need for further steps
+            _new_sync_idx = j;
+            if (now <= _roundEndTime) {
                 break;
             }
+            // set _lastRewardTime to end of current round,
+            // we will continue calculation from this moment on next round iteration
+            _lastRewardTime = _roundEndTime;
         }
-        return rewardRounds;
+
+        return (rewardRounds, _new_sync_idx);
     }
 
-    function _getUpdatedExtraRewardRounds() internal view returns (mapping (uint => RewardRound[]) _extraRewardRounds) {
+    function _getUpdatedExtraRewardRounds() internal view returns (
+        mapping (uint => RewardRound[]) _extraRewardRounds,
+        uint256[] _sync_idx
+    ) {
+        _sync_idx = lastExtraRewardRoundIdx;
         for (uint i = 0; i < extraRewards.length; i++) {
-            _extraRewardRounds[i] = _getUpdateRewardRounds(extraRewards[i].rewardRounds);
+            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdateRewardRounds(extraRewards[i].rewardRounds, lastExtraRewardRoundIdx[i]);
         }
     }
 
-    function calculateRewardData() public view returns (uint32 _lastRewardTime, mapping (uint => RewardRound[]) _extraRewardRounds, RewardRound[] _qubeRewardRounds) {
-        _extraRewardRounds = _getUpdatedExtraRewardRounds();
-        _qubeRewardRounds = _getUpdateRewardRounds(qubeReward.rewardRounds);
+    function calculateRewardData() public view returns (
+        uint32 _lastRewardTime,
+        mapping (uint => RewardRound[]) _extraRewardRounds,
+        uint256[] _extra_sync_idx,
+        RewardRound[] _qubeRewardRounds,
+        uint256 _qube_sync_idx
+    ) {
+        (_extraRewardRounds, _extra_sync_idx) = _getUpdatedExtraRewardRounds();
+        (_qubeRewardRounds, _qube_sync_idx) = _getUpdateRewardRounds(qubeReward.rewardRounds, lastQubeRewardRoundIdx);
         _lastRewardTime = now;
     }
 
     function updateRewardData() internal {
-        (uint32 _lastRewardTime, mapping (uint => RewardRound[]) _extraRewardRounds, RewardRound[] _qubeRewardRounds) = calculateRewardData();
+        (
+            uint32 _lastRewardTime,
+            mapping (uint => RewardRound[]) _extraRewardRounds,
+            uint256[] _extra_sync_idx,
+            RewardRound[] _qubeRewardRounds,
+            uint256 _qube_sync_idx
+        ) = calculateRewardData();
         for (uint i = 0; i < extraRewards.length; i++) {
             extraRewards[i].rewardRounds = _extraRewardRounds[i];
         }
+        lastExtraRewardRoundIdx = _extra_sync_idx;
         qubeReward.rewardRounds = _qubeRewardRounds;
+        lastQubeRewardRoundIdx = _qube_sync_idx;
         lastRewardTime = _lastRewardTime;
     }
 }

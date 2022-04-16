@@ -77,7 +77,7 @@ contract VoteEscrow is IAcceptTokensTransferCallback {
 //    uint128 constant TOKEN_WALLET_DEPLOY_VALUE = 0.5 ton;
 
 
-constructor(address _owner, address _qube) public {
+    constructor(address _owner, address _qube) public {
         require (tvm.pubkey() != 0, WRONG_PUBKEY);
         require (tvm.pubkey() == msg.pubkey(), WRONG_PUBKEY);
         tvm.accept();
@@ -274,6 +274,11 @@ constructor(address _owner, address _qube) public {
 
         // Add callback if nonce >= 0
         deposit.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
+    function burnVeQubes(address user, uint128 expiredVeQubes) external onlyVoteEscrowAccount(user) {
+        updateAverage();
+        veQubeSupply -= expiredVeQubes;
     }
 
     function _addToWhitelist(address gauge) internal {
