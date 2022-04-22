@@ -28,6 +28,31 @@ abstract contract GaugeRewards is GaugeUpgradable {
         }
     }
 
+    // @dev Create new qube reward round with given parameters. Reward per second is set according to len and amount
+    // @param qubes_amount - amount of qubes that should be distributed along new round
+    // @param round_len - length of new round in seconds
+    function _addQubeRewardRound(uint128 qubes_amount, uint128 round_len) internal {
+        RewardRound new_qube_round;
+        RewardRound[] cur_rounds = qubeReward.rewardRounds;
+        RewardRound last_qube_round = cur_rounds[cur_rounds.length - 1];
+        uint32 start_time = now > last_qube_round.endTime ? now : last_qube_round.endTime;
+        new_qube_round.startTime = start_time;
+        new_qube_round.endTime = start_time + round_len;
+        new_qube_round.rewardPerSecond = qubes_amount / round_len;
+
+        if (cur_rounds.length == MAX_STORED_ROUNDS) {
+            for (uint i = 0; i < cur_rounds.length - 1; i++) {
+                cur_rounds[i] = cur_rounds[i + 1];
+            }
+            cur_rounds[cur_rounds.length - 1] = new_qube_round;
+        } else {
+            cur_rounds.push(new_qube_round);
+        }
+
+        // TODO: emit event
+    }
+
+    // @dev accRewardPerShare and endTime params in new_rounds are ignored
     function addRewardRounds(uint256[] ids, RewardRound[] new_rounds, address send_gas_to) external onlyOwner {
         require (ids.length == new_rounds.length, Errors.BAD_REWARD_ROUNDS_INPUT);
 
@@ -39,6 +64,8 @@ abstract contract GaugeRewards is GaugeUpgradable {
             require (new_rounds[i].startTime > _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_REWARD_ROUNDS_INPUT);
             require (_extraRewards.ended == false, Errors.BAD_REWARD_ROUNDS_INPUT);
 
+            new_rounds[i].endTime = 0;
+            new_rounds[i].accRewardPerShare = 0;
             _cur_rounds[_cur_rounds.length - 1].endTime = new_rounds[i].startTime;
             _cur_rounds.push(new_rounds[i]);
 
@@ -102,6 +129,10 @@ abstract contract GaugeRewards is GaugeUpgradable {
             // get multiplier bounded by this reward round
             uint32 multiplier = _getMultiplier(round.startTime, _roundEndTime, _lastRewardTime, now);
             uint128 new_reward = round.rewardPerSecond * multiplier;
+            // if we sync this round 1st time, copy accRewardPerShare
+            if (round.accRewardPerShare == 0 && j > 0) {
+                round.accRewardPerShare = rewardRounds[j - 1].accRewardPerShare;
+            }
             round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
             rewardRounds[j] = round;
             // no need for further steps

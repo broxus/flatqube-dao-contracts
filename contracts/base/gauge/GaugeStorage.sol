@@ -27,6 +27,7 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint128 constant SET_END_TIME_VALUE = 0.5 ton;
     uint128 constant INCREASE_DEBT_VALUE = 0.3 ton;
     uint128 constant CONTRACT_MIN_BALANCE = 1 ton;
+    uint8 constant MAX_STORED_ROUNDS = 10;
 
     uint32 constant MAX_UINT32 = 0xFFFFFFFF;
     uint128 constant SCALING_FACTOR = 1e18;

@@ -211,6 +211,10 @@ abstract contract GaugeBase is GaugeRewards {
                 lastRewardTime,
                 gauge_account_version
             );
+        } else if (msg.sender == qubeReward.tokenData.tokenWallet && sender == voteEscrow) {
+            TvmSlice slice = payload.toSlice();
+            uint32 round_len = slice.decode(uint32);
+            _addQubeRewardRound(amount, round_len);
         } else {
             for (uint i = 0; i < extraRewards.length; i++) {
                 if (msg.sender == extraRewards[i].tokenData.tokenWallet) {

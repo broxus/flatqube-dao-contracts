@@ -17,10 +17,12 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
     // min gas amount required to update this account based on number of stored deposits
     function calculateMinGas() public view responsible returns (uint128 min_gas) {
-        // TODO: sync?
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } activeDeposits * GAS_PER_DEPOSIT;
+        // TODO: up
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } 0.5 ton + activeDeposits * GAS_PER_DEPOSIT;
     }
 
+    // @dev On first update just set lastUpdateTime to `up_to_moment`
+    // If `up_to_moment` <= lastUpdateTime, nothing will be updated
     function _updateVeAverage(uint32 up_to_moment) internal {
         if (up_to_moment <= lastUpdateTime || lastUpdateTime == 0) {
             // already updated on this block or this is our first update
@@ -34,10 +36,10 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         lastUpdateTime = up_to_moment;
     }
 
-
-    // @dev Iterate through all qube deposits and check if any of them is expired
-    // Deposits are ordered by unlock time, so we can stop iteration when reached deposit that is still locked
-    // Iterations are limited by constant to avoid gas overflow
+    // Iterate through all qube deposits and check if any of them is expired
+    // @dev 1. Deposits are ordered by unlock time, so we can stop iteration when reached deposit that is still locked
+    // 2. VE stats updated on every iteration up to deposit unlock time to get maximum precision
+    // 3. Iterations are limited by constant to avoid gas overflow
     // @param sync_time - timestamp. Update deposits up to this moment
     // @return finished - indicate if we checked all required deposits up to this moment
     function _syncDeposits(uint32 sync_time) internal returns (bool finished) {
@@ -105,6 +107,68 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         activeDeposits += 1;
     }
 
+    function processVote(
+        uint32 voteEpoch, mapping (address => uint128) votes, uint32 nonce, address send_gas_to
+    ) external onlyVoteEscrowOrSelf {
+        require (lastEpochVoted < voteEpoch, Errors.ALREADY_VOTED);
+
+        tvm.rawReserve(_reserve(), 0);
+
+        // check gas only at beginning
+        if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
+            // TODO: emit event
+            msg.sender.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            return;
+        }
+
+        bool update_finished = _syncDeposits(now);
+        if (!update_finished) {
+            IVoteEscrowAccount(address(this)).processVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                voteEpoch, votes, nonce, send_gas_to
+            );
+            return;
+        }
+
+        uint128 totalVotes = 0;
+        for ((, uint128 vote_value) : votes) {
+            totalVotes += vote_value;
+        }
+        if (veQubeBalance < totalVotes) {
+            // soft fail, because ve qubes could be burned while syncing
+            // TODO: emit event
+            send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            return;
+        }
+
+        lastEpochVoted = voteEpoch;
+        IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, nonce, send_gas_to);
+    }
+
+    function processWithdraw(uint32 nonce, address send_gas_to) external onlyVoteEscrowOrSelf {
+        tvm.rawReserve(_reserve(), 0);
+
+        // check gas only at beginning
+        if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
+            // TODO: emit event
+            msg.sender.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            return;
+        }
+
+        bool update_finished = _syncDeposits(now);
+        // continue update in next message with same parameters
+        if (!update_finished) {
+            IVoteEscrowAccount(address(this)).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                nonce, send_gas_to
+            );
+            return;
+        }
+
+        qubeBalance -= unlockedQubes;
+        unlockedQubes = 0;
+
+        IVoteEscrow(voteEscrow).finishWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, unlockedQubes, nonce, send_gas_to);
+    }
+
     function processDeposit(
         uint32 deposit_nonce,
         uint128 qube_amount,
@@ -135,7 +199,9 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
     }
 
     // Update averages up to current moment taking into account expired deposits
-    // @dev attach gas >= calculateMinGas(), otherwise call may fail
+    // @dev attach gas >= calculateMinGas(), otherwise call may fail with gas overflow!
+    // Caller contract is responsible for attaching enough gas
+    // This call could be called by anyone, user will only benefit from this
     // @param callback_receiver - address that will receive callback
     // @param callback_nonce - nonce that will be sent with callback
     // @param sync_time - timestamp. Ve stats will be updated up to this moment
@@ -157,7 +223,8 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         );
     }
 
-    // view function for getting actual ve stats without modifying data
+    // view function for getting actual ve stats without modifying data on given time point
+    // @dev If sync_time <= lastUpdateTime, will just return values stored on contract
     function calculateVeAverage(uint32 sync_time) external view returns (uint128 _veQubeAverage, uint128 _veQubeAveragePeriod) {
         _veQubeAverage = veQubeAverage;
         _veQubeAveragePeriod = veQubeAveragePeriod;

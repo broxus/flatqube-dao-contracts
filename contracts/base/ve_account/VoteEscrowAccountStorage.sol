@@ -19,6 +19,8 @@ abstract contract VoteEscrowAccountStorage {
     uint32 veQubeAveragePeriod;
     uint32 lastUpdateTime;
 
+    uint32 lastEpochVoted; // number of last epoch when user voted
+
     struct Checkpoint {
         uint128 lastVeQubeAverage;
         uint32 lastVeQubeAveragePeriod;
