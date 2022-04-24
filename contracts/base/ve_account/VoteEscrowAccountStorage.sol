@@ -21,18 +21,18 @@ abstract contract VoteEscrowAccountStorage {
 
     uint32 lastEpochVoted; // number of last epoch when user voted
 
-    struct Checkpoint {
-        uint128 lastVeQubeAverage;
-        uint32 lastVeQubeAveragePeriod;
-    }
-
-    // gauge address as a key, stats from VE contract as a value
-    // this is updated for gauge every time he syncs with VE on gauge deposit/withdraw/claim
-    mapping (address => Checkpoint) gaugeTVECheckpoints;
-
-    // gauge address as a key, stats from VEAccount (this) contract as a value
-    // this is updated for gauge every time he syncs with VE on gauge deposit/withdraw/claim
-    mapping (address => Checkpoint) gaugeUVECheckpoints;
+//    struct Checkpoint {
+//        uint128 lastVeQubeAverage;
+//        uint32 lastVeQubeAveragePeriod;
+//    }
+//
+//    // gauge address as a key, stats from VE contract as a value
+//    // this is updated for gauge every time he syncs with VE on gauge deposit/withdraw/claim
+//    mapping (address => Checkpoint) gaugeTVECheckpoints;
+//
+//    // gauge address as a key, stats from VEAccount (this) contract as a value
+//    // this is updated for gauge every time he syncs with VE on gauge deposit/withdraw/claim
+//    mapping (address => Checkpoint) gaugeUVECheckpoints;
 
     uint32 activeDeposits; // number of currently locked deposits
 

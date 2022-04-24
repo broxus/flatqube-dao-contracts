@@ -42,6 +42,8 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         TvmSlice params = s.loadRefAsSlice();
         (current_version, ) = params.decode(uint32, uint32);
 
+        IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0.01 ton, flag: MsgFlag.SENDER_PAYS_FEES}(user);
+
         send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 }

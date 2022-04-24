@@ -1,9 +1,13 @@
 pragma ton-solidity ^0.57.1;
+
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 
-abstract contract VoteEscrowStorage {
+import "../../interfaces/IVoteEscrow.sol";
+
+
+abstract contract VoteEscrowStorage is IVoteEscrow {
     uint64 static deploy_nonce;
     TvmCell static platformCode;
     TvmCell static veAccountCode;
@@ -28,7 +32,7 @@ abstract contract VoteEscrowStorage {
     uint128 distributionSupply; // current balance of tokens reserved for distribution
     // Array of distribution amount for all epochs
     // We store only half of all numbers, because distribution function is symmetric
-    uint128[] distribution;
+    uint128[] distributionSchedule;
 
     uint128 veQubeAverage;
     uint32 veQubeAveragePeriod;
@@ -67,18 +71,8 @@ abstract contract VoteEscrowStorage {
     // TODO: make editable
     uint32 constant QUBE_MIN_LOCK_TIME = 7 * 24 * 60 * 60; // 7 days
     uint32 constant QUBE_MAX_LOCK_TIME = 4 * 365 * 60 * 60; // 4 years
-    enum DepositType { userDeposit, whitelist, adminDeposit }
 
     uint128 constant SCALING_FACTOR = 10**18;
-
-    struct PendingDeposit {
-        address user;
-        uint128 amount;
-        uint128 ve_amount;
-        uint32 lock_time;
-        address send_gas_to;
-        uint32 nonce;
-    }
 
     uint32 deposit_nonce;
     mapping (uint32 => PendingDeposit) pending_deposits;

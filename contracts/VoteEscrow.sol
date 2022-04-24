@@ -3,9 +3,6 @@ pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
-import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
 import "./libraries/Errors.sol";
@@ -28,6 +25,7 @@ contract VoteEscrow is VoteEscrowBase {
         _setupTokenWallet();
     }
 
+    // TODO: Up
     function upgrade() external onlyOwner {}
 
     function onCodeUpgrade() private {}

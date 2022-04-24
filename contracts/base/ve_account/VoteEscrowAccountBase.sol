@@ -62,14 +62,13 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
             uint32 deposit_lock_end = cur_deposit.deposit_time + cur_deposit.lock_time;
             // no need to check further, deposits are sorted by lock time
-            if (sync_time <= deposit_lock_end) {
+            if (sync_time < deposit_lock_end) {
                 finished = true;
                 break;
             }
 
             _updateVeAverage(deposit_lock_end);
             // now stats are updated up to deposit_lock_end moment
-            // TODO: emit event?
             veQubeBalance -= cur_deposit.ve_qube_amount;
             expiredVeQubes += cur_deposit.ve_qube_amount;
             unlockedQubes += cur_deposit.qube_amount;
@@ -79,7 +78,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             counter += 1;
             pointer = deposits.next(cur_key);
         }
-        if (finished || activeDeposits == 0) {
+        if (finished) {
             _updateVeAverage(sync_time);
             if (expiredVeQubes > 0) {
                 IVoteEscrow(voteEscrow).burnVeQubes{value: 0.1 ton}(user, expiredVeQubes);
@@ -108,7 +107,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
     }
 
     function processVote(
-        uint32 voteEpoch, mapping (address => uint128) votes, uint32 nonce, address send_gas_to
+        uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
     ) external onlyVoteEscrowOrSelf {
         require (lastEpochVoted < voteEpoch, Errors.ALREADY_VOTED);
 
@@ -116,8 +115,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
         // check gas only at beginning
         if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
-            // TODO: emit event
-            msg.sender.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
             return;
         }
 
@@ -134,9 +132,8 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             totalVotes += vote_value;
         }
         if (veQubeBalance < totalVotes) {
-            // soft fail, because ve qubes could be burned while syncing
-            // TODO: emit event
-            send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            // soft fail, because ve qubes could be burned while syncing, we dont want this to fail
+            IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
             return;
         }
 
@@ -144,13 +141,12 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, nonce, send_gas_to);
     }
 
-    function processWithdraw(uint32 nonce, address send_gas_to) external onlyVoteEscrowOrSelf {
+    function processWithdraw(uint32 call_id, uint32 nonce, address send_gas_to) external onlyVoteEscrowOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
         // check gas only at beginning
         if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
-            // TODO: emit event
-            msg.sender.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            IVoteEscrow(msg.sender).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
             return;
         }
 
@@ -158,15 +154,16 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         // continue update in next message with same parameters
         if (!update_finished) {
             IVoteEscrowAccount(address(this)).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                nonce, send_gas_to
+                call_id, nonce, send_gas_to
             );
             return;
         }
 
         qubeBalance -= unlockedQubes;
+        uint128 _withdraw_qubes = unlockedQubes;
         unlockedQubes = 0;
 
-        IVoteEscrow(voteEscrow).finishWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, unlockedQubes, nonce, send_gas_to);
+        IVoteEscrow(voteEscrow).finishWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _withdraw_qubes, call_id, nonce, send_gas_to);
     }
 
     function processDeposit(
@@ -242,20 +239,16 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
             uint32 deposit_lock_end = cur_deposit.deposit_time + cur_deposit.lock_time;
             // no need to check further, deposits are sorted by lock time
-            if (sync_time <= deposit_lock_end) {
+            if (sync_time < deposit_lock_end) {
                 break;
             }
 
-            if (deposit_lock_end <= _lastUpdateTime || _lastUpdateTime == 0) {
-                // already updated on this block or this is our first update
-                _lastUpdateTime = deposit_lock_end;
-            } else {
-                uint32 last_period = deposit_lock_end - _lastUpdateTime;
-                _veQubeAverage = (_veQubeAverage * _veQubeAveragePeriod + _veQubeBalance * last_period) / (_veQubeAveragePeriod + last_period);
-                _veQubeAveragePeriod += last_period;
-                _lastUpdateTime = deposit_lock_end;
-            }
+            uint32 last_period = deposit_lock_end - _lastUpdateTime;
+            _veQubeAverage = (_veQubeAverage * _veQubeAveragePeriod + _veQubeBalance * last_period) / (_veQubeAveragePeriod + last_period);
+            _veQubeAveragePeriod += last_period;
+            _lastUpdateTime = deposit_lock_end;
             _veQubeBalance -= cur_deposit.ve_qube_amount;
+
             pointer = deposits.next(cur_key);
         }
         if (sync_time > _lastUpdateTime && _lastUpdateTime > 0) {
