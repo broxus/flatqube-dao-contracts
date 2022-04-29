@@ -251,4 +251,15 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         TvmCell empty;
         _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
     }
+
+    function withdrawPaymentTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
+        require (amount <= whitelistPayments, Errors.BAD_INPUT);
+
+        tvm.rawReserve(_reserve(), 0);
+        whitelistPayments -= amount;
+
+        emit PaymentWithdraw(call_id, receiver, amount);
+        TvmCell empty;
+        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+    }
 }

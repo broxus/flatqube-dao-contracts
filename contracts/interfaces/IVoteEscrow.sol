@@ -47,6 +47,11 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         address receiver,
         uint128 amount
     );
+    event PaymentWithdraw(
+        uint32 call_id,
+        address receiver,
+        uint128 amount
+    );
 
     struct PendingDeposit {
         address user;

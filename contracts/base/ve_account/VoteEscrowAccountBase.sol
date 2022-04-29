@@ -211,7 +211,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         // continue update in next message with same parameters
         if (!update_finished) {
             IVoteEscrowAccount(address(this)).getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                callback_receiver, callback_payload
+                callback_receiver, callback_nonce, sync_time
             );
             return;
         }
