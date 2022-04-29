@@ -2,6 +2,12 @@ pragma ton-solidity ^0.57.1;
 
 
 import "./VoteEscrowAccountStorage.sol";
+import "../../libraries/Gas.sol";
+import "../../libraries/Errors.sol";
+import "../../interfaces/IVoteEscrow.sol";
+import "../../interfaces/IVoteEscrowAccount.sol";
+import "../../interfaces/IGaugeAccount.sol";
+
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
@@ -11,14 +17,14 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
     }
 
     modifier onlyVoteEscrowOrSelf() {
-        require(msg.sender == voteEscrow || msg.sender == address(this), NOT_VOTE_ESCROW);
+        require(msg.sender == voteEscrow || msg.sender == address(this), Errors.NOT_VOTE_ESCROW);
         _;
     }
 
     // min gas amount required to update this account based on number of stored deposits
     function calculateMinGas() public view responsible returns (uint128 min_gas) {
         // TODO: up
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } 0.5 ton + activeDeposits * GAS_PER_DEPOSIT;
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } 0.5 ton + activeDeposits * Gas.GAS_PER_DEPOSIT;
     }
 
     // @dev On first update just set lastUpdateTime to `up_to_moment`
@@ -100,7 +106,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         while (deposits[save_key].qube_amount != 0) {
             save_key++;
         }
-        deposits[save_key] = QubeDeposit(qube_amount, ve_amount, lock_time);
+        deposits[save_key] = QubeDeposit(qube_amount, ve_amount, now, lock_time);
         veQubeBalance += ve_amount;
         qubeBalance += qube_amount;
         activeDeposits += 1;
@@ -122,7 +128,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         bool update_finished = _syncDeposits(now);
         if (!update_finished) {
             IVoteEscrowAccount(address(this)).processVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                voteEpoch, votes, nonce, send_gas_to
+                voteEpoch, votes, call_id, nonce, send_gas_to
             );
             return;
         }
@@ -138,7 +144,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         }
 
         lastEpochVoted = voteEpoch;
-        IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, nonce, send_gas_to);
+        IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, call_id, nonce, send_gas_to);
     }
 
     function processWithdraw(uint32 call_id, uint32 nonce, address send_gas_to) external onlyVoteEscrowOrSelf {
@@ -215,7 +221,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             );
             return;
         }
-        IGaugeAccount(callback_receiver).receiveVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        IGaugeAccount(callback_receiver).receiveVeAccAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             callback_nonce, veQubeAverage, veQubeAveragePeriod, lastUpdateTime
         );
     }
@@ -225,8 +231,8 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
     function calculateVeAverage(uint32 sync_time) external view returns (uint128 _veQubeAverage, uint128 _veQubeAveragePeriod) {
         _veQubeAverage = veQubeAverage;
         _veQubeAveragePeriod = veQubeAveragePeriod;
-        _lastUpdateTime = lastUpdateTime;
-        _veQubeBalance = veQubeBalance;
+        uint32 _lastUpdateTime = lastUpdateTime;
+        uint128 _veQubeBalance = veQubeBalance;
 
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
         uint64 cur_key;

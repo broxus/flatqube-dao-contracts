@@ -1,0 +1,19 @@
+pragma ton-solidity ^0.57.1;
+pragma AbiHeader expire;
+
+
+interface IVoteEscrowAccount {
+    function processVote(
+        uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
+    ) external;
+    function processDeposit(
+        uint32 deposit_nonce,
+        uint128 qube_amount,
+        uint128 ve_amount,
+        uint32 lock_time,
+        uint32 nonce,
+        address send_gas_to
+    ) external;
+    function processWithdraw(uint32 call_id, uint32 nonce, address send_gas_to) external;
+    function getVeAverage(address callback_receiver, uint32 callback_nonce, uint32 sync_time) external;
+}

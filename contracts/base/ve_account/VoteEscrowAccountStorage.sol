@@ -45,8 +45,6 @@ abstract contract VoteEscrowAccountStorage {
 
     mapping (uint64 => QubeDeposit) deposits;
 
-    uint128 constant GAS_PER_DEPOSIT = 0.01 ton;
-
-    uint128 constant NOT_VOTE_ESCROW = 1001;
     uint32 constant MAX_ITERATIONS_PER_MSG = 50;
+    uint128 constant CONTRACT_MIN_BALANCE = 0.5 ton;
 }

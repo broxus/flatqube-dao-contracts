@@ -11,16 +11,13 @@ import "./base/vote_escrow/VoteEscrowBase.sol";
 
 contract VoteEscrow is VoteEscrowBase {
     // TODO: up
-    constructor(address _owner, address _qube, uint32 _distribution_interval) public {
-        require (tvm.pubkey() != 0, WRONG_PUBKEY);
-        require (tvm.pubkey() == msg.pubkey(), WRONG_PUBKEY);
+    constructor(address _owner, address _qube) public {
+        require (tvm.pubkey() != 0, Errors.WRONG_PUBKEY);
+        require (tvm.pubkey() == msg.pubkey(), Errors.WRONG_PUBKEY);
         tvm.accept();
 
         owner = _owner;
         qube = _qube;
-
-        // 2 years
-        distributionInterval = _distribution_interval;
 
         _setupTokenWallet();
     }

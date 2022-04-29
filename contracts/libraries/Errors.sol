@@ -3,24 +3,33 @@ pragma ton-solidity ^0.57.1;
 
 library Errors {
     // ERRORS
-    uint16 constant NOT_OWNER = 1001;
-    uint16 constant NOT_ROOT = 1002;
-    uint16 constant NOT_TOKEN_WALLET = 1003;
-    uint16 constant LOW_DEPOSIT_MSG_VALUE = 1004;
-    uint16 constant NOT_GAUGE_ACCOUNT = 1005;
-    uint16 constant EXTERNAL_CALL = 1006;
-    uint16 constant ZERO_AMOUNT_INPUT = 1007;
-    uint16 constant LOW_WITHDRAW_MSG_VALUE = 1008;
-    uint16 constant FARMING_NOT_ENDED = 1009;
-    uint16 constant WRONG_INTERVAL = 1010;
-    uint16 constant BAD_REWARD_TOKENS_INPUT = 1011;
-    uint16 constant NOT_FACTORY = 1012;
-    uint16 constant LOW_CLAIM_REWARD_MSG_VALUE = 1013;
-    uint16 constant BAD_REWARD_ROUNDS_INPUT = 1014;
-    uint16 constant BAD_FARM_END_TIME = 1015;
-    uint16 constant BAD_VESTING_SETUP = 1016;
-    uint16 constant CANT_WITHDRAW_UNCLAIMED_ALL = 1017;
-    uint16 constant LOW_MSG_VALUE = 1018;
-    uint16 constant BAD_DEPOSIT_TOKEN = 1019;
-    uint16 constant BAD_INPUT = 1020;
+    // COMMON
+    uint16 constant NOT_OWNER = 1000;
+    uint16 constant NOT_ACTIVE = 1001;
+    uint16 constant NOT_EMERGENCY = 1002;
+    uint16 constant WRONG_PUBKEY = 1003;
+    uint16 constant LOW_MSG_VALUE = 1004;
+    uint16 constant BAD_INPUT = 1005;
+    uint16 constant NOT_TOKEN_WALLET = 1006;
+
+    // VOTE ESCROW
+    uint16 constant NOT_VOTE_ESCROW_ACCOUNT = 2000;
+    uint16 constant CANT_BE_INITIALIZED = 2001;
+    uint16 constant ALREADY_INITIALIZED = 2002;
+    uint16 constant NOT_INITIALIZED = 2003;
+    uint16 constant LAST_EPOCH = 2004;
+    uint16 constant TOO_EARLY_FOR_VOTING = 2005;
+    uint16 constant VOTING_ALREADY_STARTED = 2006;
+    uint16 constant VOTING_NOT_STARTED = 2007;
+    uint16 constant VOTING_ENDED = 2008;
+    uint16 constant GAUGE_NOT_WHITELISTED = 2009;
+    uint16 constant MAX_GAUGES_PER_VOTE = 2010;
+    uint16 constant VOTING_NOT_ENDED = 2011;
+
+    // VE ACCOUNT
+    uint16 constant NOT_VOTE_ESCROW = 3000;
+    uint16 constant ALREADY_VOTED = 3001;
+    uint16 constant BAD_SENDER = 3002;
+
+
 }

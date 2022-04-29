@@ -8,6 +8,10 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
 import "./VoteEscrowStorage.sol";
 import "../../interfaces/IVoteEscrowCallbackReceiver.sol";
+import "../../libraries/Gas.sol";
+import "../../libraries/PlatformTypes.sol";
+import "../../libraries/Errors.sol";
+
 
 
 abstract contract VoteEscrowHelpers is VoteEscrowStorage {
@@ -20,7 +24,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     ) external pure returns (TvmCell payload){
         TvmBuilder builder;
         builder.store(deposit_owner, lock_time);
-        return _encodeTokenTransferPayload(0, nonce, call_id, builder.toCell());
+        return encodeTokenTransferPayload(0, nonce, call_id, builder.toCell());
     }
 
     function decodeDepositPayload(
@@ -39,7 +43,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     ) external pure returns (TvmCell payload){
         TvmBuilder builder;
         builder.store(whitelist_addr);
-        return _encodeTokenTransferPayload(1, nonce, call_id, builder.toCell());
+        return encodeTokenTransferPayload(1, nonce, call_id, builder.toCell());
     }
 
     function decodeWhitelistPayload(
@@ -53,7 +57,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     // @param call_id - will be used in result event, helper for front and indexer
     function encodeDistributionPayload(uint32 nonce, uint32 call_id) external pure returns (TvmCell payload) {
         TvmCell empty;
-        return _encodeTokenTransferPayload(2, nonce, call_id, empty);
+        return encodeTokenTransferPayload(2, nonce, call_id, empty);
     }
 
     function encodeTokenTransferPayload(
@@ -67,7 +71,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         return builder.toCell();
     }
 
-    function decodeTokenTransferPayload(TvmCell payload) public returns (
+    function decodeTokenTransferPayload(TvmCell payload) public pure returns (
         uint8 deposit_type, uint32 nonce, uint32 call_id, TvmCell additional_payload, bool correct
     ){
         // check if payload assembled correctly
@@ -82,19 +86,19 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         }
     }
 
-    function _addToWhitelist(uint32 call_id, address gauge) internal {
+    function _addToWhitelist(address gauge, uint32 call_id) internal {
         gaugesNum += 1;
         whitelistedGauges[gauge] = true;
         emit GaugeWhitelist(call_id, gauge);
     }
 
-    function _removeFromWhitelist(uint32 call_id, address gauge) internal {
+    function _removeFromWhitelist(address gauge, uint32 call_id) internal {
         gaugesNum -= 1;
         whitelistedGauges[gauge] = false;
         emit GaugeRemoveWhitelist(call_id, gauge);
     }
 
-    function _sendCallbackOrGas(address callback_receiver, uint32 nonce, bool success, address send_gas_to) internal {
+    function _sendCallbackOrGas(address callback_receiver, uint32 nonce, bool success, address send_gas_to) internal pure {
         if (nonce > 0) {
             if (success) {
                 IVoteEscrowCallbackReceiver(
@@ -113,17 +117,18 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     // TODO: add value
     function _transferTokens(
         address token_wallet, uint128 amount, address receiver, TvmCell payload, address send_gas_to, uint16 flag
-    ) internal {
+    ) internal pure {
         uint128 value;
         if (flag != MsgFlag.ALL_NOT_RESERVED) {
-            value = TOKEN_TRANSFER_VALUE;
+            value = Gas.TOKEN_TRANSFER_VALUE;
         }
         bool notify = false;
         // notify = true if payload is non-empty
-        if (payload.bits() > 0) {
+        TvmSlice slice = payload.toSlice();
+        if (slice.bits() > 0 || slice.refs() > 0) {
             notify = true;
         }
-        ITokenWallet(qubeWallet).transfer{value: value, flag: flag}(
+        ITokenWallet(token_wallet).transfer{value: value, flag: flag}(
             amount,
             receiver,
             0,
@@ -133,7 +138,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         );
     }
 
-    function _makeCell(uint32 nonce) internal {
+    function _makeCell(uint32 nonce) internal pure returns (TvmCell) {
         TvmBuilder builder;
         if (nonce > 0) {
             builder.store(nonce);
@@ -142,10 +147,10 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     }
 
 
-    function _setupTokenWallet() internal {
-        ITokenRoot(qube).deployWallet{value: TOKEN_WALLET_DEPLOY_VALUE, callback: VoteEscrow.receiveTokenWalletAddress }(
+    function _setupTokenWallet() internal view {
+        ITokenRoot(qube).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IVoteEscrow.receiveTokenWalletAddress }(
             address(this), // owner
-            TOKEN_WALLET_DEPLOY_GRAMS_VALUE / 2 // deploy grams
+            Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
         );
     }
 
@@ -155,7 +160,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         );
     }
 
-    function _buildVoteEscrowAccountParams(address user) internal view returns (TvmCell) {
+    function _buildVoteEscrowAccountParams(address user) internal pure returns (TvmCell) {
         TvmBuilder builder;
         builder.store(user);
         return builder.toCell();
@@ -190,9 +195,13 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _;
     }
 
+    function _reserve() internal pure returns (uint128) {
+        return math.max(address(this).balance - msg.value, CONTRACT_MIN_BALANCE);
+    }
+
     modifier onlyVoteEscrowAccount(address user) {
         address ve_account_addr = getVoteEscrowAccountAddress(user);
-        require (msg.sender == ve_account_addr, NOT_VOTE_ESCROW_ACCOUNT);
+        require (msg.sender == ve_account_addr, Errors.NOT_VOTE_ESCROW_ACCOUNT);
         _;
     }
 }

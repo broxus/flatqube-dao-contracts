@@ -9,7 +9,7 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
     constructor() public { revert(); }
 
 
-    function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external onlyVoteEscrow {
+    function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external onlyVoteEscrowOrSelf {
         if (new_version == current_version) {
             tvm.rawReserve(_reserve(), 0);
             send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
@@ -18,12 +18,12 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
 
         // TODO: upgrade
 
-        // set code after complete this method
-        //        tvm.setcode(new_code);
-        //
-        //        // run onCodeUpgrade from new code
-        //        tvm.setCurrentCode(new_code);
-        //        onCodeUpgrade(main_builder.toCell());
+//         set code after complete this method
+        tvm.setcode(new_code);
+
+        // run onCodeUpgrade from new code
+        tvm.setCurrentCode(new_code);
+//        onCodeUpgrade(main_builder.toCell());
     }
 
     function onCodeUpgrade(TvmCell upgrade_data) private {

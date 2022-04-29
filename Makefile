@@ -7,4 +7,4 @@ file=test/*
 network=local
 tests:
 	@echo Running test $(file) on network $(network):
-	npx locklift test --network $(network) --tests $(file) --external-build node_modules/broxus-ton-tokens-contracts/build
+	npx locklift test --network $(network) --test $(file) --external-build node_modules/broxus-ton-tokens-contracts/build

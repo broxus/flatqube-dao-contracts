@@ -16,9 +16,6 @@ interface IGaugeAccount {
         uint32 current_version;
     }
 
-    struct RewardData {
-
-    }
 
     function getDetails() external responsible view returns (GaugeAccountDetails);
     function processDeposit(uint64 nonce, uint128 _amount, uint256[] _accTonPerShare, uint32 poolLastRewardTime, uint32 farmEndTime, uint32 code_version) external;
@@ -26,5 +23,7 @@ interface IGaugeAccount {
     function processSafeWithdraw(address send_gas_to, uint32 code_version) external;
     function processClaimReward(uint256[] _accTonShare, uint32 poolLastRewardTime, uint32 farmEndTime, address send_gas_to, uint32 nonce, uint32 code_version) external;
     function increasePoolDebt(uint128[] _pool_debt, address send_gas_to, uint32 code_version) external;
+    function receiveVeAverage(uint32 nonce, uint128 veQubeAverage, uint32 veQubeAveragePeriod) external;
+    function receiveVeAccAverage(uint32 callback_nonce, uint128 veQubeAverage, uint32 veQubeAveragePeriod, uint32 lastUpdateTime) external;
     function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
 }

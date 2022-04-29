@@ -6,11 +6,11 @@ import "./VoteEscrowHelpers.sol";
 
 
 abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
-    function onVoteEscrowAccountDeploy(address user) external onlyVoteEscrowAccount(user) {
+    function onVoteEscrowAccountDeploy(address user) external override onlyVoteEscrowAccount(user) {
         emit VoteEscrowAccountDeploy(user);
     }
 
-    function deployVoteEscrowAccount(address user) public returns (address) {
+    function deployVoteEscrowAccount(address user) public view returns (address) {
         TvmBuilder constructor_params;
 
         constructor_params.store(ve_account_version); // 32

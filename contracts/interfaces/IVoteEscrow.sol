@@ -21,6 +21,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     event VotingStart(uint32 call_id, uint32 start, uint32 end);
     event Vote(uint32 call_id, address user, mapping (address => uint128) votes);
     event VoteRevert(uint32 call_id, address user);
+    event NewQubeLockLimits(uint32 call_id, uint32 new_min, uint32 new_max);
     event VotingEnd(
         uint32 call_id,
         mapping (address => uint128) votes,
@@ -52,6 +53,16 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         address receiver,
         uint128 amount
     );
+    event NewVotingParams(
+        uint32 call_id,
+        uint32 epochTime,
+        uint32 timeBeforeVoting,
+        uint32 votingTime,
+        uint32 gaugeMinVotesRatio,
+        uint32 gaugeMaxVotesRatio,
+        uint8 gaugeMaxDowntime,
+        uint32 maxGaugesPerVote
+    );
 
     struct PendingDeposit {
         address user;
@@ -73,4 +84,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     function burnVeQubes(address user, uint128 expiredVeQubes) external;
     function finishVote(address user, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
+    function receiveTokenWalletAddress(address wallet) external;
+    function distributeEpochQubes(uint128 bonus_treasury_votes, uint32 call_id, address send_gas_to) external;
+    function onVoteEscrowAccountDeploy(address user) external;
 }

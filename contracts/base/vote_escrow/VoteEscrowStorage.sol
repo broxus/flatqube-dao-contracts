@@ -11,8 +11,8 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint64 static deploy_nonce;
     TvmCell static platformCode;
     TvmCell static veAccountCode;
-    uint32 static ve_account_version;
-    uint32 static ve_version;
+    uint32 ve_account_version;
+    uint32 ve_version;
 
     address owner;
     address qube;
@@ -68,15 +68,13 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     // amount of QUBEs available for withdraw as payments for whitelist
     uint128 whitelistPayments;
 
-    // TODO: make editable
-    uint32 constant QUBE_MIN_LOCK_TIME = 7 * 24 * 60 * 60; // 7 days
-    uint32 constant QUBE_MAX_LOCK_TIME = 4 * 365 * 60 * 60; // 4 years
+    uint32 qubeMinLockTime = 7 * 24 * 60 * 60; // 7 days
+    uint32 qubeMaxLockTime = 4 * 365 * 60 * 60; // 4 years
 
     uint128 constant SCALING_FACTOR = 10**18;
 
     uint32 deposit_nonce;
     mapping (uint32 => PendingDeposit) pending_deposits;
 
-    uint128 constant MIN_DEPOSIT_VALUE = 1 ton; // adjust dynamically
-    uint128 constant TOKEN_WALLET_DEPLOY_VALUE = 0.5 ton;
+    uint128 constant CONTRACT_MIN_BALANCE = 0.5 ton;
 }

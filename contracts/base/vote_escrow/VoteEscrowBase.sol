@@ -8,24 +8,25 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
-import "./libraries/Errors.sol";
+import "../../libraries/Errors.sol";
 import "./VoteEscrowVoting.sol";
+import "../../interfaces/IGaugeAccount.sol";
 
 
 abstract contract VoteEscrowBase is VoteEscrowVoting {
-    function receiveTokenWalletAddress(address wallet) external {
+    function receiveTokenWalletAddress(address wallet) external override {
         require (msg.sender == qube);
         qubeWallet = wallet;
     }
 
     function onAcceptTokensTransfer(
-        address tokenRoot,
+        address,
         uint128 amount,
         address sender,
-        address senderWallet,
+        address,
         address remainingGasTo,
         TvmCell payload
-    ) external {
+    ) external override {
         require (msg.sender == qubeWallet, Errors.NOT_TOKEN_WALLET);
         tvm.rawReserve(_reserve(), 0);
 
@@ -38,37 +39,37 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         ) = decodeTokenTransferPayload(payload);
 
         // common cases
-        bool revert = !correct || paused || !initialized || emergency || msg.value < Gas.MIN_DEPOSIT_VALUE || uint8(deposit_type) > 2;
+        bool exception = !correct || paused || !initialized || emergency || msg.value < Gas.MIN_MSG_VALUE || uint8(deposit_type) > 2;
         // specific cases
-        if (deposit_type == DepositType.userDeposit) {
+        if (deposit_type == uint8(DepositType.userDeposit)) {
             (address deposit_owner, uint32 lock_time) = decodeDepositPayload(additional_payload);
-            revert = revert || lock_time < QUBE_MIN_LOCK_TIME || lock_time > QUBE_MAX_LOCK_TIME;
+            exception = exception || lock_time < qubeMinLockTime || lock_time > qubeMaxLockTime;
             sender = deposit_owner;
-            if (!revert) {
+            if (!exception) {
                 // deposit logic
-                uint128 ve_minted = calculateVeMint(amount);
+                uint128 ve_minted = calculateVeMint(amount, lock_time);
                 deposit_nonce += 1;
                 pending_deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, ve_minted, lock_time, remainingGasTo, nonce, call_id);
 
                 address ve_account_addr = getVoteEscrowAccountAddress(deposit_owner);
                 IVoteEscrowAccount(ve_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                    deposit_nonce, amount, ve_minted, lock_time, remainingGasTo, nonce
+                    deposit_nonce, amount, ve_minted, lock_time, nonce, remainingGasTo
                 );
                 return;
             }
-        } else if (deposit_type == DepositType.whitelist) {
+        } else if (deposit_type == uint8(DepositType.whitelist)) {
             address whitelist_addr = decodeWhitelistPayload(additional_payload);
-            revert = revert || whitelistedGauges[whitelist_addr] == true || amount < whitelistPrice;
-            if (!revert) {
+            exception = exception || whitelistedGauges[whitelist_addr] == true || amount < gaugeWhitelistPrice;
+            if (!exception) {
                 // whitelist address
                 qubeBalance += amount;
                 whitelistPayments += amount;
-                _addToWhitelist(call_id, whitelist_address);
+                _addToWhitelist(whitelist_addr, call_id);
                 _sendCallbackOrGas(sender, nonce, true, remainingGasTo);
                 return;
             }
-        } else if (deposit_type == DepositType.adminDeposit) {
-            if (!revert) {
+        } else if (deposit_type == uint8(DepositType.adminDeposit)) {
+            if (!exception) {
                 emit DistributionSupplyIncrease(call_id, amount);
                 // tokens for distribution
                 qubeBalance += amount;
@@ -78,13 +79,13 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
             }
         }
 
-        if (revert) {
+        if (exception) {
             emit DepositRevert(call_id, sender, amount);
             _transferTokens(qubeWallet, amount, sender, _makeCell(nonce), remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
         }
     }
 
-    function revertDeposit(address user, uint32 deposit_nonce) external onlyVoteEscrowAccount(user) {
+    function revertDeposit(address user, uint32 deposit_nonce) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
         PendingDeposit deposit = pending_deposits[deposit_nonce];
         delete pending_deposits[deposit_nonce];
@@ -95,7 +96,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         );
     }
 
-    function finishDeposit(address user, uint32 deposit_nonce) external onlyVoteEscrowAccount(user) {
+    function finishDeposit(address user, uint32 deposit_nonce) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
         PendingDeposit deposit = pending_deposits[deposit_nonce];
         delete pending_deposits[deposit_nonce];
@@ -108,9 +109,9 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         _sendCallbackOrGas(user, deposit.nonce, true, deposit.send_gas_to);
     }
 
-    function withdraw(uint32 call_id, uint32 nonce, address send_gas_to) external onlyActive {
+    function withdraw(uint32 call_id, uint32 nonce, address send_gas_to) external view onlyActive {
         // TODO: gas
-        require (msg.value >= Gas.MIN_CALL_MSG_VALUE, Errors.LOW_WITHDRAW_MSG_VALUE);
+        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         address ve_acc_addr = getVoteEscrowAccountAddress(msg.sender);
@@ -119,16 +120,16 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
 
     function revertWithdraw(
         address user, uint32 call_id, uint32 nonce, address send_gas_to
-    ) external onlyVoteEscrowAccount(user) {
+    ) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit WithdrawRevert(call_id, user);
-        _sendCallbackOrGas(user, deposit.nonce, false, send_gas_to);
+        _sendCallbackOrGas(user, nonce, false, send_gas_to);
     }
 
     function finishWithdraw(
         address user, uint128 unlockedQubes, uint32 call_id, uint32 nonce, address send_gas_to
-    ) external onlyVoteEscrowAccount(user) {
+    ) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         updateAverage();
@@ -138,16 +139,26 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         _transferTokens(qubeWallet, unlockedQubes, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function burnVeQubes(address user, uint128 expiredVeQubes) external onlyVoteEscrowAccount(user) {
+    function burnVeQubes(address user, uint128 expiredVeQubes) external override onlyVoteEscrowAccount(user) {
         updateAverage();
         veQubeSupply -= expiredVeQubes;
         emit VeQubesBurn(user, expiredVeQubes);
     }
 
+    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external onlyOwner {
+        tvm.rawReserve(_reserve(), 0);
+
+        qubeMinLockTime = new_min;
+        qubeMaxLockTime = new_max;
+
+        emit NewQubeLockLimits(call_id, new_min, new_max);
+        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
     function setWhitelistPrice(uint128 new_price, uint32 call_id, address send_gas_to) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        whitelistPrice = new_price;
+        gaugeWhitelistPrice = new_price;
 
         emit WhitelistPriceUpdate(call_id, new_price);
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
@@ -156,28 +167,28 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
     function addToWhitelist(address gauge, uint32 call_id, address send_gas_to) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        _addToWhitelist(call_id, gauge);
+        _addToWhitelist(gauge, call_id);
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function removeFromWhitelist(address gauge, uint32 call_id, address send_gas_to) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        _removeFromWhitelist(call_id, gauge);
+        _removeFromWhitelist(gauge, call_id);
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function calculateVeMint(uint128 qube_amount, uint32 lock_time) public view returns (uint128 ve_amount) {
         // qube has 18 decimals, there should be no problems with division precision
-        return math.muldiv(qube_amount, lock_time, QUBE_MAX_LOCK_TIME);
+        return math.muldiv(qube_amount, lock_time, qubeMaxLockTime);
     }
 
-    function getVeAverage(uint32 nonce) external {
+    function getVeAverage(uint32 nonce) external override {
         tvm.rawReserve(_reserve(), 0);
 
         updateAverage();
 
-        IGaugeAccount(msg.sender).receiveAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        IGaugeAccount(msg.sender).receiveVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             nonce, veQubeAverage, veQubeAveragePeriod
         );
     }
@@ -194,15 +205,15 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         veQubeAveragePeriod += last_period;
     }
 
-    onBounce(TvmSlice slice) external {
+    onBounce(TvmSlice slice) external view {
         tvm.accept();
 
         uint32 functionId = slice.decode(uint32);
         // if processing failed - contract was not deployed. Deploy and try again
-        if (functionId == tvm.functionId(VoteEscrowAccount.processDeposit)) {
+        if (functionId == tvm.functionId(IVoteEscrowAccount.processDeposit)) {
             tvm.rawReserve(_reserve(), 0);
 
-            uint64 _deposit_nonce = slice.decode(uint32);
+            uint32 _deposit_nonce = slice.decode(uint32);
             PendingDeposit deposit = pending_deposits[_deposit_nonce];
             address gauge_account_addr = deployVoteEscrowAccount(deposit.user);
 
