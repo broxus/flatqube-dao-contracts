@@ -4,7 +4,6 @@ pragma AbiHeader expire;
 
 abstract contract VoteEscrowAccountStorage {
     uint32 current_version;
-    TvmCell platform_code;
 
     address voteEscrow;
     address user;

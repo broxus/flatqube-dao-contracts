@@ -1,6 +1,7 @@
 const logger = require("mocha-logger");
 const {expect} = require("chai");
 const Token = require("./wrappers/token");
+const VoteEscrow = require('./wrappers/vote_ecsrow');
 const {
     convertCrystal
 } = locklift.utils;
@@ -53,4 +54,34 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
     expect(name.toString()).to.be.equal(token_name, 'Wrong root name');
     expect((await locklift.ton.getBalance(_root.address)).toNumber()).to.be.above(0, 'Root balance empty');
     return new Token(_root, owner);
+}
+
+
+const setupVoteEscrow = async function(owner, qube) {
+    const VoteEscrowContract = await locklift.factory.getContract('VoteEscrow');
+    const VeAccount = await locklift.factory.getContract('VoteEscrowAccount');
+    const Platform = await locklift.factory.getContract('Platform');
+    const [keyPair] = await locklift.keys.getKeyPairs();
+
+    const ve = await locklift.giver.deployContract({
+        contract: VoteEscrowContract,
+        constructorParams: {
+            _owner: owner.address,
+            _qube: qube.address
+        },
+        initParams: {
+            deploy_nonce: locklift.utils.getRandomNonce(),
+            platformCode: Platform.code,
+            veAccountCode: VeAccount.code
+        },
+        keyPair
+    });
+    logger.log(`Vote Escrow address: ${ve.address}`);
+    return new VoteEscrow(ve, owner);
+}
+
+
+module.exports = {
+    setupTokenRoot,
+    setupVoteEscrow
 }

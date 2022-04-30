@@ -1,16 +1,13 @@
 pragma ton-solidity ^0.57.1;
 
-pragma AbiHeader expire;
-pragma AbiHeader pubkey;
-
 
 import "../../interfaces/IVoteEscrow.sol";
 
 
 abstract contract VoteEscrowStorage is IVoteEscrow {
     uint64 static deploy_nonce;
-    TvmCell static platformCode;
-    TvmCell static veAccountCode;
+    TvmCell platformCode;
+    TvmCell veAccountCode;
     uint32 ve_account_version;
     uint32 ve_version;
 
@@ -31,15 +28,13 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
 
     uint128 distributionSupply; // current balance of tokens reserved for distribution
     // Array of distribution amount for all epochs
-    // We store only half of all numbers, because distribution function is symmetric
     uint128[] distributionSchedule;
 
     uint128 veQubeAverage;
     uint32 veQubeAveragePeriod;
 
-    uint32 epochTime; // length of epoch in seconds
-    uint32 votingTime; // length of voting in seconds
-    uint32 timeBeforeVoting; // time after epoch start when next voting will take place
+    uint32 qubeMinLockTime = 7 * 24 * 60 * 60; // 7 days
+    uint32 qubeMaxLockTime = 4 * 365 * 60 * 60; // 4 years
 
     bool initialized; // require origin epoch to be created
     bool paused; // pause contract in case of some error or update, disable user actions
@@ -52,24 +47,25 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint32 currentVotingEndTime;
     uint128 currentVotingTotalVotes;
 
+    uint32 epochTime; // length of epoch in seconds
+    uint32 votingTime; // length of voting in seconds
+    uint32 timeBeforeVoting; // time after epoch start when next voting will take place
+
     uint32 constant MAX_VOTES_RATIO = 10000;
     uint32 gaugeMaxVotesRatio; // up to 10000 (100%). Gauge cant have more votes. All exceeded votes will be distributed among other gauges
     uint32 gaugeMinVotesRatio; // up to 10000 (100%). If gauge doesn't have min votes, it will not be elected in epoch
     uint8 gaugeMaxDowntime; // if gauge was not elected for N times in a row, it is deleted from whitelist
 
-    uint32 maxGaugesPerVote = 10; // max number of gauges user can vote for
+    uint32 maxGaugesPerVote; // max number of gauges user can vote for
     uint32 gaugesNum;
-    mapping (address => bool) whitelistedGauges;
-    mapping (address => uint128) currentVotingVotes;
-    mapping (address => uint8) gaugeDowntime;
+    mapping (address => bool) public whitelistedGauges;
+    mapping (address => uint128) public currentVotingVotes;
+    mapping (address => uint8) public gaugeDowntime;
 
     // amount of QUBE tokens user should pay to add his gauge to QUBE dao
     uint128 gaugeWhitelistPrice;
     // amount of QUBEs available for withdraw as payments for whitelist
     uint128 whitelistPayments;
-
-    uint32 qubeMinLockTime = 7 * 24 * 60 * 60; // 7 days
-    uint32 qubeMaxLockTime = 4 * 365 * 60 * 60; // 4 years
 
     uint128 constant SCALING_FACTOR = 10**18;
 

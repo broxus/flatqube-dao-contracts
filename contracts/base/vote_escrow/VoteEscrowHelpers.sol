@@ -15,6 +15,112 @@ import "../../libraries/Errors.sol";
 
 
 abstract contract VoteEscrowHelpers is VoteEscrowStorage {
+    function getDetails() external view returns (
+        address _owner,
+        address _qube,
+        address _qubeWallet,
+        uint128 _treasuryTokens,
+        uint128 _teamTokens,
+        uint32[] _distributionScheme,
+        uint128 _qubeBalance,
+        uint128 _veQubeSupply,
+        uint32 _lastUpdateTime,
+        uint128 _distributionSupply,
+        uint128 _veQubeAverage,
+        uint32 _veQubeAveragePeriod,
+        uint32 _qubeMinLockTime,
+        uint32 _qubeMaxLockTime,
+        uint128 _gaugeWhitelistPrice,
+        uint128 _whitelistPayments,
+        bool _initialized,
+        bool _paused,
+        bool _emergency
+    ) {
+        _owner = owner;
+        _qube = qube;
+        _qubeWallet = qubeWallet;
+        _treasuryTokens = treasuryTokens;
+        _teamTokens = teamTokens;
+        _distributionScheme = distributionScheme;
+        _qubeBalance = qubeBalance;
+        _veQubeSupply = veQubeSupply;
+        _lastUpdateTime = lastUpdateTime;
+        _distributionSupply = distributionSupply;
+        _veQubeAverage = veQubeAverage;
+        _veQubeAveragePeriod = veQubeAveragePeriod;
+        _qubeMinLockTime = qubeMinLockTime;
+        _qubeMaxLockTime = qubeMaxLockTime;
+        _gaugeWhitelistPrice = gaugeWhitelistPrice;
+        _whitelistPayments = whitelistPayments;
+        _initialized = initialized;
+        _paused = paused;
+        _emergency = emergency;
+    }
+
+    function getDistributionSchedule() external view returns (uint128[] _distributionSchedule) {
+        _distributionSchedule = distributionSchedule;
+    }
+
+    function getCurrentEpochDetails() external view returns (
+        uint32 _currentEpoch,
+        uint32 _currentEpochStartTime,
+        uint32 _currentEpochEndTime,
+        uint32 _currentVotingStartTime,
+        uint32 _currentVotingEndTime,
+        uint128 _currentVotingTotalVotes
+    ) {
+        _currentEpoch = currentEpoch;
+        _currentEpochStartTime = currentEpochStartTime;
+        _currentEpochEndTime = currentEpochEndTime;
+        _currentVotingStartTime = currentVotingStartTime;
+        _currentVotingEndTime = currentVotingEndTime;
+        _currentVotingTotalVotes = currentVotingTotalVotes;
+    }
+
+    function getCurrentVotes() external view returns (mapping (address => uint128) _currentVotes) {
+        _currentVotes = currentVotingVotes;
+    }
+
+    function getDowntimes() external view returns (mapping (address => uint8) _downtimes) {
+        _downtimes = gaugeDowntime;
+    }
+
+    function getWhitelistedGauges() external view returns (mapping (address => bool) _whitelistedGauges) {
+        _whitelistedGauges = whitelistedGauges;
+    }
+
+    function getVotingDetails() external view returns (
+        uint32 _epochTime, // length of epoch in seconds
+        uint32 _votingTime, // length of voting in seconds
+        uint32 _timeBeforeVoting, // time after epoch start when next voting will take place
+         uint32 _gaugeMaxVotesRatio, // up to 10000 (100%). Gauge cant have more votes. All exceeded votes will be distributed among other gauges
+        uint32 _gaugeMinVotesRatio, // up to 10000 (100%). If gauge doesn't have min votes, it will not be elected in epoch
+        uint8 _gaugeMaxDowntime, // if gauge was not elected for N times in a row, it is deleted from whitelist
+        uint32 _maxGaugesPerVote, // max number of gauges user can vote for
+        uint32 _gaugesNum
+    ) {
+        _epochTime = epochTime;
+        _votingTime = votingTime;
+        _timeBeforeVoting = timeBeforeVoting;
+        _gaugeMaxVotesRatio = gaugeMaxVotesRatio;
+        _gaugeMinVotesRatio = gaugeMinVotesRatio;
+        _gaugeMaxDowntime = gaugeMaxDowntime;
+        _maxGaugesPerVote = maxGaugesPerVote;
+        _gaugesNum = gaugesNum;
+    }
+
+    function getCodes() external view returns (
+        TvmCell _platform_code,
+        TvmCell _ve_acc_code,
+        uint32 _ve_acc_version,
+        uint32 _ve_version
+    ) {
+        _platform_code = platformCode;
+        _ve_acc_code = veAccountCode;
+        _ve_acc_version = ve_account_version;
+        _ve_version = ve_version;
+    }
+
     // @param deposit_owner -address on which behalf sender making deposit
     // @param nonce - nonce, that will be sent with callback, should be > 0 if callback is needed
     // @param lock_time - lock time for deposited qubes

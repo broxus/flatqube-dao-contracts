@@ -2,6 +2,7 @@ pragma ton-solidity ^0.57.1;
 pragma AbiHeader expire;
 
 
+import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "./VoteEscrowUpgradable.sol";
 import "../../interfaces/IVoteEscrowAccount.sol";
 
@@ -9,9 +10,18 @@ import "../../interfaces/IVoteEscrowAccount.sol";
 abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     function initialize(uint32 start_time, address send_gas_to) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
+        // codes installed
+        require (!platformCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
+        require (!veAccountCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
+        // distribution params
         require (distributionSchedule.length > 0, Errors.CANT_BE_INITIALIZED);
         require (distributionScheme.length > 0, Errors.CANT_BE_INITIALIZED);
+        // people can but whitelist
         require (gaugeWhitelistPrice > 0, Errors.CANT_BE_INITIALIZED);
+        // voting params were installed
+        require (epochTime > 0 && timeBeforeVoting > 0 && votingTime > 0, Errors.CANT_BE_INITIALIZED);
+        // additional voting params
+        require (gaugeMaxVotesRatio > 0 && maxGaugesPerVote > 0, Errors.CANT_BE_INITIALIZED);
         require (!initialized, Errors.ALREADY_INITIALIZED);
 
         tvm.rawReserve(_reserve(), 0);
@@ -157,11 +167,11 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         _sendCallbackOrGas(user, nonce, false, send_gas_to);
     }
 
-    function endVoting(uint32 call_id, address send_gas_to) external {
+    function endVoting(uint32 call_id, address send_gas_to) external onlyActive {
         uint128 min_gas = Gas.MIN_MSG_VALUE + Gas.PER_GAUGE_VOTE_VALUE * gaugesNum + Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
         require (msg.value >= min_gas, Errors.LOW_MSG_VALUE);
         require (currentVotingStartTime != 0, Errors.VOTING_NOT_STARTED);
-        require (now > currentVotingEndTime, Errors.VOTING_NOT_ENDED);
+        require (now >= currentVotingEndTime, Errors.VOTING_NOT_ENDED);
 
         uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
         uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
@@ -206,7 +216,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         currentEpoch += 1;
         // if voting ended too late, start epoch now
         currentEpochStartTime = currentEpochEndTime < now ? now : currentEpochEndTime;
-        currentVotingEndTime = currentEpochStartTime + epochTime;
+        currentEpochEndTime = currentEpochStartTime + epochTime;
 
         tvm.rawReserve(_reserve(), 0);
 
@@ -233,13 +243,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         // we start distributing qubes from 2 epoch
         uint256 epoch_idx = currentEpoch - 2;
-        uint128 to_distribute_total;
-        if (epoch_idx >= distributionSchedule.length) {
-            uint256 offset = epoch_idx - (distributionSchedule.length - 1);
-            to_distribute_total = distributionSchedule[epoch_idx - offset];
-        } else {
-            to_distribute_total = distributionSchedule[epoch_idx];
-        }
+        uint128 to_distribute_total = distributionSchedule[epoch_idx];
         uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
         uint128 to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[1], DISTRIBUTION_SCHEME_TOTAL);
         uint128 to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[2], DISTRIBUTION_SCHEME_TOTAL);

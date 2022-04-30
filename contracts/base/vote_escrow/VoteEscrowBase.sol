@@ -110,7 +110,6 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
     }
 
     function withdraw(uint32 call_id, uint32 nonce, address send_gas_to) external view onlyActive {
-        // TODO: gas
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -140,9 +139,13 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
     }
 
     function burnVeQubes(address user, uint128 expiredVeQubes) external override onlyVoteEscrowAccount(user) {
+        tvm.rawReserve(_reserve(), 0);
+
         updateAverage();
         veQubeSupply -= expiredVeQubes;
         emit VeQubesBurn(user, expiredVeQubes);
+
+        user.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external onlyOwner {
@@ -152,6 +155,24 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         qubeMaxLockTime = new_max;
 
         emit NewQubeLockLimits(call_id, new_min, new_max);
+        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
+    function setPause(bool new_state, uint32 call_id, address send_gas_to) external onlyOwner {
+        tvm.rawReserve(_reserve(), 0);
+
+        paused = new_state;
+        emit PauseUpdate(call_id, new_state);
+
+        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
+    function setEmergency(bool new_state, uint32 call_id, address send_gas_to) external onlyOwner {
+        tvm.rawReserve(_reserve(), 0);
+
+        emergency = new_state;
+        emit EmergencyUpdate(call_id, new_state);
+
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 

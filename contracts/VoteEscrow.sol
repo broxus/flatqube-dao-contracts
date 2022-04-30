@@ -10,7 +10,6 @@ import "./base/vote_escrow/VoteEscrowBase.sol";
 
 
 contract VoteEscrow is VoteEscrowBase {
-    // TODO: up
     constructor(address _owner, address _qube) public {
         require (tvm.pubkey() != 0, Errors.WRONG_PUBKEY);
         require (tvm.pubkey() == msg.pubkey(), Errors.WRONG_PUBKEY);
