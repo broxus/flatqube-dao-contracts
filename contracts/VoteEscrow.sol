@@ -9,6 +9,7 @@ import "./libraries/Errors.sol";
 import "./base/vote_escrow/VoteEscrowBase.sol";
 
 
+// TODO: red buttons
 contract VoteEscrow is VoteEscrowBase {
     constructor(address _owner, address _qube) public {
         require (tvm.pubkey() != 0, Errors.WRONG_PUBKEY);

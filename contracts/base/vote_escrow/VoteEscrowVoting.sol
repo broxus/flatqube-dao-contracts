@@ -119,8 +119,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     // @param send_gas_to - address to send unspent gas
     function vote(mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external view onlyActive {
         // minimum check for gas dependant on gauges count
-        // TODO: dont need dynamic here, gauges num is limited
-        require (msg.value >= Gas.MIN_MSG_VALUE + maxGaugesPerVote * Gas.PER_GAUGE_VOTE_VALUE, Errors.LOW_MSG_VALUE);
+        require (msg.value >= Gas.MIN_MSG_VALUE + maxGaugesPerVote * Gas.PER_GAUGE_VOTE_GAS, Errors.LOW_MSG_VALUE);
         require (currentVotingStartTime > 0, Errors.VOTING_NOT_STARTED);
         require (now <= currentEpochEndTime, Errors.VOTING_ENDED);
 
@@ -168,7 +167,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     }
 
     function endVoting(uint32 call_id, address send_gas_to) external onlyActive {
-        uint128 min_gas = Gas.MIN_MSG_VALUE + Gas.PER_GAUGE_VOTE_VALUE * gaugesNum + Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
+        uint128 min_gas = Gas.MIN_MSG_VALUE + Gas.PER_GAUGE_VOTE_GAS * gaugesNum + Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
         require (msg.value >= min_gas, Errors.LOW_MSG_VALUE);
         require (currentVotingStartTime != 0, Errors.VOTING_NOT_STARTED);
         require (now >= currentVotingEndTime, Errors.VOTING_NOT_ENDED);
@@ -190,10 +189,10 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             } else if (gauge_votes > max_votes) {
                 currentVotingVotes[gauge] = max_votes;
                 exceeded_votes += gauge_votes - max_votes;
-                gaugeDowntime[gauge] = 0;
+                delete gaugeDowntime[gauge];
             } else {
                 valid_votes += gauge_votes;
-                gaugeDowntime[gauge] = 0;
+                delete gaugeDowntime[gauge];
             }
         }
 

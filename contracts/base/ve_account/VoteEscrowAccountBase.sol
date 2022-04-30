@@ -23,8 +23,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
     // min gas amount required to update this account based on number of stored deposits
     function calculateMinGas() public view responsible returns (uint128 min_gas) {
-        // TODO: up
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } 0.5 ton + activeDeposits * Gas.GAS_PER_DEPOSIT;
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } Gas.MIN_MSG_VALUE + activeDeposits * Gas.GAS_PER_DEPOSIT;
     }
 
     // @dev On first update just set lastUpdateTime to `up_to_moment`
