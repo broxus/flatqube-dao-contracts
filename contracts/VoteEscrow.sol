@@ -21,8 +21,64 @@ contract VoteEscrow is VoteEscrowBase {
         _setupTokenWallet();
     }
 
-    // TODO: Up
-    function upgrade() external onlyOwner {}
+    function upgrade(TvmCell code, address send_gas_to) external onlyOwner {
+        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
-    function onCodeUpgrade() private {}
+        TvmCell data = abi.encode(
+            send_gas_to,
+            deploy_nonce,
+            platformCode,
+            veAccountCode,
+            ve_account_version,
+            ve_version,
+            owner,
+            qube,
+            qubeWallet,
+            treasuryTokens,
+            teamTokens,
+            distributionScheme,
+            qubeBalance,
+            veQubeSupply,
+            lastUpdateTime,
+            distributionSupply,
+            distributionSchedule,
+            veQubeAverage,
+            veQubeAveragePeriod,
+            qubeMinLockTime,
+            qubeMaxLockTime,
+            initialized,
+            paused,
+            emergency,
+            currentEpoch,
+            currentEpochStartTime,
+            currentEpochEndTime,
+            currentVotingStartTime,
+            currentVotingEndTime,
+            currentVotingTotalVotes,
+            epochTime,
+            votingTime,
+            timeBeforeVoting,
+            gaugeMaxVotesRatio,
+            gaugeMinVotesRatio,
+            gaugeMaxDowntime,
+            maxGaugesPerVote,
+            gaugesNum,
+            whitelistedGauges,
+            currentVotingVotes,
+            gaugeDowntime,
+            gaugeWhitelistPrice,
+            whitelistPayments,
+            deposit_nonce,
+            pending_deposits
+        );
+
+        // set code after complete this method
+        tvm.setcode(code);
+
+        // run onCodeUpgrade from new code
+        tvm.setCurrentCode(code);
+        onCodeUpgrade(data);
+    }
+
+    function onCodeUpgrade(TvmCell upgrade_data) private {}
 }
