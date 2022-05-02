@@ -59,7 +59,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
             }
         } else if (deposit_type == uint8(DepositType.whitelist)) {
             address whitelist_addr = decodeWhitelistPayload(additional_payload);
-            exception = exception || whitelistedGauges[whitelist_addr] == true || amount < gaugeWhitelistPrice;
+            exception = exception || whitelistedGauges[whitelist_addr] == true || amount < gaugeWhitelistPrice || currentVotingStartTime != 0;
             if (!exception) {
                 // whitelist address
                 qubeBalance += amount;
@@ -186,6 +186,8 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
     }
 
     function addToWhitelist(address gauge, uint32 call_id, address send_gas_to) external onlyOwner {
+        // cant add gauge to whitelist during voting
+        require (currentVotingStartTime == 0, Errors.BAD_INPUT);
         tvm.rawReserve(_reserve(), 0);
 
         _addToWhitelist(gauge, call_id);
@@ -193,6 +195,8 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
     }
 
     function removeFromWhitelist(address gauge, uint32 call_id, address send_gas_to) external onlyOwner {
+        // cant remove gauge from whitelist during voting
+        require (currentVotingStartTime == 0, Errors.BAD_INPUT);
         tvm.rawReserve(_reserve(), 0);
 
         _removeFromWhitelist(gauge, call_id);

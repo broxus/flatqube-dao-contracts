@@ -90,6 +90,27 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     function finishVote(address user, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;
-    function distributeEpochQubes(uint128 bonus_treasury_votes, uint32 call_id, address send_gas_to) external;
     function onVoteEscrowAccountDeploy(address user, address send_gas_to) external;
+    function countVotesStep(
+        address start_addr,
+        uint128 exceeded_votes,
+        uint128 valid_votes,
+        uint32 call_id,
+        address send_gas_to
+    ) external;
+    function normalizeVotesStep(
+        address start_addr,
+        uint128 treasury_votes,
+        uint128 exceeded_votes,
+        uint128 valid_votes,
+        uint32 call_id,
+        address send_gas_to
+    ) external;
+    function distributeEpochQubesStep(
+        address start_addr,
+        uint128 bonus_treasury_votes,
+        mapping (address => uint128) distributed,
+        uint32 call_id,
+        address send_gas_to
+    ) external;
 }

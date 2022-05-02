@@ -166,19 +166,62 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         _sendCallbackOrGas(user, nonce, false, send_gas_to);
     }
 
+    function calculateGasForEndVoting() public view returns (uint128 min_gas) {
+        min_gas += Gas.MIN_MSG_VALUE + ((gaugesNum / MAX_ITERATIONS_PER_COUNT) + 1) * GAS_FOR_MAX_ITERATIONS;
+        min_gas += Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
+    }
+
     function endVoting(uint32 call_id, address send_gas_to) external onlyActive {
-        uint128 min_gas = Gas.MIN_MSG_VALUE + Gas.PER_GAUGE_VOTE_GAS * gaugesNum + Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
+        uint128 min_gas = calculateGasForEndVoting();
+
         require (msg.value >= min_gas, Errors.LOW_MSG_VALUE);
         require (currentVotingStartTime != 0, Errors.VOTING_NOT_STARTED);
         require (now >= currentVotingEndTime, Errors.VOTING_NOT_ENDED);
 
+        currentVotingEndTime = 0;
+        currentVotingStartTime = 0;
+        currentEpoch += 1;
+        // if voting ended too late, start epoch now
+        currentEpochStartTime = currentEpochEndTime < now ? now : currentEpochEndTime;
+        currentEpochEndTime = currentEpochStartTime + epochTime;
+
+        tvm.rawReserve(_reserve(), 0);
+
+        optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
+        (address start_addr,) = start.get();
+
+        IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            start_addr, 0, 0, call_id, send_gas_to
+        );
+    }
+
+    function countVotesStep(
+        address start_addr,
+        uint128 exceeded_votes,
+        uint128 valid_votes,
+        uint32 call_id,
+        address send_gas_to
+    ) external override {
+        require (msg.sender == address(this), Errors.NOT_OWNER);
+        tvm.rawReserve(_reserve(), 0);
+
+        bool finished = false;
+        uint32 counter = 0;
         uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
         uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
-        uint128 exceeded_votes = 0;
-        uint128 valid_votes = 0;
-        // get rid of "bad" gauges that dint reach vote threshold
-        // + rearrange votes of too "big" gauges
-        for ((address gauge, uint128 gauge_votes) : currentVotingVotes) {
+
+        optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
+        while (true) {
+            if (!pointer.hasValue()) {
+                finished = true;
+                break;
+            }
+
+            if (counter >= MAX_ITERATIONS_PER_COUNT) {
+                break;
+            }
+
+            (address gauge, uint128 gauge_votes) = pointer.get();
             if (gauge_votes < min_votes) {
                 exceeded_votes += gauge_votes;
                 delete currentVotingVotes[gauge];
@@ -194,30 +237,86 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
                 valid_votes += gauge_votes;
                 delete gaugeDowntime[gauge];
             }
+
+            counter += 1;
+            pointer = currentVotingVotes.next(gauge);
         }
 
-        uint128 treasury_votes = 0;
-        if (exceeded_votes > 0) {
-            for ((address gauge, uint128 gauge_votes) : currentVotingVotes) {
-                if (gauge_votes < max_votes) {
-                    uint128 bonus_votes = math.muldiv(gauge_votes, exceeded_votes, valid_votes);
-                    gauge_votes += bonus_votes;
-                    if (gauge_votes > max_votes) {
-                        treasury_votes += gauge_votes - max_votes;
-                        currentVotingVotes[gauge] = max_votes;
-                    }
+        if (!finished) {
+            (address gauge,) = pointer.get();
+            IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                gauge, exceeded_votes, valid_votes, call_id, send_gas_to
+            );
+            return;
+        }
+
+        optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
+        (start_addr,) = start.get();
+
+        IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            start_addr, 0, exceeded_votes, valid_votes, call_id, send_gas_to
+        );
+    }
+
+    function normalizeVotesStep(
+        address start_addr,
+        uint128 treasury_votes,
+        uint128 exceeded_votes,
+        uint128 valid_votes,
+        uint32 call_id,
+        address send_gas_to
+    ) external override {
+        require (msg.sender == address(this), Errors.NOT_OWNER);
+        tvm.rawReserve(_reserve(), 0);
+
+        // if not valid votes, we dont need normalization
+        if (valid_votes == 0) {
+            optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
+            (start_addr,) = start.get();
+            mapping (address => uint128) distributed;
+            IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                start_addr, treasury_votes, distributed, call_id, send_gas_to
+            );
+            return;
+        }
+
+        bool finished = false;
+        uint32 counter = 0;
+        uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
+        uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
+
+        optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
+        while (true) {
+            if (!pointer.hasValue()) {
+                finished = true;
+                break;
+            }
+
+            if (counter >= MAX_ITERATIONS_PER_COUNT) {
+                break;
+            }
+
+            (address gauge, uint128 gauge_votes) = pointer.get();
+            if (gauge_votes < max_votes) {
+                uint128 bonus_votes = math.muldiv(gauge_votes, exceeded_votes, valid_votes);
+                gauge_votes += bonus_votes;
+                if (gauge_votes > max_votes) {
+                    treasury_votes += gauge_votes - max_votes;
+                    currentVotingVotes[gauge] = max_votes;
                 }
             }
+
+            counter += 1;
+            pointer = currentVotingVotes.next(gauge);
         }
 
-        currentVotingEndTime = 0;
-        currentVotingStartTime = 0;
-        currentEpoch += 1;
-        // if voting ended too late, start epoch now
-        currentEpochStartTime = currentEpochEndTime < now ? now : currentEpochEndTime;
-        currentEpochEndTime = currentEpochStartTime + epochTime;
-
-        tvm.rawReserve(_reserve(), 0);
+        if (!finished) {
+            (address gauge,) = pointer.get();
+            IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                gauge, treasury_votes, exceeded_votes, valid_votes, call_id, send_gas_to
+            );
+            return;
+        }
 
         emit VotingEnd(
             call_id,
@@ -228,42 +327,75 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             currentEpochStartTime,
             currentVotingEndTime
         );
-        IVoteEscrow(address(this)).distributeEpochQubes{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            treasury_votes, call_id, send_gas_to
+
+        optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
+        (start_addr,) = start.get();
+
+        mapping (address => uint128) distributed;
+        IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            start_addr, treasury_votes, distributed, call_id, send_gas_to
         );
     }
 
-    // We distribute qubes in separate message to be able to spend more gas
-    function distributeEpochQubes(
-        uint128 bonus_treasury_votes, uint32 call_id, address send_gas_to
+    function distributeEpochQubesStep(
+        address start_addr,
+        uint128 bonus_treasury_votes,
+        mapping (address => uint128) distributed,
+        uint32 call_id,
+        address send_gas_to
     ) external override {
         require (msg.sender == address(this), Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
 
-        // we start distributing qubes from 2 epoch
         uint256 epoch_idx = currentEpoch - 2;
         uint128 to_distribute_total = distributionSchedule[epoch_idx];
         uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
-        uint128 to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[1], DISTRIBUTION_SCHEME_TOTAL);
-        uint128 to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[2], DISTRIBUTION_SCHEME_TOTAL);
 
         uint128 treasury_bonus = math.muldiv(to_distribute_farming, bonus_treasury_votes, currentVotingTotalVotes);
-        to_distribute_treasury += treasury_bonus;
         to_distribute_farming -= treasury_bonus;
 
-        treasuryTokens += to_distribute_treasury;
-        teamTokens += to_distribute_team;
-
-        mapping (address => uint128) distributed;
+        bool finished = false;
+        uint32 counter = 0;
 
         TvmBuilder builder;
         builder.store(epochTime);
         TvmCell payload = builder.toCell();
-        for ((address gauge, uint128 gauge_votes): currentVotingVotes) {
+
+        optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
+        while (true) {
+            if (!pointer.hasValue()) {
+                finished = true;
+                break;
+            }
+
+            if (counter >= MAX_ITERATIONS_PER_COUNT) {
+                break;
+            }
+
+            (address gauge, uint128 gauge_votes) = pointer.get();
+
             uint128 qube_amount = math.muldiv(to_distribute_farming, gauge_votes, currentVotingTotalVotes);
             distributed[gauge] = qube_amount;
             _transferTokens(qubeWallet, qube_amount, gauge, payload, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+
+            counter += 1;
+            pointer = currentVotingVotes.next(gauge);
         }
+
+        if (!finished) {
+            (address gauge,) = pointer.get();
+            IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                gauge, bonus_treasury_votes, distributed, call_id, send_gas_to
+            );
+            return;
+        }
+
+        uint128 to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[1], DISTRIBUTION_SCHEME_TOTAL);
+        uint128 to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[2], DISTRIBUTION_SCHEME_TOTAL);
+        to_distribute_treasury += treasury_bonus;
+
+        treasuryTokens += to_distribute_treasury;
+        teamTokens += to_distribute_team;
 
         currentVotingTotalVotes = 0;
         delete currentVotingVotes;
