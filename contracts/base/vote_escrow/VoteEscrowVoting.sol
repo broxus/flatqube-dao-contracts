@@ -167,7 +167,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     }
 
     function calculateGasForEndVoting() public view returns (uint128 min_gas) {
-        min_gas += Gas.MIN_MSG_VALUE + ((gaugesNum / MAX_ITERATIONS_PER_COUNT) + 1) * GAS_FOR_MAX_ITERATIONS;
+        min_gas += Gas.MIN_MSG_VALUE + ((gaugesNum / MAX_ITERATIONS_PER_COUNT) + 1) * Gas.GAS_FOR_MAX_ITERATIONS;
         min_gas += Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
     }
 

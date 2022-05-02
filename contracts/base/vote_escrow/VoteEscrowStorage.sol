@@ -73,6 +73,5 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     mapping (uint32 => PendingDeposit) pending_deposits;
 
     uint128 constant CONTRACT_MIN_BALANCE = 0.5 ton;
-    uint32 constant MAX_ITERATIONS_PER_COUNT = 40;
-    uint128 constant GAS_FOR_MAX_ITERATIONS = 1.5 ton;
+    uint32 constant MAX_ITERATIONS_PER_COUNT = 35;
 }
