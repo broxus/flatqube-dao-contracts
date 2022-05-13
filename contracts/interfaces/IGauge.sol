@@ -10,9 +10,13 @@ interface IGauge {
 
     event RewardDeposit(uint256 id, uint128 amount);
     event ExtraFarmEndSet(uint256[] ids, uint32[] farm_end_times);
-    event GaugeAccountCodeUpdated(uint32 prev_version, uint32 new_version);
+    event GaugeAccountCodeUpdated(uint32 call_id, uint32 prev_version, uint32 new_version);
+    event GaugeAccountCodeUpdateRejected(uint32 call_id);
     event GaugeUpdated(uint32 prev_version, uint32 new_version);
     event RewardRoundAdded(uint256[] ids, RewardRound[] reward_rounds);
+
+    event GaugeAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
+    event GaugeAccountDeploy(address user);
 
     struct RewardRound {
         uint32 startTime;
@@ -79,8 +83,9 @@ interface IGauge {
         address send_gas_to,
         uint32 nonce
     ) external;
-    function forceUpgradeGaugeAccount(address user, address send_gas_to) external;
+    function forceUpgradeGaugeAccount(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function finishSafeWithdraw(address user, uint128 amount, address send_gas_to) external;
     function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
-    function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, address send_gas_to) external;
+    function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
+    function onGaugeAccountDeploy(address user, address send_gas_to) external;
 }

@@ -212,12 +212,8 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
         while (true) {
-            if (!pointer.hasValue()) {
-                finished = true;
-                break;
-            }
-
-            if (counter >= MAX_ITERATIONS_PER_COUNT) {
+            if (!pointer.hasValue() || counter >= MAX_ITERATIONS_PER_COUNT) {
+                finished = !pointer.hasValue();
                 break;
             }
 
@@ -282,17 +278,12 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         bool finished = false;
         uint32 counter = 0;
-        uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
         uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
 
         optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
         while (true) {
-            if (!pointer.hasValue()) {
-                finished = true;
-                break;
-            }
-
-            if (counter >= MAX_ITERATIONS_PER_COUNT) {
+            if (!pointer.hasValue() || counter >= MAX_ITERATIONS_PER_COUNT) {
+                finished = !pointer.hasValue();
                 break;
             }
 
@@ -363,12 +354,8 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
         while (true) {
-            if (!pointer.hasValue()) {
-                finished = true;
-                break;
-            }
-
-            if (counter >= MAX_ITERATIONS_PER_COUNT) {
+            if (!pointer.hasValue() || counter >= MAX_ITERATIONS_PER_COUNT) {
+                finished = !pointer.hasValue();
                 break;
             }
 

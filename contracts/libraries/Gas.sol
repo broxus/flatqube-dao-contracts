@@ -16,4 +16,8 @@ library Gas {
 
     // VOTE ESCROW ACC
     uint128 constant GAS_PER_DEPOSIT = 0.01 ton;
+
+    // GAUGE
+    uint128 constant REQUEST_UPGRADE_VALUE = 1.5 ton;
+    uint128 constant GAUGE_ACCOUNT_UPGRADE_VALUE = 1.5 ton;
 }

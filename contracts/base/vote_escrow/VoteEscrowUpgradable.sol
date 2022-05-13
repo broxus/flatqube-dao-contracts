@@ -20,7 +20,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function installOrUpgradeVeAccountCode(TvmCell code, address send_gas_to) external onlyOwner {
+    function installOrUpdateVeAccountCode(TvmCell code, address send_gas_to) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 

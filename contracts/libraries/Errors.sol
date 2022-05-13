@@ -31,5 +31,7 @@ library Errors {
     uint16 constant ALREADY_VOTED = 3001;
     uint16 constant BAD_SENDER = 3002;
 
-
+    // GAUGE
+    uint16 constant NOT_GAUGE_ACCOUNT = 4000;
+    uint16 constant NOT_FACTORY = 4001;
 }

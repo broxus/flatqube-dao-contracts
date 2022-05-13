@@ -7,7 +7,7 @@ import "@broxus/contracts/contracts/platform/Platform.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
 import "./VoteEscrowStorage.sol";
-import "../../interfaces/IVoteEscrowCallbackReceiver.sol";
+import "../../interfaces/ICallbackReceiver.sol";
 import "../../libraries/Gas.sol";
 import "../../libraries/PlatformTypes.sol";
 import "../../libraries/Errors.sol";
@@ -207,13 +207,13 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     function _sendCallbackOrGas(address callback_receiver, uint32 nonce, bool success, address send_gas_to) internal pure {
         if (nonce > 0) {
             if (success) {
-                IVoteEscrowCallbackReceiver(
+                ICallbackReceiver(
                     callback_receiver
-                ).acceptVoteEscrowSuccessCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+                ).acceptSuccessCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
             } else {
-                IVoteEscrowCallbackReceiver(
+                ICallbackReceiver(
                     callback_receiver
-                ).acceptVoteEscrowFailCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+                ).acceptFailCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
             }
         } else {
             send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);

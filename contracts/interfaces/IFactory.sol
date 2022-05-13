@@ -18,6 +18,6 @@ interface IFactory {
         uint32[] vestingRatio,
         uint32 withdrawAllLockPeriod
     ) external;
-    function processUpgradeGaugeRequest(address send_gas_to) external;
-    function processUpdateGaugeAccountCodeRequest(address send_gas_to) external;
+    function processUpgradeGaugeRequest(uint32 call_id, address send_gas_to) external;
+    function processUpdateGaugeAccountCodeRequest(uint32 call_id, address send_gas_to) external;
 }

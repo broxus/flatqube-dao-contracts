@@ -25,5 +25,5 @@ interface IGaugeAccount {
     function increasePoolDebt(uint128[] _pool_debt, address send_gas_to, uint32 code_version) external;
     function receiveVeAverage(uint32 nonce, uint128 veQubeAverage, uint32 veQubeAveragePeriod) external;
     function receiveVeAccAverage(uint32 callback_nonce, uint128 veQubeAverage, uint32 veQubeAveragePeriod, uint32 lastUpdateTime) external;
-    function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
+    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to) external;
 }
