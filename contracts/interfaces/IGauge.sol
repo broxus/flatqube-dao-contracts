@@ -3,17 +3,19 @@ pragma AbiHeader expire;
 
 interface IGauge {
     // Events
-    event Deposit(address user, uint128 amount);
-    event Withdraw(address user, uint128 amount);
-    event SafeWithdraw(address user, uint128 amount);
-    event Claim(address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
+    event Deposit(uint32 call_id, address user, uint128 amount, uint32 lock_time);
+    event DepositReverted(uint32 call_id, address user, uint128 amount);
+    event Withdraw(uint32 call_id, address user, uint128 amount);
+    event WithdrawUnclaimed(uint32 call_id, address receiver, uint128[] amounts);
+    event Claim(uint32 call_id, address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
 
-    event RewardDeposit(uint256 id, uint128 amount);
-    event ExtraFarmEndSet(uint256[] ids, uint32[] farm_end_times);
+    event RewardDeposit(uint32 call_id, uint256 reward_id, uint128 amount);
+    event ExtraFarmEndSet(uint32 call_id, uint256[] ids, uint32[] farm_end_times);
     event GaugeAccountCodeUpdated(uint32 call_id, uint32 prev_version, uint32 new_version);
     event GaugeAccountCodeUpdateRejected(uint32 call_id);
     event GaugeUpdated(uint32 prev_version, uint32 new_version);
-    event RewardRoundAdded(uint256[] ids, RewardRound[] reward_rounds);
+    event RewardRoundAdded(uint32 call_id, uint256[] ids, RewardRound[] reward_rounds);
+    event QubeRewardRoundAdded(RewardRound new_qube_round);
 
     event GaugeAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
     event GaugeAccountDeploy(address user);
@@ -29,7 +31,6 @@ interface IGauge {
         address tokenRoot;
         address tokenWallet;
         uint128 tokenBalance;
-        uint128 tokenBalanceCumulative;
     }
 
     struct ExtraRewardData {
@@ -43,7 +44,6 @@ interface IGauge {
         RewardRound[] rewardRounds;
         uint32 vestingPeriod;
         uint32 vestingRatio;
-        bool enabled;
     }
 
     // TODO: up
@@ -63,8 +63,10 @@ interface IGauge {
     struct PendingDeposit {
         address user;
         uint128 amount;
+        uint32 lock_time;
         address send_gas_to;
         uint32 nonce;
+        uint32 call_id;
     }
     function finishDeposit(
         address user,
@@ -73,19 +75,22 @@ interface IGauge {
     function finishWithdraw(
         address user,
         uint128 withdrawAmount,
-        address send_gas_to,
-        uint32 nonce
+        uint32 call_id,
+        uint32 nonce,
+        address send_gas_to
     ) external;
     function finishClaim(
         address user,
         uint128 qube_amount,
         uint128[] extra_amounts,
-        address send_gas_to,
-        uint32 nonce
+        uint32 call_id,
+        uint32 nonce,
+        address send_gas_to
     ) external;
+    function revertDeposit(address user, uint64 _deposit_nonce) external;
     function forceUpgradeGaugeAccount(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
-    function finishSafeWithdraw(address user, uint128 amount, address send_gas_to) external;
     function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
     function onGaugeAccountDeploy(address user, address send_gas_to) external;
+    function receiveTokenWalletAddress(address wallet) external;
 }

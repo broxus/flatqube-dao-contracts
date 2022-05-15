@@ -81,7 +81,9 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
 
         if (exception) {
             emit DepositRevert(call_id, sender, amount);
-            _transferTokens(qubeWallet, amount, sender, _makeCell(nonce), remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
+            // if payload assembled correctly, send nonce, otherwise send payload we got with this transfer
+            payload = correct ? _makeCell(nonce) : payload;
+            _transferTokens(qubeWallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
         }
     }
 

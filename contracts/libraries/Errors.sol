@@ -34,4 +34,7 @@ library Errors {
     // GAUGE
     uint16 constant NOT_GAUGE_ACCOUNT = 4000;
     uint16 constant NOT_FACTORY = 4001;
+    uint16 constant BAD_REWARD_ROUNDS_INPUT = 4002;
+    uint16 constant BAD_FARM_END_TIME = 4003;
+    uint16 constant CANT_WITHDRAW_UNCLAIMED_ALL = 4004;
 }

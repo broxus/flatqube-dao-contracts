@@ -85,7 +85,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function deployVoteEscrowAccount(address user) public view returns (address) {
+    function deployVoteEscrowAccount(address user) public view override returns (address) {
         TvmBuilder constructor_params;
 
         constructor_params.store(ve_account_version); // 32

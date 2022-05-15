@@ -201,7 +201,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
     }
 
     // Update averages up to current moment taking into account expired deposits
-    // @dev attach gas >= calculateMinGas(), otherwise call may fail with gas overflow!
+    // @dev attach gas >= calculateMinGas(), otherwise call may fail with gas exception!
     // Caller contract is responsible for attaching enough gas
     // This call could be called by anyone, user will only benefit from this
     // @param callback_receiver - address that will receive callback

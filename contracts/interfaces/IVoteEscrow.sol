@@ -91,6 +91,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;
     function onVoteEscrowAccountDeploy(address user, address send_gas_to) external;
+    function deployVoteEscrowAccount(address user) external view returns (address);
     function countVotesStep(
         address start_addr,
         uint128 exceeded_votes,
