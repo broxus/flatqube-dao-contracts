@@ -9,8 +9,8 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCa
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
 import "../../libraries/Errors.sol";
-import "./VoteEscrowVoting.sol";
 import "../../interfaces/IGaugeAccount.sol";
+import "./VoteEscrowVoting.sol";
 
 
 abstract contract VoteEscrowBase is VoteEscrowVoting {

@@ -24,6 +24,7 @@ interface IGaugeAccount {
     function processDeposit(
         uint32 nonce,
         uint128 amount,
+        uint128 boosted_amount,
         uint32 lock_time,
         IGauge.ExtraRewardData[] extra_rewards,
         IGauge.RewardRound[] qube_reward_rounds,

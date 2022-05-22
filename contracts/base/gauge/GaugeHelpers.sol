@@ -22,6 +22,15 @@ abstract contract GaugeHelpers is GaugeStorage {
         );
     }
 
+    function calculateBoostedBalance(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {
+        if (maxLockTime == 0) {
+            return amount;
+        }
+        lock_time = math.min(lock_time, maxLockTime);
+        uint128 boost = BOOST_BASE + math.muldiv((maxBoost - BOOST_BASE), lock_time, maxLockTime);
+        boosted_amount = math.muldiv(amount, boost, BOOST_BASE);
+    }
+
     function encodeDepositPayload(
         address deposit_owner,
         uint32 lock_time,

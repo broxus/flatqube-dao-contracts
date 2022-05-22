@@ -63,6 +63,7 @@ interface IGauge {
     struct PendingDeposit {
         address user;
         uint128 amount;
+        uint128 boosted_amount;
         uint32 lock_time;
         address send_gas_to;
         uint32 nonce;

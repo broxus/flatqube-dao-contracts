@@ -96,20 +96,26 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
     function startVoting(uint32 call_id, address send_gas_to) external onlyActive {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
-        require (initialized, Errors.NOT_INITIALIZED);
-
-        require (currentEpoch + 1 < distributionSchedule.length, Errors.LAST_EPOCH);
-
-        require (now >= currentEpochStartTime + timeBeforeVoting, Errors.TOO_EARLY_FOR_VOTING);
-        require (currentVotingStartTime == 0, Errors.VOTING_ALREADY_STARTED);
 
         tvm.rawReserve(_reserve(), 0);
+        _startVoting(call_id);
+
+        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
+    function _startVoting(uint32 call_id) internal {
+        // if this is true, than someone already started voting
+        // dont throw error on duplicate calls
+        if (currentVotingStartTime > 0) {
+            return;
+        }
+        require (initialized, Errors.NOT_INITIALIZED);
+        require (currentEpoch + 1 < distributionSchedule.length, Errors.LAST_EPOCH);
+        require (now >= currentEpochStartTime + timeBeforeVoting, Errors.TOO_EARLY_FOR_VOTING);
 
         currentVotingStartTime = now;
         currentVotingEndTime = now + votingTime;
-
         emit VotingStart(call_id, currentVotingStartTime, currentVotingEndTime);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     // Function for voting with ve qubes user has
@@ -117,9 +123,13 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     // @param call_id - id helper for front/indexing
     // @param nonce - nonce for callback, ignored if == 0
     // @param send_gas_to - address to send unspent gas
-    function vote(mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external view onlyActive {
-        // minimum check for gas dependant on gauges count
+    function vote(mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external onlyActive {
         require (msg.value >= Gas.MIN_MSG_VALUE + maxGaugesPerVote * Gas.PER_GAUGE_VOTE_GAS, Errors.LOW_MSG_VALUE);
+
+        if (currentVotingStartTime == 0) {
+            _startVoting(call_id);
+        }
+        // minimum check for gas dependant on gauges count
         require (currentVotingStartTime > 0, Errors.VOTING_NOT_STARTED);
         require (now <= currentEpochEndTime, Errors.VOTING_ENDED);
 

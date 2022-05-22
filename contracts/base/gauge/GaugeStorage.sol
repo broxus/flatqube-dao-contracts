@@ -35,8 +35,17 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     address depositTokenWallet;
     uint128 depositTokenBalance;
 
+    // sum of all deposits boosted with locks
+    uint128 lockBoostedSupply;
+    // sum of all deposits boosted with locks + with veQubes
+    uint128 workingSupply;
+
     // VE contract that manage qube emission
     address voteEscrow;
+
+    uint32 maxBoost; // should be bigger than BOOST_BASE. 1200 == 1.2x max boost that could be reached on maxLockTime
+    uint32 maxLockTime;
+    uint32 constant BOOST_BASE = 1000;
 
     // reward params for qube
     QubeRewardData qubeReward;

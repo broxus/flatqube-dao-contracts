@@ -29,7 +29,7 @@ abstract contract GaugeBase is GaugeRewards {
             // check if payload assembled correctly
             (address deposit_owner, uint32 lock_time, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
 
-            if (!correct || msg.value < Gas.GAUGE_MIN_MSG_VALUE) {
+            if (!correct || msg.value < Gas.GAUGE_MIN_MSG_VALUE || lock_time > maxLockTime) {
                 // too low deposit value or too low msg.value or incorrect deposit payload
                 // for incorrect deposit payload send tokens back to sender
                 emit DepositReverted(call_id, deposit_owner, amount);
@@ -38,16 +38,20 @@ abstract contract GaugeBase is GaugeRewards {
             }
 
             updateRewardData();
+
+            uint128 boosted_amount = calculateBoostedBalance(amount, lock_time);
             depositTokenBalance += amount;
+            lockBoostedSupply += boosted_amount;
 
             deposit_nonce += 1;
-            deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, lock_time, remainingGasTo, nonce, call_id);
+            deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, boosted_amount, lock_time, remainingGasTo, nonce, call_id);
 
             address gaugeAccountAddr = getGaugeAccountAddress(deposit_owner);
             // TODO: up
             IGaugeAccount(gaugeAccountAddr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 deposit_nonce,
                 amount,
+                boosted_amount,
                 lock_time,
                 extraRewards,
                 qubeReward.rewardRounds,
@@ -83,6 +87,7 @@ abstract contract GaugeBase is GaugeRewards {
 
         PendingDeposit deposit = deposits[_deposit_nonce];
         depositTokenBalance -= deposit.amount;
+        lockBoostedSupply -= deposit.boosted_amount;
 
         emit DepositReverted(deposit.call_id, deposit.user, deposit.amount);
         delete deposits[_deposit_nonce];
@@ -241,6 +246,7 @@ abstract contract GaugeBase is GaugeRewards {
              IGaugeAccount(gauge_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 _deposit_nonce,
                 deposit.amount,
+                deposit.boosted_amount,
                 deposit.lock_time,
                 extraRewards,
                 qubeReward.rewardRounds,
