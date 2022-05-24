@@ -216,20 +216,27 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         updateAverage();
 
         IGaugeAccount(msg.sender).receiveVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            nonce, veQubeAverage, veQubeAveragePeriod
+            nonce, veQubeSupply, veQubeAverage, veQubeAveragePeriod
         );
     }
 
-    function updateAverage() internal {
+    function calculateAverage() public view returns (
+        uint32 _lastUpdateTime, uint128 _veQubeSupply, uint128 _veQubeAverage, uint32 _veQubeAveragePeriod
+    ) {
         if (now <= lastUpdateTime || lastUpdateTime == 0) {
             // already updated on this block or this is our first update
-            lastUpdateTime = now;
-            return;
+            return (now, veQubeSupply, veQubeAverage, veQubeAveragePeriod);
         }
 
         uint32 last_period = now - lastUpdateTime;
-        veQubeAverage = (veQubeAverage * veQubeAveragePeriod + veQubeSupply * last_period) / (veQubeAveragePeriod + last_period);
-        veQubeAveragePeriod += last_period;
+        _veQubeAverage = (veQubeAverage * veQubeAveragePeriod + veQubeSupply * last_period) / (veQubeAveragePeriod + last_period);
+        _veQubeAveragePeriod += last_period;
+        _lastUpdateTime = now;
+        _veQubeSupply = veQubeSupply;
+    }
+
+    function updateAverage() internal {
+        (lastUpdateTime, veQubeSupply, veQubeAverage, veQubeAveragePeriod) = calculateAverage();
     }
 
     onBounce(TvmSlice slice) external view {

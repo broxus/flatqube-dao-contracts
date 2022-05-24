@@ -53,6 +53,9 @@ abstract contract GaugeBase is GaugeRewards {
                 amount,
                 boosted_amount,
                 lock_time,
+                lockBoostedSupply,
+                lockBoostedSupplyAverage,
+                lockBoostedSupplyAveragePeriod,
                 extraRewards,
                 qubeReward.rewardRounds,
                 lastRewardTime
@@ -204,7 +207,7 @@ abstract contract GaugeBase is GaugeRewards {
         constructor_params.store(gauge_account_version); // 32
         constructor_params.store(gauge_account_version); // 32
 
-        constructor_params.store(uint8(extraRewards.length)); // 8
+        constructor_params.store(voteEscrow);
 
         constructor_params.store(qubeReward.vestingPeriod); // 32
         constructor_params.store(qubeReward.vestingRatio); // 32

@@ -36,10 +36,10 @@ abstract contract VoteEscrowAccountStorage {
     uint32 activeDeposits; // number of currently locked deposits
 
     struct QubeDeposit {
-        uint128 qube_amount;
-        uint128 ve_qube_amount; // expire after deposit_time + lock_time
-        uint32 deposit_time; // timestamp of deposit
-        uint32 lock_time; // lock interval
+        uint128 amount; // amount of qubes deposited
+        uint128 veAmount; // amount of ve qubes minted for qubes, expire after deposit_time + lock_time
+        uint32 createdAt; // timestamp of deposit
+        uint32 lockTime; // lock interval
     }
 
     mapping (uint64 => QubeDeposit) deposits;

@@ -170,6 +170,18 @@ abstract contract GaugeRewards is GaugeUpgradable {
         _lastRewardTime = now;
     }
 
+    function updateSupplyAverage() internal {
+        if (now <= lastRewardTime || lastRewardTime == 0) {
+            // already updated on this block or this is our first update
+            lastRewardTime = now;
+            return;
+        }
+
+        uint32 last_period = now - lastRewardTime;
+        lockBoostedSupplyAverage = (lockBoostedSupplyAverage * lockBoostedSupplyAveragePeriod + lockBoostedSupply * last_period) / (lockBoostedSupplyAveragePeriod + last_period);
+        lockBoostedSupplyAveragePeriod += last_period;
+    }
+
     function updateRewardData() internal {
         (
             uint32 _lastRewardTime,
@@ -178,6 +190,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
             RewardRound[] _qubeRewardRounds,
             uint256 _qube_sync_idx
         ) = calculateRewardData();
+        updateSupplyAverage();
 
         for (uint i = 0; i < extraRewards.length; i++) {
             extraRewards[i].rewardRounds = _extraRewardRounds[i];

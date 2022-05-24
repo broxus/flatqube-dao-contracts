@@ -90,6 +90,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     function finishVote(address user, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;
+    function getVoteEscrowAccountAddress(address user) public view responsible;
     function onVoteEscrowAccountDeploy(address user, address send_gas_to) external;
     function deployVoteEscrowAccount(address user) external view returns (address);
     function countVotesStep(

@@ -1,11 +1,11 @@
-//pragma ton-solidity ^0.57.1;
-//pragma AbiHeader expire;
-//
-//
-//import "./GaugeAccountStorage.sol";
-//
-//
-//abstract contract GaugeAccountVesting is GaugeAccountStorage {
+pragma ton-solidity ^0.57.1;
+pragma AbiHeader expire;
+
+
+import "./GaugeAccountStorage.sol";
+
+
+abstract contract GaugeAccountVesting is GaugeAccountStorage {
 //    function _isEven(uint64 num) internal pure returns (bool) {
 //        return (num / 2) == 0 ? true : false;
 //    }
@@ -140,5 +140,5 @@
 //
 //        return (updated_entitled, newly_vested, new_vesting_time);
 //    }
-//
-//}
+
+}

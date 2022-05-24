@@ -22,10 +22,13 @@ interface IGaugeAccount {
 
     function getDetails() external responsible view returns (GaugeAccountDetails);
     function processDeposit(
-        uint32 nonce,
+        uint32 deposit_nonce,
         uint128 amount,
         uint128 boosted_amount,
         uint32 lock_time,
+        uint128 lockBoostedSupply,
+        uint128 lockBoostedSupplyAverage,
+        uint32 lockBoostedSupplyAveragePeriod,
         IGauge.ExtraRewardData[] extra_rewards,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 lastRewardTime

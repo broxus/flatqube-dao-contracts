@@ -98,12 +98,12 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
         tvm.rawReserve(_reserve(), 0);
-        _startVoting(call_id);
+        _tryStartVoting(call_id);
 
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function _startVoting(uint32 call_id) internal {
+    function _tryStartVoting(uint32 call_id) internal {
         // if this is true, than someone already started voting
         // dont throw error on duplicate calls
         if (currentVotingStartTime > 0) {
@@ -127,7 +127,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         require (msg.value >= Gas.MIN_MSG_VALUE + maxGaugesPerVote * Gas.PER_GAUGE_VOTE_GAS, Errors.LOW_MSG_VALUE);
 
         if (currentVotingStartTime == 0) {
-            _startVoting(call_id);
+            _tryStartVoting(call_id);
         }
         // minimum check for gas dependant on gauges count
         require (currentVotingStartTime > 0, Errors.VOTING_NOT_STARTED);

@@ -65,7 +65,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             }
             (cur_key, cur_deposit) = pointer.get();
 
-            uint32 deposit_lock_end = cur_deposit.deposit_time + cur_deposit.lock_time;
+            uint32 deposit_lock_end = cur_deposit.createdAt + cur_deposit.lockTime;
             // no need to check further, deposits are sorted by lock time
             if (sync_time < deposit_lock_end) {
                 finished = true;
@@ -74,9 +74,9 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
             _updateVeAverage(deposit_lock_end);
             // now stats are updated up to deposit_lock_end moment
-            veQubeBalance -= cur_deposit.ve_qube_amount;
-            expiredVeQubes += cur_deposit.ve_qube_amount;
-            unlockedQubes += cur_deposit.qube_amount;
+            veQubeBalance -= cur_deposit.veAmount;
+            expiredVeQubes += cur_deposit.veAmount;
+            unlockedQubes += cur_deposit.amount;
             activeDeposits -= 1;
             delete deposits[cur_key];
 
@@ -98,11 +98,11 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         // we multiply by 100 to create 'window' for collisions,
         // so user can have up to 100 deposits with equal unlock time and they will be stored sequentially
         // without breaking sort order of keys
-        // In worst case user (user has 101 deposits with unlock time N and M deposits with unlock time N + 1)
-        // user will have excess boost for 101th deposit for M seconds
+        // In worst case user (user has 101 deposits with unlock time N and M deposits with unlock time N + 1 and etc.)
+        // user will have excess boost for 101th deposit for several seconds
         uint64 save_key = uint64(now + lock_time) * 100;
         // infinite loop is bad, but in reality it is practically impossible to make many deposits with equal unlock time
-        while (deposits[save_key].qube_amount != 0) {
+        while (deposits[save_key].amount != 0) {
             save_key++;
         }
         deposits[save_key] = QubeDeposit(qube_amount, ve_amount, now, lock_time);
@@ -242,7 +242,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             }
             (cur_key, cur_deposit) = pointer.get();
 
-            uint32 deposit_lock_end = cur_deposit.deposit_time + cur_deposit.lock_time;
+            uint32 deposit_lock_end = cur_deposit.createdAt + cur_deposit.lockTime;
             // no need to check further, deposits are sorted by lock time
             if (sync_time < deposit_lock_end) {
                 break;
@@ -252,7 +252,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             _veQubeAverage = (_veQubeAverage * _veQubeAveragePeriod + _veQubeBalance * last_period) / (_veQubeAveragePeriod + last_period);
             _veQubeAveragePeriod += last_period;
             _lastUpdateTime = deposit_lock_end;
-            _veQubeBalance -= cur_deposit.ve_qube_amount;
+            _veQubeBalance -= cur_deposit.veAmount;
 
             pointer = deposits.next(cur_key);
         }
