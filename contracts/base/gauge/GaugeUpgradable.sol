@@ -13,7 +13,7 @@ import "@broxus/contracts/contracts/platform/Platform.sol";
 
 
 abstract contract GaugeUpgradable is GaugeHelpers {
-    function requestUpdateGaugeAccountCode(uint32 call_id, address send_gas_to) external onlyOwner {
+    function requestUpdateGaugeAccountCode(uint32 call_id, address send_gas_to) external view onlyOwner {
         require (msg.value >= Gas.REQUEST_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -37,7 +37,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function requestUpgradeGauge(uint32 call_id, address send_gas_to) external virtual onlyOwner {
+    function requestUpgradeGauge(uint32 call_id, address send_gas_to) external view onlyOwner {
         require (msg.value >= Gas.REQUEST_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -54,7 +54,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         );
     }
 
-    function upgradeGaugeAccount(uint32 call_id, uint32 nonce, address send_gas_to) external virtual {
+    function upgradeGaugeAccount(uint32 call_id, uint32 nonce, address send_gas_to) external view {
         require (msg.value >= Gas.GAUGE_ACCOUNT_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 

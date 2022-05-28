@@ -16,10 +16,10 @@ abstract contract GaugeBase is GaugeRewards {
 
     // deposit occurs here
     function onAcceptTokensTransfer(
-        address tokenRoot,
+        address,
         uint128 amount,
         address sender,
-        address senderWallet,
+        address,
         address remainingGasTo,
         TvmCell payload
     ) external override {
@@ -166,6 +166,8 @@ abstract contract GaugeBase is GaugeRewards {
                 uint128 _qube_debt,
                 uint128[] _extra_debt
             ) = _transferReward(msg.sender, user, qube_reward, extra_reward, deposit.send_gas_to, deposit.nonce);
+
+            emit Claim(deposit.call_id, deposit.user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
         }
 
         _sendCallbackOrGas(deposit.user, deposit.nonce, true, deposit.send_gas_to);
@@ -198,6 +200,8 @@ abstract contract GaugeBase is GaugeRewards {
                 uint128 _qube_debt,
                 uint128[] _extra_debt
             ) = _transferReward(msg.sender, user, qube_reward, extra_reward, send_gas_to, nonce);
+
+            emit Claim(call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
         }
 
         // we dont need additional callback, we always send tokens as last action
@@ -262,7 +266,7 @@ abstract contract GaugeBase is GaugeRewards {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function deployGaugeAccount(address gauge_account_owner) internal returns (address) {
+    function deployGaugeAccount(address gauge_account_owner) internal view returns (address) {
         TvmBuilder constructor_params;
 
         constructor_params.store(gauge_account_version); // 32
@@ -282,7 +286,7 @@ abstract contract GaugeBase is GaugeRewards {
         }(gaugeAccountCode, constructor_params.toCell(), gauge_account_owner);
     }
 
-    onBounce(TvmSlice slice) external {
+    onBounce(TvmSlice slice) external view {
         tvm.accept();
 
         uint32 functionId = slice.decode(uint32);
