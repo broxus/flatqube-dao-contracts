@@ -3,9 +3,10 @@ pragma AbiHeader expire;
 
 
 import "../../interfaces/IGauge.sol";
+import "../../interfaces/IGaugeAccount.sol";
 
 
-abstract contract GaugeAccountStorage {
+abstract contract GaugeAccountStorage is IGaugeAccount {
     uint32 current_version;
     TvmCell platform_code;
 
@@ -20,18 +21,26 @@ abstract contract GaugeAccountStorage {
         uint32 gaugeLockBoostedSupplyAveragePeriod;
     }
 
+    // amount of all deposited tokens
     uint128 balance;
+    // balance + bonus for locking deposit
     uint128 lockBoostedBalance;
+    // balance + bonus for locking deposit + ve boost
     uint128 veBoostedBalance;
 
+    // aggregated amount of locked deposited tokens
     uint128 lockedBalance;
+    // this used for storing expired lock boosted balance during sync
     uint128 expiredLockBoostedBalance;
 
+    // full state of user stats from all contracts (ve/veAcc/gauge) on moment of last action
     Averages lastRewardAverageState;
+    // same as above, but is used during sync
     Averages curAverageState;
 
-    uint32 lastRewardTime;
+    // timestamp of last update e.g updating average while syncing
     uint32 lastUpdateTime;
+    // number of locked deposits. We need it for gas calculations
     uint32 lockedDepositsNum;
 
     address gauge;
@@ -46,47 +55,67 @@ abstract contract GaugeAccountStorage {
         uint32 createdAt;
     }
 
-    DepositData deposit; // unlocked part
+    // locked deposits are stored independently
     mapping (uint64 => DepositData) lockedDeposits;
 
-    uint128 qubeLocked;
-    uint128 qubeUnlocked;
-    uint128 qubeRewardDebt;
-    uint128 qubeGaugeDebt;
+    struct RewardData {
+        uint256 accRewardPerShare;
+        uint128 lockedReward;
+        uint128 unlockedReward;
+        uint32 lastRewardTime;
+    }
 
-    uint128[] extraLocked;
-    uint128[] extraUnlocked;
-    uint128[] extraRewardDebts;
-    uint128[] extraGaugeDebts;
+    struct VestingData {
+        uint32 vestingTime;
+        uint32 vestingPeriod;
+        uint32 vestingRatio;
+    }
 
-    // vesting data
-    uint32 qubeVestingTime;
-    uint32 qubeVestingPeriod;
-    uint32 qubeVestingRatio;
-    uint32[] extraVestingTimes;
-    uint32[] extraVestingPeriods;
-    uint32[] extraVestingRatios;
+    RewardData qubeReward;
+    RewardData[] extraReward;
 
+    VestingData qubeVesting;
+    VestingData[] extraVesting;
+
+    // this is stored while we gathering data from all contracts to sync contract state
     struct PendingDeposit {
         uint32 deposit_nonce;
         uint128 amount;
         uint128 boostedAmount;
         uint32 lockTime;
-        IGauge.ExtraRewardData[] extraRewards;
-        IGauge.RewardRound[] qubeRewardRounds;
+        bool claim;
     }
 
+    struct PendingWithdraw {
+        uint128 amount;
+        bool claim;
+        uint32 call_id;
+        uint32 nonce;
+        address send_gas_to;
+    }
+
+    struct PendingClaim {
+        uint32 call_id;
+        uint32 nonce;
+        address send_gas_to;
+    }
+
+    // common sync data for all actions
     struct SyncData {
         uint32 poolLastRewardTime;
         uint128 lockBoostedSupply;
         uint128 veSupply;
         uint128 veAccBalance;
+        IGauge.ExtraRewardData[] extraReward;
+        IGauge.RewardRound[] qubeRewardRounds;
     }
 
     enum ActionType { Deposit, Withdraw, Claim }
 
     uint32 _nonce;
+    mapping (uint32 => PendingWithdraw) _withdraws;
     mapping (uint32 => PendingDeposit) _deposits;
+    mapping (uint32 => PendingClaim) _claims;
     mapping (uint32 => ActionType) _actions;
     mapping (uint32 => SyncData) _sync_data;
 

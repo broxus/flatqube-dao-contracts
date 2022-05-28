@@ -38,7 +38,7 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     // sum of all deposits boosted with locks
     uint128 lockBoostedSupply;
     // sum of all deposits boosted with locks + with veQubes
-    uint128 workingSupply;
+    uint128 veBoostedSupply;
 
     uint128 lockBoostedSupplyAverage;
     uint32 lockBoostedSupplyAveragePeriod;

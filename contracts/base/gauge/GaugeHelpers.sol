@@ -34,12 +34,14 @@ abstract contract GaugeHelpers is GaugeStorage {
     function encodeDepositPayload(
         address deposit_owner,
         uint32 lock_time,
+        bool claim,
         uint32 call_id,
         uint32 nonce
     ) external pure returns (TvmCell deposit_payload) {
         TvmBuilder builder;
         builder.store(deposit_owner);
         builder.store(lock_time);
+        builder.store(claim);
         builder.store(call_id);
         builder.store(nonce);
         return builder.toCell();
@@ -63,14 +65,15 @@ abstract contract GaugeHelpers is GaugeStorage {
 
     // try to decode deposit payload
     function decodeDepositPayload(TvmCell payload) public pure returns (
-        address deposit_owner, uint32 lock_time, uint32 call_id, uint32 nonce, bool correct
+        address deposit_owner, uint32 lock_time, bool claim, uint32 call_id, uint32 nonce, bool correct
     ) {
         // check if payload assembled correctly
         TvmSlice slice = payload.toSlice();
         // 1 address and 1 cell
-        if (slice.hasNBitsAndRefs(267 + 32 + 32 + 32, 0)) {
+        if (slice.hasNBitsAndRefs(267 + 32 + 32 + 1 + 32, 0)) {
             deposit_owner = slice.decode(address);
             lock_time = slice.decode(uint32);
+            claim = slice.decode(bool);
             call_id = slice.decode(uint32);
             nonce = slice.decode(uint32);
             correct = true;

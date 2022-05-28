@@ -59,34 +59,34 @@ contract GaugeAccount is GaugeAccountBase {
 //        onCodeUpgrade(main_builder.toCell());
 //    }
 
-    function onCodeUpgrade(TvmCell upgrade_data) private {
-        tvm.resetStorage();
-        tvm.rawReserve(_reserve(), 0);
-
-        TvmSlice s = upgrade_data.toSlice();
-        (address root_, , address send_gas_to) = s.decode(address, uint8, address);
-        gauge = root_;
-
-        platform_code = s.loadRef();
-
-        TvmSlice initialData = s.loadRefAsSlice();
-        user = initialData.decode(address);
-
-        TvmSlice params = s.loadRefAsSlice();
-        uint32 prev_version;
-        (current_version, prev_version) = params.decode(uint32, uint32);
-        (voteEscrow) = params.decode(address);
-        // initialization from platform
-        (qubeVestingPeriod, qubeVestingRatio) = params.decode(uint32, uint32);
-        (extraVestingPeriods, extraVestingRatios) = params.decode(uint32[], uint32[]);
-
-        extraLocked = new uint128[](extraVestingPeriods.length);
-        extraUnlocked = new uint128[](extraVestingPeriods.length);
-        extraRewardDebts = new uint128[](extraVestingPeriods.length);
-        extraGaugeDebts = new uint128[](extraVestingPeriods.length);
-        extraVestingTimes = new uint128[](extraVestingPeriods.length);
-
-        IVoteEscrow(voteEscrow).getVoteEscrowAccountAddress{value: 0.1 ton, callback: IGaugeAccount.receiveVeAccAddress}(user);
-        IGauge(gauge).onGaugeAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
-    }
+//    function onCodeUpgrade(TvmCell upgrade_data) private {
+//        tvm.resetStorage();
+//        tvm.rawReserve(_reserve(), 0);
+//
+//        TvmSlice s = upgrade_data.toSlice();
+//        (address root_, , address send_gas_to) = s.decode(address, uint8, address);
+//        gauge = root_;
+//
+//        platform_code = s.loadRef();
+//
+//        TvmSlice initialData = s.loadRefAsSlice();
+//        user = initialData.decode(address);
+//
+//        TvmSlice params = s.loadRefAsSlice();
+//        uint32 prev_version;
+//        (current_version, prev_version) = params.decode(uint32, uint32);
+//        (voteEscrow) = params.decode(address);
+//        // initialization from platform
+//        (qubeVestingPeriod, qubeVestingRatio) = params.decode(uint32, uint32);
+//        (extraVestingPeriods, extraVestingRatios) = params.decode(uint32[], uint32[]);
+//
+//        extraLocked = new uint128[](extraVestingPeriods.length);
+//        extraUnlocked = new uint128[](extraVestingPeriods.length);
+//        extraRewardDebts = new uint128[](extraVestingPeriods.length);
+//        extraGaugeDebts = new uint128[](extraVestingPeriods.length);
+//        extraVestingTimes = new uint128[](extraVestingPeriods.length);
+//
+//        IVoteEscrow(voteEscrow).getVoteEscrowAccountAddress{value: 0.1 ton, callback: IGaugeAccount.receiveVeAccAddress}(user);
+//        IGauge(gauge).onGaugeAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
+//    }
 }

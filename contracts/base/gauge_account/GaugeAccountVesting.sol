@@ -55,59 +55,60 @@ abstract contract GaugeAccountVesting is GaugeAccountStorage {
 
     function _computeVesting(
         uint128 _balance,
-        uint128 _locked,
-        uint128 _rewardDebt,
-        uint128 _accRewardPerShare,
+        uint128 _locked_reward,
+        uint256 _accRewardPerShare_prev,
+        uint256 _accRewardPerShare_cur,
         uint32 _poolLastRewardTime,
         uint32 _lastRewardTime,
         uint32 _farmEndTime,
         uint32 _vestingPeriod,
         uint32 _vestingRatio,
         uint32 _vestingTime
-    ) internal view returns (uint128 updated_locked, uint128 new_unlocked, uint32 new_vesting_time) {
-        uint128 new_reward = math.muldiv(_balance, _accRewardPerShare, SCALING_FACTOR) - _rewardDebt;
+    ) internal view returns (uint128 updated_locked_reward, uint128 new_unlocked_reward, uint32 updated_vesting_time) {
+        uint128 reward_debt = uint128(math.muldiv(_balance, _accRewardPerShare_prev, SCALING_FACTOR));
+        uint128 new_reward = uint128(math.muldiv(_balance, _accRewardPerShare_cur, SCALING_FACTOR)) - reward_debt;
 
         if (_vestingRatio > 0) {
             // calc which part should be payed immediately and with vesting from new reward
             uint128 new_vesting = (new_reward * _vestingRatio) / MAX_VESTING_RATIO;
             uint128 clear_part = new_reward - new_vesting;
 
-            new_unlocked = _calcUnlocked(new_vesting, _poolLastRewardTime, lastRewardTime, _farmEndTime, _vestingPeriod);
+            new_unlocked_reward = _calcUnlocked(new_vesting, _poolLastRewardTime, _lastRewardTime, _farmEndTime, _vestingPeriod);
 
-            // now calculate newly unlocked part of old locked reward
+            // now calculate newly unlocked_reward part of old locked reward
             uint32 passed = _poolLastRewardTime >= _vestingTime ? _vestingPeriod : _poolLastRewardTime - _lastRewardTime;
-            uint128 unlocked_old = passed >= _vestingPeriod
-            ? _locked
-            : uint128(math.muldiv(_locked, passed, _vestingTime - lastRewardTime));
+            uint128 unlocked_reward_old = passed >= _vestingPeriod
+            ? _locked_reward
+            : uint128(math.muldiv(_locked_reward, passed, _vestingTime - _lastRewardTime));
 
             // amount of reward locked from now
-            uint128 remaining_locked = _locked == 0 ? 0 : _locked - unlocked_old;
-            uint128 new_locked = new_vesting - new_unlocked;
-            uint128 pending = remaining_locked + new_locked;
+            uint128 remaining_locked_reward = _locked_reward == 0 ? 0 : _locked_reward - unlocked_reward_old;
+            uint128 new_locked_reward = new_vesting - new_unlocked_reward;
+            uint128 pending = remaining_locked_reward + new_locked_reward;
 
-            // Compute the vesting time (i.e. when the locked reward to be all unlocked)
+            // Compute the vesting time (i.e. when the locked reward to be all unlocked_reward)
             if (pending == 0) {
-                new_vesting_time = _poolLastRewardTime;
-            } else if (remaining_locked == 0) {
+                updated_vesting_time = _poolLastRewardTime;
+            } else if (remaining_locked_reward == 0) {
                 // only new reward, set vesting time to vesting period
-                new_vesting_time = _poolLastRewardTime + _vestingPeriod;
-            } else if (new_locked == 0) {
+                updated_vesting_time = _poolLastRewardTime + _vestingPeriod;
+            } else if (new_locked_reward == 0) {
                 // only unlocking old reward, dont change vesting time
-                new_vesting_time = _vestingTime;
+                updated_vesting_time = _vestingTime;
             } else {
                 // "old" reward and, perhaps, "new" reward are pending - the weighted average applied
                 uint32 passed_2 = _vestingTime - _poolLastRewardTime;
-                uint32 period = uint32(((remaining_locked * passed_2) + (new_locked * _vestingPeriod)) / pending);
-                new_vesting_time = _poolLastRewardTime + math.min(period, _vestingPeriod);
+                uint32 period = uint32(((remaining_locked_reward * passed_2) + (new_locked_reward * _vestingPeriod)) / pending);
+                updated_vesting_time = _poolLastRewardTime + math.min(period, _vestingPeriod);
             }
 
-            new_vesting_time = _farmEndTime > 0 ? math.min(_farmEndTime + _vestingPeriod, new_vesting_time) : new_vesting_time;
-            updated_locked = _locked + new_vesting - unlocked_old - new_unlocked;
-            new_unlocked += unlocked_old + clear_part;
+            updated_vesting_time = _farmEndTime > 0 ? math.min(_farmEndTime + _vestingPeriod, updated_vesting_time) : updated_vesting_time;
+            updated_locked_reward = _locked_reward + new_vesting - unlocked_reward_old - new_unlocked_reward;
+            new_unlocked_reward += unlocked_reward_old + clear_part;
         } else {
-            new_unlocked = new_reward;
-            updated_locked = _locked;
-            new_vesting_time = _vestingTime;
+            new_unlocked_reward = new_reward;
+            updated_locked_reward = _locked_reward;
+            updated_vesting_time = _vestingTime;
         }
     }
 }

@@ -4,18 +4,19 @@ pragma AbiHeader expire;
 interface IGauge {
     // Events
     event Deposit(uint32 call_id, address user, uint128 amount, uint32 lock_time);
-    event DepositReverted(uint32 call_id, address user, uint128 amount);
+    event DepositRevert(uint32 call_id, address user, uint128 amount);
     event Withdraw(uint32 call_id, address user, uint128 amount);
-    event WithdrawUnclaimed(uint32 call_id, address receiver, uint128[] amounts);
+    event WithdrawRevert(uint32 call_id, address user);
     event Claim(uint32 call_id, address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
+    event LockBoostedBurn(address user, uint128 lock_boosted_burned);
 
     event RewardDeposit(uint32 call_id, uint256 reward_id, uint128 amount);
     event ExtraFarmEndSet(uint32 call_id, uint256[] ids, uint32[] farm_end_times);
     event GaugeAccountCodeUpdated(uint32 call_id, uint32 prev_version, uint32 new_version);
     event GaugeAccountCodeUpdateRejected(uint32 call_id);
     event GaugeUpdated(uint32 prev_version, uint32 new_version);
-    event RewardRoundAdded(uint32 call_id, uint256[] ids, RewardRound[] reward_rounds);
-    event QubeRewardRoundAdded(RewardRound new_qube_round);
+    event RewardRoundAdded(uint32 call_id, uint256 ids, RewardRound new_reward_round, RewardRound[] updated_reward_rounds);
+    event QubeRewardRoundAdded(RewardRound new_qube_round, RewardRound[] updated_qube_rounds);
 
     event GaugeAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
     event GaugeAccountDeploy(address user);
@@ -71,11 +72,21 @@ interface IGauge {
     }
     function finishDeposit(
         address user,
-        uint64 _nonce
+        uint128 qube_reward,
+        uint128[] extra_rewards,
+        bool claim,
+        uint128 ve_bal_old,
+        uint128 ve_bal_new,
+        uint32 _deposit_nonce
     ) external;
     function finishWithdraw(
         address user,
-        uint128 withdrawAmount,
+        uint128 amount,
+        uint128 qube_reward,
+        uint128[] extra_reward,
+        bool claim,
+        uint128 ve_bal_old,
+        uint128 ve_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
@@ -84,11 +95,15 @@ interface IGauge {
         address user,
         uint128 qube_amount,
         uint128[] extra_amounts,
+        uint128 ve_bal_old,
+        uint128 ve_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
     ) external;
+    function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function revertDeposit(address user, uint64 _deposit_nonce) external;
+    function burnBoostedBalance(address user, uint128 expired_boosted) external;
     function forceUpgradeGaugeAccount(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;

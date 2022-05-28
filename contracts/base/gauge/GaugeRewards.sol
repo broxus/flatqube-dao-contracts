@@ -45,11 +45,15 @@ abstract contract GaugeRewards is GaugeUpgradable {
                 cur_rounds[i] = cur_rounds[i + 1];
             }
             cur_rounds[cur_rounds.length - 1] = new_qube_round;
+            if (lastQubeRewardRoundIdx > 0) {
+                lastQubeRewardRoundIdx -= 1;
+            }
         } else {
             cur_rounds.push(new_qube_round);
         }
 
-        emit QubeRewardRoundAdded(new_qube_round);
+        qubeReward.rewardRounds = cur_rounds;
+        emit QubeRewardRoundAdded(new_qube_round, cur_rounds);
     }
 
     // @dev accRewardPerShare and endTime params in new_rounds are ignored
@@ -70,11 +74,11 @@ abstract contract GaugeRewards is GaugeUpgradable {
             _cur_rounds.push(new_rounds[i]);
 
             extraRewards[ids[i]].rewardRounds = _cur_rounds;
+            emit RewardRoundAdded(call_id, ids[i], new_rounds[i], _cur_rounds);
         }
 
         tvm.rawReserve(_reserve(), 0);
 
-        emit RewardRoundAdded(call_id, ids, new_rounds);
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
@@ -103,37 +107,33 @@ abstract contract GaugeRewards is GaugeUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function _getMultiplier(uint32 _minFarmTime, uint32 _maxFarmTime, uint32 from, uint32 to) internal view returns(uint32) {
-        // restrict by farm start and end time
-        to = math.min(to, _maxFarmTime);
-        from = math.max(from, _minFarmTime);
-        // 'from' cant be bigger then 'to'
-        from = math.min(from, to);
-        return to - from;
-    }
-
-
-    function _getUpdateRewardRounds(RewardRound[] rewardRounds, uint256 start_sync_idx) internal view returns (RewardRound[], uint256) {
+    function _getUpdateRewardRounds(RewardRound[] rewardRounds, uint256 start_sync_idx, uint128 working_supply) internal view returns (RewardRound[], uint256) {
         uint32 _lastRewardTime = lastRewardTime;
         uint32 first_round_start = rewardRounds[0].startTime;
 
         // reward rounds still not started/update already occurred this block/no deposit balance => nothing to calculate
-        if (now < first_round_start || now == _lastRewardTime || depositTokenBalance == 0) {
+        if (now < first_round_start || now == _lastRewardTime || working_supply == 0) {
             return (rewardRounds, start_sync_idx);
         }
+
+        // for case when last update was before 1st round start
+        _lastRewardTime = math.max(_lastRewardTime, first_round_start);
 
         uint256 _new_sync_idx;
         for (uint j = start_sync_idx; j < rewardRounds.length; j++) {
             RewardRound round = rewardRounds[j];
-            uint32 _roundEndTime = round.endTime > 0 ? round.endTime : MAX_UINT32;
+            uint32 _roundEndTime = round.endTime > 0 ? round.endTime : now;
+            _roundEndTime = math.min(_roundEndTime, now);
+            _lastRewardTime = math.min(_lastRewardTime, _roundEndTime);
+
             // get multiplier bounded by this reward round
-            uint32 multiplier = _getMultiplier(round.startTime, _roundEndTime, _lastRewardTime, now);
+            uint32 multiplier = _roundEndTime - _lastRewardTime;
             uint128 new_reward = round.rewardPerSecond * multiplier;
             // if we sync this round 1st time, copy accRewardPerShare
             if (round.accRewardPerShare == 0 && j > 0) {
                 round.accRewardPerShare = rewardRounds[j - 1].accRewardPerShare;
             }
-            round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, depositTokenBalance);
+            round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, working_supply);
             rewardRounds[j] = round;
             // no need for further steps
             _new_sync_idx = j;
@@ -154,7 +154,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
     ) {
         _sync_idx = lastExtraRewardRoundIdx;
         for (uint i = 0; i < extraRewards.length; i++) {
-            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdateRewardRounds(extraRewards[i].rewardRounds, lastExtraRewardRoundIdx[i]);
+            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdateRewardRounds(extraRewards[i].rewardRounds, lastExtraRewardRoundIdx[i], lockBoostedSupply);
         }
     }
 
@@ -166,7 +166,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
         uint256 _qube_sync_idx
     ) {
         (_extraRewardRounds, _extra_sync_idx) = _getUpdatedExtraRewardRounds();
-        (_qubeRewardRounds, _qube_sync_idx) = _getUpdateRewardRounds(qubeReward.rewardRounds, lastQubeRewardRoundIdx);
+        (_qubeRewardRounds, _qube_sync_idx) = _getUpdateRewardRounds(qubeReward.rewardRounds, lastQubeRewardRoundIdx, veBoostedSupply);
         _lastRewardTime = now;
     }
 

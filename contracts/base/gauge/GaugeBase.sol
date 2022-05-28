@@ -27,7 +27,7 @@ abstract contract GaugeBase is GaugeRewards {
 
         if (msg.sender == depositTokenWallet) {
             // check if payload assembled correctly
-            (address deposit_owner, uint32 lock_time, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
+            (address deposit_owner, uint32 lock_time, bool claim, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
 
             if (!correct || msg.value < Gas.GAUGE_MIN_MSG_VALUE || lock_time > maxLockTime) {
                 // too low deposit value or too low msg.value or incorrect deposit payload
@@ -53,6 +53,7 @@ abstract contract GaugeBase is GaugeRewards {
                 amount,
                 boosted_amount,
                 lock_time,
+                claim,
                 lockBoostedSupply,
                 lockBoostedSupplyAverage,
                 lockBoostedSupplyAveragePeriod,
@@ -85,14 +86,14 @@ abstract contract GaugeBase is GaugeRewards {
         }
     }
 
-    function revertDeposit(address user, uint64 _deposit_nonce) external onlyGaugeAccount(user) override {
+    function revertDeposit(address user, uint32 _deposit_nonce) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
         PendingDeposit deposit = deposits[_deposit_nonce];
         depositTokenBalance -= deposit.amount;
         lockBoostedSupply -= deposit.boosted_amount;
 
-        emit DepositReverted(deposit.call_id, deposit.user, deposit.amount);
+        emit DepositRevert(deposit.call_id, deposit.user, deposit.amount);
         delete deposits[_deposit_nonce];
 
         _transferTokens(
@@ -105,18 +106,7 @@ abstract contract GaugeBase is GaugeRewards {
         );
     }
 
-    function finishDeposit(address user, uint64 _deposit_nonce) external onlyGaugeAccount(user) override {
-        tvm.rawReserve(_reserve(), 0);
-
-        PendingDeposit deposit = deposits[_deposit_nonce];
-
-        emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.lock_time);
-        delete deposits[_deposit_nonce];
-
-        _sendCallbackOrGas(deposit.user, deposit.nonce, true, deposit.send_gas_to);
-    }
-
-    function withdraw(uint128 amount, uint32 call_id, uint32 nonce, address send_gas_to) external {
+    function withdraw(uint128 amount, bool claim, uint32 call_id, uint32 nonce, address send_gas_to) external {
         require (amount > 0, Errors.BAD_INPUT);
         require (msg.value >= Gas.GAUGE_MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
@@ -126,8 +116,15 @@ abstract contract GaugeBase is GaugeRewards {
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            amount, extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
+            amount, claim, extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
         );
+    }
+
+    function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external onlyGaugeAccount(user) {
+        tvm.rawReserve(_reserve(), 0);
+
+        emit WithdrawRevert(call_id, user);
+        _sendCallbackOrGas(user, nonce, false, send_gas_to);
     }
 
     function claimReward(uint32 call_id, uint32 nonce, address send_gas_to) external {
@@ -143,31 +140,81 @@ abstract contract GaugeBase is GaugeRewards {
         );
     }
 
+    function finishDeposit(
+        address user,
+        uint128 qube_reward,
+        uint128[] extra_rewards,
+        bool claim,
+        uint128 ve_bal_old,
+        uint128 ve_bal_new,
+        uint32 _deposit_nonce
+    ) external onlyGaugeAccount(user) override {
+        tvm.rawReserve(_reserve(), 0);
+        PendingDeposit deposit = deposits[_deposit_nonce];
+
+        veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
+
+        emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.lock_time);
+        delete deposits[_deposit_nonce];
+
+        if (claim) {
+            (
+                uint128 _qube_amount,
+                uint128[] _extra_amount,
+                uint128 _qube_debt,
+                uint128[] _extra_debt
+            ) = _transferReward(msg.sender, user, qube_reward, extra_rewards, deposit.send_gas_to, deposit.nonce);
+        }
+
+        _sendCallbackOrGas(deposit.user, deposit.nonce, true, deposit.send_gas_to);
+    }
+
     function finishWithdraw(
         address user,
-        uint128 withdrawAmount,
+        uint128 amount,
+        uint128 qube_reward,
+        uint128[] extra_reward,
+        bool claim,
+        uint128 ve_bal_old,
+        uint128 ve_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
     ) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
-        depositTokenBalance -= withdrawAmount;
-        emit Withdraw(call_id, user, withdrawAmount);
+        veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
+        depositTokenBalance -= amount;
+        lockBoostedSupply -= amount;
 
-        _transferTokens(depositTokenWallet, withdrawAmount, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        emit Withdraw(call_id, user, amount);
+
+        if (claim) {
+            (
+                uint128 _qube_amount,
+                uint128[] _extra_amount,
+                uint128 _qube_debt,
+                uint128[] _extra_debt
+            ) = _transferReward(msg.sender, user, qube_amount, extra_amounts, send_gas_to, nonce);
+        }
+
+        // we dont need additional callback, we always send tokens as last action
+        _transferTokens(depositTokenWallet, amount, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function finishClaim(
         address user,
         uint128 qube_amount,
         uint128[] extra_amounts,
+        uint128 ve_bal_old,
+        uint128 ve_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
     ) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
+        veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
         (
             uint128 _qube_amount,
             uint128[] _extra_amount,
@@ -176,7 +223,19 @@ abstract contract GaugeBase is GaugeRewards {
         ) = _transferReward(msg.sender, user, qube_amount, extra_amounts, send_gas_to, nonce);
 
         emit Claim(call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+
+        _sendCallbackOrGas(deposit.user, deposit.nonce, true, deposit.send_gas_to);
+    }
+
+    function burnBoostedBalance(address user, uint128 expired_boosted) external override onlyGaugeAccount(user) {
+        tvm.rawReserve(_reserve(), 0);
+
+        updateSupplyAverage();
+
+        lockBoostedSupply -= expired_boosted;
+        emit LockBoostedBurn(user, expired_boosted);
+
+        user.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function withdrawUnclaimed(uint128[] ids, address to, uint32 call_id, uint32 nonce, address send_gas_to) external onlyOwner {
