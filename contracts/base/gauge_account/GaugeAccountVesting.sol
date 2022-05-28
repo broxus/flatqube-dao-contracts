@@ -19,7 +19,7 @@ abstract contract GaugeAccountVesting is GaugeAccountStorage {
     // calculate how much will be unlocked after given time passed for given locked amount with vesting period
     function _calcUnlockedForInterval(
         uint128 _locked, uint32 _passed, uint32 _vestingPeriod
-    ) internal view returns (uint128 unlocked, uint128 remaining_locked) {
+    ) internal pure returns (uint128 unlocked, uint128 remaining_locked) {
         remaining_locked = _locked;
 
         if (_passed > _vestingPeriod) {
@@ -36,7 +36,7 @@ abstract contract GaugeAccountVesting is GaugeAccountStorage {
 
     function _calcUnlocked(
         uint128 _locked, uint32 _poolLastRewardTime, uint32 _lastRewardTime, uint32 _farmEndTime, uint32 _vestingPeriod
-    ) internal view returns (uint128 _unlocked) {
+    ) internal pure returns (uint128 _unlocked) {
         // some safety checks
         // no new entitled rewards after farm end, nothing to compute
         if (_locked == 0 || (_farmEndTime > 0 && _lastRewardTime >= _farmEndTime)) {
@@ -64,7 +64,7 @@ abstract contract GaugeAccountVesting is GaugeAccountStorage {
         uint32 _vestingPeriod,
         uint32 _vestingRatio,
         uint32 _vestingTime
-    ) internal view returns (uint128 updated_locked_reward, uint128 new_unlocked_reward, uint32 updated_vesting_time) {
+    ) internal pure returns (uint128 updated_locked_reward, uint128 new_unlocked_reward, uint32 updated_vesting_time) {
         uint128 reward_debt = uint128(math.muldiv(_balance, _accRewardPerShare_prev, SCALING_FACTOR));
         uint128 new_reward = uint128(math.muldiv(_balance, _accRewardPerShare_cur, SCALING_FACTOR)) - reward_debt;
 

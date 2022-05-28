@@ -260,7 +260,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         );
     }
 
-    function getVoteEscrowAccountAddress(address user) public view responsible returns (address) {
+    function getVoteEscrowAccountAddress(address user) public view override responsible returns (address) {
         return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(
             tvm.hash(_buildInitData(_buildVoteEscrowAccountParams(user)))
         );

@@ -8,7 +8,9 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
     // Cant be deployed directly
     constructor() public { revert(); }
 
-    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to) external onlyVoteEscrowOrSelf {
+    function upgrade(
+        TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to
+    ) external override onlyVoteEscrowOrSelf {
         if (new_version == current_version) {
             tvm.rawReserve(_reserve(), 0);
             send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });

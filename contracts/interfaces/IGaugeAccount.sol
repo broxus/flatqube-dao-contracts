@@ -51,8 +51,7 @@ interface IGaugeAccount {
         uint32 nonce,
         uint128 veAccQube,
         uint128 veAccQubeAverage,
-        uint32 veAccQubeAveragePeriod,
-        uint32 lastUpdateTime
+        uint32 veAccQubeAveragePeriod
     ) external;
     function receiveVeAverage(
         uint32 nonce,
@@ -60,6 +59,7 @@ interface IGaugeAccount {
         uint128 veQubeAverage,
         uint32 veQubeAveragePeriod
     ) external;
+    function receiveVeAccAddress(address ve_acc_addr) external;
     function syncDepositsRecursive(uint32 nonce, uint32 sync_time, bool reserve) external;
     function updateQubeReward(uint32 nonce, uint128 interval_ve_balance, uint128 interval_lock_balance) external;
     function updateExtraReward(uint32 nonce, uint128 interval_ve_balance, uint128 interval_lock_balance, uint256 idx) external;

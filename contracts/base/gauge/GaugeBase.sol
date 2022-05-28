@@ -32,7 +32,7 @@ abstract contract GaugeBase is GaugeRewards {
             if (!correct || msg.value < Gas.GAUGE_MIN_MSG_VALUE || lock_time > maxLockTime) {
                 // too low deposit value or too low msg.value or incorrect deposit payload
                 // for incorrect deposit payload send tokens back to sender
-                emit DepositReverted(call_id, deposit_owner, amount);
+                emit DepositRevert(call_id, deposit_owner, amount);
                 _transferTokens(depositTokenWallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
                 return;
             }
@@ -44,7 +44,7 @@ abstract contract GaugeBase is GaugeRewards {
             lockBoostedSupply += boosted_amount;
 
             deposit_nonce += 1;
-            deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, boosted_amount, lock_time, remainingGasTo, nonce, call_id);
+            deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, boosted_amount, lock_time, claim, remainingGasTo, nonce, call_id);
 
             address gaugeAccountAddr = getGaugeAccountAddress(deposit_owner);
             // TODO: up
@@ -71,7 +71,7 @@ abstract contract GaugeBase is GaugeRewards {
                 if (msg.sender == extraRewards[i].tokenData.tokenWallet) {
                     (uint32 call_id, uint32 nonce, bool correct) = decodeRewardDepositPayload(payload);
                     if (!correct) {
-                        emit DepositReverted(call_id, sender, amount);
+                        emit DepositRevert(call_id, sender, amount);
                         _transferTokens(msg.sender, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
                         return;
                     }
@@ -116,11 +116,12 @@ abstract contract GaugeBase is GaugeRewards {
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            amount, claim, extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
+            amount, claim, lockBoostedSupply, lockBoostedSupplyAverage, lockBoostedSupplyAveragePeriod,
+            extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
         );
     }
 
-    function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external onlyGaugeAccount(user) {
+    function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external override onlyGaugeAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit WithdrawRevert(call_id, user);
@@ -135,7 +136,8 @@ abstract contract GaugeBase is GaugeRewards {
 
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
-        IGaugeAccount(gaugeAccountAddr).processClaimReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            lockBoostedSupply, lockBoostedSupplyAverage, lockBoostedSupplyAveragePeriod,
             extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
         );
     }
@@ -143,7 +145,7 @@ abstract contract GaugeBase is GaugeRewards {
     function finishDeposit(
         address user,
         uint128 qube_reward,
-        uint128[] extra_rewards,
+        uint128[] extra_reward,
         bool claim,
         uint128 ve_bal_old,
         uint128 ve_bal_new,
@@ -163,7 +165,7 @@ abstract contract GaugeBase is GaugeRewards {
                 uint128[] _extra_amount,
                 uint128 _qube_debt,
                 uint128[] _extra_debt
-            ) = _transferReward(msg.sender, user, qube_reward, extra_rewards, deposit.send_gas_to, deposit.nonce);
+            ) = _transferReward(msg.sender, user, qube_reward, extra_reward, deposit.send_gas_to, deposit.nonce);
         }
 
         _sendCallbackOrGas(deposit.user, deposit.nonce, true, deposit.send_gas_to);
@@ -195,7 +197,7 @@ abstract contract GaugeBase is GaugeRewards {
                 uint128[] _extra_amount,
                 uint128 _qube_debt,
                 uint128[] _extra_debt
-            ) = _transferReward(msg.sender, user, qube_amount, extra_amounts, send_gas_to, nonce);
+            ) = _transferReward(msg.sender, user, qube_reward, extra_reward, send_gas_to, nonce);
         }
 
         // we dont need additional callback, we always send tokens as last action
@@ -204,8 +206,8 @@ abstract contract GaugeBase is GaugeRewards {
 
     function finishClaim(
         address user,
-        uint128 qube_amount,
-        uint128[] extra_amounts,
+        uint128 qube_reward,
+        uint128[] extra_reward,
         uint128 ve_bal_old,
         uint128 ve_bal_new,
         uint32 call_id,
@@ -220,11 +222,11 @@ abstract contract GaugeBase is GaugeRewards {
             uint128[] _extra_amount,
             uint128 _qube_debt,
             uint128[] _extra_debt
-        ) = _transferReward(msg.sender, user, qube_amount, extra_amounts, send_gas_to, nonce);
+        ) = _transferReward(msg.sender, user, qube_reward, extra_reward, send_gas_to, nonce);
 
         emit Claim(call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
 
-        _sendCallbackOrGas(deposit.user, deposit.nonce, true, deposit.send_gas_to);
+        _sendCallbackOrGas(user, nonce, true, send_gas_to);
     }
 
     function burnBoostedBalance(address user, uint128 expired_boosted) external override onlyGaugeAccount(user) {
@@ -305,11 +307,16 @@ abstract contract GaugeBase is GaugeRewards {
                     Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
                 );
             }
-             IGaugeAccount(gauge_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+
+            IGaugeAccount(gauge_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 _deposit_nonce,
                 deposit.amount,
                 deposit.boosted_amount,
                 deposit.lock_time,
+                deposit.claim,
+                lockBoostedSupply,
+                lockBoostedSupplyAverage,
+                lockBoostedSupplyAveragePeriod,
                 extraRewards,
                 qubeReward.rewardRounds,
                 lastRewardTime

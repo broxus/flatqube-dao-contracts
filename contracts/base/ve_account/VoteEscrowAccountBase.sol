@@ -113,7 +113,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
 
     function processVote(
         uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
-    ) external onlyVoteEscrowOrSelf {
+    ) external override onlyVoteEscrowOrSelf {
         require (lastEpochVoted < voteEpoch, Errors.ALREADY_VOTED);
 
         tvm.rawReserve(_reserve(), 0);
@@ -146,7 +146,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, call_id, nonce, send_gas_to);
     }
 
-    function processWithdraw(uint32 call_id, uint32 nonce, address send_gas_to) external onlyVoteEscrowOrSelf {
+    function processWithdraw(uint32 call_id, uint32 nonce, address send_gas_to) external override onlyVoteEscrowOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
         // check gas only at beginning
@@ -178,7 +178,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
         uint32 lock_time,
         uint32 nonce,
         address send_gas_to
-    ) external onlyVoteEscrowOrSelf {
+    ) external override onlyVoteEscrowOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
         // check gas only at beginning
@@ -207,7 +207,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
     // @param callback_receiver - address that will receive callback
     // @param callback_nonce - nonce that will be sent with callback
     // @param sync_time - timestamp. Ve stats will be updated up to this moment
-    function getVeAverage(address callback_receiver, uint32 callback_nonce, uint32 sync_time) external {
+    function getVeAverage(address callback_receiver, uint32 callback_nonce, uint32 sync_time) external override {
         require (msg.sender == address(this) || msg.sender == callback_receiver, Errors.BAD_SENDER);
         tvm.rawReserve(_reserve(), 0);
 
@@ -221,7 +221,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountStorage {
             return;
         }
         IGaugeAccount(callback_receiver).receiveVeAccAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            callback_nonce, veQubeAverage, veQubeAveragePeriod, lastUpdateTime
+            callback_nonce, veQubeBalance, veQubeAverage, veQubeAveragePeriod
         );
     }
 

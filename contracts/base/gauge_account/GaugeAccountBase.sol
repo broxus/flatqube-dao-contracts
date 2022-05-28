@@ -10,8 +10,8 @@ import "../../libraries/Errors.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
-contract GaugeAccountBase is GaugeAccountVesting {
-    function receiveVeAccAddress(address ve_acc_addr) external onlyVoteEscrow {
+abstract contract GaugeAccountBase is GaugeAccountVesting {
+    function receiveVeAccAddress(address ve_acc_addr) external override onlyVoteEscrow {
         veAccount = ve_acc_addr;
     }
 
@@ -167,7 +167,7 @@ contract GaugeAccountBase is GaugeAccountVesting {
     }
 
     function receiveVeAccAverage(
-        uint32 nonce, uint128 veAccQube, uint128 veAccQubeAverage, uint32 veAccQubeAveragePeriod, uint32 lastUpdateTime
+        uint32 nonce, uint128 veAccQube, uint128 veAccQubeAverage, uint32 veAccQubeAveragePeriod
     ) external override onlyVoteEscrowAccountOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
@@ -248,7 +248,7 @@ contract GaugeAccountBase is GaugeAccountVesting {
         VestingData vesting_data,
         uint128 interval_balance,
         uint32 pool_last_reward_time
-    ) public view returns (RewardData, VestingData) {
+    ) public pure returns (RewardData, VestingData) {
         uint32 first_round_start = reward_rounds[0].startTime;
 
         // nothing to calculate
@@ -304,8 +304,8 @@ contract GaugeAccountBase is GaugeAccountVesting {
                         reward_data.lastRewardTime = up_to;
                         vesting_data.vestingTime = updated_vesting_time;
                     }
+                    break;
                 }
-                break;
             }
         }
 
@@ -358,7 +358,7 @@ contract GaugeAccountBase is GaugeAccountVesting {
         _finalizeAction(nonce);
     }
 
-    function _finalizeAction(uint32 nonce) internal {
+    function _finalizeAction(uint32 nonce) internal view {
         if (_actions[nonce] == ActionType.Deposit) {
             IGaugeAccount(address(this)).processDeposit_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
         } else if (_actions[nonce] == ActionType.Withdraw) {

@@ -2,7 +2,10 @@ pragma ton-solidity ^0.57.1;
 pragma AbiHeader expire;
 
 
-abstract contract VoteEscrowAccountStorage {
+import "../../interfaces/IVoteEscrowAccount.sol";
+
+
+abstract contract VoteEscrowAccountStorage is IVoteEscrowAccount {
     uint32 current_version;
 
     address voteEscrow;

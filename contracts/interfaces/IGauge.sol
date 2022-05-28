@@ -9,6 +9,7 @@ interface IGauge {
     event WithdrawRevert(uint32 call_id, address user);
     event Claim(uint32 call_id, address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
     event LockBoostedBurn(address user, uint128 lock_boosted_burned);
+    event WithdrawUnclaimed(uint32 call_id, address to, uint128[] extra_amounts);
 
     event RewardDeposit(uint32 call_id, uint256 reward_id, uint128 amount);
     event ExtraFarmEndSet(uint32 call_id, uint256[] ids, uint32[] farm_end_times);
@@ -66,6 +67,7 @@ interface IGauge {
         uint128 amount;
         uint128 boosted_amount;
         uint32 lock_time;
+        bool claim;
         address send_gas_to;
         uint32 nonce;
         uint32 call_id;
@@ -102,7 +104,7 @@ interface IGauge {
         address send_gas_to
     ) external;
     function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
-    function revertDeposit(address user, uint64 _deposit_nonce) external;
+    function revertDeposit(address user, uint32 _deposit_nonce) external;
     function burnBoostedBalance(address user, uint128 expired_boosted) external;
     function forceUpgradeGaugeAccount(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
