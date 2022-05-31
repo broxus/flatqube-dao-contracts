@@ -6,6 +6,72 @@ import "./IGauge.sol";
 
 
 interface IGaugeAccount {
+    struct Averages {
+        uint128 veQubeAverage;
+        uint32 veQubeAveragePeriod;
+        uint128 veAccQubeAverage;
+        uint32 veAccQubeAveragePeriod;
+        uint128 lockBoostedBalanceAverage;
+        uint32 lockBoostedBalanceAveragePeriod;
+        uint128 gaugeLockBoostedSupplyAverage;
+        uint32 gaugeLockBoostedSupplyAveragePeriod;
+    }
+
+    struct DepositData {
+        uint128 amount;
+        uint128 boostedAmount;
+        uint32 lockTime;
+        uint32 createdAt;
+    }
+
+    struct RewardData {
+        uint256 accRewardPerShare;
+        uint128 lockedReward;
+        uint128 unlockedReward;
+        uint32 lastRewardTime;
+    }
+
+    struct VestingData {
+        uint32 vestingTime;
+        uint32 vestingPeriod;
+        uint32 vestingRatio;
+    }
+
+    // this is stored while we gathering data from all contracts to sync contract state
+    struct PendingDeposit {
+        uint32 deposit_nonce;
+        uint128 amount;
+        uint128 boostedAmount;
+        uint32 lockTime;
+        bool claim;
+    }
+
+    struct PendingWithdraw {
+        uint128 amount;
+        bool claim;
+        uint32 call_id;
+        uint32 nonce;
+        address send_gas_to;
+    }
+
+    struct PendingClaim {
+        uint32 call_id;
+        uint32 nonce;
+        address send_gas_to;
+    }
+
+    // common sync data for all actions
+    struct SyncData {
+        uint32 poolLastRewardTime;
+        uint128 lockBoostedSupply;
+        uint128 veSupply;
+        uint128 veAccBalance;
+        IGauge.ExtraRewardData[] extraReward;
+        IGauge.RewardRound[] qubeRewardRounds;
+    }
+
+    enum ActionType { Deposit, Withdraw, Claim }
+
     function processDeposit(
         uint32 deposit_nonce,
         uint128 amount,

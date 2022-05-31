@@ -44,10 +44,11 @@ abstract contract GaugeBase is GaugeRewards {
             lockBoostedSupply += boosted_amount;
 
             deposit_nonce += 1;
-            deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, boosted_amount, lock_time, claim, remainingGasTo, nonce, call_id);
+            deposits[deposit_nonce] = PendingDeposit(
+                deposit_owner, amount, boosted_amount, lock_time, claim, remainingGasTo, nonce, call_id
+            );
 
             address gaugeAccountAddr = getGaugeAccountAddress(deposit_owner);
-            // TODO: up
             IGaugeAccount(gaugeAccountAddr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 deposit_nonce,
                 amount,

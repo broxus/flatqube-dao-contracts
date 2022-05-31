@@ -23,8 +23,7 @@ abstract contract GaugeAccountVesting is GaugeAccountStorage {
         remaining_locked = _locked;
 
         if (_passed > _vestingPeriod) {
-            uint32 periods_passed = (_passed / _vestingPeriod) - 1;
-            uint32 full_unlocked_part = periods_passed * _vestingPeriod + _passed % _vestingPeriod;
+            uint32 full_unlocked_part = _passed - _vestingPeriod;
 
             remaining_locked -= uint128(math.muldiv(math.muldiv(full_unlocked_part, SCALING_FACTOR, _passed), remaining_locked, SCALING_FACTOR));
             _passed -= full_unlocked_part;

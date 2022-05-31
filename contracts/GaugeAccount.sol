@@ -12,7 +12,6 @@ contract GaugeAccount is GaugeAccountBase {
     // Cant be deployed directly
     constructor() public { revert(); }
 
-//     TODO: UP
     function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to) external override onlyGauge {
         if (new_version == current_version) {
             tvm.rawReserve(_reserve(), 0);
@@ -20,14 +19,60 @@ contract GaugeAccount is GaugeAccountBase {
             return;
         }
 
-        TvmBuilder builder;
+        uint8 _tmp;
+        TvmBuilder main_builder;
+        main_builder.store(gauge); // address 267
+        main_builder.store(_tmp); // 8
+        main_builder.store(send_gas_to); // address 267
 
+        TvmCell empty;
+        main_builder.storeRef(empty); // ref
+
+        TvmBuilder initial;
+        initial.store(user);
+
+        main_builder.storeRef(initial); // ref 2
+
+        TvmBuilder params;
+        params.store(new_version);
+        params.store(current_version);
+
+        main_builder.storeRef(params); // ref3
+
+        TvmCell data = abi.encode(
+            call_id,
+            nonce,
+            balance,
+            lockBoostedBalance,
+            veBoostedBalance,
+            lockedBalance,
+            expiredLockBoostedBalance,
+            lastRewardAverageState,
+            curAverageState,
+            lastUpdateTime,
+            lockedDepositsNum,
+            voteEscrow,
+            veAccount,
+            lockedDeposits,
+            qubeReward,
+            extraReward,
+            qubeVesting,
+            extraVesting,
+            _nonce,
+            _withdraws,
+            _deposits,
+            _claims,
+            _actions,
+            _sync_data
+        );
+
+        main_builder.storeRef(data); // ref 4
         // set code after complete this method
         tvm.setcode(new_code);
 
         // run onCodeUpgrade from new code
         tvm.setCurrentCode(new_code);
-        onCodeUpgrade(builder.toCell());
+        onCodeUpgrade(main_builder.toCell());
     }
 
     function onCodeUpgrade(TvmCell upgrade_data) private {
@@ -38,7 +83,8 @@ contract GaugeAccount is GaugeAccountBase {
         (address root_, , address send_gas_to) = s.decode(address, uint8, address);
         gauge = root_;
 
-        platform_code = s.loadRef();
+        // skip 0 bits and 1 ref (platform code), we dont need it
+        s.skip(0, 1);
 
         TvmSlice initialData = s.loadRefAsSlice();
         user = initialData.decode(address);

@@ -68,7 +68,8 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         (address root_, , address send_gas_to) = s.decode(address, uint8, address);
         voteEscrow = root_;
 
-        TvmCell _platform_code = s.loadRef();
+        // skip 0 bits and 1 ref (platform code), we dont need it
+        s.skip(0, 1);
 
         TvmSlice initialData = s.loadRefAsSlice();
         user = initialData.decode(address);
