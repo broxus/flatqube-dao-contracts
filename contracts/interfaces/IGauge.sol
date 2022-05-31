@@ -35,19 +35,6 @@ interface IGauge {
         uint128 tokenBalance;
     }
 
-    struct ExtraRewardData {
-        TokenData tokenData;
-        RewardRound[] rewardRounds;
-        bool ended;
-    }
-
-    struct QubeRewardData {
-        TokenData tokenData;
-        RewardRound[] rewardRounds;
-        uint32 vestingPeriod;
-        uint32 vestingRatio;
-    }
-
     // TODO: up
     struct Details {
         uint32 lastRewardTime;
@@ -55,8 +42,6 @@ interface IGauge {
         address depositTokenRoot;
         address depositTokenWallet;
         uint128 depositTokenBalance;
-        QubeRewardData qubeReward;
-        ExtraRewardData[] extraRewards;
         address owner;
         address factory;
         uint32 gauge_account_version;

@@ -12,15 +12,14 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "@broxus/contracts/contracts/platform/Platform.sol";
 
 
-
 abstract contract GaugeHelpers is GaugeStorage {
     // TODO: sync
-    function getDetails() external view responsible returns (Details) {
-        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }Details(
-            lastRewardTime, voteEscrow, depositTokenRoot, depositTokenWallet, depositTokenBalance,
-            qubeReward, extraRewards, owner, factory,gauge_account_version, gauge_version
-        );
-    }
+//    function getDetails() external view responsible returns (Details) {
+//        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }Details(
+//            lastRewardTime, voteEscrow, depositTokenRoot, depositTokenWallet, depositTokenBalance,
+//            qubeReward, extraRewards, owner, factory,gauge_account_version, gauge_version
+//        );
+//    }
 
     function calculateBoostedBalance(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {
         if (maxLockTime == 0) {
@@ -131,15 +130,15 @@ abstract contract GaugeHelpers is GaugeStorage {
         bool have_debt;
         // check if we have enough special rewards, emit debt otherwise
         for (uint i = 0; i < extra_amounts.length; i++) {
-            if (extraRewards[i].tokenData.tokenBalance < extra_amounts[i]) {
-                _extra_debt[i] = extra_amounts[i] - extraRewards[i].tokenData.tokenBalance;
+            if (extraTokenData[i].tokenBalance < extra_amounts[i]) {
+                _extra_debt[i] = extra_amounts[i] - extraTokenData[i].tokenBalance;
                 _extra_amount[i] -= _extra_debt[i];
                 have_debt = true;
             }
         }
         // check if we have enough qube, emit debt otherwise
-        if (qubeReward.tokenData.tokenBalance < qube_amount) {
-            _qube_debt = qube_amount - qubeReward.tokenData.tokenBalance;
+        if (qubeTokenData.tokenBalance < qube_amount) {
+            _qube_debt = qube_amount - qubeTokenData.tokenBalance;
             _qube_amount -= _qube_debt;
             have_debt = true;
         }
@@ -155,14 +154,14 @@ abstract contract GaugeHelpers is GaugeStorage {
         // pay extra rewards
         for (uint i = 0; i < _extra_amount.length; i++) {
             if (_extra_amount[i] > 0) {
-                _transferTokens(extraRewards[i].tokenData.tokenWallet, _extra_amount[i], receiver_addr, _makeCell(nonce), send_gas_to, 0);
-                extraRewards[i].tokenData.tokenBalance -= _extra_amount[i];
+                _transferTokens(extraTokenData[i].tokenWallet, _extra_amount[i], receiver_addr, _makeCell(nonce), send_gas_to, 0);
+                extraTokenData[i].tokenBalance -= _extra_amount[i];
             }
         }
         // pay qube rewards
         if (_qube_amount > 0) {
-            _transferTokens(qubeReward.tokenData.tokenWallet, _qube_amount, receiver_addr, _makeCell(nonce), send_gas_to, 0);
-            qubeReward.tokenData.tokenBalance -= _qube_amount;
+            _transferTokens(qubeTokenData.tokenWallet, _qube_amount, receiver_addr, _makeCell(nonce), send_gas_to, 0);
+            qubeTokenData.tokenBalance -= _qube_amount;
         }
         return (_qube_amount, _extra_amount, _qube_debt, _extra_debt);
     }
@@ -178,13 +177,13 @@ abstract contract GaugeHelpers is GaugeStorage {
         );
 
         // deploy qube wallet
-        ITokenRoot(qubeReward.tokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
+        ITokenRoot(qubeTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
             address(this), // owner
             Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
         );
 
-        for (uint i = 0; i < extraRewards.length; i++) {
-            ITokenRoot(extraRewards[i].tokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress}(
+        for (uint i = 0; i < extraTokenData.length; i++) {
+            ITokenRoot(extraTokenData[i].tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress}(
                 address(this), // owner address
                 Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
             );
@@ -201,12 +200,12 @@ abstract contract GaugeHelpers is GaugeStorage {
 
         if (msg.sender == depositTokenRoot) {
             depositTokenWallet = wallet;
-        } else if (msg.sender == qubeReward.tokenData.tokenRoot) {
-            qubeReward.tokenData.tokenWallet = wallet;
+        } else if (msg.sender == qubeTokenData.tokenRoot) {
+            qubeTokenData.tokenWallet = wallet;
         } else {
-            for (uint i = 0; i < extraRewards.length; i++) {
-                if (msg.sender == extraRewards[i].tokenData.tokenRoot) {
-                    extraRewards[i].tokenData.tokenWallet = wallet;
+            for (uint i = 0; i < extraTokenData.length; i++) {
+                if (msg.sender == extraTokenData[i].tokenRoot) {
+                    extraTokenData[i].tokenWallet = wallet;
                 }
             }
         }

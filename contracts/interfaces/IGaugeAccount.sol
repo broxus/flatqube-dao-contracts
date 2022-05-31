@@ -66,7 +66,7 @@ interface IGaugeAccount {
         uint128 lockBoostedSupply;
         uint128 veSupply;
         uint128 veAccBalance;
-        IGauge.ExtraRewardData[] extraReward;
+        IGauge.RewardRound[][] extraRewardRounds;
         IGauge.RewardRound[] qubeRewardRounds;
     }
 
@@ -81,7 +81,7 @@ interface IGaugeAccount {
         uint128 lockBoostedSupply,
         uint128 lockBoostedSupplyAverage,
         uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.ExtraRewardData[] extra_rewards,
+        IGauge.RewardRound[][] extra_reward_rounds,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 poolLastRewardTime
     ) external;
@@ -92,7 +92,7 @@ interface IGaugeAccount {
         uint128 lockBoostedSupply,
         uint128 lockBoostedSupplyAverage,
         uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.ExtraRewardData[] extra_rewards,
+        IGauge.RewardRound[][] extra_reward_rounds,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 poolLastRewardTime,
         uint32 call_id,
@@ -104,7 +104,7 @@ interface IGaugeAccount {
         uint128 lockBoostedSupply,
         uint128 lockBoostedSupplyAverage,
         uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.ExtraRewardData[] extra_rewards,
+        IGauge.RewardRound[][] extra_reward_rounds,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 poolLastRewardTime,
         uint32 call_id,

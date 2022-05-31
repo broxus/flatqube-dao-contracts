@@ -30,6 +30,8 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     // index used in updating reward round info
     uint256 lastQubeRewardRoundIdx;
 
+    uint32 lastAverageUpdateTime;
+
     // deposit token data
     address depositTokenRoot;
     address depositTokenWallet;
@@ -50,13 +52,19 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint32 maxLockTime;
     uint32 constant BOOST_BASE = 1000;
 
-    // reward params for qube
-    QubeRewardData qubeReward;
-    // reward params for additional tokens
-    ExtraRewardData[] extraRewards;
-    // deserializing structure is very expensive, so that we store vars that we send to other contracts separately
+    // qube data
+    // storing in structs is better, but much more expensive
+    TokenData qubeTokenData;
+    RewardRound[] qubeRewardRounds;
+    uint32 qubeVestingPeriod;
+    uint32 qubeVestingRatio;
+
+    // extra rewards data
+    TokenData[] extraTokenData;
+    RewardRound[][] extraRewardRounds;
     uint32[] extraVestingPeriods;
     uint32[] extraVestingRatios;
+    bool[] extraRewardEnded;
 
     address owner;
 

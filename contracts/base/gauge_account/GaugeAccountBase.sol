@@ -28,7 +28,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         uint128 lockBoostedSupply,
         uint128 lockBoostedSupplyAverage,
         uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.ExtraRewardData[] extra_rewards,
+        IGauge.RewardRound[][] extra_reward_rounds,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 poolLastRewardTime,
         uint32 call_id,
@@ -42,7 +42,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         // TODO: min gas?
         _nonce += 1;
         _withdraws[_nonce] = PendingWithdraw(amount, claim, call_id, callback_nonce, send_gas_to);
-        _sync_data[_nonce] = SyncData(poolLastRewardTime, lockBoostedSupply, 0, 0, extra_rewards, qube_reward_rounds);
+        _sync_data[_nonce] = SyncData(poolLastRewardTime, lockBoostedSupply, 0, 0, extra_reward_rounds, qube_reward_rounds);
         _actions[_nonce] = ActionType.Withdraw;
 
         curAverageState.gaugeLockBoostedSupplyAverage = lockBoostedSupplyAverage;
@@ -56,7 +56,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         uint128 lockBoostedSupply,
         uint128 lockBoostedSupplyAverage,
         uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.ExtraRewardData[] extra_rewards,
+        IGauge.RewardRound[][] extra_reward_rounds,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 poolLastRewardTime,
         uint32 call_id,
@@ -66,7 +66,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         // TODO: min gas?
         _nonce += 1;
         _claims[_nonce] = PendingClaim(call_id, callback_nonce, send_gas_to);
-        _sync_data[_nonce] = SyncData(poolLastRewardTime, lockBoostedSupply, 0, 0, extra_rewards, qube_reward_rounds);
+        _sync_data[_nonce] = SyncData(poolLastRewardTime, lockBoostedSupply, 0, 0, extra_reward_rounds, qube_reward_rounds);
         _actions[_nonce] = ActionType.Claim;
 
         curAverageState.gaugeLockBoostedSupplyAverage = lockBoostedSupplyAverage;
@@ -85,14 +85,14 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         uint128 lockBoostedSupply,
         uint128 lockBoostedSupplyAverage,
         uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.ExtraRewardData[] extra_rewards,
+        IGauge.RewardRound[][] extra_reward_rounds,
         IGauge.RewardRound[] qube_reward_rounds,
         uint32 poolLastRewardTime
     ) external override onlyGauge {
         // TODO: min gas?
         _nonce += 1;
         _deposits[_nonce] = PendingDeposit(deposit_nonce, amount, boosted_amount, lock_time, claim);
-        _sync_data[_nonce] = SyncData(poolLastRewardTime, lockBoostedSupply, 0, 0, extra_rewards, qube_reward_rounds);
+        _sync_data[_nonce] = SyncData(poolLastRewardTime, lockBoostedSupply, 0, 0, extra_reward_rounds, qube_reward_rounds);
         _actions[_nonce] = ActionType.Deposit;
 
         curAverageState.gaugeLockBoostedSupplyAverage = lockBoostedSupplyAverage;
@@ -182,7 +182,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
             extraReward[idx],
             extraVesting[idx]
         ) = calculateRewards(
-            _data.extraReward[idx].rewardRounds, extraReward[idx], extraVesting[idx], interval_lock_balance, _data.poolLastRewardTime
+            _data.extraRewardRounds[idx], extraReward[idx], extraVesting[idx], interval_lock_balance, _data.poolLastRewardTime
         );
 
         if (extraReward.length - 1 > idx) {

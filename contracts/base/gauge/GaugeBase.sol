@@ -58,18 +58,18 @@ abstract contract GaugeBase is GaugeRewards {
                 lockBoostedSupply,
                 lockBoostedSupplyAverage,
                 lockBoostedSupplyAveragePeriod,
-                extraRewards,
-                qubeReward.rewardRounds,
+                extraRewardRounds,
+                qubeRewardRounds,
                 lastRewardTime
             );
-        } else if (msg.sender == qubeReward.tokenData.tokenWallet && sender == voteEscrow) {
+        } else if (msg.sender == qubeTokenData.tokenWallet && sender == voteEscrow) {
             TvmSlice slice = payload.toSlice();
             uint32 round_len = slice.decode(uint32);
             _addQubeRewardRound(amount, round_len);
             remainingGasTo.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
         } else {
-            for (uint i = 0; i < extraRewards.length; i++) {
-                if (msg.sender == extraRewards[i].tokenData.tokenWallet) {
+            for (uint i = 0; i < extraTokenData.length; i++) {
+                if (msg.sender == extraTokenData[i].tokenWallet) {
                     (uint32 call_id, uint32 nonce, bool correct) = decodeRewardDepositPayload(payload);
                     if (!correct) {
                         emit DepositRevert(call_id, sender, amount);
@@ -77,7 +77,7 @@ abstract contract GaugeBase is GaugeRewards {
                         return;
                     }
 
-                    extraRewards[i].tokenData.tokenBalance += amount;
+                    extraTokenData[i].tokenBalance += amount;
                     emit RewardDeposit(call_id, i, amount);
 
                     _sendCallbackOrGas(sender, nonce, true, remainingGasTo);
@@ -118,7 +118,7 @@ abstract contract GaugeBase is GaugeRewards {
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             amount, claim, lockBoostedSupply, lockBoostedSupplyAverage, lockBoostedSupplyAveragePeriod,
-            extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
+            extraRewardRounds, qubeRewardRounds, lastRewardTime, call_id, nonce, send_gas_to
         );
     }
 
@@ -139,7 +139,7 @@ abstract contract GaugeBase is GaugeRewards {
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             lockBoostedSupply, lockBoostedSupplyAverage, lockBoostedSupplyAveragePeriod,
-            extraRewards, qubeReward.rewardRounds, lastRewardTime, call_id, nonce, send_gas_to
+            extraRewardRounds, qubeRewardRounds, lastRewardTime, call_id, nonce, send_gas_to
         );
     }
 
@@ -247,17 +247,19 @@ abstract contract GaugeBase is GaugeRewards {
 
     function withdrawUnclaimed(uint128[] ids, address to, uint32 call_id, uint32 nonce, address send_gas_to) external onlyOwner {
         require (msg.value >= Gas.GAUGE_MIN_MSG_VALUE + Gas.TOKEN_TRANSFER_VALUE * ids.length, Errors.LOW_MSG_VALUE);
-        uint128[] extra_amounts = new uint128[](extraRewards.length);
+        uint128[] extra_amounts = new uint128[](extraTokenData.length);
 
         for (uint i = 0; i < ids.length; i++) {
-            ExtraRewardData _reward_data = extraRewards[ids[i]];
-            RewardRound _last_round = _reward_data.rewardRounds[_reward_data.rewardRounds.length - 1];
+            RewardRound[] _rounds = extraRewardRounds[ids[i]];
+            RewardRound _last_round = _rounds[_rounds.length - 1];
+
             uint32 lock_time = _last_round.endTime + extraVestingPeriods[ids[i]] + withdrawAllLockPeriod;
 
-            require (_reward_data.ended, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
+            require (extraRewardEnded[ids[i]], Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
             require (now >= lock_time, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
 
-            extra_amounts[ids[i]] = extraRewards[ids[i]].tokenData.tokenBalance;
+            extra_amounts[ids[i]] = extraTokenData[ids[i]].tokenBalance;
+            extraTokenData[ids[i]].tokenBalance = 0;
         }
         tvm.rawReserve(_reserve(), 0);
 
@@ -275,8 +277,8 @@ abstract contract GaugeBase is GaugeRewards {
 
         constructor_params.store(voteEscrow);
 
-        constructor_params.store(qubeReward.vestingPeriod); // 32
-        constructor_params.store(qubeReward.vestingRatio); // 32
+        constructor_params.store(qubeVestingPeriod); // 32
+        constructor_params.store(qubeVestingRatio); // 32
 
         constructor_params.store(extraVestingPeriods); // 32 + ref
         constructor_params.store(extraVestingRatios); // 32 + ref
@@ -302,12 +304,12 @@ abstract contract GaugeBase is GaugeRewards {
             // deploy Gauge account
             address gauge_account_addr = deployGaugeAccount(deposit.user);
             // deploy qube and other wallets
-            ITokenRoot(qubeReward.tokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
+            ITokenRoot(qubeTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
                 deposit.user,
                 Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
             );
-            for (uint i = 0; i < extraRewards.length; i++) {
-                ITokenRoot(extraRewards[i].tokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
+            for (uint i = 0; i < extraTokenData.length; i++) {
+                ITokenRoot(extraTokenData[i].tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
                     deposit.user,
                     Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
                 );
@@ -322,8 +324,8 @@ abstract contract GaugeBase is GaugeRewards {
                 lockBoostedSupply,
                 lockBoostedSupplyAverage,
                 lockBoostedSupplyAveragePeriod,
-                extraRewards,
-                qubeReward.rewardRounds,
+                extraRewardRounds,
+                qubeRewardRounds,
                 lastRewardTime
             );
         }
