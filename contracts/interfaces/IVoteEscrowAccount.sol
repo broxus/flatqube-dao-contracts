@@ -3,6 +3,12 @@ pragma AbiHeader expire;
 
 
 interface IVoteEscrowAccount {
+    struct QubeDeposit {
+        uint128 amount; // amount of qubes deposited
+        uint128 veAmount; // amount of ve qubes minted for qubes, expire after deposit_time + lock_time
+        uint32 createdAt; // timestamp of deposit
+        uint32 lockTime; // lock interval
+    }
     function processVote(
         uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
     ) external;
