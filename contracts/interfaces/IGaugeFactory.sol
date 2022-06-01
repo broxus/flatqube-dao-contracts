@@ -36,6 +36,6 @@ interface IGaugeFactory {
         uint32 withdrawAllLockPeriod,
         uint32 call_id
     ) external;
-    function processUpgradeGaugeRequest(uint32 call_id, address send_gas_to) external;
-    function processUpdateGaugeAccountCodeRequest(uint32 call_id, address send_gas_to) external;
+    function processUpgradeGaugeRequest(uint32 call_id, address send_gas_to) external view;
+    function processUpdateGaugeAccountCodeRequest(uint32 call_id, address send_gas_to) external view;
 }

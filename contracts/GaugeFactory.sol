@@ -25,6 +25,7 @@ contract GaugeFactory is GaugeFactoryBase {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
         TvmCell data = abi.encode(
+            send_gas_to,
             factory_version,
             gauge_version,
             gauge_account_version,

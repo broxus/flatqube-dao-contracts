@@ -45,7 +45,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         IGaugeFactory(factory).processUpgradeGaugeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
     }
 
-    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external override {
+    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external view override {
         require (msg.sender == factory, Errors.NOT_FACTORY);
         tvm.rawReserve(_reserve(), 0);
 

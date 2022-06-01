@@ -39,7 +39,7 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function upgradeGauges(address[] gauges, uint32 call_id, address send_gas_to) external onlyOwner {
+    function upgradeGauges(address[] gauges, uint32 call_id, address send_gas_to) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * gauges.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -51,7 +51,7 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function updateGaugeAccountsCode(address[] gauges, uint32 call_id, address send_gas_to) external onlyOwner {
+    function updateGaugeAccountsCode(address[] gauges, uint32 call_id, address send_gas_to) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * gauges.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -63,7 +63,7 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function forceUpgradeGaugeAccounts(address gauge, address[] users, uint32 call_id, address send_gas_to) external onlyOwner {
+    function forceUpgradeGaugeAccounts(address gauge, address[] users, uint32 call_id, address send_gas_to) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * users.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -74,7 +74,7 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function processUpgradeGaugeRequest(uint32 call_id, address send_gas_to) external override {
+    function processUpgradeGaugeRequest(uint32 call_id, address send_gas_to) external view override {
         require (msg.value >= Gas.GAUGE_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
@@ -83,7 +83,7 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         );
     }
 
-    function processUpdateGaugeAccountCodeRequest(uint32 call_id, address send_gas_to) external override {
+    function processUpdateGaugeAccountCodeRequest(uint32 call_id, address send_gas_to) external view override {
         require (msg.value >= Gas.GAUGE_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
