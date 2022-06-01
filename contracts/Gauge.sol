@@ -8,7 +8,6 @@ import "./base/gauge/GaugeBase.sol";
 import "./libraries/Errors.sol";
 
 
-// TODO: deploy from platform ?
 contract Gauge is GaugeBase {
     constructor(
         address _owner,

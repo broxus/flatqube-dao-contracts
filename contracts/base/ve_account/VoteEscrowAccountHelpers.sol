@@ -51,7 +51,6 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
         finished = false;
 
         uint32 counter;
-        // TODO: check how many deposits can be processed in 1 txn
         // get deposit with lowest unlock time
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
         uint64 cur_key;
