@@ -91,8 +91,8 @@ interface IGauge {
     function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function revertDeposit(address user, uint32 _deposit_nonce) external;
     function burnBoostedBalance(address user, uint128 expired_boosted) external;
-    function forceUpgradeGaugeAccount(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
-    function upgrade(TvmCell new_code, uint32 new_version, address send_gas_to) external;
+    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external;
+    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
     function onGaugeAccountDeploy(address user, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;

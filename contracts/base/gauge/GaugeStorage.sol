@@ -8,7 +8,6 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCa
 
 import "../../interfaces/IGaugeAccount.sol";
 import "../../interfaces/IGauge.sol";
-import "../../interfaces/IFactory.sol";
 import "../../GaugeAccount.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
@@ -72,11 +71,10 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     // this is used to prevent data loss on bounced messages during deposit
     mapping (uint64 => PendingDeposit) deposits;
 
-    // TODO: remove useless from static
     TvmCell static platformCode;
     TvmCell static gaugeAccountCode;
     address static factory;
-    uint64 static deploy_nonce;
+    uint32 static deploy_nonce;
     uint32 static gauge_account_version;
     uint32 static gauge_version;
 }

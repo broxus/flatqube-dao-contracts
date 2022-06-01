@@ -5,6 +5,7 @@ pragma AbiHeader expire;
 import "../../libraries/Errors.sol";
 import "../../libraries/Gas.sol";
 import "../../interfaces/IGaugeAccount.sol";
+import "../../interfaces/IGaugeFactory.sol";
 import "../../libraries/PlatformTypes.sol";
 import "../../GaugeAccount.sol";
 import "./GaugeHelpers.sol";
@@ -17,7 +18,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         require (msg.value >= Gas.REQUEST_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
-        IFactory(factory).processUpdateGaugeAccountCodeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
+        IGaugeFactory(factory).processUpdateGaugeAccountCodeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
     }
 
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external override {
@@ -41,16 +42,16 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         require (msg.value >= Gas.REQUEST_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
-        IFactory(factory).processUpgradeGaugeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
+        IGaugeFactory(factory).processUpgradeGaugeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
     }
 
-    function forceUpgradeGaugeAccount(address user, uint32 call_id, uint32 nonce, address send_gas_to) external override {
+    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external override {
         require (msg.sender == factory, Errors.NOT_FACTORY);
         tvm.rawReserve(_reserve(), 0);
 
         address gauge_account = getGaugeAccountAddress(user);
         IGaugeAccount(gauge_account).upgrade{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            gaugeAccountCode, gauge_account_version, call_id, nonce, send_gas_to
+            gaugeAccountCode, gauge_account_version, call_id, 0, send_gas_to
         );
     }
 

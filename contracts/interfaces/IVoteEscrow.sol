@@ -19,6 +19,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     event DistributionScheduleUpdate(uint32 call_id, uint128[] distribution);
     event DistributionSchemeUpdate(uint32 call_id, uint32[] distribution_scheme);
     event VotingStart(uint32 call_id, uint32 start, uint32 end);
+    event VotingStartedAlready(uint32 call_id, uint32 start, uint32 end);
     event Vote(uint32 call_id, address user, mapping (address => uint128) votes);
     event VoteRevert(uint32 call_id, address user);
     event NewQubeLockLimits(uint32 call_id, uint32 new_min, uint32 new_max);

@@ -37,9 +37,15 @@ library Errors {
     uint16 constant BAD_REWARD_ROUNDS_INPUT = 4002;
     uint16 constant BAD_FARM_END_TIME = 4003;
     uint16 constant CANT_WITHDRAW_UNCLAIMED_ALL = 4004;
+    uint16 constant BAD_VESTING_SETUP = 4005;
+    uint16 constant BAD_DEPOSIT_TOKEN = 4006;
+    uint16 constant BAD_REWARD_TOKENS_INPUT = 4007;
 
-    // GAUGE_ ACCOUNT
+    // GAUGE ACCOUNT
     uint16 constant NOT_GAUGE = 5000;
     uint16 constant NOT_VOTE_ESCROW_2 = 5001;
     uint16 constant NOT_VOTE_ESCROW_ACCOUNT_2 = 5002;
+
+    // FACTORY
+    uint16 constant BAD_GAUGE_CONFIG = 6000;
 }

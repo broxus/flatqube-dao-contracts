@@ -5,26 +5,6 @@ import "./GaugeUpgradable.sol";
 
 
 abstract contract GaugeRewards is GaugeUpgradable {
-    function _initRewardData(
-        uint32[] _extraRewardsStartTime,
-        uint32[] _extraRewardsRewardPerSecond,
-        address[] _extra_reward_token_root,
-        uint32[] _extra_vesting_period,
-        uint32[] _extra_vesting_ratio
-    ) internal {
-        extraTokenData = new TokenData[](_extraRewardsStartTime.length);
-        extraRewardRounds = new RewardRound[][](_extraRewardsStartTime.length);
-        extraVestingRatios = _extra_vesting_ratio;
-        extraVestingPeriods = _extra_vesting_period;
-
-        for (uint i = 0; i < _extra_reward_token_root.length; i++) {
-            // token data
-            extraTokenData[i] = TokenData(_extra_reward_token_root[i], address.makeAddrNone(), 0);
-            // initial reward rounds
-            extraRewardRounds[i].push(RewardRound(_extraRewardsStartTime[i], 0, _extraRewardsRewardPerSecond[i], 0));
-        }
-    }
-
     // @dev Create new qube reward round with given parameters. Reward per second is set according to len and amount
     // @param qubes_amount - amount of qubes that should be distributed along new round
     // @param round_len - length of new round in seconds
@@ -85,6 +65,9 @@ abstract contract GaugeRewards is GaugeUpgradable {
         for (uint i = 0; i < ids.length; i++) {
             RewardRound[] _cur_rounds = extraRewardRounds[ids[i]];
 
+            // cant end reward without rounds
+            require (_cur_rounds.length > 0, Errors.BAD_REWARD_ROUNDS_INPUT);
+
             require (farm_end_times[i] >= now, Errors.BAD_FARM_END_TIME);
             require (farm_end_times[i] > _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_FARM_END_TIME);
             require (extraRewardEnded[ids[i]] == false, Errors.BAD_REWARD_ROUNDS_INPUT);
@@ -101,9 +84,12 @@ abstract contract GaugeRewards is GaugeUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function _getUpdateRewardRounds(
+    function _getUpdatedRewardRounds(
         RewardRound[] rewardRounds, uint256 start_sync_idx, uint128 working_supply
     ) internal view returns (RewardRound[], uint256) {
+        if (rewardRounds.length == 0) {
+            return (rewardRounds, start_sync_idx);
+        }
         uint32 _lastRewardTime = lastRewardTime;
         uint32 first_round_start = rewardRounds[0].startTime;
 
@@ -149,7 +135,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
         _extraRewardRounds = extraRewardRounds;
 
         for (uint i = 0; i < extraTokenData.length; i++) {
-            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdateRewardRounds(extraRewardRounds[i], lastExtraRewardRoundIdx[i], lockBoostedSupply);
+            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdatedRewardRounds(extraRewardRounds[i], lastExtraRewardRoundIdx[i], lockBoostedSupply);
         }
     }
 
@@ -161,7 +147,7 @@ abstract contract GaugeRewards is GaugeUpgradable {
         uint256 _qube_sync_idx
     ) {
         (_extraRewardRounds, _extra_sync_idx) = _getUpdatedExtraRewardRounds();
-        (_qubeRewardRounds, _qube_sync_idx) = _getUpdateRewardRounds(qubeRewardRounds, lastQubeRewardRoundIdx, veBoostedSupply);
+        (_qubeRewardRounds, _qube_sync_idx) = _getUpdatedRewardRounds(qubeRewardRounds, lastQubeRewardRoundIdx, veBoostedSupply);
         _lastRewardTime = now;
     }
 

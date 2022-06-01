@@ -107,6 +107,8 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         // if this is true, than someone already started voting
         // dont throw error on duplicate calls
         if (currentVotingStartTime > 0) {
+            // emit event otherwise so we can catch function call result on front
+            emit VotingStartedAlready(call_id, currentVotingStartTime, currentVotingEndTime);
             return;
         }
         require (initialized, Errors.NOT_INITIALIZED);

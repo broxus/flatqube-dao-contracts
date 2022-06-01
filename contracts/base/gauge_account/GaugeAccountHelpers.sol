@@ -110,6 +110,9 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         uint128 interval_balance,
         uint32 pool_last_reward_time
     ) public pure returns (RewardData, VestingData) {
+        if (reward_rounds.length == 0) {
+            return (reward_data, vesting_data);
+        }
         uint32 first_round_start = reward_rounds[0].startTime;
 
         // nothing to calculate

@@ -29,7 +29,7 @@ abstract contract GaugeBase is GaugeRewards {
             // check if payload assembled correctly
             (address deposit_owner, uint32 lock_time, bool claim, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
 
-            if (!correct || msg.value < Gas.GAUGE_MIN_MSG_VALUE || lock_time > maxLockTime) {
+            if (!correct || msg.value < Gas.MIN_MSG_VALUE || lock_time > maxLockTime) {
                 // too low deposit value or too low msg.value or incorrect deposit payload
                 // for incorrect deposit payload send tokens back to sender
                 emit DepositRevert(call_id, deposit_owner, amount);
@@ -109,7 +109,7 @@ abstract contract GaugeBase is GaugeRewards {
 
     function withdraw(uint128 amount, bool claim, uint32 call_id, uint32 nonce, address send_gas_to) external {
         require (amount > 0, Errors.BAD_INPUT);
-        require (msg.value >= Gas.GAUGE_MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
+        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         updateRewardData();
@@ -130,7 +130,7 @@ abstract contract GaugeBase is GaugeRewards {
     }
 
     function claimReward(uint32 call_id, uint32 nonce, address send_gas_to) external {
-        require (msg.value >= Gas.GAUGE_MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
+        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         updateRewardData();
@@ -246,7 +246,7 @@ abstract contract GaugeBase is GaugeRewards {
     }
 
     function withdrawUnclaimed(uint128[] ids, address to, uint32 call_id, uint32 nonce, address send_gas_to) external onlyOwner {
-        require (msg.value >= Gas.GAUGE_MIN_MSG_VALUE + Gas.TOKEN_TRANSFER_VALUE * ids.length, Errors.LOW_MSG_VALUE);
+        require (msg.value >= Gas.MIN_MSG_VALUE + Gas.TOKEN_TRANSFER_VALUE * ids.length, Errors.LOW_MSG_VALUE);
         uint128[] extra_amounts = new uint128[](extraTokenData.length);
 
         for (uint i = 0; i < ids.length; i++) {
