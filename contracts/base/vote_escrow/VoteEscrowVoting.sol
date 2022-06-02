@@ -11,6 +11,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     function initialize(uint32 start_time, address send_gas_to) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         // codes installed
+        require (start_time > now, Errors.CANT_BE_INITIALIZED);
         require (!platformCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
         require (!veAccountCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
         // distribution params
@@ -133,7 +134,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         }
         // minimum check for gas dependant on gauges count
         require (currentVotingStartTime > 0, Errors.VOTING_NOT_STARTED);
-        require (now <= currentEpochEndTime, Errors.VOTING_ENDED);
+        require (now <= currentVotingEndTime, Errors.VOTING_ENDED);
 
         uint32 counter = 0;
         for ((address gauge,) : votes) {
@@ -417,7 +418,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit TreasuryWithdraw(call_id, receiver, amount);
         TvmCell empty;
-        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function withdrawTeamTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
@@ -428,7 +429,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit TeamWithdraw(call_id, receiver, amount);
         TvmCell empty;
-        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function withdrawPaymentTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
@@ -439,6 +440,6 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit PaymentWithdraw(call_id, receiver, amount);
         TvmCell empty;
-        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 }

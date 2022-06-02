@@ -38,7 +38,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountHelpers {
             totalVotes += vote_value;
         }
         if (veQubeBalance < totalVotes) {
-            // soft fail, because ve qubes could be burned while syncing, we dont want this to fail
+            // soft fail, because ve qubes could be burned while syncing and we want to return gas to user and notify him
             IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
             return;
         }

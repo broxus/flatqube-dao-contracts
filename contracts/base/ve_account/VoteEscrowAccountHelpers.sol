@@ -12,6 +12,40 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
+    function getDetails() external view responsible returns (
+        uint32 _current_version,
+        address _voteEscrow,
+        address _user,
+        uint128 _qubeBalance, // total amount of deposited qubes
+        uint128 _veQubeBalance, // current ve balance
+        uint128 _expiredVeQubes, // expired ve qubes that should be withdrawn from vote escrow contract
+        uint128 _unlockedQubes, // qubes with expired lock, that can be withdraw
+        uint128 _veQubeAverage,
+        uint32 _veQubeAveragePeriod,
+        uint32 _lastUpdateTime,
+        uint32 _lastEpochVoted, // number of last epoch when user voted
+        uint32 _activeDeposits
+    ) {
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false }(
+            current_version,
+            voteEscrow,
+            user,
+            qubeBalance, // total amount of deposited qubes
+            veQubeBalance, // current ve balance
+            expiredVeQubes, // expired ve qubes that should be withdrawn from vote escrow contract
+            unlockedQubes, // qubes with expired lock, that can be withdraw
+            veQubeAverage,
+            veQubeAveragePeriod,
+            lastUpdateTime,
+            lastEpochVoted, // number of last epoch when user voted
+            activeDeposits
+        );
+    }
+
+    function getDeposits() external view responsible returns (mapping (uint64 => QubeDeposit) _deposits) {
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } deposits;
+    }
+
     function _reserve() internal pure returns (uint128) {
         return math.max(address(this).balance - msg.value, CONTRACT_MIN_BALANCE);
     }
