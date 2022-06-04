@@ -180,16 +180,24 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
     }
 
     function calculateGasForEndVoting() public view returns (uint128 min_gas) {
-        min_gas += Gas.MIN_MSG_VALUE + ((gaugesNum / MAX_ITERATIONS_PER_COUNT) + 1) * Gas.GAS_FOR_MAX_ITERATIONS;
+        min_gas = Gas.MIN_MSG_VALUE + ((gaugesNum / MAX_ITERATIONS_PER_COUNT) + 1) * Gas.GAS_FOR_MAX_ITERATIONS;
         min_gas += Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
     }
 
     function endVoting(uint32 call_id, address send_gas_to) external onlyActive {
+        // make sure we have enough admin deposit to pay for this epoch
+        require (distributionSupply >= distributionSchedule[currentEpoch - 1], Errors.LOW_DISTRIBUTION_BALANCE);
+
+        tvm.rawReserve(_reserve(), 0);
         uint128 min_gas = calculateGasForEndVoting();
 
-        require (msg.value >= min_gas, Errors.LOW_MSG_VALUE);
-        require (currentVotingStartTime != 0, Errors.VOTING_NOT_STARTED);
-        require (now >= currentVotingEndTime, Errors.VOTING_NOT_ENDED);
+        // soft fail, because this function could be called simultaneously by several users
+        // we dont want require here, because we need to return gas to users which could be really big here
+        if (msg.value < min_gas || currentVotingStartTime == 0 || now < currentVotingEndTime) {
+            emit VotingEndRevert(call_id);
+            send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            return;
+        }
 
         currentVotingEndTime = 0;
         currentVotingStartTime = 0;
@@ -197,8 +205,6 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         // if voting ended too late, start epoch now
         currentEpochStartTime = currentEpochEndTime < now ? now : currentEpochEndTime;
         currentEpochEndTime = currentEpochStartTime + epochTime;
-
-        tvm.rawReserve(_reserve(), 0);
 
         optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
         (address start_addr,) = start.get();
@@ -329,7 +335,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             treasury_votes,
             currentEpoch,
             currentEpochStartTime,
-            currentVotingEndTime
+            currentEpochEndTime
         );
 
         optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
@@ -354,9 +360,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         uint256 epoch_idx = currentEpoch - 2;
         uint128 to_distribute_total = distributionSchedule[epoch_idx];
         uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
-
         uint128 treasury_bonus = math.muldiv(to_distribute_farming, bonus_treasury_votes, currentVotingTotalVotes);
-        to_distribute_farming -= treasury_bonus;
 
         bool finished = false;
         uint32 counter = 0;
@@ -376,7 +380,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
             uint128 qube_amount = math.muldiv(to_distribute_farming, gauge_votes, currentVotingTotalVotes);
             distributed[gauge] = qube_amount;
-            _transferTokens(qubeWallet, qube_amount, gauge, payload, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+            _transferQubes(qube_amount, gauge, payload, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
 
             counter += 1;
             pointer = currentVotingVotes.next(gauge);
@@ -396,6 +400,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         treasuryTokens += to_distribute_treasury;
         teamTokens += to_distribute_team;
+        distributionSupply -= to_distribute_total;
 
         currentVotingTotalVotes = 0;
         delete currentVotingVotes;
@@ -418,7 +423,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit TreasuryWithdraw(call_id, receiver, amount);
         TvmCell empty;
-        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function withdrawTeamTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
@@ -429,7 +434,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit TeamWithdraw(call_id, receiver, amount);
         TvmCell empty;
-        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function withdrawPaymentTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
@@ -440,6 +445,6 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit PaymentWithdraw(call_id, receiver, amount);
         TvmCell empty;
-        _transferTokens(qubeWallet, amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 }

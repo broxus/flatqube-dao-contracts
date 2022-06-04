@@ -15,6 +15,7 @@ import "../../libraries/Errors.sol";
 
 
 abstract contract VoteEscrowHelpers is VoteEscrowStorage {
+    // TODO: Up
     function getDetails() external view returns (
         address _owner,
         address _qube,
@@ -23,7 +24,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         uint128 _teamTokens,
         uint32[] _distributionScheme,
         uint128 _qubeBalance,
-        uint128 _veQubeSupply,
+        uint128 _veQubeBalance,
         uint32 _lastUpdateTime,
         uint128 _distributionSupply,
         uint128 _veQubeAverage,
@@ -43,7 +44,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _teamTokens = teamTokens;
         _distributionScheme = distributionScheme;
         _qubeBalance = qubeBalance;
-        _veQubeSupply = veQubeSupply;
+        _veQubeBalance = veQubeBalance;
         _lastUpdateTime = lastUpdateTime;
         _distributionSupply = distributionSupply;
         _veQubeAverage = veQubeAverage;
@@ -77,16 +78,16 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _currentVotingTotalVotes = currentVotingTotalVotes;
     }
 
-    function getCurrentVotes() external view returns (mapping (address => uint128) _currentVotes) {
-        _currentVotes = currentVotingVotes;
+    function getGaugeVotes(address gauge) external view returns (uint128) {
+        return currentVotingVotes[gauge];
     }
 
-    function getDowntimes() external view returns (mapping (address => uint8) _downtimes) {
-        _downtimes = gaugeDowntime;
+    function getGaugeDowntime(address gauge) external view returns (uint8) {
+        return gaugeDowntime[gauge];
     }
 
-    function getWhitelistedGauges() external view returns (mapping (address => bool) _whitelistedGauges) {
-        _whitelistedGauges = whitelistedGauges;
+    function isGaugeWhitelisted(address gauge) external view returns (bool) {
+        return whitelistedGauges[gauge];
     }
 
     function getVotingDetails() external view returns (
@@ -220,10 +221,11 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         }
     }
 
-    // TODO: add value
-    function _transferTokens(
-        address token_wallet, uint128 amount, address receiver, TvmCell payload, address send_gas_to, uint16 flag
-    ) internal pure {
+    function _transferQubes(
+        uint128 amount, address receiver, TvmCell payload, address send_gas_to, uint16 flag
+    ) internal {
+        qubeBalance -= amount;
+
         uint128 value;
         if (flag != MsgFlag.ALL_NOT_RESERVED) {
             value = Gas.TOKEN_TRANSFER_VALUE;
@@ -234,7 +236,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         if (slice.bits() > 0 || slice.refs() > 0) {
             notify = true;
         }
-        ITokenWallet(token_wallet).transfer{value: value, flag: flag}(
+        ITokenWallet(qubeWallet).transfer{value: value, flag: flag}(
             amount,
             receiver,
             0,

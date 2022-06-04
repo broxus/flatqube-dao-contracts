@@ -23,7 +23,7 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint32[] distributionScheme;
 
     uint128 qubeBalance;
-    uint128 veQubeSupply;
+    uint128 veQubeBalance;
     uint32 lastUpdateTime;
 
     uint128 distributionSupply; // current balance of tokens reserved for distribution

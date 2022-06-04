@@ -4,6 +4,8 @@ const {
 const logger = require("mocha-logger");
 const TokenWallet = require("./token_wallet");
 const VoteEscrowAccount = require("./ve_account");
+const BigNumber = require('bignumber.js');
+const { expect } = require('chai');
 
 
 class VoteEscrow {
@@ -11,6 +13,7 @@ class VoteEscrow {
         this.contract = ve_contract;
         this._owner = ve_owner;
         this.address = this.contract.address;
+        this.token_wallet = null;
     }
 
     static async from_addr (addr, owner) {
@@ -19,8 +22,49 @@ class VoteEscrow {
         return new VoteEscrow(veContract, owner);
     }
 
+    async tokenWallet() {
+        const _details = await this.details();
+        this.token_wallet = await TokenWallet.from_addr(_details._qubeWallet, null);
+        return this.token_wallet;
+    }
+
     async details() {
         return await this.contract.call({method: 'getDetails'});
+    }
+
+    async votingDetails() {
+        return await this.contract.call({method: 'getVotingDetails'});
+    }
+
+    async getCurrentEpochDetails() {
+        return await this.contract.call({method: 'getCurrentEpochDetails'});
+    }
+
+    async checkQubeBalance(expected_balance) {
+        if (this.token_wallet == null) {
+            this.token_wallet = await this.tokenWallet();
+        }
+        const _details = await this.details();
+        const token_balance = await this.token_wallet.balance();
+        expect(_details._qubeBalance.toFixed(0)).to.be.eq(token_balance.toFixed(0));
+        expect(_details._qubeBalance.toFixed(0)).to.be.eq(expected_balance.toFixed(0));
+    }
+
+    async isGaugeWhitelisted(gauge) {
+        const addr = gauge.address === undefined ? gauge : gauge.address;
+        return await this.contract.call({method: 'isGaugeWhitelisted', params: {gauge: addr}});
+    }
+
+    async whitelistedGauges() {
+        return await this.contract.call({method: 'whitelistedGauges'});
+    }
+
+    async currentVotingVotes() {
+        return await this.contract.call({method: 'currentVotingVotes'});
+    }
+
+    async gaugeDowntime() {
+        return await this.contract.call({method: 'gaugeDowntime'});
     }
 
     async voteEscrowAccount(account) {
@@ -65,6 +109,46 @@ class VoteEscrow {
             params: {
                 code: code,
                 send_gas_to: this._owner.address
+            },
+            value: convertCrystal(5, 'nano')
+        });
+    }
+
+    async startVoting(call_id) {
+        return await this._owner.runTarget({
+            contract: this.contract,
+            method: 'startVoting',
+            params: {
+                call_id: call_id,
+                send_gas_to: this._owner.address
+            },
+            value: convertCrystal(5, 'nano')
+        });
+    }
+
+    async endVoting(call_id) {
+        const gas = await this.contract.call({method: 'calculateGasForEndVoting'});
+        return await this._owner.runTarget({
+            contract: this.contract,
+            method: 'endVoting',
+            params: {
+                call_id: call_id,
+                send_gas_to: this._owner.address
+            },
+            // required gas + 1
+            value: gas.plus(new BigNumber(10**9)).toFixed(0)
+        });
+    }
+
+    async vote(voter, votes, call_id) {
+        return await voter.runTarget({
+            contract: this.contract,
+            method: 'vote',
+            params: {
+                votes: votes,
+                call_id: call_id,
+                nonce: 0,
+                send_gas_to: voter.address
             },
             value: convertCrystal(5, 'nano')
         });
@@ -177,24 +261,24 @@ class VoteEscrow {
         });
     }
 
-    async whitelistDepositPayload(whitelist_contract_or_addr) {
+    async whitelistDepositPayload(whitelist_contract_or_addr, call_id) {
         const addr = whitelist_contract_or_addr.address === undefined ? whitelist_contract_or_addr : whitelist_contract_or_addr.address;
         return await this.contract.call({
             method: 'encodeWhitelistPayload',
             params: {
-                deposit_owner: addr,
+                whitelist_addr: addr,
                 nonce: 0,
-                call_id: 0
+                call_id: call_id
             }
         });
     }
 
-    async distributionDepositPayload() {
+    async distributionDepositPayload(call_id=0) {
         return await this.contract.call({
             method: 'encodeDistributionPayload',
             params: {
                 nonce: 0,
-                call_id: 0
+                call_id: call_id
             }
         });
     }
@@ -204,13 +288,13 @@ class VoteEscrow {
         return await from_wallet.transfer(amount, this.contract, payload, null, allowed_codes);
     }
 
-    async whitelistDeposit(from_wallet, amount, whitelist_addr, allowed_codes) {
-        const payload = await this.whitelistDepositPayload(whitelist_addr);
+    async whitelistDeposit(from_wallet, amount, whitelist_addr, call_id, allowed_codes) {
+        const payload = await this.whitelistDepositPayload(whitelist_addr, call_id);
         return await from_wallet.transfer(amount, this.contract, payload, null, allowed_codes);
     }
 
-    async distributionDeposit(from_wallet, amount, allowed_codes) {
-        const payload = await this.distributionDepositPayload();
+    async distributionDeposit(from_wallet, amount, call_id, allowed_codes) {
+        const payload = await this.distributionDepositPayload(call_id);
         return await from_wallet.transfer(amount, this.contract, payload, null, allowed_codes);
     }
 

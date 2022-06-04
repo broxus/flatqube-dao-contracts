@@ -13,6 +13,10 @@ import "../../interfaces/IGaugeAccount.sol";
 import "./VoteEscrowVoting.sol";
 
 
+// TODO: DEBUG ONLY
+import "locklift/locklift/console.sol";
+
+
 abstract contract VoteEscrowBase is VoteEscrowVoting {
     function receiveTokenWalletAddress(address wallet) external override {
         require (msg.sender == qube);
@@ -40,11 +44,13 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
 
         // common cases
         bool exception = !correct || paused || !initialized || emergency || msg.value < Gas.MIN_MSG_VALUE || uint8(deposit_type) > 2;
+
         // specific cases
         if (deposit_type == uint8(DepositType.userDeposit)) {
             (address deposit_owner, uint32 lock_time) = decodeDepositPayload(additional_payload);
             exception = exception || lock_time < qubeMinLockTime || lock_time > qubeMaxLockTime;
             sender = deposit_owner;
+
             if (!exception) {
                 // deposit logic
                 uint128 ve_minted = calculateVeMint(amount, lock_time);
@@ -83,7 +89,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
             emit DepositRevert(call_id, sender, amount);
             // if payload assembled correctly, send nonce, otherwise send payload we got with this transfer
             payload = correct ? _makeCell(nonce) : payload;
-            _transferTokens(qubeWallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
+            _transferQubes(amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
         }
     }
 
@@ -93,8 +99,8 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         delete pending_deposits[deposit_nonce];
 
         emit DepositRevert(deposit.call_id, deposit.user, deposit.amount);
-        _transferTokens(
-            qubeWallet, deposit.amount, deposit.user, _makeCell(deposit.nonce), deposit.send_gas_to, MsgFlag.ALL_NOT_RESERVED
+        _transferQubes(
+            deposit.amount, deposit.user, _makeCell(deposit.nonce), deposit.send_gas_to, MsgFlag.ALL_NOT_RESERVED
         );
     }
 
@@ -106,7 +112,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.ve_amount, deposit.lock_time);
         updateAverage();
         qubeBalance += deposit.amount;
-        veQubeSupply += deposit.ve_amount;
+        veQubeBalance += deposit.ve_amount;
 
         _sendCallbackOrGas(user, deposit.nonce, true, deposit.send_gas_to);
     }
@@ -134,17 +140,16 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         tvm.rawReserve(_reserve(), 0);
 
         updateAverage();
-        qubeBalance -= unlockedQubes;
         emit Withdraw(call_id, user, unlockedQubes);
 
-        _transferTokens(qubeWallet, unlockedQubes, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(unlockedQubes, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function burnVeQubes(address user, uint128 expiredVeQubes) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         updateAverage();
-        veQubeSupply -= expiredVeQubes;
+        veQubeBalance -= expiredVeQubes;
         emit VeQubesBurn(user, expiredVeQubes);
 
         user.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
@@ -216,27 +221,27 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         updateAverage();
 
         IGaugeAccount(msg.sender).receiveVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            nonce, veQubeSupply, veQubeAverage, veQubeAveragePeriod
+            nonce, veQubeBalance, veQubeAverage, veQubeAveragePeriod
         );
     }
 
     function calculateAverage() public view returns (
-        uint32 _lastUpdateTime, uint128 _veQubeSupply, uint128 _veQubeAverage, uint32 _veQubeAveragePeriod
+        uint32 _lastUpdateTime, uint128 _veQubeBalance, uint128 _veQubeAverage, uint32 _veQubeAveragePeriod
     ) {
         if (now <= lastUpdateTime || lastUpdateTime == 0) {
             // already updated on this block or this is our first update
-            return (now, veQubeSupply, veQubeAverage, veQubeAveragePeriod);
+            return (now, veQubeBalance, veQubeAverage, veQubeAveragePeriod);
         }
 
         uint32 last_period = now - lastUpdateTime;
-        _veQubeAverage = (veQubeAverage * veQubeAveragePeriod + veQubeSupply * last_period) / (veQubeAveragePeriod + last_period);
+        _veQubeAverage = (veQubeAverage * veQubeAveragePeriod + veQubeBalance * last_period) / (veQubeAveragePeriod + last_period);
         _veQubeAveragePeriod += last_period;
         _lastUpdateTime = now;
-        _veQubeSupply = veQubeSupply;
+        _veQubeBalance = veQubeBalance;
     }
 
     function updateAverage() internal {
-        (lastUpdateTime, veQubeSupply, veQubeAverage, veQubeAveragePeriod) = calculateAverage();
+        (lastUpdateTime, veQubeBalance, veQubeAverage, veQubeAveragePeriod) = calculateAverage();
     }
 
     onBounce(TvmSlice slice) external view {

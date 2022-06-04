@@ -7,6 +7,18 @@ const {
 } = locklift.utils;
 
 
+async function sleep(ms) {
+    ms = ms === undefined ? 1000 : ms;
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+const checkTokenBalance = async function(token_wallet, expected_bal) {
+    const balance = await token_wallet.balance();
+    expect(balance.toFixed(0)).to.be.eq(expected_bal.toFixed(0));
+}
+
+
 const deployUser = async function(initial_balance=100) {
     const [keyPair] = await locklift.keys.getKeyPairs();
     const Account = await locklift.factory.getAccount('Wallet');
@@ -84,7 +96,7 @@ const setupVoteEscrow = async function(
     time_before_voting=4,
     voting_time=5,
     gauge_min_votes_ratio=200,
-    gauge_max_votes_ratio=5000,
+    gauge_max_votes_ratio=3000,
     gauge_max_downtime=2,
     max_gauges_per_vote=10,
     whitelist_price=1000000
@@ -149,5 +161,7 @@ const setupVoteEscrow = async function(
 module.exports = {
     setupTokenRoot,
     setupVoteEscrow,
-    deployUser
+    deployUser,
+    sleep,
+    checkTokenBalance
 }

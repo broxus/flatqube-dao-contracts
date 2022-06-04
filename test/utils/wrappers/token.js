@@ -34,7 +34,7 @@ class Token {
 
     async wallet(user) {
         const wallet_addr = await this.walletAddr(user);
-        return TokenWallet.from_addr(wallet_addr, user);
+        return await TokenWallet.from_addr(wallet_addr, user);
     }
 
     async deployWallet(user) {
@@ -51,7 +51,7 @@ class Token {
         const addr = await this.walletAddr(user);
 
         logger.log(`User token wallet: ${addr}`);
-        return TokenWallet.from_addr(addr, user);
+        return await TokenWallet.from_addr(addr, user);
     }
 
     async mint(mint_amount, user) {
@@ -72,7 +72,7 @@ class Token {
         const walletAddr = await this.walletAddr(user);
 
         logger.log(`User token wallet: ${walletAddr}`);
-        return TokenWallet.from_addr(walletAddr, user);
+        return await TokenWallet.from_addr(walletAddr, user);
     }
 }
 

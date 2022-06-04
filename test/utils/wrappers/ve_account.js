@@ -18,6 +18,10 @@ class VoteEscrowAccount {
     async getDetails() {
         return await this.contract.call({method: 'getDetails'});
     }
+
+    async calculateVeAverage() {
+        return await this.contract.call({method: 'calculateVeAverage'});
+    }
 }
 
 module.exports = VoteEscrowAccount

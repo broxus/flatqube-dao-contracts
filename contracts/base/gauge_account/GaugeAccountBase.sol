@@ -103,11 +103,11 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     }
 
     function receiveVeAverage(
-        uint32 nonce, uint128 veQubeSupply, uint128 veQubeAverage, uint32 veQubeAveragePeriod
+        uint32 nonce, uint128 veQubeBalance, uint128 veQubeAverage, uint32 veQubeAveragePeriod
     ) external override onlyVoteEscrow {
         tvm.rawReserve(_reserve(), 0);
 
-        _sync_data[nonce].veSupply = veQubeSupply;
+        _sync_data[nonce].veSupply = veQubeBalance;
         curAverageState.veQubeAverage = veQubeAverage;
         curAverageState.veQubeAveragePeriod = veQubeAveragePeriod;
 

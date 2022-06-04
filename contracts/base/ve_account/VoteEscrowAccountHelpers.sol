@@ -17,11 +17,8 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
         address _voteEscrow,
         address _user,
         uint128 _qubeBalance, // total amount of deposited qubes
-        uint128 _veQubeBalance, // current ve balance
         uint128 _expiredVeQubes, // expired ve qubes that should be withdrawn from vote escrow contract
         uint128 _unlockedQubes, // qubes with expired lock, that can be withdraw
-        uint128 _veQubeAverage,
-        uint32 _veQubeAveragePeriod,
         uint32 _lastUpdateTime,
         uint32 _lastEpochVoted, // number of last epoch when user voted
         uint32 _activeDeposits
@@ -31,11 +28,8 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             voteEscrow,
             user,
             qubeBalance, // total amount of deposited qubes
-            veQubeBalance, // current ve balance
             expiredVeQubes, // expired ve qubes that should be withdrawn from vote escrow contract
             unlockedQubes, // qubes with expired lock, that can be withdraw
-            veQubeAverage,
-            veQubeAveragePeriod,
             lastUpdateTime,
             lastEpochVoted, // number of last epoch when user voted
             activeDeposits
@@ -145,12 +139,12 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
     }
 
     // view function for getting actual ve stats without modifying data on given time point
-    // @dev If sync_time <= lastUpdateTime, will just return values stored on contract
-    function calculateVeAverage(uint32 sync_time) external view returns (uint128 _veQubeAverage, uint128 _veQubeAveragePeriod) {
+    // @dev If now <= lastUpdateTime, will just return values stored on contract
+    function calculateVeAverage() external view returns (uint128 _veQubeBalance, uint128 _veQubeAverage, uint128 _veQubeAveragePeriod) {
         _veQubeAverage = veQubeAverage;
         _veQubeAveragePeriod = veQubeAveragePeriod;
+        _veQubeBalance = veQubeBalance;
         uint32 _lastUpdateTime = lastUpdateTime;
-        uint128 _veQubeBalance = veQubeBalance;
 
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
         uint64 cur_key;
@@ -163,7 +157,7 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
 
             uint32 deposit_lock_end = cur_deposit.createdAt + cur_deposit.lockTime;
             // no need to check further, deposits are sorted by lock time
-            if (sync_time < deposit_lock_end) {
+            if (now < deposit_lock_end) {
                 break;
             }
 
@@ -175,8 +169,8 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
 
             pointer = deposits.next(cur_key);
         }
-        if (sync_time > _lastUpdateTime && _lastUpdateTime > 0) {
-            uint32 last_period = sync_time - _lastUpdateTime;
+        if (now > _lastUpdateTime && _lastUpdateTime > 0) {
+            uint32 last_period = now - _lastUpdateTime;
             _veQubeAverage = (_veQubeAverage * _veQubeAveragePeriod + _veQubeBalance * last_period) / (_veQubeAveragePeriod + last_period);
             _veQubeAveragePeriod += last_period;
         }

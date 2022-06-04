@@ -38,7 +38,7 @@ contract VoteEscrow is VoteEscrowBase {
             teamTokens,
             distributionScheme,
             qubeBalance,
-            veQubeSupply,
+            veQubeBalance,
             lastUpdateTime,
             distributionSupply,
             distributionSchedule,

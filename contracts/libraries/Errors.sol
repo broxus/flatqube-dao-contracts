@@ -25,6 +25,7 @@ library Errors {
     uint16 constant GAUGE_NOT_WHITELISTED = 2009;
     uint16 constant MAX_GAUGES_PER_VOTE = 2010;
     uint16 constant VOTING_NOT_ENDED = 2011;
+    uint16 constant LOW_DISTRIBUTION_BALANCE = 2012;
 
     // VE ACCOUNT
     uint16 constant NOT_VOTE_ESCROW = 3000;
