@@ -57,10 +57,10 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint8 gaugeMaxDowntime; // if gauge was not elected for N times in a row, it is deleted from whitelist
 
     uint32 maxGaugesPerVote; // max number of gauges user can vote for
-    uint32 gaugesNum;
-    mapping (address => bool) public whitelistedGauges;
+    uint32 gaugesNum; // current number of whitelisted gauges
+    mapping (address => bool) public gaugeWhitelist;
     mapping (address => uint128) public currentVotingVotes;
-    mapping (address => uint8) public gaugeDowntime;
+    mapping (address => uint8) public gaugeDowntimes;
 
     // amount of QUBE tokens user should pay to add his gauge to QUBE dao
     uint128 gaugeWhitelistPrice;

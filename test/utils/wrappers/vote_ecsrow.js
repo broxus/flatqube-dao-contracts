@@ -55,16 +55,21 @@ class VoteEscrow {
         return await this.contract.call({method: 'isGaugeWhitelisted', params: {gauge: addr}});
     }
 
-    async whitelistedGauges() {
-        return await this.contract.call({method: 'whitelistedGauges'});
+    async getGaugeDowntime(gauge) {
+        const addr = gauge.address === undefined ? gauge : gauge.address;
+        return await this.contract.call({method: 'getGaugeDowntime', params: {gauge: addr}});
+    }
+
+    async gaugeWhitelist() {
+        return await this.contract.call({method: 'gaugeWhitelist'});
     }
 
     async currentVotingVotes() {
         return await this.contract.call({method: 'currentVotingVotes'});
     }
 
-    async gaugeDowntime() {
-        return await this.contract.call({method: 'gaugeDowntime'});
+    async gaugeDowntimes() {
+        return await this.contract.call({method: 'gaugeDowntimes'});
     }
 
     async voteEscrowAccount(account) {

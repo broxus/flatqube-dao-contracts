@@ -138,7 +138,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         uint32 counter = 0;
         for ((address gauge,) : votes) {
-            require (whitelistedGauges[gauge], Errors.GAUGE_NOT_WHITELISTED);
+            require (gaugeWhitelist[gauge], Errors.GAUGE_NOT_WHITELISTED);
             counter += 1;
         }
         require (counter <= maxGaugesPerVote, Errors.MAX_GAUGES_PER_VOTE);
@@ -206,7 +206,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         currentEpochStartTime = currentEpochEndTime < now ? now : currentEpochEndTime;
         currentEpochEndTime = currentEpochStartTime + epochTime;
 
-        optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
+        optional(address, bool) start = gaugeWhitelist.next(address.makeAddrStd(address(this).wid, 0));
         (address start_addr,) = start.get();
 
         IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
@@ -229,32 +229,34 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
         uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
 
-        optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
+        optional(address, bool) pointer = gaugeWhitelist.nextOrEq(start_addr);
         while (true) {
             if (!pointer.hasValue() || counter >= MAX_ITERATIONS_PER_COUNT) {
                 finished = !pointer.hasValue();
                 break;
             }
 
-            (address gauge, uint128 gauge_votes) = pointer.get();
+            (address gauge,) = pointer.get();
+            uint128 gauge_votes = currentVotingVotes[gauge];
+
             if (gauge_votes < min_votes) {
                 exceeded_votes += gauge_votes;
                 delete currentVotingVotes[gauge];
-                gaugeDowntime[gauge] += 1;
-                if (gaugeDowntime[gauge] >= gaugeMaxDowntime) {
+                gaugeDowntimes[gauge] += 1;
+                if (gaugeDowntimes[gauge] >= gaugeMaxDowntime) {
                     _removeFromWhitelist(gauge, call_id);
                 }
             } else if (gauge_votes > max_votes) {
                 currentVotingVotes[gauge] = max_votes;
                 exceeded_votes += gauge_votes - max_votes;
-                delete gaugeDowntime[gauge];
+                delete gaugeDowntimes[gauge];
             } else {
                 valid_votes += gauge_votes;
-                delete gaugeDowntime[gauge];
+                delete gaugeDowntimes[gauge];
             }
 
             counter += 1;
-            pointer = currentVotingVotes.next(gauge);
+            pointer = gaugeWhitelist.next(gauge);
         }
 
         if (!finished) {

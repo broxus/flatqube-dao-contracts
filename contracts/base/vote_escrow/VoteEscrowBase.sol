@@ -65,7 +65,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
             }
         } else if (deposit_type == uint8(DepositType.whitelist)) {
             address whitelist_addr = decodeWhitelistPayload(additional_payload);
-            exception = exception || whitelistedGauges[whitelist_addr] == true || amount < gaugeWhitelistPrice || currentVotingStartTime != 0;
+            exception = exception || gaugeWhitelist[whitelist_addr] == true || amount < gaugeWhitelistPrice || currentVotingStartTime != 0;
             if (!exception) {
                 // whitelist address
                 qubeBalance += amount;

@@ -83,11 +83,11 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     }
 
     function getGaugeDowntime(address gauge) external view returns (uint8) {
-        return gaugeDowntime[gauge];
+        return gaugeDowntimes[gauge];
     }
 
     function isGaugeWhitelisted(address gauge) external view returns (bool) {
-        return whitelistedGauges[gauge];
+        return gaugeWhitelist[gauge];
     }
 
     function getVotingDetails() external view returns (
@@ -195,13 +195,14 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
 
     function _addToWhitelist(address gauge, uint32 call_id) internal {
         gaugesNum += 1;
-        whitelistedGauges[gauge] = true;
+        gaugeWhitelist[gauge] = true;
         emit GaugeWhitelist(call_id, gauge);
     }
 
     function _removeFromWhitelist(address gauge, uint32 call_id) internal {
         gaugesNum -= 1;
-        whitelistedGauges[gauge] = false;
+        delete gaugeWhitelist[gauge];
+        delete gaugeDowntimes[gauge];
         emit GaugeRemoveWhitelist(call_id, gauge);
     }
 
