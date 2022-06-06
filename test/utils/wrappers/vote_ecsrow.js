@@ -293,7 +293,8 @@ class VoteEscrow {
     }
 
     async withdraw(user, call_id=0, allowed_codes) {
-        const gas = await this.contract.call({method: 'calculateGasForEndVoting'});
+        const ve_acc = await this.voteEscrowAccount(user);
+        const gas = await ve_acc.contract.call({method: 'calculateMinGas'});
         return await user.runTarget({
             contract: this.contract,
             method: 'withdraw',
@@ -308,18 +309,21 @@ class VoteEscrow {
     }
 
     async deposit(from_wallet, amount, lock_time, call_id, allowed_codes) {
+        const ve_acc = await this.voteEscrowAccount(from_wallet._owner);
+        let gas = await ve_acc.contract.call({method: 'calculateMinGas'});
+        gas = gas.plus(new BigNumber(3*10**9)).toFixed(0);
         const payload = await this.depositPayload(from_wallet._owner, lock_time, call_id);
-        return await from_wallet.transfer(amount, this.contract, payload, null, allowed_codes);
+        return await from_wallet.transfer(amount, this.contract, payload, gas, null, allowed_codes);
     }
 
     async whitelistDeposit(from_wallet, amount, whitelist_addr, call_id, allowed_codes) {
         const payload = await this.whitelistDepositPayload(whitelist_addr, call_id);
-        return await from_wallet.transfer(amount, this.contract, payload, null, allowed_codes);
+        return await from_wallet.transfer(amount, this.contract, payload, null, null, allowed_codes);
     }
 
     async distributionDeposit(from_wallet, amount, call_id, allowed_codes) {
         const payload = await this.distributionDepositPayload(call_id);
-        return await from_wallet.transfer(amount, this.contract, payload, null, allowed_codes);
+        return await from_wallet.transfer(amount, this.contract, payload, null, null, allowed_codes);
     }
 
 

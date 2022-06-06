@@ -32,7 +32,7 @@ class TokenWallet {
         return await this.contract.call({method: 'balance'});
     }
 
-    async transfer(amount, receiver_or_addr, payload='', tracing=null, allowed_codes={compute: []}) {
+    async transfer(amount, receiver_or_addr, payload='', value, tracing=null, allowed_codes={compute: []}) {
         const addr = receiver_or_addr.address === undefined ? receiver_or_addr : receiver_or_addr.address;
         let notify = payload !== '';
 
@@ -47,7 +47,7 @@ class TokenWallet {
                 notify: notify,
                 payload: payload
             },
-            value: convertCrystal(5, 'nano'),
+            value: value || convertCrystal(5, 'nano'),
             tracing: tracing,
             tracing_allowed_codes: allowed_codes
         });

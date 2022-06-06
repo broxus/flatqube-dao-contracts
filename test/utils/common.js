@@ -171,7 +171,7 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
 }
 
 
-const setupVoteEscrow = async function(
+const setupVoteEscrow = async function({
     owner,
     qube,
     start_time=null,
@@ -187,7 +187,7 @@ const setupVoteEscrow = async function(
     gauge_max_downtime=2,
     max_gauges_per_vote=10,
     whitelist_price=1000000
-) {
+}) {
     const VoteEscrowContract = await locklift.factory.getContract('VoteEscrow');
     const [keyPair] = await locklift.keys.getKeyPairs();
 

@@ -16,7 +16,8 @@ describe("Vote Escrow mass deposits scenario", async function() {
     let owner;
 
     let current_epoch = 1;
-    let count = 151;
+    const count = 250;
+    const packs_num = 10;
 
     const deposit_amount = 1000;
 
@@ -30,8 +31,8 @@ describe("Vote Escrow mass deposits scenario", async function() {
 
     describe('Setup contracts', async function() {
         it('Deploy users', async function() {
-            user = await deployUser(10000);
-            owner = await deployUser(10000);
+            user = await deployUser(10000000);
+            owner = await deployUser(10000000);
         });
 
         it('Deploy token', async function() {
@@ -39,12 +40,13 @@ describe("Vote Escrow mass deposits scenario", async function() {
         });
 
         it('Deploy token wallets + mint', async function() {
-            owner_qube_wallet = await qube_root.mint(1000000000, owner);
-            user_qube_wallet = await qube_root.mint(1000000000, user);
+            owner_qube_wallet = await qube_root.mint(10000000000, owner);
+            user_qube_wallet = await qube_root.mint(10000000000, user);
         });
 
         it('Deploy Vote Escrow', async function() {
-            vote_escrow = await setupVoteEscrow(owner, qube_root);
+            const max_lock = 10000;
+            vote_escrow = await setupVoteEscrow({owner, qube:qube_root, max_lock});
             vote_escrow_qube_wallet = await vote_escrow.tokenWallet();
 
             const details = await vote_escrow.getCurrentEpochDetails();
@@ -52,15 +54,11 @@ describe("Vote Escrow mass deposits scenario", async function() {
         })
     });
 
-    describe('Checking N deposits works correctly', async function() {
-        it(`Making ${count} deposits`, async function() {
+    describe('Checking huge number of deposits works correctly', async function() {
+        it(`Made ${count * packs_num} deposits`, async function() {
             // processing requires some time, so we must be sure it will not unlock until all deposits are processed
-            // 1 deposit processing takes ~0.25 sec
-            const lock_time = Math.floor(count * 0.25);
-            logger.log(`Locking for ${lock_time}`);
-            // make 1st deposit manually to initialize vote escrow account
-            await vote_escrow.deposit(user_qube_wallet, deposit_amount, lock_time, 1, {compute: [null]});
-            count -= 1;
+            const lock_time = 700;
+            logger.log(`Locking for ${lock_time} seconds`);
 
             const deposit_payload = await vote_escrow.depositPayload(user, lock_time);
             const params = {
@@ -72,17 +70,28 @@ describe("Vote Escrow mass deposits scenario", async function() {
                 payload: deposit_payload
             };
 
-            await runTargets(
-                user,
-                Array(count).fill(user_qube_wallet.contract),
-                Array(count).fill('transfer'),
-                Array(count).fill(params),
-                Array(count).fill(convertCrystal(5, 'nano'))
-            );
+            let time_passed = 0;
 
-            count += 1;
+            for (const i of Array.from(Array(packs_num).keys())) {
+                logger.log(`Sending pack #${i + 1} with ${count} deposits`)
+                const from = Date.now();
+                await runTargets(
+                    user,
+                    Array(count).fill(user_qube_wallet.contract),
+                    Array(count).fill('transfer'),
+                    Array(count).fill(params),
+                    Array(count).fill(convertCrystal(50, 'nano')),
+                    {compute: [null]}
+                );
+                const to = Date.now();
+                logger.log(`Pack processed in ${Math.floor((to - from) / 1000)}`);
+                time_passed += Math.floor((to - from) / 1000);
+            }
+
+            logger.log(`${time_passed} seconds passed overall`);
+
             let ve_expected = await vote_escrow.calculateVeMint(deposit_amount, lock_time);
-            ve_expected = ve_expected * count;
+            ve_expected = ve_expected * count * packs_num;
 
             ve_account = await vote_escrow.voteEscrowAccount(user.address);
             const acc_balance = await ve_account.calculateVeAverage();
@@ -91,20 +100,24 @@ describe("Vote Escrow mass deposits scenario", async function() {
 
             // ve acc check
             expect(acc_balance._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(acc_details._qubeBalance.toString()).to.be.eq((count * deposit_amount).toString());
+            expect(acc_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
             expect(acc_details._unlockedQubes.toString()).to.be.eq('0');
 
             expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount).toString());
+            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
         });
 
         it('Making 1 more deposit, unlocking old ones', async function() {
-            const lock_time = Math.floor(count * 0.25);
-            // sleep to make sure all deposits are unlocked
-            await sleep(lock_time * deposit_amount);
+            logger.log(`Sleeping until all deposits are unlocked...`)
 
-            const acc_balance = await ve_account.calculateVeAverage();
-            expect(acc_balance._veQubeBalance.toString()).to.be.eq('0');
+            while (true) {
+                const acc_balance = await ve_account.calculateVeAverage();
+                if (acc_balance._veQubeBalance.toString() === '0') {
+                    break;
+                }
+                logger.log(`VeQube balance - ${acc_balance._veQubeBalance.toString()}, sleeping...`);
+                await sleep(100 * 1000);
+            }
 
             await vote_escrow.deposit(user_qube_wallet, deposit_amount, 100, 2);
             const ve_expected = await vote_escrow.calculateVeMint(deposit_amount, 100);
@@ -116,13 +129,13 @@ describe("Vote Escrow mass deposits scenario", async function() {
             // only ve qubes from new deposit
             expect(acc_balance_1._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
             // + deposit_amount to qube balance
-            expect(acc_details_1._qubeBalance.toString()).to.be.eq((count * deposit_amount + deposit_amount).toString());
+            expect(acc_details_1._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
             // all old qubes are unlocked
-            expect(acc_details_1._unlockedQubes.toString()).to.be.eq((count * deposit_amount).toString());
+            expect(acc_details_1._unlockedQubes.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
 
             // all old ve qubes are burned
             expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount + deposit_amount).toString());
+            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
         })
 
         it('Making withdraw', async function() {
@@ -130,7 +143,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
             const event = await vote_escrow.getEvent('Withdraw');
 
             expect(event.call_id.toString()).to.be.eq('1');
-            expect(event.amount.toString()).to.be.eq((count * deposit_amount).toString());
+            expect(event.amount.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
 
             const ve_expected = await vote_escrow.calculateVeMint(deposit_amount, 100);
             // ve qubes only for new deposit

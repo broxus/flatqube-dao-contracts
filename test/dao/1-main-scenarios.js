@@ -54,7 +54,7 @@ describe("Main Vote Escrow scenarios", async function() {
         });
 
         it('Deploy Vote Escrow', async function() {
-            vote_escrow = await setupVoteEscrow(owner, qube_root);
+            vote_escrow = await setupVoteEscrow({owner, qube: qube_root});
             vote_escrow_qube_wallet = await vote_escrow.tokenWallet();
 
             const details = await vote_escrow.getCurrentEpochDetails();
