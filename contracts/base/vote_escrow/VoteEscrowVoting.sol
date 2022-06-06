@@ -382,6 +382,8 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
             uint128 qube_amount = math.muldiv(to_distribute_farming, gauge_votes, currentVotingTotalVotes);
             distributed[gauge] = qube_amount;
+
+            qubeBalance -= qube_amount;
             _transferQubes(qube_amount, gauge, payload, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
 
             counter += 1;
@@ -425,6 +427,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit TreasuryWithdraw(call_id, receiver, amount);
         TvmCell empty;
+        qubeBalance -= amount;
         _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
@@ -436,6 +439,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit TeamWithdraw(call_id, receiver, amount);
         TvmCell empty;
+        qubeBalance -= amount;
         _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
@@ -447,6 +451,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
 
         emit PaymentWithdraw(call_id, receiver, amount);
         TvmCell empty;
+        qubeBalance -= amount;
         _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 }

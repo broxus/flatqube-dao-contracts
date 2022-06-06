@@ -141,6 +141,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         updateAverage();
         emit Withdraw(call_id, user, unlockedQubes);
 
+        qubeBalance -= unlockedQubes;
         _transferQubes(unlockedQubes, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 

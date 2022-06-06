@@ -225,8 +225,6 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     function _transferQubes(
         uint128 amount, address receiver, TvmCell payload, address send_gas_to, uint16 flag
     ) internal {
-        qubeBalance -= amount;
-
         uint128 value;
         if (flag != MsgFlag.ALL_NOT_RESERVED) {
             value = Gas.TOKEN_TRANSFER_VALUE;
