@@ -80,8 +80,12 @@ class VoteEscrow {
         return new VoteEscrowAccount(ve_acc);
     }
 
+    async getEvents(event_name) {
+        return await this.contract.getEvents(event_name);
+    }
+
     async getEvent(event_name) {
-        return ((await this.contract.getEvents(event_name)).pop()).value;
+        return ((await this.contract.getEvents(event_name)).shift()).value;
     }
 
     async calculateVeMint(amount, lock_time) {
@@ -285,6 +289,21 @@ class VoteEscrow {
                 nonce: 0,
                 call_id: call_id
             }
+        });
+    }
+
+    async withdraw(user, call_id=0, allowed_codes) {
+        const gas = await this.contract.call({method: 'calculateGasForEndVoting'});
+        return await user.runTarget({
+            contract: this.contract,
+            method: 'withdraw',
+            params: {
+                nonce: 0,
+                call_id: call_id,
+                send_gas_to: user.address
+            },
+            value: gas.plus(new BigNumber(3*10**9)).toFixed(0),
+            tracing_allowed_codes: allowed_codes
         });
     }
 

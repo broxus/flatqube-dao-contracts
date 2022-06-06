@@ -12,6 +12,11 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 abstract contract VoteEscrowAccountBase is VoteEscrowAccountHelpers {
+    function onDeployRetry(TvmCell, TvmCell, address sendGasTo) external view onlyVoteEscrowOrSelf functionID(0x23dc4360){
+        tvm.rawReserve(_reserve(), 0);
+        sendGasTo.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+    }
+
     function processVote(
         uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
     ) external override onlyVoteEscrowOrSelf {

@@ -3,9 +3,9 @@ pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 
-import "@broxus/contracts/contracts/platform/Platform.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
+import "../../Platform.sol";
 import "./VoteEscrowStorage.sol";
 import "../../interfaces/ICallbackReceiver.sol";
 import "../../libraries/Gas.sol";
@@ -277,7 +277,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
 
     function _buildInitData(TvmCell _initialData) internal view returns (TvmCell) {
         return tvm.buildStateInit({
-            contr: Platform,
+            contr: RPlatform,
             varInit: {
                 root: address(this),
                 platformType: PlatformTypes.VoteEscrowAccount,

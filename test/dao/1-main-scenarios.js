@@ -1,12 +1,8 @@
 const logger = require('mocha-logger');
 const { expect } = require('chai');
+const { getRandomNonce } = locklift.utils;
 var should = require('chai').should();
-
-const BigNumber = require('bignumber.js');
-const { convertCrystal, getRandomNonce } = locklift.utils;
-
-
-const { setupTokenRoot, setupVoteEscrow, deployUser, checkTokenBalance, sleep } = require("../utils/common");
+const { setupTokenRoot, setupVoteEscrow, deployUser, sleep } = require("../utils/common");
 
 
 describe("Main Vote Escrow scenarios", async function() {

@@ -4,7 +4,6 @@ pragma AbiHeader pubkey;
 
 
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "@broxus/contracts/contracts/platform/Platform.sol";
 import "./libraries/Errors.sol";
 import "./base/vote_escrow/VoteEscrowBase.sol";
 

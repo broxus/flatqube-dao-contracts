@@ -91,7 +91,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         constructor_params.store(ve_account_version); // 32
         constructor_params.store(ve_account_version); // 32
 
-        return new Platform{
+        return new RPlatform{
             stateInit: _buildInitData(_buildVoteEscrowAccountParams(user)),
             value: Gas.VE_ACCOUNT_DEPLOY_VALUE
         }(veAccountCode, constructor_params.toCell(), user);

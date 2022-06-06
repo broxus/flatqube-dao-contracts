@@ -1,5 +1,6 @@
 const logger = require("mocha-logger");
 const {expect} = require("chai");
+const BigNumber = require('bignumber.js');
 const Token = require("./wrappers/token");
 const VoteEscrow = require('./wrappers/vote_ecsrow');
 const {
@@ -19,12 +20,98 @@ const checkTokenBalance = async function(token_wallet, expected_bal) {
 }
 
 
+// allow sending N internal messages via batch method
+const runTargets = async function(wallet, targets, methods, params_list, values, allowed_codes) {
+    let bodies = await Promise.all(targets.map(async function(target, idx) {
+        const method = methods[idx];
+        const params = params_list[idx];
+
+        const message = await locklift.ton.client.abi.encode_message_body({
+            address: target.address,
+            abi: {
+                type: "Contract",
+                value: target.abi,
+            },
+            call_set: {
+                function_name: method,
+                input: params,
+            },
+            signer: {
+                type: 'None',
+            },
+            is_internal: true,
+        });
+
+        return message.body;
+    }));
+
+    return wallet.run({
+        method: 'sendTransactions',
+        params: {
+            dest: targets.map((contract) => contract.address),
+            value: values,
+            bounce: new Array(targets.length).fill(true),
+            flags: new Array(targets.length).fill(0),
+            payload: bodies,
+        },
+        tracing_allowed_codes: allowed_codes
+    });
+}
+
+
+const deployUsers = async function(count, initial_balance) {
+    let keys = await locklift.keys.getKeyPairs();
+    keys = keys.slice(0, count);
+
+    let keys_map = {};
+    keys.map((pair) => {
+        keys_map[`0x${pair.public}`] = pair;
+    })
+
+    const TestWallet = await locklift.factory.getAccount('TestWallet');
+    const TestFactory = await locklift.factory.getAccount('TestFactory');
+
+    const factory = await locklift.giver.deployContract({
+        contract: TestFactory,
+        constructorParams: {},
+        initParams: {
+            wallet_code: TestWallet.code
+        }
+    }, convertCrystal(count * initial_balance + 10, 'nano'));
+
+    const pubkeys = keys.map((pair) => { return (new BigNumber(pair.public, 16)).toFixed(0) });
+    const values = Array(count).fill(convertCrystal(initial_balance, 'nano'))
+
+    await factory.run({
+        method: 'deployUsers',
+        params: {
+            pubkeys: pubkeys,
+            values: values
+        }
+    });
+
+    const events = await factory.getEvents('NewWallet');
+    return await Promise.all(events.map(async function(event) {
+        const addr = event.value.addr;
+        const pubkey = event.value.pubkey;
+
+        const pair = keys_map[pubkey];
+        const wallet = await locklift.factory.getContract('TestWallet');
+        wallet.setAddress(addr);
+        wallet.setKeyPair(pair);
+        return wallet;
+    }));
+}
+
+
 const deployUser = async function(initial_balance=100) {
     const [keyPair] = await locklift.keys.getKeyPairs();
-    const Account = await locklift.factory.getAccount('Wallet');
+    const Account = await locklift.factory.getAccount('TestWallet');
     const _user = await locklift.giver.deployContract({
         contract: Account,
-        constructorParams: {},
+        constructorParams: {
+            owner_pubkey: (new BigNumber(keyPair.public, 16)).toFixed(0)
+        },
         initParams: {
             _randomNonce: locklift.utils.getRandomNonce()
         },
@@ -162,6 +249,8 @@ module.exports = {
     setupTokenRoot,
     setupVoteEscrow,
     deployUser,
+    deployUsers,
+    runTargets,
     sleep,
     checkTokenBalance
 }

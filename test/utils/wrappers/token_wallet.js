@@ -5,9 +5,9 @@ const {
 
 class TokenWallet {
     constructor(wallet_contract, wallet_owner) {
-        this.wallet = wallet_contract;
+        this.contract = wallet_contract;
         this._owner = wallet_owner;
-        this.address = this.wallet.address;
+        this.address = this.contract.address;
     }
 
     static async from_addr(addr, owner) {
@@ -21,28 +21,23 @@ class TokenWallet {
     }
 
     async owner() {
-        return await this.wallet.call({method: 'owner'});
+        return await this.contract.call({method: 'owner'});
     }
 
     async root() {
-        return await this.wallet.call({method: 'root'});
+        return await this.contract.call({method: 'root'});
     }
 
     async balance() {
-        return await this.wallet.call({method: 'balance'});
+        return await this.contract.call({method: 'balance'});
     }
 
     async transfer(amount, receiver_or_addr, payload='', tracing=null, allowed_codes={compute: []}) {
-        let addr = receiver_or_addr.address;
-        if (addr === undefined) {
-            addr = receiver_or_addr;
-        }
-        let notify = false;
-        if (payload) {
-            notify = true;
-        }
+        const addr = receiver_or_addr.address === undefined ? receiver_or_addr : receiver_or_addr.address;
+        let notify = payload !== '';
+
         return await this._owner.runTarget({
-            contract: this.wallet,
+            contract: this.contract,
             method: 'transfer',
             params: {
                 amount: amount,

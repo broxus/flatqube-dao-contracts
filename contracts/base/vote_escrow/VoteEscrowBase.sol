@@ -7,7 +7,6 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "@broxus/contracts/contracts/platform/Platform.sol";
 import "../../libraries/Errors.sol";
 import "../../interfaces/IGaugeAccount.sol";
 import "./VoteEscrowVoting.sol";
