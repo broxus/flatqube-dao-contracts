@@ -10,7 +10,7 @@ import "../../libraries/PlatformTypes.sol";
 import "../../GaugeAccount.sol";
 import "./GaugeHelpers.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "@broxus/contracts/contracts/platform/Platform.sol";
+import "../../Platform.sol";
 
 
 abstract contract GaugeUpgradable is GaugeHelpers {

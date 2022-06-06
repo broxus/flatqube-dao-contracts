@@ -8,7 +8,7 @@ import "../../interfaces/IVoteEscrow.sol";
 import "../../libraries/PlatformTypes.sol";
 import "../../libraries/Errors.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "@broxus/contracts/contracts/platform/Platform.sol";
+import "../../Platform.sol";
 
 
 abstract contract GaugeBase is GaugeRewards {

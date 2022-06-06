@@ -11,6 +11,11 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 abstract contract GaugeAccountBase is GaugeAccountHelpers {
+    function onDeployRetry(TvmCell, TvmCell, address sendGasTo) external view onlyGauge functionID(0x23dc4360){
+        tvm.rawReserve(_reserve(), 0);
+        sendGasTo.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+    }
+
     function increasePoolDebt(uint128 qube_debt, uint128[] extra_debt, address send_gas_to) external override onlyGauge {
         tvm.rawReserve(_reserve(), 0);
 

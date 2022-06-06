@@ -9,7 +9,7 @@ import "../../interfaces/IGaugeAccount.sol";
 import "../../libraries/PlatformTypes.sol";
 import "../../interfaces/ICallbackReceiver.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "@broxus/contracts/contracts/platform/Platform.sol";
+import "../../Platform.sol";
 
 
 abstract contract GaugeHelpers is GaugeStorage {
