@@ -308,10 +308,13 @@ class VoteEscrow {
         });
     }
 
-    async deposit(from_wallet, amount, lock_time, call_id, allowed_codes) {
-        const ve_acc = await this.voteEscrowAccount(from_wallet._owner);
-        let gas = await ve_acc.contract.call({method: 'calculateMinGas'});
-        gas = gas.plus(new BigNumber(3*10**9)).toFixed(0);
+    async deposit(from_wallet, amount, lock_time, call_id, allowed_codes, calc_min_gas=true) {
+        let gas = null;
+        if (calc_min_gas) {
+            const ve_acc = await this.voteEscrowAccount(from_wallet._owner);
+            gas = await ve_acc.contract.call({method: 'calculateMinGas'});
+            gas = gas.plus(new BigNumber(3*10**9)).toFixed(0);
+        }
         const payload = await this.depositPayload(from_wallet._owner, lock_time, call_id);
         return await from_wallet.transfer(amount, this.contract, payload, gas, null, allowed_codes);
     }

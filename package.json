@@ -7,7 +7,7 @@
     "license": "ISC",
     "dependencies": {
         "@broxus/contracts": "^1.0.4",
-        "locklift": "github:broxus/ton-locklift#307cd070d4b4c9033fd9672c8b3e5913eacd0ba9",
+        "locklift": "github:broxus/ton-locklift#81bc9044fce806c8ef16b2f7e66d6aa3fc60ccce",
         "broxus-ton-tokens-contracts": "github:broxus/ton-eth-bridge-token-contracts#d3c1cd920c0320ffaab03b54c878dd0e06fed3c7",
         "mocha-logger": "^1.0.7"
     }

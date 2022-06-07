@@ -66,7 +66,7 @@ describe("Main Vote Escrow scenarios", async function() {
         describe('Making deposits & whitelisting gauges & send distribution QUBEs', async function() {
             it('Making 1st deposit', async function() {
                 const lock_time = 100;
-                await vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, {compute: [null]});
+                await vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, {compute: [null]}, false);
                 const event = await vote_escrow.getEvent('Deposit');
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
