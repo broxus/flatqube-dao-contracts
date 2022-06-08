@@ -1,9 +1,10 @@
-pragma ton-solidity ^0.57.1;
+pragma ton-solidity ^0.60.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 
 import '@broxus/contracts/contracts/wallets/Account.sol';
+import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 contract TestWallet is Account {
@@ -12,6 +13,20 @@ contract TestWallet is Account {
         tvm.accept();
 
         setOwnership(owner_pubkey);
+    }
+
+    // can accept tokens
+    function onAcceptTokensTransfer(
+        address,
+        uint128,
+        address,
+        address,
+        address remainingGasTo,
+        TvmCell
+    ) external pure {
+        tvm.rawReserve(address(this).balance - msg.value, 0);
+
+        remainingGasTo.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     // batch version of sendTransaction

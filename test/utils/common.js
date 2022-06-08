@@ -77,24 +77,27 @@ const deployUsers = async function(count, initial_balance) {
         initParams: {
             wallet_code: TestWallet.code
         }
-    }, convertCrystal(count * initial_balance + 10, 'nano'));
+    }, convertCrystal(count * initial_balance + 100, 'nano'));
 
     const pubkeys = keys.map((pair) => { return (new BigNumber(pair.public, 16)).toFixed(0) });
     const values = Array(count).fill(convertCrystal(initial_balance, 'nano'))
 
-    await factory.run({
-        method: 'deployUsers',
-        params: {
-            pubkeys: pubkeys,
-            values: values
-        }
-    });
+    const chunkSize = 70;
+    for (let i = 0; i < count; i += chunkSize) {
+        const _pubkeys = pubkeys.slice(i, i + chunkSize);
+        const _values = values.slice(i, i + chunkSize);
 
-    const events = await factory.getEvents('NewWallet');
-    return await Promise.all(events.map(async function(event) {
-        const addr = event.value.addr;
-        const pubkey = event.value.pubkey;
+        await factory.run({
+            method: 'deployUsers',
+            params: {
+                pubkeys: _pubkeys,
+                values: _values
+            }
+        });
+    }
 
+    const wallets = await factory.call({method: 'wallets'});
+    return await Promise.all(Object.entries(wallets).map(async function([pubkey, addr]) {
         const pair = keys_map[pubkey];
         const wallet = await locklift.factory.getContract('TestWallet');
         wallet.setAddress(addr);
