@@ -93,7 +93,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(event.lock_time.toString()).to.be.eq(lock_time.toString());
                 expect(event.ve_amount.toString()).to.be.eq(ve_expected.toString());
 
-                await vote_escrow.checkQubeBalance(1000);
+                await vote_escrow.checkQubeBalance(2000);
                 const details = await ve_account.getDetails();
                 expect(details._activeDeposits.toString()).to.be.eq('2');
 

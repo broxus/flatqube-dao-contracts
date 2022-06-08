@@ -1,6 +1,6 @@
 module.exports = {
   compiler: {
-    path: '/usr/bin/solc_0571',
+    path: '/usr/bin/solc_0600',
   },
   linker: {
     path: '/usr/bin/tvm_linker-80e31a5',
@@ -19,7 +19,7 @@ module.exports = {
       },
       keys: {
         phrase: '',
-        amount: 20,
+        amount: 500,
       }
     },
     dev: {
