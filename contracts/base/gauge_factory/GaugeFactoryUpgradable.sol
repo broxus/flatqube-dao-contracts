@@ -63,7 +63,7 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function forceUpgradeGaugeAccounts(address gauge, address[] users, uint32 call_id, address send_gas_to) external pure onlyOwner {
+    function forceUpgradeGaugeAccounts(address gauge, address[] users, uint32 call_id, address send_gas_to) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * users.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
