@@ -149,7 +149,7 @@ class VoteEscrow {
         });
     }
 
-    async vote(voter, votes, call_id) {
+    async vote(voter, votes, call_id=0) {
         return await voter.runTarget({
             contract: this.contract,
             method: 'vote',
@@ -319,7 +319,7 @@ class VoteEscrow {
         return await from_wallet.transfer(amount, this.contract, payload, gas, null, allowed_codes);
     }
 
-    async whitelistDeposit(from_wallet, amount, whitelist_addr, call_id, allowed_codes) {
+    async whitelistDeposit(from_wallet, amount, whitelist_addr, call_id=0, allowed_codes) {
         const payload = await this.whitelistDepositPayload(whitelist_addr, call_id);
         return await from_wallet.transfer(amount, this.contract, payload, null, null, allowed_codes);
     }

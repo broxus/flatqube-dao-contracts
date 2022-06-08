@@ -23,7 +23,6 @@ describe("Main Vote Escrow scenarios", async function() {
     let qube_root;
     let user_qube_wallet;
     let owner_qube_wallet;
-    let vote_escrow_qube_wallet;
 
     describe('Setup contracts', async function() {
         it('Deploy users', async function() {
@@ -55,7 +54,6 @@ describe("Main Vote Escrow scenarios", async function() {
             vote_escrow = await setupVoteEscrow({
                 owner, qube: qube_root
             });
-            vote_escrow_qube_wallet = await vote_escrow.tokenWallet();
 
             const details = await vote_escrow.getCurrentEpochDetails();
             expect(details._currentEpoch.toString()).to.be.eq(current_epoch.toString());
@@ -76,8 +74,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(event.ve_amount.toString()).to.be.eq(ve_expected.toString());
 
                 ve_account = await vote_escrow.voteEscrowAccount(user);
-                const details = await ve_account.getDetails();
-                expect(details._qubeBalance.toString()).to.be.eq('1000');
+                await vote_escrow.checkQubeBalance(1000);
 
                 await sleep(1000);
                 const ve_details = await ve_account.calculateVeAverage();
@@ -96,8 +93,8 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(event.lock_time.toString()).to.be.eq(lock_time.toString());
                 expect(event.ve_amount.toString()).to.be.eq(ve_expected.toString());
 
+                await vote_escrow.checkQubeBalance(1000);
                 const details = await ve_account.getDetails();
-                expect(details._qubeBalance.toString()).to.be.eq('2000');
                 expect(details._activeDeposits.toString()).to.be.eq('2');
 
                 const ve_details = await ve_account.calculateVeAverage();

@@ -71,7 +71,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
-    ) external view onlyVoteEscrowAccount(user) {
+    ) external pure onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit VoteEscrowAccountUpgrade(call_id, user, old_version, new_version);

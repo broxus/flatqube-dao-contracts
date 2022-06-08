@@ -82,7 +82,7 @@ const deployUsers = async function(count, initial_balance) {
     const pubkeys = keys.map((pair) => { return (new BigNumber(pair.public, 16)).toFixed(0) });
     const values = Array(count).fill(convertCrystal(initial_balance, 'nano'))
 
-    const chunkSize = 70;
+    const chunkSize = 60;
     for (let i = 0; i < count; i += chunkSize) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
@@ -99,7 +99,7 @@ const deployUsers = async function(count, initial_balance) {
     const wallets = await factory.call({method: 'wallets'});
     return await Promise.all(Object.entries(wallets).map(async function([pubkey, addr]) {
         const pair = keys_map[pubkey];
-        const wallet = await locklift.factory.getContract('TestWallet');
+        const wallet = await locklift.factory.getAccount('TestWallet');
         wallet.setAddress(addr);
         wallet.setKeyPair(pair);
         return wallet;
@@ -188,7 +188,7 @@ const setupVoteEscrow = async function({
     gauge_min_votes_ratio=200,
     gauge_max_votes_ratio=3000,
     gauge_max_downtime=2,
-    max_gauges_per_vote=10,
+    max_gauges_per_vote=15,
     whitelist_price=1000000
 }) {
     const VoteEscrowContract = await locklift.factory.getContract('VoteEscrow');

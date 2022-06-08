@@ -72,7 +72,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
-    ) external view onlyGaugeAccount(user) {
+    ) external pure onlyGaugeAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit GaugeAccountUpgrade(call_id, user, old_version, new_version);

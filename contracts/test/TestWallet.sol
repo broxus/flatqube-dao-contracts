@@ -38,7 +38,7 @@ contract TestWallet is Account {
         TvmCell[] payload
     )
     public
-    view
+    pure
     onlyOwner
     {
         tvm.accept();

@@ -14,26 +14,37 @@ describe("Vote Escrow mass deposits scenario", async function() {
 
     let user;
     let owner;
-    let gauges;
+    let gauges = [];
+    let voters = [];
+
+    let big_gauge;
 
     let current_epoch = 1;
-    const gauges_count = 105;
+    const pack_size = 35;
+    const gauges_per_vote = 15;
+    const gauges_count = pack_size * 10;
+    const voters_count = Math.ceil(gauges_count / gauges_per_vote); // every voter vote for 15 gauges
     const whitelist_price = 1000000;
 
+    const lock_time = 1000;
+    const gauge_deposit = 1000;
+    const big_gauge_deposit = 1000000;
+
     let vote_escrow;
-    let ve_account;
 
     let qube_root;
     let user_qube_wallet;
     let owner_qube_wallet;
-    let vote_escrow_qube_wallet;
+    let voters_qube_wallets = [];
 
     describe('Setup contracts', async function() {
         it('Deploy users', async function() {
             user = await deployUser(10000000);
             owner = await deployUser(10000000);
 
+            voters = await deployUsers(voters_count, 100);
             gauges = await deployUsers(gauges_count, 100);
+            big_gauge = await deployUser(100);
         });
 
         it('Deploy token', async function() {
@@ -43,13 +54,27 @@ describe("Vote Escrow mass deposits scenario", async function() {
         it('Deploy token wallets + mint', async function() {
             owner_qube_wallet = await qube_root.mint(100000000000, owner);
             user_qube_wallet = await qube_root.mint(100000000000, user);
+
+            await qube_root.deployWallet(big_gauge);
+
+            const chunkSize = 30;
+            for (let i = 0; i < gauges_count; i += chunkSize) {
+                const _gauges = gauges.slice(i, i + chunkSize);
+
+                await Promise.all(_gauges.map(async (gauge) => {
+                    await qube_root.deployWallet(gauge);
+                }));
+            }
+
+            for (const voter of voters) {
+                voters_qube_wallets.push(await qube_root.mint(100000000000, voter));
+            }
         });
 
         it('Deploy Vote Escrow', async function() {
             vote_escrow = await setupVoteEscrow({
-                owner, qube:qube_root, whitelist_price: whitelist_price
+                owner, qube:qube_root, whitelist_price: whitelist_price, gauge_min_votes_ratio: 0, max_lock: lock_time, voting_time: 10, epoch_time: 20
             });
-            vote_escrow_qube_wallet = await vote_escrow.tokenWallet();
 
             const details = await vote_escrow.getCurrentEpochDetails();
             expect(details._currentEpoch.toString()).to.be.eq(current_epoch.toString());
@@ -57,6 +82,23 @@ describe("Vote Escrow mass deposits scenario", async function() {
     });
 
     describe("Checking huge number of gauges on voting works correctly", async function() {
+        let total_votes = 0;
+
+        it('Making deposits', async function() {
+            await vote_escrow.deposit(user_qube_wallet, big_gauge_deposit, lock_time, 0, {compute: [null]}, false);
+
+            const mid = Math.floor(voters_count / 2);
+            await Promise.all(voters_qube_wallets.slice(0, mid).map(async (qube_wallet, index) => {
+                await vote_escrow.deposit(qube_wallet, gauge_deposit, lock_time, index, {compute: [null]}, false);
+            }))
+
+            await Promise.all(voters_qube_wallets.slice(mid).map(async (qube_wallet, index) => {
+                await vote_escrow.deposit(qube_wallet, gauge_deposit, lock_time, index, {compute: [null]}, false);
+            }))
+
+            await vote_escrow.checkQubeBalance(gauge_deposit * voters_qube_wallets.length + big_gauge_deposit);
+        });
+
         it(`Whitelisting ${gauges_count} gauges`, async function() {
             let params = [];
             for (const gauge of gauges) {
@@ -84,118 +126,94 @@ describe("Vote Escrow mass deposits scenario", async function() {
                 );
             }
 
+            await vote_escrow.whitelistDeposit(owner_qube_wallet, whitelist_price, big_gauge.address);
+
             const details = await vote_escrow.votingDetails();
-            expect(details._gaugesNum.toString()).to.be.eq(gauges_count.toString());
-        });
-    });
-
-    describe.skip('Checking huge number of deposits works correctly', async function() {
-        it(`Made ${count * packs_num} deposits`, async function() {
-            // processing requires some time, so we must be sure it will not unlock until all deposits are processed
-            const lock_time = 700;
-            logger.log(`Locking for ${lock_time} seconds`);
-
-            const deposit_payload = await vote_escrow.depositPayload(user, lock_time);
-            const params = {
-                amount: deposit_amount,
-                recipient: vote_escrow.address,
-                deployWalletValue: 0,
-                remainingGasTo: user.address,
-                notify: true,
-                payload: deposit_payload
-            };
-
-            let time_passed = 0;
-
-            for (const i of Array.from(Array(packs_num).keys())) {
-                logger.log(`Sending pack #${i + 1} with ${count} deposits`)
-                const from = Date.now();
-                await runTargets(
-                    user,
-                    Array(count).fill(user_qube_wallet.contract),
-                    Array(count).fill('transfer'),
-                    Array(count).fill(params),
-                    Array(count).fill(convertCrystal(50, 'nano')),
-                    {compute: [null]}
-                );
-                const to = Date.now();
-                logger.log(`Pack processed in ${Math.floor((to - from) / 1000)}`);
-                time_passed += Math.floor((to - from) / 1000);
-            }
-
-            logger.log(`${time_passed} seconds passed overall`);
-
-            let ve_expected = await vote_escrow.calculateVeMint(deposit_amount, lock_time);
-            ve_expected = ve_expected * count * packs_num;
-
-            ve_account = await vote_escrow.voteEscrowAccount(user.address);
-            const acc_balance = await ve_account.calculateVeAverage();
-            const acc_details = await ve_account.getDetails();
-            const ve_details = await vote_escrow.details();
-
-            // ve acc check
-            expect(acc_balance._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(acc_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
-            expect(acc_details._unlockedQubes.toString()).to.be.eq('0');
-
-            expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
+            expect(details._gaugesNum.toString()).to.be.eq((gauges_count + 1).toString());
         });
 
-        it('Making 1 more deposit, unlocking old ones', async function() {
-            logger.log(`Sleeping until all deposits are unlocked...`)
-
-            while (true) {
-                const acc_balance = await ve_account.calculateVeAverage();
-                if (acc_balance._veQubeBalance.toString() === '0') {
-                    break;
-                }
-                logger.log(`VeQube balance - ${acc_balance._veQubeBalance.toString()}, sleeping...`);
-                await sleep(100 * 1000);
-            }
-
-            await vote_escrow.deposit(user_qube_wallet, deposit_amount, 100, 2);
-            const ve_expected = await vote_escrow.calculateVeMint(deposit_amount, 100);
-
-            const acc_balance_1 = await ve_account.calculateVeAverage();
-            const acc_details_1 = await ve_account.getDetails();
-            const ve_details = await vote_escrow.details();
-
-            // only ve qubes from new deposit
-            expect(acc_balance_1._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            // + deposit_amount to qube balance
-            expect(acc_details_1._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
-            // all old qubes are unlocked
-            expect(acc_details_1._unlockedQubes.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
-
-            // all old ve qubes are burned
-            expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
-        })
-
-        it('Making withdraw', async function() {
-            await vote_escrow.withdraw(user, 1);
-            const event = await vote_escrow.getEvent('Withdraw');
+        it('Send QUBEs for distribution', async function() {
+            const supply = 6000000;
+            await vote_escrow.distributionDeposit(owner_qube_wallet, supply, '1');
+            const event = await vote_escrow.getEvent('DistributionSupplyIncrease');
 
             expect(event.call_id.toString()).to.be.eq('1');
-            expect(event.amount.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
+            expect(event.amount.toString()).to.be.eq(supply.toString());
 
-            const ve_expected = await vote_escrow.calculateVeMint(deposit_amount, 100);
-            // ve qubes only for new deposit
-            const acc_balance = await ve_account.calculateVeAverage();
-            const acc_details = await ve_account.getDetails();
-            const ve_details = await vote_escrow.details();
+            const details = await vote_escrow.details();
+            expect(details._distributionSupply.toString()).to.be.eq(supply.toString());
+        });
 
-            // only ve qubes from new deposit
-            expect(acc_balance._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            // + deposit_amount to qube balance
-            expect(acc_details._qubeBalance.toString()).to.be.eq(deposit_amount.toString());
-            // all unlocked qubes qre withdrawn
-            expect(acc_details._unlockedQubes.toString()).to.be.eq('0');
+        it('Voting', async function() {
+            await sleep(4000);
 
-            // only last deposit is alive
-            expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq(deposit_amount.toString());
+            // we have max lock for all deposits => ve ball == deposit
+            const vote = Math.floor(gauge_deposit / gauges_per_vote);
+
+            await Promise.all(voters.map(async (voter, idx) => {
+                const gauges_to_vote = gauges.slice(idx * gauges_per_vote, idx * gauges_per_vote + gauges_per_vote);
+                let votes = {};
+                gauges_to_vote.map((gauge) => {
+                    votes[gauge.address] = vote;
+                    total_votes += vote;
+                });
+                await vote_escrow.vote(voter, votes);
+            }));
+
+            let votes_big = {};
+            votes_big[big_gauge.address] = big_gauge_deposit.toString();
+            await vote_escrow.vote(user, votes_big);
+            total_votes += big_gauge_deposit;
+
+            const details = await vote_escrow.getCurrentEpochDetails();
+            expect(details._currentVotingTotalVotes.toString()).to.be.eq(total_votes.toString());
+
+            const votes = await vote_escrow.currentVotingVotes();
+            expect(Object.keys(votes).length.toString()).to.be.eq((gauges_count + 1).toString());
+            for (const [key, val] of Object.entries(votes)) {
+                if (key === big_gauge.address) {
+                    expect(val).to.be.eq(big_gauge_deposit.toString());
+                } else {
+                    expect(val).to.be.eq(vote.toString());
+                }
+            }
+            expect(details._currentVotingTotalVotes.toString()).to.be.eq((vote * gauges_count + big_gauge_deposit).toString());
+        });
+
+        it('End voting', async function() {
+            await sleep(10 * 1000);
+            await vote_escrow.endVoting(1);
+
+            const vote = Math.floor(gauge_deposit / gauges_per_vote);
+
+            const voting_end = await vote_escrow.getEvent('VotingEnd');
+            const epoch_distribution = await vote_escrow.getEvent('EpochDistribution');
+
+            const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
+            const valid_votes = vote * gauges_count;
+            const exceeded_votes = big_gauge_deposit - max_votes;
+            const gauge_votes = Math.floor(vote + (vote / valid_votes) * exceeded_votes);
+
+            expect(Object.keys(voting_end.votes).length.toString()).to.be.eq((gauges_count + 1).toString());
+            for (const [key, val] of Object.entries(voting_end.votes)) {
+                if (key === big_gauge.address) {
+                    expect(val).to.be.eq(max_votes.toString());
+                } else {
+                    expect(val).to.be.eq(gauge_votes.toString());
+                }
+            }
+
+            const expected_distribution_1 = Math.floor((gauge_votes / total_votes) * 800000);
+            const expected_distribution_2 = Math.floor((max_votes / total_votes) * 800000);
+
+            expect(Object.keys(epoch_distribution.farming_distribution).length.toString()).to.be.eq((gauges_count + 1).toString());
+            for (const [key, val] of Object.entries(epoch_distribution.farming_distribution)) {
+                if (key === big_gauge.address) {
+                    expect(val).to.be.eq(expected_distribution_2.toString());
+                } else {
+                    expect(val).to.be.eq(expected_distribution_1.toString());
+                }
+            }
         });
     });
 });

@@ -228,7 +228,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
 
         // no votes at all, set min_votes to 1, so that all gauges get +1 downtime
-        if (currentVotingTotalVotes == 0) {
+        if (currentVotingTotalVotes == 0 && gaugeMinVotesRatio > 0) {
             min_votes = 1;
         }
 
@@ -309,8 +309,8 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
                     gauge_votes += bonus_votes;
                     if (gauge_votes > max_votes) {
                         treasury_votes += gauge_votes - max_votes;
-                        currentVotingVotes[gauge] = max_votes;
                     }
+                    currentVotingVotes[gauge] = math.min(gauge_votes, max_votes);
                 }
 
                 counter += 1;
@@ -415,6 +415,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             to_distribute_team,
             to_distribute_treasury
         );
+
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 

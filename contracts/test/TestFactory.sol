@@ -17,7 +17,7 @@ contract TestFactory is RandomNonce {
 
     // max 70 per tx
     function deployUsers(uint256[] pubkeys, uint128[] values) external {
-        require (pubkeys.length <= 70, 1000);
+        require (pubkeys.length <= 60, 1000);
         tvm.accept();
 
         for (uint i = 0; i < pubkeys.length; i++) {
