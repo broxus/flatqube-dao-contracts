@@ -123,7 +123,7 @@ class VoteEscrow {
         });
     }
 
-    async startVoting(call_id) {
+    async startVoting(call_id=0) {
         return await this._owner.runTarget({
             contract: this.contract,
             method: 'startVoting',
@@ -270,7 +270,7 @@ class VoteEscrow {
         });
     }
 
-    async whitelistDepositPayload(whitelist_contract_or_addr, call_id) {
+    async whitelistDepositPayload(whitelist_contract_or_addr, call_id=0) {
         const addr = whitelist_contract_or_addr.address === undefined ? whitelist_contract_or_addr : whitelist_contract_or_addr.address;
         return await this.contract.call({
             method: 'encodeWhitelistPayload',

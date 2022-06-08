@@ -113,7 +113,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             return;
         }
         require (initialized, Errors.NOT_INITIALIZED);
-        require (currentEpoch + 1 < distributionSchedule.length, Errors.LAST_EPOCH);
+        require (currentEpoch - 1 < distributionSchedule.length, Errors.LAST_EPOCH);
         require (now >= currentEpochStartTime + timeBeforeVoting, Errors.TOO_EARLY_FOR_VOTING);
 
         currentVotingStartTime = now;
@@ -206,9 +206,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         currentEpochStartTime = currentEpochEndTime < now ? now : currentEpochEndTime;
         currentEpochEndTime = currentEpochStartTime + epochTime;
 
-        optional(address, bool) start = gaugeWhitelist.next(address.makeAddrStd(address(this).wid, 0));
-        (address start_addr,) = start.get();
-
+        address start_addr = address.makeAddrStd(address(this).wid, 0);
         IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             start_addr, 0, 0, call_id, send_gas_to
         );
@@ -228,6 +226,11 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         uint32 counter = 0;
         uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
         uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
+
+        // no votes at all, set min_votes to 1, so that all gauges get +1 downtime
+        if (currentVotingTotalVotes == 0) {
+            min_votes = 1;
+        }
 
         optional(address, bool) pointer = gaugeWhitelist.nextOrEq(start_addr);
         while (true) {
@@ -267,9 +270,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             return;
         }
 
-        optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
-        (start_addr,) = start.get();
-
+        start_addr = address.makeAddrStd(address(this).wid, 0);
         IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             start_addr, 0, exceeded_votes, valid_votes, call_id, send_gas_to
         );
@@ -286,48 +287,43 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         require (msg.sender == address(this), Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
 
-        // if not valid votes, we dont need normalization
-        if (valid_votes == 0) {
-            optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
-            (start_addr,) = start.get();
-            mapping (address => uint128) distributed;
-            IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                start_addr, treasury_votes, distributed, call_id, send_gas_to
-            );
-            return;
-        }
+        // if no valid votes/exceeded_votes, we dont need normalization
+        if (valid_votes == 0 || exceeded_votes == 0) {
+            // if exceeded_votes > 0, set all for treasury
+            treasury_votes = exceeded_votes;
+        } else {
+            bool finished = false;
+            uint32 counter = 0;
+            uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
 
-        bool finished = false;
-        uint32 counter = 0;
-        uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
-
-        optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
-        while (true) {
-            if (!pointer.hasValue() || counter >= MAX_ITERATIONS_PER_COUNT) {
-                finished = !pointer.hasValue();
-                break;
-            }
-
-            (address gauge, uint128 gauge_votes) = pointer.get();
-            if (gauge_votes < max_votes) {
-                uint128 bonus_votes = math.muldiv(gauge_votes, exceeded_votes, valid_votes);
-                gauge_votes += bonus_votes;
-                if (gauge_votes > max_votes) {
-                    treasury_votes += gauge_votes - max_votes;
-                    currentVotingVotes[gauge] = max_votes;
+            optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
+            while (true) {
+                if (!pointer.hasValue() || counter >= MAX_ITERATIONS_PER_COUNT) {
+                    finished = !pointer.hasValue();
+                    break;
                 }
+
+                (address gauge, uint128 gauge_votes) = pointer.get();
+                if (gauge_votes < max_votes) {
+                    uint128 bonus_votes = math.muldiv(gauge_votes, exceeded_votes, valid_votes);
+                    gauge_votes += bonus_votes;
+                    if (gauge_votes > max_votes) {
+                        treasury_votes += gauge_votes - max_votes;
+                        currentVotingVotes[gauge] = max_votes;
+                    }
+                }
+
+                counter += 1;
+                pointer = currentVotingVotes.next(gauge);
             }
 
-            counter += 1;
-            pointer = currentVotingVotes.next(gauge);
-        }
-
-        if (!finished) {
-            (address gauge,) = pointer.get();
-            IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                gauge, treasury_votes, exceeded_votes, valid_votes, call_id, send_gas_to
-            );
-            return;
+            if (!finished) {
+                (address gauge,) = pointer.get();
+                IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                    gauge, treasury_votes, exceeded_votes, valid_votes, call_id, send_gas_to
+                );
+                return;
+            }
         }
 
         emit VotingEnd(
@@ -340,9 +336,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
             currentEpochEndTime
         );
 
-        optional(address, uint128) start = currentVotingVotes.next(address.makeAddrStd(address(this).wid, 0));
-        (start_addr,) = start.get();
-
+        start_addr = address.makeAddrStd(address(this).wid, 0);
         mapping (address => uint128) distributed;
         IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             start_addr, treasury_votes, distributed, call_id, send_gas_to
@@ -362,7 +356,12 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         uint256 epoch_idx = currentEpoch - 2;
         uint128 to_distribute_total = distributionSchedule[epoch_idx];
         uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
-        uint128 treasury_bonus = math.muldiv(to_distribute_farming, bonus_treasury_votes, currentVotingTotalVotes);
+        uint128 treasury_bonus;
+        if (currentVotingTotalVotes > 0) {
+            treasury_bonus = math.muldiv(to_distribute_farming, bonus_treasury_votes, currentVotingTotalVotes);
+        } else {
+            treasury_bonus = to_distribute_farming;
+        }
 
         bool finished = false;
         uint32 counter = 0;
