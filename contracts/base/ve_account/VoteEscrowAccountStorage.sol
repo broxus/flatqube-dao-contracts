@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.57.1;
+pragma ton-solidity ^0.60.0;
 pragma AbiHeader expire;
 
 
@@ -24,7 +24,7 @@ abstract contract VoteEscrowAccountStorage is IVoteEscrowAccount {
     uint32 lastEpochVoted; // number of last epoch when user voted
     uint32 activeDeposits; // number of currently locked deposits
 
-    mapping (uint64 => QubeDeposit) deposits;
+    mapping (uint64 => QubeDeposit) public deposits;
 
     uint32 constant MAX_ITERATIONS_PER_MSG = 50;
     uint128 constant CONTRACT_MIN_BALANCE = 0.3 ton;

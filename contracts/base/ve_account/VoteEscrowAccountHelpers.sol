@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.57.1;
+pragma ton-solidity ^0.60.0;
 
 
 import "./VoteEscrowAccountStorage.sol";
@@ -34,10 +34,6 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             lastEpochVoted, // number of last epoch when user voted
             activeDeposits
         );
-    }
-
-    function getDeposits() external view responsible returns (mapping (uint64 => QubeDeposit) _deposits) {
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } deposits;
     }
 
     function _reserve() internal pure returns (uint128) {
