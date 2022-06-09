@@ -32,6 +32,10 @@ class VoteEscrow {
         return await this.contract.call({method: 'getDetails'});
     }
 
+    async getCodes() {
+        return await this.contract.call({method: 'getCodes'});
+    }
+
     async votingDetails() {
         return await this.contract.call({method: 'getVotingDetails'});
     }
@@ -360,7 +364,8 @@ class VoteEscrow {
                 code: new_code,
                 send_gas_to: this._owner.address,
             },
-            value: convertCrystal(5, 'nano')
+            value: convertCrystal(5, 'nano'),
+            tracing: false
         });
     }
 

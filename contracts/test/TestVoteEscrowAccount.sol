@@ -1,10 +1,10 @@
 pragma ever-solidity ^0.60.0;
 
 
-import "./base/ve_account/VoteEscrowAccountBase.sol";
+import "../base/ve_account/VoteEscrowAccountBase.sol";
 
 
-contract VoteEscrowAccount is VoteEscrowAccountBase {
+contract TestVoteEscrowAccount is VoteEscrowAccountBase {
     // Cant be deployed directly
     constructor() public { revert(); }
 
@@ -51,7 +51,7 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         );
         TvmCell data = abi.encode(call_id, nonce, storage_data);
 
-        main_builder.storeRef(data); // ref3
+        main_builder.storeRef(data); // ref 4
 
         tvm.setcode(new_code);
         // run onCodeUpgrade from new code
@@ -60,22 +60,67 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
     }
 
     function onCodeUpgrade(TvmCell upgrade_data) private {
-        tvm.resetStorage();
         tvm.rawReserve(_reserve(), 0);
 
         TvmSlice s = upgrade_data.toSlice();
         (address root_, , address send_gas_to) = s.decode(address, uint8, address);
-        voteEscrow = root_;
 
         // skip 0 bits and 1 ref (platform code), we dont need it
         s.skip(0, 1);
 
         TvmSlice initialData = s.loadRefAsSlice();
-        user = initialData.decode(address);
 
         TvmSlice params = s.loadRefAsSlice();
-        (current_version, ) = params.decode(uint32, uint32);
+        (uint32 _current_version, uint32 _old_version) = params.decode(uint32, uint32);
 
-        IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
+        // deploy
+        if (_current_version == _old_version) {
+            tvm.resetStorage();
+
+            voteEscrow = root_;
+            user = initialData.decode(address);
+            current_version = _current_version;
+
+            IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
+        } else {
+            tvm.resetStorage();
+
+            voteEscrow = root_;
+            user = initialData.decode(address);
+            current_version = _current_version;
+
+            TvmCell data = s.loadRef();
+            (uint32 call_id, uint32 nonce, TvmCell storage_data) = abi.decode(data, (uint32, uint32, TvmCell));
+            (
+                qubeBalance,
+                veQubeBalance,
+                expiredVeQubes,
+                unlockedQubes,
+                veQubeAverage,
+                veQubeAveragePeriod,
+                lastUpdateTime,
+                lastEpochVoted,
+                activeDeposits,
+                deposits
+            ) = abi.decode(
+                storage_data,
+                (
+                    uint128,
+                    uint128,
+                    uint128,
+                    uint128,
+                    uint128,
+                    uint32,
+                    uint32,
+                    uint32,
+                    uint32,
+                    mapping (uint64 => QubeDeposit)
+                )
+            );
+
+            IVoteEscrow(voteEscrow).onVeAccountUpgrade{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                user, _old_version, _current_version, call_id, nonce, send_gas_to
+            );
+        }
     }
 }

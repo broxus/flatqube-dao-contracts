@@ -4,14 +4,16 @@ pragma AbiHeader pubkey;
 
 
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "./libraries/Errors.sol";
-import "./base/vote_escrow/VoteEscrowBase.sol";
+import "../libraries/Errors.sol";
+import "../base/vote_escrow/VoteEscrowBase.sol";
 
 
-contract VoteEscrow is VoteEscrowBase {
+contract TestVoteEscrow is VoteEscrowBase {
     constructor(address _owner, address _qube) public {
-        // Deployed by Deployer contract
-        require (msg.sender.value != 0, Errors.BAD_SENDER);
+        require (tvm.pubkey() != 0, Errors.WRONG_PUBKEY);
+        require (tvm.pubkey() == msg.pubkey(), Errors.WRONG_PUBKEY);
+        tvm.accept();
+
         owner = _owner;
         qube = _qube;
 
@@ -29,7 +31,6 @@ contract VoteEscrow is VoteEscrowBase {
             ve_account_version,
             ve_version,
             owner,
-            pendingOwner,
             qube,
             qubeWallet,
             treasuryTokens,
@@ -78,6 +79,10 @@ contract VoteEscrow is VoteEscrowBase {
         onCodeUpgrade(data);
     }
 
+    event Upgrade(uint32 old_version, uint32 new_version);
+
     function onCodeUpgrade(TvmCell upgrade_data) private {
+        ve_version += 1;
+        emit Upgrade(ve_version - 1, ve_version);
     }
 }
