@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.60.0;
+pragma ever-solidity ^0.60.0;
 pragma AbiHeader expire;
 
 import "./interfaces/IGauge.sol";

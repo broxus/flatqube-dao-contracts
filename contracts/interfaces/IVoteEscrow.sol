@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.60.0;
+pragma ever-solidity ^0.60.0;
 
 
 import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
@@ -71,7 +71,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     event Emergency(uint32 call_id, bool new_state);
     event PlatformCodeInstall();
     event VeAccountCodeUpdate(uint32 old_version, uint32 new_version);
-    event VoteEscrowAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_versioin);
+    event VoteEscrowAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
 
     struct PendingDeposit {
         address user;

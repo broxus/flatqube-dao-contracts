@@ -10,10 +10,8 @@ import "../base/vote_escrow/VoteEscrowBase.sol";
 
 contract TestVoteEscrow is VoteEscrowBase {
     constructor(address _owner, address _qube) public {
-        require (tvm.pubkey() != 0, Errors.WRONG_PUBKEY);
-        require (tvm.pubkey() == msg.pubkey(), Errors.WRONG_PUBKEY);
-        tvm.accept();
-
+        // Deployed by Deployer contract
+        require (msg.sender.value != 0, Errors.BAD_SENDER);
         owner = _owner;
         qube = _qube;
 
