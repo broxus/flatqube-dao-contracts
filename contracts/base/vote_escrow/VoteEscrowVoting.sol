@@ -8,7 +8,7 @@ import "../../interfaces/IVoteEscrowAccount.sol";
 
 
 abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
-    function initialize(uint32 start_time, address send_gas_to) external onlyOwner {
+    function initialize(uint32 start_time, address send_gas_to) external override onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         // codes installed
         require (start_time > now, Errors.CANT_BE_INITIALIZED);
@@ -45,7 +45,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         uint32 _max_gauges_per_vote,
         uint32 call_id,
         address send_gas_to
-    ) external onlyOwner {
+    ) external override onlyOwner {
         require (_gauge_min_votes_ratio < _gauge_max_votes_ratio, Errors.BAD_INPUT);
         require (_gauge_max_votes_ratio <= MAX_VOTES_RATIO, Errors.BAD_INPUT);
         require (_time_before_voting < _epoch_time, Errors.BAD_INPUT);
@@ -76,7 +76,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setDistributionScheme(uint32[] _new_scheme, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setDistributionScheme(uint32[] _new_scheme, uint32 call_id, address send_gas_to) external override onlyOwner {
         require (_new_scheme.length == 3, Errors.BAD_INPUT);
         require (_new_scheme[0] + _new_scheme[1] + _new_scheme[2] == DISTRIBUTION_SCHEME_TOTAL, Errors.BAD_INPUT);
 
@@ -87,7 +87,7 @@ abstract contract VoteEscrowVoting is VoteEscrowUpgradable {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setDistribution(uint128[] _new_distribution, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setDistribution(uint128[] _new_distribution, uint32 call_id, address send_gas_to) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
         distributionSchedule = _new_distribution;
 

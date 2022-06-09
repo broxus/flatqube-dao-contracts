@@ -192,57 +192,60 @@ const setupVoteEscrow = async function({
     whitelist_price=1000000
 }) {
     const VoteEscrowContract = await locklift.factory.getContract('VoteEscrow');
+    const VoteEscrowDeployer = await locklift.factory.getContract('VoteEscrowDeployer');
+    const Platform = await locklift.factory.getContract('Platform');
+    const VoteEscrowAccount = await locklift.factory.getContract('VoteEscrowAccount');
+
     const [keyPair] = await locklift.keys.getKeyPairs();
 
-    const ve_contract = await locklift.giver.deployContract({
-        contract: VoteEscrowContract,
-        constructorParams: {
-            _owner: owner.address,
-            _qube: qube.address
-        },
+    const deployer = await locklift.giver.deployContract({
+        contract: VoteEscrowDeployer,
+        constructorParams: {},
         initParams: {
-            deploy_nonce: locklift.utils.getRandomNonce()
+            PlatformCode: Platform.code,
+            veAccountCode: VoteEscrowAccount.code
         },
         keyPair
+    }, convertCrystal(25, 'nano'));
+    deployer.setKeyPair(keyPair);
+    logger.log(`Deployed Vote Escrow deployer`);
+    await deployer.run({
+        method: 'installVoteEscrowCode',
+        params: {
+            code: VoteEscrowContract.code
+        }
     });
-    logger.log(`Vote Escrow address: ${ve_contract.address}`);
-    const ve = new VoteEscrow(ve_contract, owner);
-
-    const VeAccount = await locklift.factory.getContract('VoteEscrowAccount');
-    await ve.installPlatformCode();
-    logger.log(`Installed platform code`);
-
-    await ve.installOrUpdateVeAccountCode(VeAccount.code);
-    logger.log(`Installed ve account code`);
-
-    await ve.setVotingParams(
-        epoch_time,
-        time_before_voting,
-        voting_time,
-        gauge_min_votes_ratio,
-        gauge_max_votes_ratio,
-        gauge_max_downtime,
-        max_gauges_per_vote
-    );
-    logger.log('Set voting params');
-
-    await ve.setDistributionScheme(distribution_scheme);
-    logger.log('Set distribution scheme');
-
-    await ve.setDistribution(distribution);
-    logger.log('Set distribution');
-
-    await ve.setQubeLockTimeLimits(min_lock, max_lock);
-    logger.log('Set qube lock time limits');
-
-    await ve.setWhitelistPrice(whitelist_price);
-    logger.log(`Set whitelist price`);
-
     if (start_time === null) {
         start_time = Math.floor(Date.now() / 1000 + 5);
     }
-    await ve.initialize(start_time);
-    logger.log('Initialized');
+    logger.log(`Set Vote Escrow code`);
+    const tx = await deployer.run({
+       method: 'deployVoteEscrow',
+       params: {
+           owner: owner.address,
+           qube: qube.address,
+           start_time,
+           min_lock,
+           max_lock,
+           distribution_scheme,
+           distribution,
+           epoch_time,
+           time_before_voting,
+           voting_time,
+           gauge_min_votes_ratio,
+           gauge_max_votes_ratio,
+           gauge_max_downtime,
+           max_gauges_per_vote,
+           whitelist_price
+       }
+    });
+
+    const ve_addr = tx.decoded.output._vote_escrow;
+    const ve = await VoteEscrow.from_addr(ve_addr, owner);
+    logger.log(`Deployed and configured Vote Escrow: ${ve_addr}`);
+
+    await ve.acceptOwnership(owner);
+    logger.log(`Accepted ownership`);
 
     return ve;
 }

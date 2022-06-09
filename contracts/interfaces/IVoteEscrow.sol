@@ -5,6 +5,8 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCa
 
 
 interface IVoteEscrow is IAcceptTokensTransferCallback {
+    event NewOwner(address prev_owner, address new_owner);
+    event NewPendingOwner(address pending_owner);
     event Deposit(uint32 call_id, address user, uint128 amount, uint128 ve_amount, uint32 lock_time);
     event DepositRevert(uint32 call_id, address user, uint128 amount);
     event GaugeWhitelist(uint32 call_id, address gauge);
@@ -65,10 +67,10 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         uint8 gaugeMaxDowntime,
         uint32 maxGaugesPerVote
     );
-    event PauseUpdate(uint32 call_id, bool new_state);
-    event EmergencyUpdate(uint32 call_id, bool new_state);
+    event Pause(uint32 call_id, bool new_state);
+    event Emergency(uint32 call_id, bool new_state);
     event PlatformCodeInstall();
-    event VeAccountCodeUpgrade(uint32 old_version, uint32 new_version);
+    event VeAccountCodeUpdate(uint32 old_version, uint32 new_version);
     event VoteEscrowAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_versioin);
 
     struct PendingDeposit {
@@ -95,6 +97,33 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     function getVoteEscrowAccountAddress(address user) external view responsible returns (address);
     function onVoteEscrowAccountDeploy(address user, address send_gas_to) external;
     function deployVoteEscrowAccount(address user) external view returns (address);
+    function installPlatformCode(TvmCell code, address send_gas_to) external;
+    function installOrUpdateVeAccountCode(TvmCell code, address send_gas_to) external;
+    function setVotingParams(
+        uint32 epoch_time,
+        uint32 time_before_voting,
+        uint32 voting_time,
+        uint32 gauge_min_votes_ratio,
+        uint32 gauge_max_votes_ratio,
+        uint8 gauge_max_downtime,
+        uint32 max_gauges_per_vote,
+        uint32 call_id,
+        address send_gas_to
+    ) external;
+    function setDistributionScheme(uint32[] scheme, uint32 call_id, address send_gas_to) external;
+    function setDistribution(uint128[] distribution, uint32 call_id, address send_gas_to) external;
+    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external;
+    function setWhitelistPrice(uint128 whitelist_price, uint32 call_id, address send_gas_to) external;
+    function initialize(uint32 start_time, address send_gas_to) external;
+    function transferOwnership(address new_owner, address send_gas_to) external;
+    function onVeAccountUpgrade(
+        address user,
+        uint32 old_version,
+        uint32 new_version,
+        uint32 call_id,
+        uint32 nonce,
+        address send_gas_to
+    ) external view;
     function countVotesStep(
         address start_addr,
         uint128 exceeded_votes,

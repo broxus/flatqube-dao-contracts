@@ -9,7 +9,7 @@ import "../../libraries/Errors.sol";
 
 
 abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
-    function installPlatformCode(TvmCell code, address send_gas_to) external onlyOwner {
+    function installPlatformCode(TvmCell code, address send_gas_to) external override onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         require(platformCode.toSlice().empty(), Errors.ALREADY_INITIALIZED);
 
@@ -20,13 +20,13 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function installOrUpdateVeAccountCode(TvmCell code, address send_gas_to) external onlyOwner {
+    function installOrUpdateVeAccountCode(TvmCell code, address send_gas_to) external override onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         veAccountCode = code;
         ve_account_version += 1;
-        emit VeAccountCodeUpgrade(ve_account_version - 1, ve_account_version);
+        emit VeAccountCodeUpdate(ve_account_version - 1, ve_account_version);
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
@@ -71,7 +71,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
-    ) external pure onlyVoteEscrowAccount(user) {
+    ) external override view onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit VoteEscrowAccountUpgrade(call_id, user, old_version, new_version);

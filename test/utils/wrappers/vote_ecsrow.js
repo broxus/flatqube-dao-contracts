@@ -98,6 +98,17 @@ class VoteEscrow {
         });
     }
 
+    async acceptOwnership(owner) {
+        return await owner.runTarget({
+            contract: this.contract,
+            method: 'acceptOwnership',
+            params: {
+                send_gas_to: owner.address
+            },
+            value: convertCrystal(5, 'nano')
+        });
+    }
+
     async installPlatformCode() {
         const Platform = await locklift.factory.getContract('Platform');
         return await this._owner.runTarget({
@@ -257,6 +268,18 @@ class VoteEscrow {
         });
     }
 
+    async deployVeAccount(user) {
+        const addr = user.address === undefined ? user : user.address;
+        return await user.runTarget({
+            contract: this.contract,
+            method: 'deployVoteEscrowAccount',
+            params: {
+                user: addr,
+            },
+            value: convertCrystal(5, 'nano')
+        });
+    }
+
     async depositPayload(deposit_owner_or_addr, lock_time, call_id=0) {
         const addr = deposit_owner_or_addr.address === undefined ? deposit_owner_or_addr : deposit_owner_or_addr.address;
         return await this.contract.call({
@@ -329,7 +352,43 @@ class VoteEscrow {
         return await from_wallet.transfer(amount, this.contract, payload, null, null, allowed_codes);
     }
 
+    async upgrade(new_code) {
+        return await this._owner.runTarget({
+            contract: this.contract,
+            method: 'upgrade',
+            params: {
+                code: new_code,
+                send_gas_to: this._owner.address,
+            },
+            value: convertCrystal(5, 'nano')
+        });
+    }
 
+    async upgradeVeAccount(user, call_id=0) {
+        return await user.runTarget({
+            contract: this.contract,
+            method: 'upgradeVeAccount',
+            params: {
+                nonce: 0,
+                call_id: call_id,
+                send_gas_to: user.address,
+            },
+            value: convertCrystal(5, 'nano')
+        });
+    }
+
+    async forceUpgradeVeAccounts(users) {
+        users = users.map((user) => user.address === undefined ? user : user.address );
+        return await this._owner.runTarget({
+            contract: this.contract,
+            method: 'forceUpgradeVeAccounts',
+            params: {
+                users: users,
+                send_gas_to: this._owner.address,
+            },
+            value: convertCrystal(5 * users.length, 'nano')
+        });
+    }
 }
 
 
