@@ -17,6 +17,24 @@ import "locklift/locklift/console.sol";
 
 
 abstract contract VoteEscrowBase is VoteEscrowVoting {
+    function transferOwnership(address new_owner, address send_gas_to) external override onlyOwner {
+        tvm.rawReserve(_reserve(), 0);
+
+        emit NewPendingOwner(new_owner);
+        pendingOwner = new_owner;
+        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+    }
+
+    function acceptOwnership(address send_gas_to) external {
+        require (msg.sender == pendingOwner, Errors.NOT_OWNER);
+        tvm.rawReserve(_reserve(), 0);
+
+        emit NewOwner(owner, pendingOwner);
+        owner = pendingOwner;
+        pendingOwner = address.makeAddrNone();
+        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+    }
+
     function receiveTokenWalletAddress(address wallet) external override {
         require (msg.sender == qube);
         qubeWallet = wallet;
@@ -155,7 +173,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         user.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         qubeMinLockTime = new_min;
@@ -169,7 +187,7 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         tvm.rawReserve(_reserve(), 0);
 
         paused = new_state;
-        emit PauseUpdate(call_id, new_state);
+        emit Pause(call_id, new_state);
 
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
@@ -178,12 +196,12 @@ abstract contract VoteEscrowBase is VoteEscrowVoting {
         tvm.rawReserve(_reserve(), 0);
 
         emergency = new_state;
-        emit EmergencyUpdate(call_id, new_state);
+        emit Emergency(call_id, new_state);
 
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setWhitelistPrice(uint128 new_price, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setWhitelistPrice(uint128 new_price, uint32 call_id, address send_gas_to) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         gaugeWhitelistPrice = new_price;

@@ -18,17 +18,15 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     // TODO: Up
     function getDetails() external view returns (
         address _owner,
+        address _pendingOwner,
         address _qube,
         address _qubeWallet,
         uint128 _treasuryTokens,
         uint128 _teamTokens,
-        uint32[] _distributionScheme,
         uint128 _qubeBalance,
         uint128 _veQubeBalance,
         uint32 _lastUpdateTime,
         uint128 _distributionSupply,
-        uint128 _veQubeAverage,
-        uint32 _veQubeAveragePeriod,
         uint32 _qubeMinLockTime,
         uint32 _qubeMaxLockTime,
         uint128 _gaugeWhitelistPrice,
@@ -38,17 +36,15 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         bool _emergency
     ) {
         _owner = owner;
+        _pendingOwner = pendingOwner;
         _qube = qube;
         _qubeWallet = qubeWallet;
         _treasuryTokens = treasuryTokens;
         _teamTokens = teamTokens;
-        _distributionScheme = distributionScheme;
         _qubeBalance = qubeBalance;
         _veQubeBalance = veQubeBalance;
         _lastUpdateTime = lastUpdateTime;
         _distributionSupply = distributionSupply;
-        _veQubeAverage = veQubeAverage;
-        _veQubeAveragePeriod = veQubeAveragePeriod;
         _qubeMinLockTime = qubeMinLockTime;
         _qubeMaxLockTime = qubeMaxLockTime;
         _gaugeWhitelistPrice = gaugeWhitelistPrice;
@@ -56,10 +52,6 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _initialized = initialized;
         _paused = paused;
         _emergency = emergency;
-    }
-
-    function getDistributionSchedule() external view returns (uint128[] _distributionSchedule) {
-        _distributionSchedule = distributionSchedule;
     }
 
     function getCurrentEpochDetails() external view returns (

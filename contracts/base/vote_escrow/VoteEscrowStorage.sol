@@ -12,6 +12,7 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint32 ve_version;
 
     address owner;
+    address pendingOwner;
     address qube;
     address qubeWallet;
 
@@ -20,7 +21,7 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
 
     uint32 constant DISTRIBUTION_SCHEME_TOTAL = 10000;
     // should have 3 elems. 0 - farming, 1 - treasury, 2 - team
-    uint32[] distributionScheme;
+    uint32[] public distributionScheme;
 
     uint128 qubeBalance;
     uint128 veQubeBalance;
@@ -28,7 +29,7 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
 
     uint128 distributionSupply; // current balance of tokens reserved for distribution
     // Array of distribution amount for all epochs
-    uint128[] distributionSchedule;
+    uint128[] public distributionSchedule;
 
     uint128 veQubeAverage;
     uint32 veQubeAveragePeriod;
