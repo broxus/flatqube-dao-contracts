@@ -1,4 +1,6 @@
 pragma solidity ^0.60.0;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 
 import "./VoteEscrow.sol";

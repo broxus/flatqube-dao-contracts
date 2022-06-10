@@ -1,6 +1,4 @@
 pragma ever-solidity ^0.60.0;
-pragma AbiHeader expire;
-pragma AbiHeader pubkey;
 
 
 import './interfaces/IGauge.sol';

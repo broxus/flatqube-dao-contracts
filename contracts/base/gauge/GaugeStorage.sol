@@ -1,5 +1,4 @@
 pragma ever-solidity ^0.60.0;
-pragma AbiHeader expire;
 
 
 import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";

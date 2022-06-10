@@ -1,5 +1,5 @@
 pragma ever-solidity ^0.60.0;
-pragma AbiHeader expire;
+
 
 interface IGauge {
     // Events
