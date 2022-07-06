@@ -10,9 +10,6 @@ import "../../interfaces/IGaugeAccount.sol";
 import "./VoteEscrowVoting.sol";
 
 
-// TODO: DEBUG ONLY
-import "locklift/locklift/console.sol";
-
 
 abstract contract VoteEscrowBase is VoteEscrowVoting {
     function transferOwnership(address new_owner, address send_gas_to) external override onlyOwner {
