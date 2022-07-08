@@ -1,0 +1,422 @@
+.version sol 0.60.0
+
+.macro constructor
+DROP
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+GETGLOB 6
+THROWIF 51
+ENDS
+.loc ../contracts/test/TestFactory.sol, 14
+ACCEPT
+.loc ../contracts/test/TestFactory.sol, 0
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro deployUsers
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/test/TestFactory.sol, 18
+LDU 32
+LDDICT
+ROTREV
+PAIR
+SWAP
+LDU 32
+LDDICT
+ROTREV
+PAIR
+SWAP
+ENDS
+.loc ../contracts/test/TestFactory.sol, 0
+CALLREF {
+	CALL $deployUsers_internal_macro$
+}
+DROP
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro deployUsers_internal_macro
+.loc ../contracts/test/TestFactory.sol, 19
+OVER
+FIRST
+LESSINT 61
+THROWIFNOT 1000
+.loc ../contracts/test/TestFactory.sol, 20
+ACCEPT
+.loc ../contracts/test/TestFactory.sol, 22
+PUSHINT 0
+PUSHCONT {
+	PUSH2 S0, S2
+	FIRST
+	LESS
+}
+PUSHCONT {
+	.loc ../contracts/test/TestFactory.sol, 23
+	GETGLOB 2
+	NEWC
+	STU 256
+	PUSHINT 0
+	NEWDICT
+	PUSHINT 64
+	DICTUSETB
+	LTIME
+	PUSH S2
+	ADD
+	NEWC
+	STU 256
+	PUSHINT 1
+	ROT
+	PUSHINT 64
+	DICTUSETB
+	NEWC
+	STDICT
+	ENDC
+	GETGLOB 11
+	NEWC
+	STSLICECONST x2_
+	STOPTREF
+	STOPTREF
+	STZERO
+	ENDC
+	.loc ../contracts/test/TestFactory.sol, 32
+	PUSH2 S1, S3
+	SECOND
+	PUSHINT 32
+	DICTUGET
+	THROWIFNOT 50
+	PLDU 256
+	SWAP
+	DUP
+	HASHCU
+	MYADDR
+	PARSEMSGADDR
+	THIRD
+	NEWC
+	STSLICECONST x9_
+	STI 8
+	STU 256
+	ENDC
+	CTOS
+	ROTREV
+	PUSH2 S3, S4
+	SECOND
+	PUSHINT 32
+	DICTUGET
+	THROWIFNOT 50
+	PLDU 128
+	PUSH S3
+	NEWC
+	STSLICECONST x62_
+	STSLICE
+	SWAP
+	STGRAMS
+	PUSHINT 3
+	STUR 107
+	OVER
+	CALLREF {
+		CTOS
+		LDI 1
+		SWAP
+		PUSHCONT {
+			LDI 5
+			NIP
+		}
+		IF
+		LDI 1
+		SWAP
+		PUSHCONT {
+			LDI 2
+			NIP
+		}
+		IF
+		LDOPTREF
+		LDOPTREF
+		LDDICT
+		ENDS
+		BLKDROP 3
+	}
+	STREF
+	STSLICECONST 1
+	SWAP
+	NEWC
+	STSLICECONST x3c91e1c5
+	STU 256
+	STBREFR
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc ../contracts/test/TestFactory.sol, 39
+	PUSH3 S0, S1, S3
+	SECOND
+	PUSHINT 32
+	DICTUGET
+	THROWIFNOT 50
+	PLDU 256
+	GETGLOB 12
+	PUSHPOW2 8
+	DICTUSET
+	SETGLOB 12
+	.loc ../contracts/test/TestFactory.sol, 41
+	PUSH2 S1, S3
+	SECOND
+	PUSHINT 32
+	DICTUGET
+	THROWIFNOT 50
+	PLDU 256
+	SWAP
+	PUSHSLICE xc0000000000000000000000000739ff608
+	NEWC
+	STSLICE
+	STSLICE
+	STU 256
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc ../contracts/test/TestFactory.sol, 22
+	INC
+	.loc ../contracts/test/TestFactory.sol, 0
+}
+WHILE
+BLKDROP 3
+.loc ../contracts/test/TestFactory.sol, 0
+
+.macro c4_to_c7
+PUSHROOT
+CTOS
+LDU 256 ; pubkey c4
+LDU 64 ; pubkey timestamp c4
+LDU 1 ; ctor flag
+NIP
+LDU 256
+LDREF
+LDDICT
+ENDS
+SETGLOB 12
+SETGLOB 11
+SETGLOB 10
+SETGLOB 3
+SETGLOB 2
+
+.macro c4_to_c7_with_init_storage
+PUSHROOT
+CTOS
+SBITS
+GTINT 1
+PUSHCONT {
+	PUSHINT 0
+	PUSHROOT
+	CTOS
+	PLDDICT ; D
+	PUSHINT 1
+	OVER
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PLDU 256
+	}
+	PUSHCONT {
+		PUSHINT 0
+	}
+	IFELSE
+	PUSHINT 2
+	PUSH S2
+	PUSHINT 64
+	DICTUGETREF
+	PUSHCONT {
+		PUSHREF {
+		}
+	}
+	IFNOT
+	NEWDICT
+	SETGLOB 12
+	SETGLOB 11
+	SETGLOB 10
+	PUSHINT 64
+	DICTUGET
+	THROWIFNOT 61
+	PLDU 256
+	SETGLOB 2
+	PUSHINT 0 ; timestamp
+	SETGLOB 3
+}
+IFREFELSE {
+	CALL $c4_to_c7$
+}
+
+.macro c7_to_c4
+GETGLOB 12
+GETGLOB 11
+GETGLOB 10
+GETGLOB 3
+GETGLOB 2
+NEWC
+STU 256
+STU 64
+STONE
+STU 256
+STREF
+STDICT
+ENDC
+POPROOT
+
+.macro upd_only_time_in_c4
+PUSHROOT
+CTOS
+LDU 256
+LDU 64
+NIP
+GETGLOB 3
+ROT
+NEWC
+STU 256
+STU 64
+STSLICE
+ENDC
+POPROOT
+
+.internal-alias :main_internal, 0
+.internal :main_internal
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSH S2
+CTOS
+PLDU 4
+MODPOW2 1
+IFRET
+OVER
+SEMPTY ; isEmpty
+IFJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+OVER
+LDUQ 32  ; [funcId] body' ok
+THROWIFNOT 60
+OVER
+IFNOTJMPREF {
+	GETGLOB 6
+	THROWIFNOT 76
+}
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.internal-alias :main_external, -1
+.internal :main_external
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+OVER
+CALLREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+LDU 1 ; haveSign msgSlice
+SWAP
+PUSHCONT {
+	PUSHPOW2 9
+	LDSLICEX ; signatureSlice msgSlice
+	DUP
+	HASHSU ; signatureSlice msgSlice hashMsgSlice
+	ROT
+	GETGLOB 2
+	CHKSIGNU ; msgSlice isSigned
+	THROWIFNOT 40
+}
+IF
+LDU 64 ; timestamp msgSlice
+SWAP
+CALL $replay_protection_macro$
+LDU 32 ; funcId body
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.macro _randomNonce
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 10
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000bb53331f
+	NEWC
+	STSLICE
+	STU 256
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro wallets
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 12
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000e0a0fae3
+	NEWC
+	STSLICE
+	STDICT
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
+.macro public_function_selector
+DUP
+PUSHINT 995308319
+EQUAL
+IFJMPREF {
+	CALL $_randomNonce$
+}
+DUP
+PUSHINT 1130629863
+EQUAL
+IFJMPREF {
+	CALL $deployUsers$
+}
+DUP
+PUSHINT 1621162723
+EQUAL
+IFJMPREF {
+	CALL $wallets$
+}
+DUP
+PUSHINT 1756716863
+EQUAL
+IFJMPREF {
+	CALL $constructor$
+}
+

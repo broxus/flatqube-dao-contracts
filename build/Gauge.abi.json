@@ -1,0 +1,552 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_owner","type":"address"},
+				{"name":"_depositTokenRoot","type":"address"},
+				{"name":"_qubeTokenRoot","type":"address"},
+				{"name":"_qubeVestingPeriod","type":"uint32"},
+				{"name":"_qubeVestingRatio","type":"uint32"},
+				{"name":"_extraRewardTokenRoot","type":"address[]"},
+				{"name":"_extraVestingPeriods","type":"uint32[]"},
+				{"name":"_extraVestingRatios","type":"uint32[]"},
+				{"name":"_withdrawAllLockPeriod","type":"uint32"},
+				{"name":"call_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "upgrade",
+			"inputs": [
+				{"name":"new_code","type":"cell"},
+				{"name":"new_version","type":"uint32"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "dummy",
+			"inputs": [
+				{"name":"user_wallet","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onAcceptTokensTransfer",
+			"inputs": [
+				{"name":"value0","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"sender","type":"address"},
+				{"name":"value3","type":"address"},
+				{"name":"remainingGasTo","type":"address"},
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "revertDeposit",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"_deposit_nonce","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "withdraw",
+			"inputs": [
+				{"name":"amount","type":"uint128"},
+				{"name":"claim","type":"bool"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "revertWithdraw",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "claimReward",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "finishDeposit",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"qube_reward","type":"uint128"},
+				{"name":"extra_reward","type":"uint128[]"},
+				{"name":"claim","type":"bool"},
+				{"name":"ve_bal_old","type":"uint128"},
+				{"name":"ve_bal_new","type":"uint128"},
+				{"name":"_deposit_nonce","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "finishWithdraw",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"qube_reward","type":"uint128"},
+				{"name":"extra_reward","type":"uint128[]"},
+				{"name":"claim","type":"bool"},
+				{"name":"ve_bal_old","type":"uint128"},
+				{"name":"ve_bal_new","type":"uint128"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "finishClaim",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"qube_reward","type":"uint128"},
+				{"name":"extra_reward","type":"uint128[]"},
+				{"name":"ve_bal_old","type":"uint128"},
+				{"name":"ve_bal_new","type":"uint128"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "burnBoostedBalance",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"expired_boosted","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "withdrawUnclaimed",
+			"inputs": [
+				{"name":"ids","type":"uint128[]"},
+				{"name":"to","type":"address"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "addRewardRounds",
+			"inputs": [
+				{"name":"ids","type":"uint256[]"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"new_rounds","type":"tuple[]"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setExtraFarmEndTime",
+			"inputs": [
+				{"name":"ids","type":"uint256[]"},
+				{"name":"farm_end_times","type":"uint32[]"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "calculateRewardData",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_lastRewardTime","type":"uint32"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"_extraRewardRounds","type":"tuple[][]"},
+				{"name":"_extra_sync_idx","type":"uint256[]"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"_qubeRewardRounds","type":"tuple[]"},
+				{"name":"_qube_sync_idx","type":"uint256"}
+			]
+		},
+		{
+			"name": "requestUpdateGaugeAccountCode",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "updateGaugeAccountCode",
+			"inputs": [
+				{"name":"new_code","type":"cell"},
+				{"name":"new_version","type":"uint32"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "requestUpgradeGauge",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "forceUpgradeGaugeAccount",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "upgradeGaugeAccount",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onGaugeAccountUpgrade",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"old_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onGaugeAccountDeploy",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "calculateBoostedBalance",
+			"inputs": [
+				{"name":"amount","type":"uint128"},
+				{"name":"lock_time","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"boosted_amount","type":"uint128"}
+			]
+		},
+		{
+			"name": "encodeDepositPayload",
+			"inputs": [
+				{"name":"deposit_owner","type":"address"},
+				{"name":"lock_time","type":"uint32"},
+				{"name":"claim","type":"bool"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"deposit_payload","type":"cell"}
+			]
+		},
+		{
+			"name": "encodeRewardDepositPayload",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"reward_deposit_payload","type":"cell"}
+			]
+		},
+		{
+			"name": "decodeRewardDepositPayload",
+			"inputs": [
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"correct","type":"bool"}
+			]
+		},
+		{
+			"name": "decodeDepositPayload",
+			"inputs": [
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+				{"name":"deposit_owner","type":"address"},
+				{"name":"lock_time","type":"uint32"},
+				{"name":"claim","type":"bool"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"nonce","type":"uint32"},
+				{"name":"correct","type":"bool"}
+			]
+		},
+		{
+			"name": "receiveTokenWalletAddress",
+			"inputs": [
+				{"name":"wallet","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getGaugeAccountAddress",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"user","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"platformCode","type":"cell"},
+		{"key":2,"name":"gaugeAccountCode","type":"cell"},
+		{"key":3,"name":"factory","type":"address"},
+		{"key":4,"name":"deploy_nonce","type":"uint32"},
+		{"key":5,"name":"gauge_account_version","type":"uint32"},
+		{"key":6,"name":"gauge_version","type":"uint32"}
+	],
+	"events": [
+		{
+			"name": "Deposit",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"lock_time","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "DepositRevert",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"},
+				{"name":"amount","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Withdraw",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"},
+				{"name":"amount","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "WithdrawRevert",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Claim",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"},
+				{"name":"qube_reward","type":"uint128"},
+				{"name":"extra_reward","type":"uint128[]"},
+				{"name":"qube_debt","type":"uint128"},
+				{"name":"extra_debt","type":"uint128[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "LockBoostedBurn",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"lock_boosted_burned","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "WithdrawUnclaimed",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"to","type":"address"},
+				{"name":"extra_amounts","type":"uint128[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "RewardDeposit",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"reward_id","type":"uint256"},
+				{"name":"amount","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ExtraFarmEndSet",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"ids","type":"uint256[]"},
+				{"name":"farm_end_times","type":"uint32[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeAccountCodeUpdated",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"prev_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeAccountCodeUpdateRejected",
+			"inputs": [
+				{"name":"call_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeUpdated",
+			"inputs": [
+				{"name":"prev_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "RewardRoundAdded",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"ids","type":"uint256"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"new_reward_round","type":"tuple"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"updated_reward_rounds","type":"tuple[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "QubeRewardRoundAdded",
+			"inputs": [
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"new_qube_round","type":"tuple"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"updated_qube_rounds","type":"tuple[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeAccountUpgrade",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"},
+				{"name":"old_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeAccountDeploy",
+			"inputs": [
+				{"name":"user","type":"address"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"withdrawAllLockPeriod","type":"uint32"},
+		{"name":"lastRewardTime","type":"uint32"},
+		{"name":"lastExtraRewardRoundIdx","type":"uint256[]"},
+		{"name":"lastQubeRewardRoundIdx","type":"uint256"},
+		{"name":"lastAverageUpdateTime","type":"uint32"},
+		{"name":"depositTokenRoot","type":"address"},
+		{"name":"depositTokenWallet","type":"address"},
+		{"name":"depositTokenBalance","type":"uint128"},
+		{"name":"lockBoostedSupply","type":"uint128"},
+		{"name":"veBoostedSupply","type":"uint128"},
+		{"name":"lockBoostedSupplyAverage","type":"uint128"},
+		{"name":"lockBoostedSupplyAveragePeriod","type":"uint32"},
+		{"name":"voteEscrow","type":"address"},
+		{"name":"maxBoost","type":"uint32"},
+		{"name":"maxLockTime","type":"uint32"},
+		{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"qubeTokenData","type":"tuple"},
+		{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},
+		{"name":"qubeVestingPeriod","type":"uint32"},
+		{"name":"qubeVestingRatio","type":"uint32"},
+		{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"extraTokenData","type":"tuple[]"},
+		{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},
+		{"name":"extraVestingPeriods","type":"uint32[]"},
+		{"name":"extraVestingRatios","type":"uint32[]"},
+		{"name":"extraRewardEnded","type":"bool[]"},
+		{"name":"owner","type":"address"},
+		{"name":"deposit_nonce","type":"uint32"},
+		{"components":[{"name":"user","type":"address"},{"name":"amount","type":"uint128"},{"name":"boosted_amount","type":"uint128"},{"name":"lock_time","type":"uint32"},{"name":"claim","type":"bool"},{"name":"send_gas_to","type":"address"},{"name":"nonce","type":"uint32"},{"name":"call_id","type":"uint32"}],"name":"deposits","type":"map(uint64,tuple)"},
+		{"name":"platformCode","type":"cell"},
+		{"name":"gaugeAccountCode","type":"cell"},
+		{"name":"factory","type":"address"},
+		{"name":"deploy_nonce","type":"uint32"},
+		{"name":"gauge_account_version","type":"uint32"},
+		{"name":"gauge_version","type":"uint32"}
+	]
+}

@@ -1,0 +1,268 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"_owner","type":"address"},
+				{"name":"_qube","type":"address"},
+				{"name":"_qube_vesting_ratio","type":"uint32"},
+				{"name":"_qube_vesting_period","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "upgrade",
+			"inputs": [
+				{"name":"new_code","type":"cell"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "transferOwnership",
+			"inputs": [
+				{"name":"new_owner","type":"address"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptOwnership",
+			"inputs": [
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setDefaultQubeVestingParams",
+			"inputs": [
+				{"name":"_vesting_period","type":"uint32"},
+				{"name":"_vesting_ratio","type":"uint32"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployGauge",
+			"inputs": [
+				{"name":"gauge_owner","type":"address"},
+				{"name":"depositTokenRoot","type":"address"},
+				{"name":"rewardTokenRoots","type":"address[]"},
+				{"name":"vestingPeriods","type":"uint32[]"},
+				{"name":"vestingRatios","type":"uint32[]"},
+				{"name":"withdrawAllLockPeriod","type":"uint32"},
+				{"name":"call_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployGaugeByOwner",
+			"inputs": [
+				{"name":"gauge_owner","type":"address"},
+				{"name":"depositTokenRoot","type":"address"},
+				{"name":"qubeVestingPeriod","type":"uint32"},
+				{"name":"qubeVestingRatio","type":"uint32"},
+				{"name":"rewardTokenRoots","type":"address[]"},
+				{"name":"vestingPeriods","type":"uint32[]"},
+				{"name":"vestingRatios","type":"uint32[]"},
+				{"name":"withdrawAllLockPeriod","type":"uint32"},
+				{"name":"call_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onGaugeDeploy",
+			"inputs": [
+				{"name":"deploy_nonce","type":"uint32"},
+				{"name":"owner","type":"address"},
+				{"name":"depositTokenRoot","type":"address"},
+				{"name":"qubeTokenRoot","type":"address"},
+				{"name":"qubeVestingPeriod","type":"uint32"},
+				{"name":"qubeVestingRatio","type":"uint32"},
+				{"name":"extraRewardTokenRoot","type":"address[]"},
+				{"name":"extraVestingPeriods","type":"uint32[]"},
+				{"name":"extraVestingRatios","type":"uint32[]"},
+				{"name":"withdrawAllLockPeriod","type":"uint32"},
+				{"name":"call_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "installNewGaugeCode",
+			"inputs": [
+				{"name":"gauge_code","type":"cell"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "installNewGaugeAccountCode",
+			"inputs": [
+				{"name":"gauge_account_code","type":"cell"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "upgradeGauges",
+			"inputs": [
+				{"name":"gauges","type":"address[]"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "updateGaugeAccountsCode",
+			"inputs": [
+				{"name":"gauges","type":"address[]"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "forceUpgradeGaugeAccounts",
+			"inputs": [
+				{"name":"gauge","type":"address"},
+				{"name":"users","type":"address[]"},
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "processUpgradeGaugeRequest",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "processUpdateGaugeAccountCodeRequest",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"send_gas_to","type":"address"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"GaugeAccountCode","type":"cell"},
+		{"key":2,"name":"GaugeCode","type":"cell"},
+		{"key":3,"name":"PlatformCode","type":"cell"},
+		{"key":4,"name":"nonce","type":"uint128"}
+	],
+	"events": [
+		{
+			"name": "QubeVestingParamsUpdate",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"new_vesting_period","type":"uint32"},
+				{"name":"new_vesting_ratio","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeCodeUpdate",
+			"inputs": [
+				{"name":"prev_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeAccountCodeUpdate",
+			"inputs": [
+				{"name":"prev_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "FactoryUpdate",
+			"inputs": [
+				{"name":"prev_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "NewOwner",
+			"inputs": [
+				{"name":"prev_owner","type":"address"},
+				{"name":"new_owner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "NewPendingOwner",
+			"inputs": [
+				{"name":"pending_owner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "NewGauge",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"gauge","type":"address"},
+				{"name":"gauge_owner","type":"address"},
+				{"name":"depositTokenRoot","type":"address"},
+				{"name":"qubeTokenRoot","type":"address"},
+				{"name":"qubeVestingPeriod","type":"uint32"},
+				{"name":"qubeVestingRatio","type":"uint32"},
+				{"name":"extraRewardTokenRoot","type":"address[]"},
+				{"name":"extraVestingPeriods","type":"uint32[]"},
+				{"name":"extraVestingRatios","type":"uint32[]"},
+				{"name":"withdrawAllLockPeriod","type":"uint32"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"factory_version","type":"uint32"},
+		{"name":"gauge_version","type":"uint32"},
+		{"name":"gauge_account_version","type":"uint32"},
+		{"name":"gauges_count","type":"uint32"},
+		{"name":"owner","type":"address"},
+		{"name":"pending_owner","type":"address"},
+		{"name":"default_qube_vesting_period","type":"uint32"},
+		{"name":"default_qube_vesting_ratio","type":"uint32"},
+		{"name":"qube","type":"address"},
+		{"name":"GaugeAccountCode","type":"cell"},
+		{"name":"GaugeCode","type":"cell"},
+		{"name":"PlatformCode","type":"cell"},
+		{"name":"nonce","type":"uint128"}
+	]
+}
