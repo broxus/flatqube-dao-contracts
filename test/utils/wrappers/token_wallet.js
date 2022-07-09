@@ -1,3 +1,4 @@
+const {Dimensions} = require("locklift");
 const {
     convertCrystal
 } = locklift.utils;
@@ -11,46 +12,42 @@ class TokenWallet {
     }
 
     static async from_addr(addr, owner) {
-        let userTokenWallet = await locklift.factory.getContract(
-            'TokenWallet',
-            'node_modules/broxus-ton-tokens-contracts/build'
-        );
-
-        userTokenWallet.setAddress(addr);
-        return new TokenWallet(userTokenWallet, owner);
+        let userTokenWallet = await locklift.factory.getContract('TokenWallet');
+        const wallet = new locklift.provider.ever.Contract(userTokenWallet.abi, addr);
+        return new TokenWallet(wallet, owner);
     }
 
     async owner() {
-        return await this.contract.call({method: 'owner'});
+        return await this.contract.methods.owner({}).call();
     }
 
     async root() {
-        return await this.contract.call({method: 'root'});
+        return await this.contract.methods.root({}).call();
     }
 
     async balance() {
-        return await this.contract.call({method: 'balance'});
+        return (await this.contract.methods.balance({answerId: 0}).call()).value0;
     }
 
-    async transfer(amount, receiver_or_addr, payload='', value, tracing=null, allowed_codes={compute: []}) {
+    async transfer(amount, receiver_or_addr, payload='', value) {
         const addr = receiver_or_addr.address === undefined ? receiver_or_addr : receiver_or_addr.address;
         let notify = payload !== '';
 
-        return await this._owner.runTarget({
-            contract: this.contract,
-            method: 'transfer',
-            params: {
+        const token = this.contract;
+        return await this._owner.runTarget(
+            {
+                contract: token,
+                value: value || convertCrystal(5, Dimensions.Nano)
+            },
+            (token) => token.methods.transfer({
                 amount: amount,
-                recipient: addr,
+                recipient: addr.toString(),
                 deployWalletValue: 0,
-                remainingGasTo: this._owner.address,
+                remainingGasTo: this._owner.address.toString(),
                 notify: notify,
                 payload: payload
-            },
-            value: value || convertCrystal(5, 'nano'),
-            tracing: tracing,
-            tracing_allowed_codes: allowed_codes
-        });
+            })
+        );
     }
 }
 

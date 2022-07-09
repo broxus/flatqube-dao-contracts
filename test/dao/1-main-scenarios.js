@@ -64,7 +64,7 @@ describe("Main Vote Escrow scenarios", async function() {
         describe('Making deposits & whitelisting gauges & send distribution QUBEs', async function() {
             it('Making 1st deposit', async function() {
                 const lock_time = 100;
-                await vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, {compute: [null]}, false);
+                await vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, false);
                 const event = await vote_escrow.getEvent('Deposit');
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
@@ -78,8 +78,8 @@ describe("Main Vote Escrow scenarios", async function() {
 
                 await sleep(1000);
                 const ve_details = await ve_account.calculateVeAverage();
-                expect(ve_details._veQubeBalance.toString()).to.be.eq('1000');
-                expect(ve_details._veQubeAverage.toString()).to.be.eq('1000');
+                expect(ve_details._veQubeBalance).to.be.eq('1000');
+                expect(ve_details._veQubeAverage).to.be.eq('1000');
             });
 
             it('Making 2nd deposit', async function() {
@@ -88,17 +88,17 @@ describe("Main Vote Escrow scenarios", async function() {
                 const event = await vote_escrow.getEvent('Deposit');
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
-                expect(event.call_id.toString()).to.be.eq('2');
-                expect(event.amount.toString()).to.be.eq('1000');
-                expect(event.lock_time.toString()).to.be.eq(lock_time.toString());
-                expect(event.ve_amount.toString()).to.be.eq(ve_expected.toString());
+                expect(event.call_id).to.be.eq('2');
+                expect(event.amount).to.be.eq('1000');
+                expect(event.lock_time).to.be.eq(lock_time.toString());
+                expect(event.ve_amount).to.be.eq(ve_expected.toString());
 
                 await vote_escrow.checkQubeBalance(2000);
                 const details = await ve_account.getDetails();
-                expect(details._activeDeposits.toString()).to.be.eq('2');
+                expect(details._activeDeposits).to.be.eq('2');
 
                 const ve_details = await ve_account.calculateVeAverage();
-                expect(ve_details._veQubeBalance.toString()).to.be.eq('1900');
+                expect(ve_details._veQubeBalance).to.be.eq('1900');
             });
 
             it('Whitelisting gauges', async function() {
@@ -112,8 +112,8 @@ describe("Main Vote Escrow scenarios", async function() {
                     const event = await vote_escrow.getEvent('GaugeWhitelist');
                     payments += price;
 
-                    expect(event.call_id.toString()).to.be.eq(random_id.toString());
-                    expect(event.gauge.toString()).to.be.eq(gauge.address);
+                    expect(event.call_id).to.be.eq(random_id.toString());
+                    expect(event.gauge.toString()).to.be.eq(gauge.address.toString());
 
                     expect(details._whitelistPayments.toString()).to.be.eq(payments.toString());
                 }
@@ -127,7 +127,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 const voting_details = await vote_escrow.votingDetails();
                 await vote_escrow.checkQubeBalance(expected_bal);
 
-                expect(voting_details._gaugesNum.toString()).to.be.eq('4');
+                expect(voting_details._gaugesNum).to.be.eq('4');
             });
 
             it('Send QUBEs for distribution', async function() {

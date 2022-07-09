@@ -3,9 +3,9 @@ const {expect} = require("chai");
 const BigNumber = require('bignumber.js');
 const Token = require("./wrappers/token");
 const VoteEscrow = require('./wrappers/vote_ecsrow');
-const {
-    convertCrystal
-} = locklift.utils;
+const {factorySource} = require("../../build/factorySource");
+const {Dimensions, zeroAddress} = require("locklift");
+const {convertCrystal} = locklift.utils;
 
 
 async function sleep(ms) {
@@ -108,45 +108,56 @@ const deployUsers = async function(count, initial_balance) {
 
 
 const deployUser = async function(initial_balance=100) {
-    const [keyPair] = await locklift.keys.getKeyPairs();
-    const Account = await locklift.factory.getAccount('TestWallet');
-    const _user = await locklift.giver.deployContract({
-        contract: Account,
-        constructorParams: {
-            owner_pubkey: (new BigNumber(keyPair.public, 16)).toFixed(0)
-        },
-        initParams: {
-            _randomNonce: locklift.utils.getRandomNonce()
-        },
-        keyPair,
-    }, convertCrystal(initial_balance, 'nano'));
-    _user.setKeyPair(keyPair);
+    const signer = await locklift.provider.keyStore.getSigner('0');
+    let accountsFactory = locklift.factory.getAccountsFactory(factorySource.TestWallet);
+    const accountData = await locklift.factory.getContract("TestWallet");
 
-    const userBalance = await locklift.ton.getBalance(_user.address);
-    expect(userBalance.toNumber()).to.be.above(0, 'Bad user balance');
+    const _user = await accountsFactory.deployNewAccount(
+        signer.publicKey,
+        locklift.utils.convertCrystal(initial_balance, Dimensions.Nano).toString(),
+        {
+            initParams: {
+                _randomNonce: locklift.utils.getRandomNonce(),
+            },
+            tvc: accountData.tvc,
+            publicKey: signer.publicKey,
+        },
+        {
+            owner_pubkey: `0x${signer.publicKey}`
+        },
+    );
 
-    logger.log(`User address: ${_user.address}`);
+    const userBalance = await locklift.provider.getBalance(_user.address.toString());
+    expect(Number(userBalance)).to.be.above(0, 'Bad user balance');
+
+    logger.log(`User address: ${_user.address.toString()}`);
     return _user;
 }
 
 
 const setupTokenRoot = async function(token_name, token_symbol, owner) {
-    const RootToken = await locklift.factory.getContract(
-        'TokenRoot',
-        'node_modules/broxus-ton-tokens-contracts/build'
-    );
+    const signer = await locklift.provider.keyStore.getSigner('0');
 
-    const TokenWallet = await locklift.factory.getContract(
-        'TokenWallet',
-        'node_modules/broxus-ton-tokens-contracts/build'
-    );
+    const RootToken = await locklift.factory.getContract('TokenRoot');
+    const TokenWallet = await locklift.factory.getContract('TokenWallet');
 
-    const [keyPair] = await locklift.keys.getKeyPairs();
-
-    const _root = await locklift.giver.deployContract({
-        contract: RootToken,
-        constructorParams: {
-            initialSupplyTo: locklift.utils.zeroAddress,
+    const _root = await locklift.factory.deployContract(
+        RootToken.abi,
+        {
+            initParams: {
+                name_: token_name,
+                symbol_: token_symbol,
+                decimals_: 9,
+                rootOwner_: owner.address,
+                walletCode_: TokenWallet.code,
+                randomNonce_: locklift.utils.getRandomNonce(),
+                deployer_: zeroAddress
+            },
+            tvc: RootToken.tvc,
+            publicKey: signer.publicKey,
+        },
+        {
+            initialSupplyTo: zeroAddress,
             initialSupply: 0,
             deployWalletValue: 0,
             mintDisabled: false,
@@ -154,22 +165,12 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
             burnPaused: false,
             remainingGasTo: owner.address
         },
-        initParams: {
-            name_: token_name,
-            symbol_: token_symbol,
-            decimals_: 9,
-            rootOwner_: owner.address,
-            walletCode_: TokenWallet.code,
-            randomNonce_: locklift.utils.getRandomNonce(),
-            deployer_: locklift.utils.zeroAddress
-        },
-        keyPair,
-    });
-    _root.setKeyPair(keyPair);
+        locklift.utils.convertCrystal(2, Dimensions.Nano),
+    );
 
-    logger.log(`Token root address: ${_root.address}`);
+    logger.log(`Token root address: ${_root.address.toString()}`);
 
-    expect((await locklift.ton.getBalance(_root.address)).toNumber()).to.be.above(0, 'Root balance empty');
+    expect(Number(await locklift.provider.getBalance(_root.address.toString()))).to.be.above(0, 'Root balance empty');
     return new Token(_root, owner);
 }
 
@@ -196,53 +197,50 @@ const setupVoteEscrow = async function({
     const Platform = await locklift.factory.getContract('Platform');
     const VoteEscrowAccount = await locklift.factory.getContract('VoteEscrowAccount');
 
-    const [keyPair] = await locklift.keys.getKeyPairs();
-
-    const deployer = await locklift.giver.deployContract({
-        contract: VoteEscrowDeployer,
-        constructorParams: {},
-        initParams: {
-            PlatformCode: Platform.code,
-            veAccountCode: VoteEscrowAccount.code
+    const signer = await locklift.provider.keyStore.getSigner('0');
+    const deployer = await locklift.factory.deployContract(
+        VoteEscrowDeployer.abi,
+        {
+            initParams: {
+                _randomNonce: locklift.utils.getRandomNonce(),
+                PlatformCode: Platform.code,
+                veAccountCode: VoteEscrowAccount.code
+            },
+            tvc: VoteEscrowDeployer.tvc,
+            publicKey: signer.publicKey,
         },
-        keyPair
-    }, convertCrystal(25, 'nano'));
-    deployer.setKeyPair(keyPair);
+        {},
+        locklift.utils.convertCrystal(25, Dimensions.Nano),
+    );
+
     logger.log(`Deployed Vote Escrow deployer`);
-    await deployer.run({
-        method: 'installVoteEscrowCode',
-        params: {
-            code: VoteEscrowContract.code
-        }
-    });
+    await deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer.publicKey});
+
     if (start_time === null) {
         start_time = Math.floor(Date.now() / 1000 + 5);
     }
     logger.log(`Set Vote Escrow code`);
-    const tx = await deployer.run({
-       method: 'deployVoteEscrow',
-       params: {
-           owner: owner.address,
-           qube: qube.address,
-           start_time,
-           min_lock,
-           max_lock,
-           distribution_scheme,
-           distribution,
-           epoch_time,
-           time_before_voting,
-           voting_time,
-           gauge_min_votes_ratio,
-           gauge_max_votes_ratio,
-           gauge_max_downtime,
-           max_gauges_per_vote,
-           whitelist_price
-       }
-    });
+    const tx = await deployer.methods.deployVoteEscrow({
+        owner: owner.address,
+        qube: qube.address,
+        start_time,
+        min_lock,
+        max_lock,
+        distribution_scheme,
+        distribution,
+        epoch_time,
+        time_before_voting,
+        voting_time,
+        gauge_min_votes_ratio,
+        gauge_max_votes_ratio,
+        gauge_max_downtime,
+        max_gauges_per_vote,
+        whitelist_price
+    }).sendExternal({publicKey: signer.publicKey});
 
-    const ve_addr = tx.decoded.output._vote_escrow;
+    const ve_addr = tx.output._vote_escrow;
     const ve = await VoteEscrow.from_addr(ve_addr, owner);
-    logger.log(`Deployed and configured Vote Escrow: ${ve_addr}`);
+    logger.log(`Deployed and configured Vote Escrow: ${ve_addr.toString()}`);
 
     await ve.acceptOwnership(owner);
     logger.log(`Accepted ownership`);

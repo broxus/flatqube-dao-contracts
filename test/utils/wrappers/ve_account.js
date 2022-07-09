@@ -11,16 +11,16 @@ class VoteEscrowAccount {
 
     static async from_addr(addr) {
         const veAccContract = await locklift.factory.getContract('VoteEscrowAccount');
-        veAccContract.setAddress(addr);
-        return new VoteEscrowAccount(veAccContract);
+        const ve_acc = new locklift.provider.ever.Contract(veAccContract.abi, addr);
+        return new VoteEscrowAccount(ve_acc);
     }
 
     async getDetails() {
-        return await this.contract.call({method: 'getDetails'});
+        return await this.contract.methods.getDetails({answerId: 0}).call();
     }
 
     async calculateVeAverage() {
-        return await this.contract.call({method: 'calculateVeAverage'});
+        return await this.contract.methods.calculateVeAverage({}).call();
     }
 }
 
