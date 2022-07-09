@@ -67,7 +67,7 @@ class VoteEscrow {
 
     arr_to_map(arr) {
         return arr.reduce((map, elem) => {
-            map[(elem[0]).toString()] = elem[1];
+            map[elem[0]] = elem[1];
             return map;
         }, {});
     }
@@ -144,43 +144,50 @@ class VoteEscrow {
     }
 
     async startVoting(call_id=0) {
-        return await this._owner.runTarget({
-            contract: this.contract,
-            method: 'startVoting',
-            params: {
-                call_id: call_id,
-                send_gas_to: this._owner.address
+        const ve = this.contract;
+        return await this._owner.runTarget(
+            {
+                contract: ve,
+                value: convertCrystal(5, Dimensions.Nano)
             },
-            value: convertCrystal(5, 'nano')
-        });
+            (ve) => ve.methods.startVoting({
+                call_id: call_id,
+                send_gas_to: this._owner.address.toString()
+            })
+        );
     }
 
     async endVoting(call_id) {
-        const gas = await this.contract.call({method: 'calculateGasForEndVoting'});
-        return await this._owner.runTarget({
-            contract: this.contract,
-            method: 'endVoting',
-            params: {
-                call_id: call_id,
-                send_gas_to: this._owner.address
+        let gas = new BigNumber((await this.contract.methods.calculateGasForEndVoting({}).call()).min_gas);
+        gas = gas.plus(new BigNumber(10**9)).toFixed(0)
+
+        const ve = this.contract;
+        return await this._owner.runTarget(
+            {
+                contract: ve,
+                value: gas
             },
-            // required gas + 1
-            value: gas.plus(new BigNumber(10**9)).toFixed(0)
-        });
+            (ve) => ve.methods.endVoting({
+                call_id: call_id,
+                send_gas_to: this._owner.address.toString()
+            })
+        );
     }
 
     async vote(voter, votes, call_id=0) {
-        return await voter.runTarget({
-            contract: this.contract,
-            method: 'vote',
-            params: {
+        const ve = this.contract;
+        return await voter.runTarget(
+            {
+                contract: ve,
+                value: convertCrystal(5, Dimensions.Nano)
+            },
+            (ve) => ve.methods.vote({
                 votes: votes,
                 call_id: call_id,
                 nonce: 0,
-                send_gas_to: voter.address
-            },
-            value: convertCrystal(5, 'nano')
-        });
+                send_gas_to: voter.address.toString()
+            })
+        );
     }
 
     // farming, treasury, team

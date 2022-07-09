@@ -149,25 +149,29 @@ describe("Main Vote Escrow scenarios", async function() {
 
                 let votes = {};
                 for (const gauge of gauges) {
-                    votes[gauge.address] = Math.floor(ve_balances._veQubeBalance.toFixed(0) / 4);
+                    votes[gauge.address.toString()] = Math.floor(ve_balances._veQubeBalance / 4);
                 }
 
+                let votes_flat = [];
+                for (const [addr, val] of Object.entries(votes)) {
+                    votes_flat.push([addr.toString(), val]);
+                }
                 // sleep a bit so that voting time starts
                 await sleep(4000);
-                await vote_escrow.vote(user, votes, 1);
+                await vote_escrow.vote(user, votes_flat, 1);
 
                 const start_event = await vote_escrow.getEvent('VotingStart');
                 const vote_event = await vote_escrow.getEvent('Vote');
 
-                expect(start_event.call_id.toString()).to.be.eq('1');
-                expect(vote_event.call_id.toString()).to.be.eq('1');
+                expect(start_event.call_id).to.be.eq('1');
+                expect(vote_event.call_id).to.be.eq('1');
 
                 const epoch = await vote_escrow.getCurrentEpochDetails();
-                expect(epoch._currentVotingTotalVotes.toString()).to.be.eq(ve_balances._veQubeBalance.toFixed(0));
+                expect(epoch._currentVotingTotalVotes).to.be.eq(ve_balances._veQubeBalance);
 
                 const all_votes = await vote_escrow.currentVotingVotes();
                 for (const gauge of gauges) {
-                    expect(all_votes[gauge.address].toString()).to.be.eq(votes[gauge.address].toString());
+                    expect(all_votes[gauge.address.toString()].toString()).to.be.eq(votes[gauge.address.toString()].toString());
                 }
             });
 
@@ -185,21 +189,25 @@ describe("Main Vote Escrow scenarios", async function() {
                 const voting_end = await vote_escrow.getEvent('VotingEnd');
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution');
 
-                expect(voting_end.call_id.toString()).to.be.eq('1');
-                expect(voting_end.new_epoch.toString()).to.be.eq(current_epoch.toString());
-                expect(voting_end.treasury_votes.toString()).to.be.eq('0');
-                expect(voting_end.total_votes.toString()).to.be.eq(ve_balances._veQubeBalance.toString());
+                const votes_map = vote_escrow.arr_to_map(voting_end.votes);
+
+                expect(voting_end.call_id).to.be.eq('1');
+                expect(voting_end.new_epoch).to.be.eq(current_epoch.toString());
+                expect(voting_end.treasury_votes).to.be.eq('0');
+                expect(voting_end.total_votes).to.be.eq(ve_balances._veQubeBalance);
                 for (const gauge of gauges) {
-                    const expected = ve_balances._veQubeBalance.toFixed(0) / 4;
-                    expect(voting_end.votes[gauge.address]).to.be.eq(expected.toString());
+                    const expected = ve_balances._veQubeBalance / 4;
+                    expect(votes_map[gauge.address.toString()]).to.be.eq(expected.toString());
                 }
 
-                expect(epoch_distribution.call_id.toString()).to.be.eq('1');
-                expect(epoch_distribution.epoch_num.toString()).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.call_id).to.be.eq('1');
+                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+
+                const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
 
                 const expected_distribution = 200000;
                 for (const gauge of gauges) {
-                    expect(epoch_distribution.farming_distribution[gauge.address]).to.be.eq(expected_distribution.toFixed(0));
+                    expect(distribution_map[gauge.address]).to.be.eq(expected_distribution.toFixed(0));
                 }
 
                 // team and treasury are the same in default setup
@@ -231,17 +239,23 @@ describe("Main Vote Escrow scenarios", async function() {
 
                 total_votes = Object.values(votes).reduce((prev,next) => prev + next, 0);
                 // sleep a bit so that voting time starts
+
+                let votes_flat = [];
+                for (const [addr, val] of Object.entries(votes)) {
+                    votes_flat.push([addr.toString(), val]);
+                }
+
                 await sleep(4000);
-                await vote_escrow.vote(user, votes, 2);
+                await vote_escrow.vote(user, votes_flat, 2);
 
                 const start_event = await vote_escrow.getEvent('VotingStart');
                 const vote_event = await vote_escrow.getEvent('Vote');
 
-                expect(start_event.call_id.toString()).to.be.eq('2');
-                expect(vote_event.call_id.toString()).to.be.eq('2');
+                expect(start_event.call_id).to.be.eq('2');
+                expect(vote_event.call_id).to.be.eq('2');
 
                 const epoch = await vote_escrow.getCurrentEpochDetails();
-                expect(epoch._currentVotingTotalVotes.toString()).to.be.eq(total_votes.toString());
+                expect(epoch._currentVotingTotalVotes).to.be.eq(total_votes.toString());
 
                 const all_votes = await vote_escrow.currentVotingVotes();
                 for (const gauge of gauges) {
@@ -270,25 +284,29 @@ describe("Main Vote Escrow scenarios", async function() {
                 let treasury_votes = (votes[gauges[2].address] + exceeded_votes) - max_votes;
                 let treasury_bonus = Math.floor(treasury_votes * Math.floor(1000000 * 0.8) / total_votes);
 
-                expect(voting_end.votes[gauges[0].address].toString()).to.be.eq(max_votes.toString());
-                expect(voting_end.votes[gauges[1].address].toString()).to.be.eq(max_votes.toString());
-                expect(voting_end.votes[gauges[2].address].toString()).to.be.eq(max_votes.toString());
-                should.not.exist(voting_end.votes[gauges[3].address]);
+                const votes_map = vote_escrow.arr_to_map(voting_end.votes);
 
-                expect(voting_end.call_id.toString()).to.be.eq('2');
-                expect(voting_end.new_epoch.toString()).to.be.eq(current_epoch.toString());
-                expect(voting_end.total_votes.toString()).to.be.eq(total_votes.toString());
-                expect(voting_end.treasury_votes.toString()).to.be.eq(treasury_votes.toString());
+                expect(votes_map[gauges[0].address]).to.be.eq(max_votes.toString());
+                expect(votes_map[gauges[1].address]).to.be.eq(max_votes.toString());
+                expect(votes_map[gauges[2].address]).to.be.eq(max_votes.toString());
+                should.not.exist(votes_map[gauges[3].address]);
 
-                expect(epoch_distribution.call_id.toString()).to.be.eq('2');
-                expect(epoch_distribution.epoch_num.toString()).to.be.eq(current_epoch.toString());
+                expect(voting_end.call_id).to.be.eq('2');
+                expect(voting_end.new_epoch).to.be.eq(current_epoch.toString());
+                expect(voting_end.total_votes).to.be.eq(total_votes.toString());
+                expect(voting_end.treasury_votes).to.be.eq(treasury_votes.toString());
+
+                expect(epoch_distribution.call_id).to.be.eq('2');
+                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+
+                const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
 
                 const share = max_votes / total_votes;
                 const max_distribution = Math.floor(Math.floor(1000000 * 0.8) * share)
-                expect(epoch_distribution.farming_distribution[gauges[0].address]).to.be.eq(max_distribution.toFixed(0));
-                expect(epoch_distribution.farming_distribution[gauges[1].address]).to.be.eq(max_distribution.toFixed(0));
-                expect(epoch_distribution.farming_distribution[gauges[2].address]).to.be.eq(max_distribution.toFixed(0));
-                should.not.exist(epoch_distribution.farming_distribution[gauges[3].address]);
+                expect(distribution_map[gauges[0].address]).to.be.eq(max_distribution.toFixed(0));
+                expect(distribution_map[gauges[1].address]).to.be.eq(max_distribution.toFixed(0));
+                expect(distribution_map[gauges[2].address]).to.be.eq(max_distribution.toFixed(0));
+                should.not.exist(distribution_map[gauges[3].address]);
 
                 const expected_team = 100000;
                 const expected_treasury = 100000 + treasury_bonus;
@@ -300,7 +318,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 const details_new = await vote_escrow.details();
                 let new_supply = details_new._distributionSupply;
 
-                expect(new_supply.toString()).to.be.eq(expected_supply.toString());
+                expect(new_supply).to.be.eq(expected_supply.toString());
             });
         });
 
@@ -318,23 +336,28 @@ describe("Main Vote Escrow scenarios", async function() {
                 votes[gauges[2].address] = Math.floor(ve_balances._veQubeBalance * 0.1); // 10% => 30% (+20%: 24% + 5% + 1% - 10% overflow)
                 votes[gauges[3].address] = Math.floor(ve_balances._veQubeBalance * 0.01); // 1% => 0%
 
+                let votes_flat = [];
+                for (const [addr, val] of Object.entries(votes)) {
+                    votes_flat.push([addr.toString(), val]);
+                }
+
                 total_votes = Object.values(votes).reduce((prev,next) => prev + next, 0);
                 // sleep a bit so that voting time starts
                 await sleep(4000);
-                await vote_escrow.vote(user, votes, 3);
+                await vote_escrow.vote(user, votes_flat, 3);
 
                 const start_event = await vote_escrow.getEvent('VotingStart');
                 const vote_event = await vote_escrow.getEvent('Vote');
 
-                expect(start_event.call_id.toString()).to.be.eq('3');
-                expect(vote_event.call_id.toString()).to.be.eq('3');
+                expect(start_event.call_id).to.be.eq('3');
+                expect(vote_event.call_id).to.be.eq('3');
 
                 const epoch = await vote_escrow.getCurrentEpochDetails();
-                expect(epoch._currentVotingTotalVotes.toString()).to.be.eq(total_votes.toString());
+                expect(epoch._currentVotingTotalVotes).to.be.eq(total_votes.toString());
 
                 const all_votes = await vote_escrow.currentVotingVotes();
                 for (const gauge of gauges) {
-                    expect(all_votes[gauge.address].toString()).to.be.eq(votes[gauge.address].toString());
+                    expect(all_votes[gauge.address.toString()].toString()).to.be.eq(votes[gauge.address.toString()].toString());
                 }
             });
 
@@ -348,7 +371,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 current_epoch += 1;
 
                 const downtime = await vote_escrow.getGaugeDowntime(gauges[3]);
-                expect(downtime.toString()).to.be.eq('0');
+                expect(downtime).to.be.eq('0');
 
                 const whitelisted = await vote_escrow.isGaugeWhitelisted(gauges[3]);
                 expect(whitelisted).to.be.false;
@@ -357,8 +380,8 @@ describe("Main Vote Escrow scenarios", async function() {
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution');
                 const gauge_removal = await vote_escrow.getEvent('GaugeRemoveWhitelist');
 
-                expect(gauge_removal.call_id.toString()).to.be.eq('3');
-                expect(gauge_removal.gauge.toString()).to.be.eq(gauges[3].address);
+                expect(gauge_removal.call_id).to.be.eq('3');
+                expect(gauge_removal.gauge.toString()).to.be.eq(gauges[3].address.toString());
 
                 const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
                 let exceeded_votes = Math.floor(total_votes * 0.3); // 24% + 5% + 1%
@@ -366,25 +389,29 @@ describe("Main Vote Escrow scenarios", async function() {
                 let treasury_votes = (votes[gauges[2].address] + exceeded_votes) - max_votes;
                 let treasury_bonus = Math.floor(treasury_votes * Math.floor(1000000 * 0.8) / total_votes);
 
-                expect(voting_end.votes[gauges[0].address].toString()).to.be.eq(max_votes.toString());
-                expect(voting_end.votes[gauges[1].address].toString()).to.be.eq(max_votes.toString());
-                expect(voting_end.votes[gauges[2].address].toString()).to.be.eq(max_votes.toString());
-                should.not.exist(voting_end.votes[gauges[3].address]);
+                const votes_map = vote_escrow.arr_to_map(voting_end.votes);
 
-                expect(voting_end.call_id.toString()).to.be.eq('3');
-                expect(voting_end.new_epoch.toString()).to.be.eq(current_epoch.toString());
-                expect(voting_end.total_votes.toString()).to.be.eq(total_votes.toString());
-                expect(voting_end.treasury_votes.toString()).to.be.eq(treasury_votes.toString());
+                expect(votes_map[gauges[0].address]).to.be.eq(max_votes.toString());
+                expect(votes_map[gauges[1].address]).to.be.eq(max_votes.toString());
+                expect(votes_map[gauges[2].address]).to.be.eq(max_votes.toString());
+                should.not.exist(votes_map[gauges[3].address]);
 
-                expect(epoch_distribution.call_id.toString()).to.be.eq('3');
-                expect(epoch_distribution.epoch_num.toString()).to.be.eq(current_epoch.toString());
+                expect(voting_end.call_id).to.be.eq('3');
+                expect(voting_end.new_epoch).to.be.eq(current_epoch.toString());
+                expect(voting_end.total_votes).to.be.eq(total_votes.toString());
+                expect(voting_end.treasury_votes).to.be.eq(treasury_votes.toString());
+
+                expect(epoch_distribution.call_id).to.be.eq('3');
+                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
 
                 const share = max_votes / total_votes;
                 const max_distribution = Math.floor(Math.floor(1000000 * 0.8) * share)
-                expect(epoch_distribution.farming_distribution[gauges[0].address]).to.be.eq(max_distribution.toFixed(0));
-                expect(epoch_distribution.farming_distribution[gauges[1].address]).to.be.eq(max_distribution.toFixed(0));
-                expect(epoch_distribution.farming_distribution[gauges[2].address]).to.be.eq(max_distribution.toFixed(0));
-                should.not.exist(epoch_distribution.farming_distribution[gauges[3].address]);
+                const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
+
+                expect(distribution_map[gauges[0].address]).to.be.eq(max_distribution.toFixed(0));
+                expect(distribution_map[gauges[1].address]).to.be.eq(max_distribution.toFixed(0));
+                expect(distribution_map[gauges[2].address]).to.be.eq(max_distribution.toFixed(0));
+                should.not.exist(distribution_map[gauges[3].address]);
 
                 const expected_team = 100000;
                 const expected_treasury = 100000 + treasury_bonus;
@@ -396,7 +423,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 const details_new = await vote_escrow.details();
                 let new_supply = details_new._distributionSupply;
 
-                expect(new_supply.toString()).to.be.eq(expected_supply.toString());
+                expect(new_supply).to.be.eq(expected_supply.toString());
             });
         });
 
@@ -413,9 +440,14 @@ describe("Main Vote Escrow scenarios", async function() {
                 votes[gauges[2].address] = Math.floor(ve_balances._veQubeBalance * 0.01); // 1% => 0%
 
                 total_votes = Object.values(votes).reduce((prev,next) => prev + next, 0);
+
+                let votes_flat = [];
+                for (const [addr, val] of Object.entries(votes)) {
+                    votes_flat.push([addr.toString(), val]);
+                }
                 // sleep a bit so that voting time starts
                 await sleep(4000);
-                await vote_escrow.vote(user, votes, 4);
+                await vote_escrow.vote(user, votes_flat, 4);
 
                 const start_event = await vote_escrow.getEvent('VotingStart');
                 const vote_event = await vote_escrow.getEvent('Vote');
@@ -447,28 +479,31 @@ describe("Main Vote Escrow scenarios", async function() {
                 const exceeded_votes = Math.floor(total_votes * 0.4);
                 const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
 
-
                 let treasury_bonus = Math.floor(exceeded_votes * Math.floor(1000000 * 0.8) / total_votes);
 
-                expect(voting_end.votes[gauges[0].address].toString()).to.be.eq(max_votes.toString());
-                expect(voting_end.votes[gauges[1].address].toString()).to.be.eq(max_votes.toString());
-                should.not.exist(voting_end.votes[gauges[2].address]);
-                should.not.exist(voting_end.votes[gauges[3].address]);
+                const votes_map = vote_escrow.arr_to_map(voting_end.votes);
 
-                expect(voting_end.call_id.toString()).to.be.eq('4');
-                expect(voting_end.new_epoch.toString()).to.be.eq(current_epoch.toString());
-                expect(voting_end.total_votes.toString()).to.be.eq(total_votes.toString());
-                expect(voting_end.treasury_votes.toString()).to.be.eq(exceeded_votes.toString());
+                expect(votes_map[gauges[0].address].toString()).to.be.eq(max_votes.toString());
+                expect(votes_map[gauges[1].address].toString()).to.be.eq(max_votes.toString());
+                should.not.exist(votes_map[gauges[2].address]);
+                should.not.exist(votes_map[gauges[3].address]);
 
-                expect(epoch_distribution.call_id.toString()).to.be.eq('4');
-                expect(epoch_distribution.epoch_num.toString()).to.be.eq(current_epoch.toString());
+                expect(voting_end.call_id).to.be.eq('4');
+                expect(voting_end.new_epoch).to.be.eq(current_epoch.toString());
+                expect(voting_end.total_votes).to.be.eq(total_votes.toString());
+                expect(voting_end.treasury_votes).to.be.eq(exceeded_votes.toString());
+
+                expect(epoch_distribution.call_id).to.be.eq('4');
+                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
 
                 const share = max_votes / total_votes;
-                const max_distribution = Math.floor(Math.floor(1000000 * 0.8) * share)
-                expect(epoch_distribution.farming_distribution[gauges[0].address]).to.be.eq(max_distribution.toFixed(0));
-                expect(epoch_distribution.farming_distribution[gauges[1].address]).to.be.eq(max_distribution.toFixed(0));
-                should.not.exist(epoch_distribution.farming_distribution[gauges[2].address]);
-                should.not.exist(epoch_distribution.farming_distribution[gauges[3].address]);
+                const max_distribution = Math.floor(Math.floor(1000000 * 0.8) * share);
+                const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
+
+                expect(distribution_map[gauges[0].address]).to.be.eq(max_distribution.toFixed(0));
+                expect(distribution_map[gauges[1].address]).to.be.eq(max_distribution.toFixed(0));
+                should.not.exist(distribution_map[gauges[2].address]);
+                should.not.exist(distribution_map[gauges[3].address]);
 
                 const expected_team = 100000;
                 const expected_treasury = 100000 + treasury_bonus;
@@ -480,7 +515,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 const details_new = await vote_escrow.details();
                 let new_supply = details_new._distributionSupply;
 
-                expect(new_supply.toString()).to.be.eq(expected_supply.toString());
+                expect(new_supply).to.be.eq(expected_supply.toString());
             });
 
         });
@@ -492,7 +527,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 await vote_escrow.startVoting(5);
 
                 const start_event = await vote_escrow.getEvent('VotingStart');
-                expect(start_event.call_id.toString()).to.be.eq('5');
+                expect(start_event.call_id).to.be.eq('5');
             });
 
             it('End voting', async function() {
@@ -509,13 +544,13 @@ describe("Main Vote Escrow scenarios", async function() {
 
                 let treasury_bonus = Math.floor(1000000 * 0.8);
 
-                expect(voting_end.call_id.toString()).to.be.eq('5');
-                expect(voting_end.new_epoch.toString()).to.be.eq(current_epoch.toString());
-                expect(voting_end.total_votes.toString()).to.be.eq('0');
-                expect(voting_end.treasury_votes.toString()).to.be.eq('0');
+                expect(voting_end.call_id).to.be.eq('5');
+                expect(voting_end.new_epoch).to.be.eq(current_epoch.toString());
+                expect(voting_end.total_votes).to.be.eq('0');
+                expect(voting_end.treasury_votes).to.be.eq('0');
 
-                expect(epoch_distribution.call_id.toString()).to.be.eq('5');
-                expect(epoch_distribution.epoch_num.toString()).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.call_id).to.be.eq('5');
+                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
 
                 const expected_team = 100000;
                 const expected_treasury = 100000 + treasury_bonus;
@@ -527,7 +562,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 const details_new = await vote_escrow.details();
                 let new_supply = details_new._distributionSupply;
 
-                expect(new_supply.toString()).to.be.eq(expected_supply.toString());
+                expect(new_supply).to.be.eq(expected_supply.toString());
             });
         })
     });
