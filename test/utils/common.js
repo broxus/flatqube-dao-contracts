@@ -21,41 +21,20 @@ const checkTokenBalance = async function(token_wallet, expected_bal) {
 
 
 // allow sending N internal messages via batch method
-const runTargets = async function(wallet, targets, methods, params_list, values, allowed_codes) {
+const runTargets = async function(wallet, targets, methods, params_list, values) {
     let bodies = await Promise.all(targets.map(async function(target, idx) {
         const method = methods[idx];
         const params = params_list[idx];
-
-        const message = await locklift.ton.client.abi.encode_message_body({
-            address: target.address,
-            abi: {
-                type: "Contract",
-                value: target.abi,
-            },
-            call_set: {
-                function_name: method,
-                input: params,
-            },
-            signer: {
-                type: 'None',
-            },
-            is_internal: true,
-        });
-
-        return message.body;
+        return await target.methods[method](params).encodeInternal();
     }));
 
-    return wallet.run({
-        method: 'sendTransactions',
-        params: {
-            dest: targets.map((contract) => contract.address),
-            value: values,
-            bounce: new Array(targets.length).fill(true),
-            flags: new Array(targets.length).fill(0),
-            payload: bodies,
-        },
-        tracing_allowed_codes: allowed_codes
-    });
+    return await wallet.accountContract.methods.sendTransactions({
+        dest: targets.map((contract) => contract.address.toString()),
+        value: values,
+        bounce: new Array(targets.length).fill(true),
+        flags: new Array(targets.length).fill(0),
+        payload: bodies,
+    }).sendExternal({publicKey: wallet.publicKey});
 }
 
 
@@ -167,6 +146,8 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
         },
         locklift.utils.convertCrystal(2, Dimensions.Nano),
     );
+
+    _root.decodeOutputMessage()
 
     logger.log(`Token root address: ${_root.address.toString()}`);
 

@@ -7,6 +7,7 @@ const { convertCrystal, getRandomNonce } = locklift.utils;
 
 
 const { setupTokenRoot, setupVoteEscrow, deployUser, sleep, runTargets} = require("../utils/common");
+const {Dimensions} = require("locklift");
 
 
 describe("Vote Escrow mass deposits scenario", async function() {
@@ -50,7 +51,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
             vote_escrow_qube_wallet = await vote_escrow.tokenWallet();
 
             const details = await vote_escrow.getCurrentEpochDetails();
-            expect(details._currentEpoch.toString()).to.be.eq(current_epoch.toString());
+            expect(details._currentEpoch).to.be.eq(current_epoch.toString());
         })
     });
 
@@ -63,9 +64,9 @@ describe("Vote Escrow mass deposits scenario", async function() {
             const deposit_payload = await vote_escrow.depositPayload(user, lock_time);
             const params = {
                 amount: deposit_amount,
-                recipient: vote_escrow.address,
+                recipient: vote_escrow.address.toString(),
                 deployWalletValue: 0,
-                remainingGasTo: user.address,
+                remainingGasTo: user.address.toString(),
                 notify: true,
                 payload: deposit_payload
             };
@@ -80,8 +81,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
                     Array(count).fill(user_qube_wallet.contract),
                     Array(count).fill('transfer'),
                     Array(count).fill(params),
-                    Array(count).fill(convertCrystal(50, 'nano')),
-                    {compute: [null]}
+                    Array(count).fill(convertCrystal(50, Dimensions.Nano))
                 );
                 const to = Date.now();
                 logger.log(`Pack processed in ${Math.floor((to - from) / 1000)}`);
@@ -99,12 +99,12 @@ describe("Vote Escrow mass deposits scenario", async function() {
             const ve_details = await vote_escrow.details();
 
             // ve acc check
-            expect(acc_balance._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(acc_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
-            expect(acc_details._unlockedQubes.toString()).to.be.eq('0');
+            expect(acc_balance._veQubeBalance).to.be.eq(ve_expected.toString());
+            expect(acc_details._qubeBalance).to.be.eq((count * deposit_amount * packs_num).toString());
+            expect(acc_details._unlockedQubes).to.be.eq('0');
 
-            expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
+            expect(ve_details._veQubeBalance).to.be.eq(ve_expected.toString());
+            expect(ve_details._qubeBalance).to.be.eq((count * deposit_amount * packs_num).toString());
         });
 
         it('Making 1 more deposit, unlocking old ones', async function() {
@@ -112,10 +112,10 @@ describe("Vote Escrow mass deposits scenario", async function() {
 
             while (true) {
                 const acc_balance = await ve_account.calculateVeAverage();
-                if (acc_balance._veQubeBalance.toString() === '0') {
+                if (acc_balance._veQubeBalance === '0') {
                     break;
                 }
-                logger.log(`VeQube balance - ${acc_balance._veQubeBalance.toString()}, sleeping...`);
+                logger.log(`VeQube balance - ${acc_balance._veQubeBalance}, sleeping...`);
                 await sleep(100 * 1000);
             }
 
@@ -127,15 +127,15 @@ describe("Vote Escrow mass deposits scenario", async function() {
             const ve_details = await vote_escrow.details();
 
             // only ve qubes from new deposit
-            expect(acc_balance_1._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
+            expect(acc_balance_1._veQubeBalance).to.be.eq(ve_expected);
             // + deposit_amount to qube balance
-            expect(acc_details_1._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
+            expect(acc_details_1._qubeBalance).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
             // all old qubes are unlocked
-            expect(acc_details_1._unlockedQubes.toString()).to.be.eq((count * deposit_amount * packs_num).toString());
+            expect(acc_details_1._unlockedQubes).to.be.eq((count * deposit_amount * packs_num).toString());
 
             // all old ve qubes are burned
-            expect(ve_details._veQubeBalance.toString()).to.be.eq(ve_expected.toString());
-            expect(ve_details._qubeBalance.toString()).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
+            expect(ve_details._veQubeBalance).to.be.eq(ve_expected);
+            expect(ve_details._qubeBalance).to.be.eq((count * deposit_amount * packs_num + deposit_amount).toString());
         })
 
         it('Making withdraw', async function() {
