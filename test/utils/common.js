@@ -4,8 +4,10 @@ const BigNumber = require('bignumber.js');
 const Token = require("./wrappers/token");
 const VoteEscrow = require('./wrappers/vote_ecsrow');
 const {factorySource} = require("../../build/factorySource");
-const {Dimensions, zeroAddress} = require("locklift");
+const {Dimensions, zeroAddress, Address} = require("locklift");
+const {getRandomNonce} = require("locklift/build/utils");
 const {convertCrystal} = locklift.utils;
+const {waitFinalized} = require('./waiter')
 
 
 async function sleep(ms) {
@@ -39,49 +41,49 @@ const runTargets = async function(wallet, targets, methods, params_list, values)
 
 
 const deployUsers = async function(count, initial_balance) {
-    let keys = await locklift.keys.getKeyPairs();
-    keys = keys.slice(0, count);
+    let signers = await Promise.all([...Array(count).keys()].map(async (i) => await locklift.provider.keyStore.getSigner(i.toString())));
+    signers = signers.slice(0, count);
 
-    let keys_map = {};
-    keys.map((pair) => {
-        keys_map[`0x${pair.public}`] = pair;
+    let signers_map = {};
+    signers.map((signer) => {
+        signers_map[`0x${signer.publicKey}`.toLowerCase()] = signer;
     })
 
-    const TestWallet = await locklift.factory.getAccount('TestWallet');
-    const TestFactory = await locklift.factory.getAccount('TestFactory');
+    const TestWallet = await locklift.factory.getContract('TestWallet');
+    const TestFactory = await locklift.factory.getContract('TestFactory');
 
-    const factory = await locklift.giver.deployContract({
-        contract: TestFactory,
-        constructorParams: {},
-        initParams: {
-            wallet_code: TestWallet.code
-        }
-    }, convertCrystal(count * initial_balance + 100, 'nano'));
+    const factory = await locklift.factory.deployContract(
+        TestFactory.abi,
+        {
+            initParams: { wallet_code: TestWallet.code, _randomNonce: getRandomNonce() },
+            tvc: TestFactory.tvc,
+            publicKey: signers[0].publicKey
+        },
+        {},
+        convertCrystal(count * initial_balance + 100, Dimensions.Nano)
+    );
 
-    const pubkeys = keys.map((pair) => { return (new BigNumber(pair.public, 16)).toFixed(0) });
-    const values = Array(count).fill(convertCrystal(initial_balance, 'nano'))
+    const pubkeys = signers.map((signer) => { return (new BigNumber(signer.publicKey, 16)).toFixed(0) });
+    const values = Array(count).fill(convertCrystal(initial_balance, Dimensions.Nano));
 
     const chunkSize = 60;
     for (let i = 0; i < count; i += chunkSize) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
 
-        await factory.run({
-            method: 'deployUsers',
-            params: {
-                pubkeys: _pubkeys,
-                values: _values
-            }
-        });
+        await waitFinalized(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
     }
 
-    const wallets = await factory.call({method: 'wallets'});
-    return await Promise.all(Object.entries(wallets).map(async function([pubkey, addr]) {
-        const pair = keys_map[pubkey];
-        const wallet = await locklift.factory.getAccount('TestWallet');
-        wallet.setAddress(addr);
-        wallet.setKeyPair(pair);
-        return wallet;
+    const {wallets} = await factory.methods.wallets({}).call();
+    const wallets_map = wallets.reduce((map, elem) => {
+        const pubkey = elem[0];
+        map[signers_map[pubkey].publicKey] = elem[1];
+        return map;
+    }, {});
+
+    let accountsFactory = locklift.factory.getAccountsFactory(factorySource.TestWallet);
+    return await Promise.all(Object.entries(wallets_map).map(async function([pubkey, addr]) {
+        return accountsFactory.getAccount(addr, pubkey);
     }));
 }
 
@@ -146,8 +148,6 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
         },
         locklift.utils.convertCrystal(2, Dimensions.Nano),
     );
-
-    _root.decodeOutputMessage()
 
     logger.log(`Token root address: ${_root.address.toString()}`);
 

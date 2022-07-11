@@ -48,7 +48,12 @@ describe("Main Vote Escrow scenarios", async function() {
 
     describe('Testing upgrade logic', async function() {
         it('Deploy ve accounts for users', async function() {
-           await vote_escrow.deployVeAccount(user1);
+            try {
+                await vote_escrow.deployVeAccount(user1);
+            } catch (e) {
+                console.log(e);
+                console.log(e.transaction.transaction.id);
+            }
            await vote_escrow.deployVeAccount(user2);
         });
 

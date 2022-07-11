@@ -286,14 +286,14 @@ class VoteEscrow {
 
     async deployVeAccount(user) {
         const addr = user.address === undefined ? user : user.address;
-        return await user.runTarget({
-            contract: this.contract,
-            method: 'deployVoteEscrowAccount',
-            params: {
-                user: addr,
+        const ve = this.contract;
+        return await user.runTarget(
+            {
+                contract: ve,
+                value: convertCrystal(5, Dimensions.Nano)
             },
-            value: convertCrystal(5, 'nano')
-        });
+            (ve) => ve.methods.deployVoteEscrowAccount({user: addr.toString()})
+        );
     }
 
     async depositPayload(deposit_owner_or_addr, lock_time, call_id=0) {

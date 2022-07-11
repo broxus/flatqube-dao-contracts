@@ -4,6 +4,7 @@ const {
 const logger = require("mocha-logger");
 const TokenWallet = require("./token_wallet");
 const {Dimensions} = require("locklift");
+const {waitFinalized} = require('../waiter');
 
 
 class Token {
@@ -56,7 +57,7 @@ class Token {
 
     async mint(mint_amount, user) {
         const token = this.contract;
-        await this.owner.runTarget(
+        await waitFinalized(this.owner.runTarget(
             {
                 contract: token,
                 value: locklift.utils.convertCrystal(5, Dimensions.Nano),
@@ -69,7 +70,7 @@ class Token {
                 notify: false,
                 payload: ''
             })
-        );
+        ));
 
         const walletAddr = await this.walletAddr(user);
         logger.log(`User token wallet: ${walletAddr.toString()}`);
