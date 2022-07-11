@@ -63,17 +63,18 @@ const deployUsers = async function(count, initial_balance) {
         convertCrystal(count * initial_balance + 100, Dimensions.Nano)
     );
 
-    const pubkeys = signers.map((signer) => { return (new BigNumber(signer.publicKey, 16)).toFixed(0) });
+    const pubkeys = signers.map((signer) => { return `0x${signer.publicKey}` });
     const values = Array(count).fill(convertCrystal(initial_balance, Dimensions.Nano));
 
     const chunkSize = 60;
     for (let i = 0; i < count; i += chunkSize) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
-
+        // console.log(_values);
         await waitFinalized(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
     }
 
+    // await sleep(1000);
     const {wallets} = await factory.methods.wallets({}).call();
     const wallets_map = wallets.reduce((map, elem) => {
         const pubkey = elem[0];

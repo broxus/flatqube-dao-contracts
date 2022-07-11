@@ -25,7 +25,7 @@ contract TestFactory is RandomNonce {
                 varInit: {
                     _randomNonce: tx.timestamp + i
                 },
-                pubkey: tvm.pubkey(),
+                pubkey: 0,
                 code: wallet_code
             });
 

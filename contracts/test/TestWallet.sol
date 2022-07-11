@@ -1,8 +1,11 @@
 pragma ever-solidity ^0.60.0;
+pragma AbiHeader expire;
+pragma AbiHeader pubkey;
 
 
 import '@broxus/contracts/contracts/wallets/Account.sol';
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+
 
 
 contract TestWallet is Account {
@@ -35,9 +38,9 @@ contract TestWallet is Account {
         uint8[] flags,
         TvmCell[] payload
     )
-    public
-    pure
-    onlyOwner
+        public
+        pure
+        onlyOwner
     {
         tvm.accept();
 
