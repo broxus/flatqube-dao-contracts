@@ -4,6 +4,7 @@ const { getRandomNonce } = locklift.utils;
 var should = require('chai').should();
 const VoteEscrow = require("../utils/wrappers/vote_ecsrow");
 const { setupTokenRoot, setupVoteEscrow, deployUser, deployUsers, sleep } = require("../utils/common");
+const {Address} = require("locklift");
 
 
 describe("Main Vote Escrow scenarios", async function() {
@@ -61,9 +62,10 @@ describe("Main Vote Escrow scenarios", async function() {
             const codes_0 = await vote_escrow.getCodes();
             expect(codes_0._ve_version.toString()).to.be.eq('0');
 
-            const new_contract = await locklift.factory.getContract('TestVoteEscrow');
-            await vote_escrow.upgrade(new_contract.code);
-            new_contract.setAddress(vote_escrow.address);
+            const new_code = await locklift.factory.getContract('TestVoteEscrow');
+            await vote_escrow.upgrade(new_code.code);
+
+            const new_contract = new locklift.provider.ever.Contract(new_code.abi, vote_escrow.address);
             vote_escrow = new VoteEscrow(new_contract, owner);
 
             const event = await vote_escrow.getEvent('Upgrade');
@@ -90,20 +92,20 @@ describe("Main Vote Escrow scenarios", async function() {
             await vote_escrow.upgradeVeAccount(user1, 1);
             const event = await vote_escrow.getEvent('VoteEscrowAccountUpgrade');
 
-            expect(event.call_id.toString()).to.be.eq('1');
-            expect(event.user.toString()).to.be.eq(user1.address);
-            expect(event.old_version.toString()).to.be.eq('1');
-            expect(event.new_version.toString()).to.be.eq('2');
+            expect(event.call_id).to.be.eq('1');
+            expect(event.user.toString()).to.be.eq(user1.address.toString());
+            expect(event.old_version).to.be.eq('1');
+            expect(event.new_version).to.be.eq('2');
         });
 
         it('Admin upgrade user ve account', async function() {
             await vote_escrow.forceUpgradeVeAccounts([user2]);
 
             const event = await vote_escrow.getEvent('VoteEscrowAccountUpgrade');
-            expect(event.call_id.toString()).to.be.eq('0'); // defaults to 0 when called by admin
-            expect(event.user.toString()).to.be.eq(user2.address);
-            expect(event.old_version.toString()).to.be.eq('1');
-            expect(event.new_version.toString()).to.be.eq('2');
+            expect(event.call_id).to.be.eq('0'); // defaults to 0 when called by admin
+            expect(event.user.toString()).to.be.eq(user2.address.toString());
+            expect(event.old_version).to.be.eq('1');
+            expect(event.new_version).to.be.eq('2');
         });
 
         it('New user deploy account after code update', async function() {
