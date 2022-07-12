@@ -62,10 +62,10 @@ describe("Main Vote Escrow scenarios", async function() {
             const codes_0 = await vote_escrow.getCodes();
             expect(codes_0._ve_version.toString()).to.be.eq('0');
 
-            const new_code = await locklift.factory.getContract('TestVoteEscrow');
+            const new_code = await locklift.factory.getContractArtifacts('TestVoteEscrow');
             await vote_escrow.upgrade(new_code.code);
 
-            const new_contract = new locklift.provider.ever.Contract(new_code.abi, vote_escrow.address);
+            const new_contract = await locklift.factory.getDeployedContract('TestVoteEscrow', vote_escrow.address);
             vote_escrow = new VoteEscrow(new_contract, owner);
 
             const event = await vote_escrow.getEvent('Upgrade');
@@ -77,7 +77,7 @@ describe("Main Vote Escrow scenarios", async function() {
         });
 
         it('Update ve account code', async function() {
-            const new_code = await locklift.factory.getContract('TestVoteEscrowAccount');
+            const new_code = await locklift.factory.getContractArtifacts('TestVoteEscrowAccount');
             await vote_escrow.installOrUpdateVeAccountCode(new_code.code);
             const event = await vote_escrow.getEvent('VeAccountCodeUpdate');
 

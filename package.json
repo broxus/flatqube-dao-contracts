@@ -8,7 +8,7 @@
     "dependencies": {
         "@broxus/contracts": "^1.0.4",
         "broxus-ton-tokens-contracts": "github:broxus/ton-eth-bridge-token-contracts#d3c1cd920c0320ffaab03b54c878dd0e06fed3c7",
-        "locklift": "git+ssh://git@gitlab.broxus.com:locklift/ever-locklift.git#0e1e090709f5214c1853a748315038aa42c77a3f",
+        "locklift": "git+ssh://git@gitlab.broxus.com:locklift/ever-locklift.git#0056a02e7e5a552d33afd89a677ff0b52dac289d",
         "mocha-logger": "^1.0.7"
     }
 }

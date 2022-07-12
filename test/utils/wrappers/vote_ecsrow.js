@@ -18,8 +18,7 @@ class VoteEscrow {
     }
 
     static async from_addr (addr, owner) {
-        const veContract = await locklift.factory.getContract('VoteEscrow');
-        const ve = new locklift.provider.ever.Contract(veContract.abi, addr);
+        const ve = await locklift.factory.getDeployedContract('VoteEscrow', addr);
         return new VoteEscrow(ve, owner);
     }
 

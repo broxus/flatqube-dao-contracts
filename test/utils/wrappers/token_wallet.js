@@ -12,8 +12,7 @@ class TokenWallet {
     }
 
     static async from_addr(addr, owner) {
-        let userTokenWallet = await locklift.factory.getContract('TokenWallet');
-        const wallet = new locklift.provider.ever.Contract(userTokenWallet.abi, addr);
+        const wallet = await locklift.factory.getDeployedContract('TokenWallet', addr);
         return new TokenWallet(wallet, owner);
     }
 
