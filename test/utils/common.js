@@ -29,7 +29,7 @@ const runTargets = async function(wallet, targets, methods, params_list, values)
         return await target.methods[method](params).encodeInternal();
     }));
 
-    return await locklift.features.trace(wallet.accountContract.methods.sendTransactions({
+    return await locklift.tracing.trace(wallet.accountContract.methods.sendTransactions({
         dest: targets.map((contract) => contract.address.toString()),
         value: values,
         bounce: new Array(targets.length).fill(true),
@@ -66,7 +66,7 @@ const deployUsers = async function(count, initial_balance) {
     for (let i = 0; i < count; i += chunkSize) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
-        // console.log(_values);
+        console.log(i, chunkSize)
         await waitFinalized(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
     }
 
@@ -139,7 +139,7 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
         },
         locklift.utils.convertCrystal(2, Dimensions.Nano),
     );
-    await locklift.features.trace(tx);
+    await locklift.tracing.trace(tx);
 
     logger.log(`Token root address: ${_root.address.toString()}`);
 

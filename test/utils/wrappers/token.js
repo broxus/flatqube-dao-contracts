@@ -57,7 +57,7 @@ class Token {
 
     async mint(mint_amount, user) {
         const token = this.contract;
-        await locklift.features.trace(this.owner.runTarget(
+        await locklift.tracing.trace(this.owner.runTarget(
             {
                 contract: token,
                 value: locklift.utils.convertCrystal(5, Dimensions.Nano),
@@ -73,6 +73,7 @@ class Token {
         ));
 
         const walletAddr = await this.walletAddr(user);
+        console.log(walletAddr);
         logger.log(`User token wallet: ${walletAddr.toString()}`);
         return await TokenWallet.from_addr(walletAddr, user);
     }

@@ -65,7 +65,7 @@ describe("Main Vote Escrow scenarios", async function() {
             it('Making 1st deposit', async function() {
                 const lock_time = 100;
                 const tx = await vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, false);
-                await locklift.features.trace(tx, {allowedCodes: {compute: [null]}});
+                await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
 
                 const event = await vote_escrow.getEvent('Deposit');
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
@@ -86,7 +86,7 @@ describe("Main Vote Escrow scenarios", async function() {
 
             it('Making 2nd deposit', async function() {
                 const lock_time = 90;
-                await locklift.features.trace(vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 2));
+                await locklift.tracing.trace(vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 2));
                 const event = await vote_escrow.getEvent('Deposit');
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
@@ -109,7 +109,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 for (const gauge of gauges) {
                     const price = 1000000;
                     const random_id = getRandomNonce();
-                    await locklift.features.trace(vote_escrow.whitelistDeposit(owner_qube_wallet, price, gauge.address, random_id));
+                    await locklift.tracing.trace(vote_escrow.whitelistDeposit(owner_qube_wallet, price, gauge.address, random_id));
                     const details = await vote_escrow.details();
                     const event = await vote_escrow.getEvent('GaugeWhitelist');
                     payments += price;
