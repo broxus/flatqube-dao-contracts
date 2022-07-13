@@ -34,7 +34,7 @@
 			]
 		},
 		{
-			"name": "processVote",
+			"name": "processEpochVote",
 			"inputs": [
 				{"name":"voteEpoch","type":"uint32"},
 				{"name":"votes","type":"map(address,uint128)"},
@@ -74,6 +74,103 @@
 				{"name":"callback_receiver","type":"address"},
 				{"name":"callback_nonce","type":"uint32"},
 				{"name":"sync_time","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "lockedTokens",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "canWithdrawVotes",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "propose",
+			"inputs": [
+				{"name":"proposal_data","type":"cell"},
+				{"name":"threshold","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onProposalDeployed",
+			"inputs": [
+				{"name":"nonce","type":"uint32"},
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"answer_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "castVote",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"support","type":"bool"},
+				{"name":"reason","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "voteCasted",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "rejectVote",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "tryUnlockVoteTokens",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "unlockVoteTokens",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"success","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "tryUnlockCastedVotes",
+			"inputs": [
+				{"name":"proposal_ids","type":"uint32[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "unlockCastedVote",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"success","type":"bool"}
 			],
 			"outputs": [
 			]
@@ -121,11 +218,81 @@
 			"outputs": [
 				{"components":[{"name":"amount","type":"uint128"},{"name":"veAmount","type":"uint128"},{"name":"createdAt","type":"uint32"},{"name":"lockTime","type":"uint32"}],"name":"deposits","type":"map(uint64,tuple)"}
 			]
+		},
+		{
+			"name": "created_proposals",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"created_proposals","type":"map(uint32,uint128)"}
+			]
+		},
+		{
+			"name": "_tmp_proposals",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_tmp_proposals","type":"map(uint32,uint128)"}
+			]
+		},
+		{
+			"name": "casted_votes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"casted_votes","type":"map(uint32,bool)"}
+			]
 		}
 	],
 	"data": [
 	],
 	"events": [
+		{
+			"name": "VoteCast",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"support","type":"bool"},
+				{"name":"votes","type":"uint128"},
+				{"name":"reason","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "UnlockVotes",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"value","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "UnlockCastedVotes",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ProposalCreationRejected",
+			"inputs": [
+				{"name":"votes_available","type":"uint128"},
+				{"name":"threshold","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ProposalCodeUpgraded",
+			"inputs": [
+				{"name":"votes_available","type":"uint128"},
+				{"name":"threshold","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
 	],
 	"fields": [
 		{"name":"_pubkey","type":"uint256"},
@@ -134,6 +301,9 @@
 		{"name":"current_version","type":"uint32"},
 		{"name":"voteEscrow","type":"address"},
 		{"name":"user","type":"address"},
+		{"name":"dao_root","type":"address"},
+		{"name":"_proposal_nonce","type":"uint32"},
+		{"name":"platform_code","type":"cell"},
 		{"name":"qubeBalance","type":"uint128"},
 		{"name":"veQubeBalance","type":"uint128"},
 		{"name":"expiredVeQubes","type":"uint128"},
@@ -143,6 +313,9 @@
 		{"name":"lastUpdateTime","type":"uint32"},
 		{"name":"lastEpochVoted","type":"uint32"},
 		{"name":"activeDeposits","type":"uint32"},
-		{"components":[{"name":"amount","type":"uint128"},{"name":"veAmount","type":"uint128"},{"name":"createdAt","type":"uint32"},{"name":"lockTime","type":"uint32"}],"name":"deposits","type":"map(uint64,tuple)"}
+		{"components":[{"name":"amount","type":"uint128"},{"name":"veAmount","type":"uint128"},{"name":"createdAt","type":"uint32"},{"name":"lockTime","type":"uint32"}],"name":"deposits","type":"map(uint64,tuple)"},
+		{"name":"created_proposals","type":"map(uint32,uint128)"},
+		{"name":"_tmp_proposals","type":"map(uint32,uint128)"},
+		{"name":"casted_votes","type":"map(uint32,bool)"}
 	]
 }

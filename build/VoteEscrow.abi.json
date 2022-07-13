@@ -385,6 +385,41 @@
 			]
 		},
 		{
+			"name": "castVote",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"support","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "castVoteWithReason",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"},
+				{"name":"support","type":"bool"},
+				{"name":"reason","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "tryUnlockVoteTokens",
+			"inputs": [
+				{"name":"proposal_id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "tryUnlockCastedVotes",
+			"inputs": [
+				{"name":"proposal_ids","type":"uint32[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "installPlatformCode",
 			"inputs": [
 				{"name":"code","type":"cell"},

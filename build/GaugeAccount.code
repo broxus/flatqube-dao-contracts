@@ -10,9 +10,9 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ../contracts/GaugeAccount.sol, 13
+.loc ../contracts/gauge/GaugeAccount.sol, 13
 THROW 100
-.loc ../contracts/GaugeAccount.sol, 0
+.loc ../contracts/gauge/GaugeAccount.sol, 0
 
 .macro upgrade
 DROP
@@ -23,7 +23,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/GaugeAccount.sol, 15
+.loc ../contracts/gauge/GaugeAccount.sol, 15
 OVER
 PUSHCONT {
 	LDREF
@@ -43,7 +43,7 @@ PUSHCONT {
 IFELSE
 LDMSGADDR
 ENDS
-.loc ../contracts/GaugeAccount.sol, 0
+.loc ../contracts/gauge/GaugeAccount.sol, 0
 CALLREF {
 	CALL $upgrade_internal_macro$
 }
@@ -54,26 +54,26 @@ CALLREF {
 THROW 0
 
 .macro upgrade_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 18
 PUSHINT 5000
 GETGLOB 9
 GETGLOB 20
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 19
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 19
 PUSHCONT {
-	.loc ../contracts/GaugeAccount.sol, 16
+	.loc ../contracts/gauge/GaugeAccount.sol, 16
 	PUSH S3
 	GETGLOB 10
 	EQUAL
 	PUSHCONT {
-		.loc ../contracts/GaugeAccount.sol, 17
+		.loc ../contracts/gauge/GaugeAccount.sol, 17
 		CALLREF {
 			CALL $_reserve_internal_macro$
 		}
 		PUSHINT 0
 		RAWRESERVE
-		.loc ../contracts/GaugeAccount.sol, 18
+		.loc ../contracts/gauge/GaugeAccount.sol, 18
 		NEWC
 		STSLICECONST x42_
 		STSLICE
@@ -82,39 +82,39 @@ PUSHCONT {
 		ENDC
 		PUSHPOW2 7
 		SENDRAWMSG
-		.loc ../contracts/GaugeAccount.sol, 19
+		.loc ../contracts/gauge/GaugeAccount.sol, 19
 		BLKDROP 4
-		.loc ../contracts/GaugeAccount.sol, 0
+		.loc ../contracts/gauge/GaugeAccount.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/GaugeAccount.sol, 24
+	.loc ../contracts/gauge/GaugeAccount.sol, 24
 	GETGLOB 20
 	NEWC
 	STSLICE
-	.loc ../contracts/GaugeAccount.sol, 25
+	.loc ../contracts/gauge/GaugeAccount.sol, 25
 	STSLICECONST x00
-	.loc ../contracts/GaugeAccount.sol, 26
+	.loc ../contracts/gauge/GaugeAccount.sol, 26
 	STSLICE
-	.loc ../contracts/GaugeAccount.sol, 29
+	.loc ../contracts/gauge/GaugeAccount.sol, 29
 	PUSHREF {
 	}
 	STREFR
-	.loc ../contracts/GaugeAccount.sol, 32
+	.loc ../contracts/gauge/GaugeAccount.sol, 32
 	GETGLOB 21
 	NEWC
 	STSLICE
-	.loc ../contracts/GaugeAccount.sol, 34
+	.loc ../contracts/gauge/GaugeAccount.sol, 34
 	STBREFR
-	.loc ../contracts/GaugeAccount.sol, 37
+	.loc ../contracts/gauge/GaugeAccount.sol, 37
 	ROLL 3
 	NEWC
 	STU 32
-	.loc ../contracts/GaugeAccount.sol, 38
+	.loc ../contracts/gauge/GaugeAccount.sol, 38
 	GETGLOB 10
 	STUR 32
-	.loc ../contracts/GaugeAccount.sol, 40
+	.loc ../contracts/gauge/GaugeAccount.sol, 40
 	STBREFR
-	.loc ../contracts/GaugeAccount.sol, 42
+	.loc ../contracts/gauge/GaugeAccount.sol, 42
 	PUSHINT 34
 	GETGLOBVAR
 	PUSHINT 33
@@ -225,10 +225,10 @@ PUSHCONT {
 	STBREFR
 	STBREFR
 	STBREFR
-	.loc ../contracts/GaugeAccount.sol, 71
+	.loc ../contracts/gauge/GaugeAccount.sol, 71
 	OVER
 	SETCODE
-	.loc ../contracts/GaugeAccount.sol, 74
+	.loc ../contracts/gauge/GaugeAccount.sol, 74
 	SWAP
 	CTOS
 	DUP
@@ -243,19 +243,19 @@ PUSHCONT {
 	CTOS
 	BLESS
 	POP C3
-	.loc ../contracts/GaugeAccount.sol, 75
+	.loc ../contracts/gauge/GaugeAccount.sol, 75
 	ENDC
 	CALLREF {
 		CALL $:onCodeUpgrade$
 	}
-	.loc ../contracts/GaugeAccount.sol, 15
+	.loc ../contracts/gauge/GaugeAccount.sol, 15
 }
 CALLX
-.loc ../contracts/GaugeAccount.sol, 0
+.loc ../contracts/gauge/GaugeAccount.sol, 0
 
 .internal-alias :onCodeUpgrade, 2
 .internal :onCodeUpgrade
-.loc ../contracts/GaugeAccount.sol, 79
+.loc ../contracts/gauge/GaugeAccount.sol, 79
 PUSHINT 0
 SETGLOB 10
 PUSHINT 0
@@ -329,56 +329,56 @@ SETGLOBVAR
 NEWDICT
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/GaugeAccount.sol, 80
+.loc ../contracts/gauge/GaugeAccount.sol, 80
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/GaugeAccount.sol, 82
+.loc ../contracts/gauge/GaugeAccount.sol, 82
 CTOS
-.loc ../contracts/GaugeAccount.sol, 83
+.loc ../contracts/gauge/GaugeAccount.sol, 83
 DUP
 LDMSGADDR
 LDU 8
 LDMSGADDR
 POP S4
 NIP
-.loc ../contracts/GaugeAccount.sol, 84
+.loc ../contracts/gauge/GaugeAccount.sol, 84
 SWAP
 SETGLOB 20
-.loc ../contracts/GaugeAccount.sol, 87
+.loc ../contracts/gauge/GaugeAccount.sol, 87
 OVER
 PUSHINT 0
 PUSHINT 1
 SSKIPFIRST
 POP S2
-.loc ../contracts/GaugeAccount.sol, 89
+.loc ../contracts/gauge/GaugeAccount.sol, 89
 OVER
 LDREFRTOS
 SWAP
 POP S3
-.loc ../contracts/GaugeAccount.sol, 90
+.loc ../contracts/gauge/GaugeAccount.sol, 90
 LDMSGADDR
 DROP
 SETGLOB 21
-.loc ../contracts/GaugeAccount.sol, 92
+.loc ../contracts/gauge/GaugeAccount.sol, 92
 SWAP
 LDREFRTOS
 NIP
-.loc ../contracts/GaugeAccount.sol, 94
+.loc ../contracts/gauge/GaugeAccount.sol, 94
 DUP
 LDU 32
 LDU 32
 POP S3
 DROP
 SETGLOB 10
-.loc ../contracts/GaugeAccount.sol, 95
+.loc ../contracts/gauge/GaugeAccount.sol, 95
 DUP
 LDMSGADDR
 POP S2
 SETGLOB 22
-.loc ../contracts/GaugeAccount.sol, 97
+.loc ../contracts/gauge/GaugeAccount.sol, 97
 DUP
 LDU 32
 LDU 32
@@ -391,7 +391,7 @@ SETGLOB 27
 SWAP
 SETINDEX 2
 SETGLOB 27
-.loc ../contracts/GaugeAccount.sol, 98
+.loc ../contracts/gauge/GaugeAccount.sol, 98
 LDU 32
 LDDICT
 ROTREV
@@ -401,7 +401,7 @@ LDU 32
 LDDICT
 DROP
 PAIR
-.loc ../contracts/GaugeAccount.sol, 100
+.loc ../contracts/gauge/GaugeAccount.sol, 100
 OVER
 FIRST
 PUSHREFSLICE
@@ -421,7 +421,7 @@ REPEAT
 BLKDROP2 2, 1
 PAIR
 SETGLOB 26
-.loc ../contracts/GaugeAccount.sol, 101
+.loc ../contracts/gauge/GaugeAccount.sol, 101
 OVER
 FIRST
 PUSHREFSLICE
@@ -441,7 +441,7 @@ REPEAT
 BLKDROP2 2, 1
 PAIR
 SETGLOB 28
-.loc ../contracts/GaugeAccount.sol, 103
+.loc ../contracts/gauge/GaugeAccount.sol, 103
 PUSHINT 0
 PUSHCONT {
 	DUP
@@ -450,7 +450,7 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/GaugeAccount.sol, 104
+	.loc ../contracts/gauge/GaugeAccount.sol, 104
 	PUSH2 S0, S2
 	SECOND
 	PUSHINT 32
@@ -489,7 +489,7 @@ PUSHCONT {
 	DICTUSETB
 	PAIR
 	SETGLOB 28
-	.loc ../contracts/GaugeAccount.sol, 105
+	.loc ../contracts/gauge/GaugeAccount.sol, 105
 	PUSH2 S0, S1
 	SECOND
 	PUSHINT 32
@@ -528,13 +528,13 @@ PUSHCONT {
 	DICTUSETB
 	PAIR
 	SETGLOB 28
-	.loc ../contracts/GaugeAccount.sol, 103
+	.loc ../contracts/gauge/GaugeAccount.sol, 103
 	INC
-	.loc ../contracts/GaugeAccount.sol, 0
+	.loc ../contracts/gauge/GaugeAccount.sol, 0
 }
 WHILE
 BLKDROP 3
-.loc ../contracts/GaugeAccount.sol, 108
+.loc ../contracts/gauge/GaugeAccount.sol, 108
 GETGLOB 22
 NEWC
 STSLICECONST x62_
@@ -550,7 +550,7 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/GaugeAccount.sol, 109
+.loc ../contracts/gauge/GaugeAccount.sol, 109
 GETGLOB 21
 GETGLOB 20
 NEWC
@@ -570,7 +570,7 @@ STBREFR
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/GaugeAccount.sol, 0
+.loc ../contracts/gauge/GaugeAccount.sol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -586,7 +586,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 13
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 13
 OVER
 PUSHCONT {
 	LDREF
@@ -602,7 +602,7 @@ PUSHCONT {
 IFELSE
 LDMSGADDR
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $onDeployRetry_internal_macro$
 }
@@ -612,19 +612,19 @@ IFREF {
 THROW 0
 
 .macro onDeployRetry_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 18
 PUSHINT 5000
 GETGLOB 9
 GETGLOB 20
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 14
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 14
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 15
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 15
 NEWC
 STSLICECONST x42_
 STSLICE
@@ -633,7 +633,7 @@ STZEROES
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 DROP2
 
 .macro increasePoolDebt
@@ -645,7 +645,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 18
 OVER
 PUSHCONT {
 	LDU 128
@@ -669,7 +669,7 @@ PUSHCONT {
 IFELSE
 LDMSGADDR
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $increasePoolDebt_internal_macro$
 }
@@ -680,19 +680,19 @@ CALLREF {
 THROW 0
 
 .macro increasePoolDebt_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 18
 PUSHINT 5000
 GETGLOB 9
 GETGLOB 20
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 19
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 19
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 21
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 21
 ROT
 GETGLOB 25
 DUP
@@ -702,7 +702,7 @@ ADD
 UFITS 128
 SETINDEX 2
 SETGLOB 25
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 22
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 22
 PUSHINT 0
 PUSHCONT {
 	DUP
@@ -711,7 +711,7 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 23
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 23
 	PUSH2 S0, S2
 	SECOND
 	PUSHINT 32
@@ -756,13 +756,13 @@ PUSHCONT {
 	DICTUSETB
 	PAIR
 	SETGLOB 26
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 22
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 22
 	INC
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 }
 WHILE
 DROP
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 26
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 26
 NEWC
 STSLICECONST x42_
 STSLICE
@@ -771,7 +771,7 @@ STZEROES
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 DROP
 
 .macro processWithdraw
@@ -783,7 +783,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 29
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 29
 OVER
 PUSHCONT {
 	LDU 128
@@ -834,7 +834,7 @@ PUSHCONT {
 IFELSE
 LDMSGADDR
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $processWithdraw_internal_macro$
 }
@@ -845,20 +845,20 @@ CALLREF {
 THROW 0
 
 .macro processWithdraw_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 18
 PUSHINT 5000
 GETGLOB 9
 GETGLOB 20
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 19
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 19
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 42
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 42
 	PUSH S10
 	GETGLOB 11
 	GREATER
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 43
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 43
 		XCHG S2
 		GETGLOB 21
 		GETGLOB 20
@@ -881,17 +881,17 @@ PUSHCONT {
 		ENDC
 		PUSHPOW2 7
 		SENDRAWMSG
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 44
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 44
 		BLKDROP 8
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 47
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 47
 	GETGLOB 29
 	INC
 	UFITS 32
 	SETGLOB 29
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 48
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 48
 	BLKSWAP 2, 9
 	BLKSWAP 3, 2
 	TUPLE 5
@@ -912,7 +912,7 @@ PUSHCONT {
 	PUSHINT 32
 	DICTUSETB
 	SETGLOB 30
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 49
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 49
 	ROLL 5
 	PUSHINT 0
 	DUP
@@ -946,7 +946,7 @@ PUSHCONT {
 	DICTUSETB
 	PUSHINT 34
 	SETGLOBVAR
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 50
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 50
 	GETGLOB 29
 	PUSHINT 33
 	GETGLOBVAR
@@ -957,23 +957,23 @@ PUSHCONT {
 	DICTUSETB
 	PUSHINT 33
 	SETGLOBVAR
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 52
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 52
 	GETGLOB 17
 	ROT
 	SETINDEX 6
 	DUP
 	SETGLOB 17
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 53
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 53
 	SWAP
 	SETINDEX 7
 	SETGLOB 17
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 55
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 55
 	CALLREF {
 		CALL $_reserve_internal_macro$
 	}
 	PUSHINT 0
 	RAWRESERVE
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 56
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 56
 	GETGLOB 29
 	GETGLOB 22
 	NEWC
@@ -985,10 +985,10 @@ PUSHCONT {
 	ENDC
 	PUSHPOW2 7
 	SENDRAWMSG
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 29
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 29
 }
 CALLX
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro processClaim
 DROP
@@ -999,7 +999,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 59
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 59
 OVER
 PUSHCONT {
 	LDU 128
@@ -1046,7 +1046,7 @@ PUSHCONT {
 IFELSE
 LDMSGADDR
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $processClaim_internal_macro$
 }
@@ -1057,18 +1057,18 @@ CALLREF {
 THROW 0
 
 .macro processClaim_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 18
 PUSHINT 5000
 GETGLOB 9
 GETGLOB 20
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 71
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 71
 GETGLOB 29
 INC
 UFITS 32
 SETGLOB 29
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 72
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 72
 TRIPLE
 GETGLOB 29
 PUSHINT 32
@@ -1087,7 +1087,7 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 32
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 73
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 73
 ROLL 5
 PUSHINT 0
 DUP
@@ -1121,7 +1121,7 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 74
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 74
 GETGLOB 29
 PUSHINT 33
 GETGLOBVAR
@@ -1132,23 +1132,23 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 33
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 76
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 76
 GETGLOB 17
 ROT
 SETINDEX 6
 DUP
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 77
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 77
 SWAP
 SETINDEX 7
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 79
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 79
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 80
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 80
 GETGLOB 29
 GETGLOB 22
 NEWC
@@ -1160,7 +1160,7 @@ STU 32
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro processDeposit
 DROP
@@ -1171,7 +1171,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 83
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 83
 OVER
 PUSHCONT {
 	LDU 32
@@ -1206,7 +1206,7 @@ PAIR
 SWAP
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $processDeposit_internal_macro$
 }
@@ -1217,18 +1217,18 @@ CALLREF {
 THROW 0
 
 .macro processDeposit_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 18
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 18
 PUSHINT 5000
 GETGLOB 9
 GETGLOB 20
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 97
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 97
 GETGLOB 29
 INC
 UFITS 32
 SETGLOB 29
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 98
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 98
 BLKSWAP 5, 6
 TUPLE 5
 GETGLOB 29
@@ -1248,7 +1248,7 @@ ROTREV
 PUSHINT 32
 DICTUSETB
 SETGLOB 31
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 99
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 99
 ROLL 5
 PUSHINT 0
 DUP
@@ -1282,7 +1282,7 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 100
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 100
 GETGLOB 29
 PUSHINT 33
 GETGLOBVAR
@@ -1293,23 +1293,23 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 33
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 102
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 102
 GETGLOB 17
 ROT
 SETINDEX 6
 DUP
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 103
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 103
 SWAP
 SETINDEX 7
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 105
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 105
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 106
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 106
 GETGLOB 29
 GETGLOB 22
 NEWC
@@ -1321,7 +1321,7 @@ STU 32
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro receiveVeAverage
 DROP
@@ -1332,13 +1332,13 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 109
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 109
 LDU 32
 LDU 128
 LDU 128
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $receiveVeAverage_internal_macro$
 }
@@ -1349,19 +1349,19 @@ CALLREF {
 THROW 0
 
 .macro receiveVeAverage_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 23
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 23
 PUSHINT 5001
 GETGLOB 9
 GETGLOB 22
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 112
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 112
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 114
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 114
 ROT
 PUSH S3
 PUSHINT 34
@@ -1422,17 +1422,17 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 115
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 115
 GETGLOB 17
 ROT
 SETINDEX 0
 DUP
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 116
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 116
 SWAP
 SETINDEX 1
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 118
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 118
 DUP
 PUSHINT 34
 GETGLOBVAR
@@ -1484,7 +1484,7 @@ STBREFR
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro receiveVeAccAverage
 DROP
@@ -1495,13 +1495,13 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 123
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 123
 LDU 32
 LDU 128
 LDU 128
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $receiveVeAccAverage_internal_macro$
 }
@@ -1512,7 +1512,7 @@ CALLREF {
 THROW 0
 
 .macro receiveVeAccAverage_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 28
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 28
 PUSHINT 5002
 GETGLOB 9
 GETGLOB 23
@@ -1522,13 +1522,13 @@ MYADDR
 SDEQ
 OR
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 126
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 126
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 128
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 128
 ROT
 PUSH S3
 PUSHINT 34
@@ -1589,17 +1589,17 @@ PUSHINT 32
 DICTUSETB
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 129
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 129
 GETGLOB 17
 ROT
 SETINDEX 2
 DUP
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 130
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 130
 SWAP
 SETINDEX 3
 SETGLOB 17
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 132
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 132
 GETGLOB 29
 PUSHINT 34
 GETGLOBVAR
@@ -1637,7 +1637,7 @@ FALSE
 CALLREF {
 	CALL $syncDepositsRecursive_internal_macro$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro syncDepositsRecursive
 DROP
@@ -1648,12 +1648,12 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 135
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 135
 LDU 32
 LDU 32
 LDI 1
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $syncDepositsRecursive_internal_macro$
 }
@@ -1668,7 +1668,7 @@ THROW 0
 CALL $syncDepositsRecursive_internal_macro$
 
 .macro syncDepositsRecursive_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 28
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 28
 PUSHINT 5002
 GETGLOB 9
 GETGLOB 23
@@ -1678,27 +1678,27 @@ MYADDR
 SDEQ
 OR
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 29
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 29
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 136
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 136
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 137
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 137
 		CALLREF {
 			CALL $_reserve_internal_macro$
 		}
 		PUSHINT 0
 		RAWRESERVE
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IF
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 141
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 141
 	DUP
 	CALLREF {
 		CALL $_syncDeposits_internal_macro$
 	}
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 143
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 143
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 144
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 144
 		TRUE
 		XCHG S2
 		MYADDR
@@ -1713,19 +1713,19 @@ PUSHCONT {
 		ENDC
 		PUSHPOW2 7
 		SENDRAWMSG
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IFNOTJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 148
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 148
 	DROP
 	GETGLOB 16
 	CALLREF {
 		CALL $calculateIntervalBalances_internal_macro$
 	}
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 149
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 149
 	GETGLOB 16
 	SETGLOB 17
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 151
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 151
 	XCHG S2
 	MYADDR
 	NEWC
@@ -1743,10 +1743,10 @@ PUSHCONT {
 	ENDC
 	PUSHPOW2 7
 	SENDRAWMSG
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 135
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 135
 }
 CALLX
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro updateQubeReward
 DROP
@@ -1757,12 +1757,12 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 156
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 156
 LDU 32
 LDU 128
 LDU 128
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $updateQubeReward_internal_macro$
 }
@@ -1773,20 +1773,20 @@ CALLREF {
 THROW 0
 
 .macro updateQubeReward_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 33
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 33
 GETGLOB 9
 MYADDR
 SDEQ
 THROWIFNOT 1007
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 34
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 34
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 159
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 159
 	CALLREF {
 		CALL $_reserve_internal_macro$
 	}
 	PUSHINT 0
 	RAWRESERVE
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 161
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 161
 	PUSH S2
 	PUSHINT 34
 	GETGLOBVAR
@@ -1819,7 +1819,7 @@ IFREFELSEREF
 		DUP
 		TUPLE 6
 }
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 163
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 163
 	DUP
 	INDEX 5
 	GETGLOB 25
@@ -1833,12 +1833,12 @@ IFREFELSEREF
 	SWAP
 	SETGLOB 25
 	SETGLOB 27
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 168
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 168
 	GETGLOB 26
 	FIRST
 	GTINT 0
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 169
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 169
 		PUSHINT 0
 		REVERSE 4, 0
 		MYADDR
@@ -1858,18 +1858,18 @@ IFREFELSEREF
 		ENDC
 		PUSHPOW2 7
 		SENDRAWMSG
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 175
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 175
 	DROP2
 	CALLREF {
 		CALL $_finalizeAction_internal_macro$
 	}
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 156
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 156
 }
 CALLX
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro updateExtraReward
 DROP
@@ -1880,7 +1880,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 178
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 178
 OVER
 PUSHCONT {
 	LDU 32
@@ -1898,7 +1898,7 @@ PUSHCONT {
 IFELSE
 LDU 256
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $updateExtraReward_internal_macro$
 }
@@ -1909,20 +1909,20 @@ CALLREF {
 THROW 0
 
 .macro updateExtraReward_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 33
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 33
 GETGLOB 9
 MYADDR
 SDEQ
 THROWIFNOT 1007
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 34
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 34
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 181
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 181
 	CALLREF {
 		CALL $_reserve_internal_macro$
 	}
 	PUSHINT 0
 	RAWRESERVE
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 183
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 183
 	PUSH S3
 	PUSHINT 34
 	GETGLOBVAR
@@ -1955,7 +1955,7 @@ IFREFELSEREF
 		DUP
 		TUPLE 6
 }
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 185
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 185
 	DUP2
 	INDEX 4
 	SECOND
@@ -2040,7 +2040,7 @@ IFREFELSEREF
 	DICTUSETB
 	PAIR
 	SETGLOB 28
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 192
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 192
 	GETGLOB 26
 	FIRST
 	DEC
@@ -2048,7 +2048,7 @@ IFREFELSEREF
 	OVER
 	GREATER
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 193
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 193
 		INC
 		REVERSE 4, 0
 		MYADDR
@@ -2068,25 +2068,25 @@ IFREFELSEREF
 		ENDC
 		PUSHPOW2 7
 		SENDRAWMSG
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 199
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 199
 	BLKDROP 3
 	CALLREF {
 		CALL $_finalizeAction_internal_macro$
 	}
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 178
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 178
 }
 CALLX
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .globl	_finalizeAction_internal
 .type	_finalizeAction_internal, @function
 CALL $_finalizeAction_internal_macro$
 
 .macro _finalizeAction_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 203
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 203
 DUP
 PUSHINT 33
 GETGLOBVAR
@@ -2114,7 +2114,7 @@ PUSHCONT {
 	IFELSE
 	EQINT 1
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 206
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 206
 		DUP
 		MYADDR
 		NEWC
@@ -2142,7 +2142,7 @@ PUSHCONT {
 		IFELSE
 		EQINT 2
 		PUSHCONT {
-			.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 208
+			.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 208
 			DUP
 			MYADDR
 			NEWC
@@ -2154,14 +2154,14 @@ PUSHCONT {
 			ENDC
 			PUSHPOW2 7
 			SENDRAWMSG
-			.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+			.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 		}
 		IF
 	}
 	IFELSE
 }
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 204
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 204
 	DUP
 	MYADDR
 	NEWC
@@ -2175,7 +2175,7 @@ PUSHCONT {
 	SENDRAWMSG
 }
 IFELSE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 DROP
 
 .macro processDeposit_final
@@ -2187,10 +2187,10 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 212
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 212
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $processDeposit_final_internal_macro$
 }
@@ -2201,18 +2201,18 @@ CALLREF {
 THROW 0
 
 .macro processDeposit_final_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 33
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 33
 GETGLOB 9
 MYADDR
 SDEQ
 THROWIFNOT 1007
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 213
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 213
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 215
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 215
 DUP
 PUSHINT 34
 GETGLOBVAR
@@ -2245,7 +2245,7 @@ IFREFELSEREF
 	DUP
 	TUPLE 6
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 216
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 216
 OVER
 GETGLOB 31
 PUSHINT 32
@@ -2265,7 +2265,7 @@ IFREFELSEREF
 	BLKPUSH 4, 0
 	TUPLE 5
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 218
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 218
 DUP
 SECOND
 OVER
@@ -2275,9 +2275,9 @@ INDEX 3
 CALLREF {
 	CALL $_saveDeposit_internal_macro$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 219
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 219
 GETGLOB 13
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 220
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 220
 GETGLOB 12
 PUSH S3
 SECOND
@@ -2289,7 +2289,7 @@ CALLREF {
 	CALL $_veBoost_internal_macro$
 }
 SETGLOB 13
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 222
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 222
 PUSH S2
 PUSHINT 33
 GETGLOBVAR
@@ -2298,14 +2298,14 @@ DICTUDEL
 DROP
 PUSHINT 33
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 223
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 223
 PUSH S2
 GETGLOB 31
 PUSHINT 32
 DICTUDEL
 DROP
 SETGLOB 31
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 224
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 224
 ROT
 PUSHINT 34
 GETGLOBVAR
@@ -2314,25 +2314,25 @@ DICTUDEL
 DROP
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 226
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 226
 PUSHINT 0
 DUP
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 227
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 227
 NEWDICT
 PAIR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 228
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 228
 PUSH S3
 INDEX 4
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 229
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 229
 	CALLREF {
 		CALL $_claimRewards_internal_macro$
 	}
 	BLKDROP2 2, 2
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 }
 IF
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 232
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 232
 PUSH S3
 FIRST
 GETGLOB 13
@@ -2369,7 +2369,7 @@ STBREFR
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro processWithdraw_final
 DROP
@@ -2380,10 +2380,10 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 237
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 237
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $processWithdraw_final_internal_macro$
 }
@@ -2394,20 +2394,20 @@ CALLREF {
 THROW 0
 
 .macro processWithdraw_final_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 33
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 33
 GETGLOB 9
 MYADDR
 SDEQ
 THROWIFNOT 1007
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 34
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 34
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 238
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 238
 	CALLREF {
 		CALL $_reserve_internal_macro$
 	}
 	PUSHINT 0
 	RAWRESERVE
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 240
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 240
 	DUP
 	PUSHINT 34
 	GETGLOBVAR
@@ -2440,7 +2440,7 @@ IFREFELSEREF
 		DUP
 		TUPLE 6
 }
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 241
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 241
 	OVER
 	GETGLOB 30
 	PUSHINT 32
@@ -2463,12 +2463,12 @@ IFREFELSEREF
 		}
 		TUPLE 5
 }
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 243
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 243
 	GETGLOB 11
 	GETGLOB 14
 	SUB
 	UFITS 128
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 244
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 244
 	OVER
 	FIRST
 	GETGLOB 11
@@ -2479,7 +2479,7 @@ IFREFELSEREF
 	GREATER
 	OR
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 245
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 245
 		DUP
 		INDEX 4
 		OVER
@@ -2507,28 +2507,28 @@ IFREFELSEREF
 		ENDC
 		PUSHPOW2 7
 		SENDRAWMSG
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 248
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 248
 		DROP2
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 251
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 251
 	DUP
 	FIRST
 	GETGLOB 11
 	SUBR
 	UFITS 128
 	SETGLOB 11
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 252
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 252
 	DUP
 	FIRST
 	GETGLOB 12
 	SUBR
 	UFITS 128
 	SETGLOB 12
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 254
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 254
 	GETGLOB 13
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 255
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 255
 	GETGLOB 12
 	PUSH S3
 	SECOND
@@ -2540,7 +2540,7 @@ IFREFELSEREF
 		CALL $_veBoost_internal_macro$
 	}
 	SETGLOB 13
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 257
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 257
 	PUSH S2
 	PUSHINT 33
 	GETGLOBVAR
@@ -2549,14 +2549,14 @@ IFREFELSEREF
 	DROP
 	PUSHINT 33
 	SETGLOBVAR
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 258
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 258
 	PUSH S2
 	GETGLOB 30
 	PUSHINT 32
 	DICTUDEL
 	DROP
 	SETGLOB 30
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 259
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 259
 	ROT
 	PUSHINT 34
 	GETGLOBVAR
@@ -2565,25 +2565,25 @@ IFREFELSEREF
 	DROP
 	PUSHINT 34
 	SETGLOBVAR
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 261
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 261
 	PUSHINT 0
 	DUP
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 262
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 262
 	NEWDICT
 	PAIR
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 263
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 263
 	PUSH S3
 	SECOND
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 264
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 264
 		CALLREF {
 			CALL $_claimRewards_internal_macro$
 		}
 		BLKDROP2 2, 2
-		.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 	}
 	IF
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 267
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 267
 	PUSH S3
 	INDEX 4
 	PUSH S4
@@ -2628,10 +2628,10 @@ IFREFELSEREF
 	ENDC
 	PUSHPOW2 7
 	SENDRAWMSG
-	.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 237
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 237
 }
 CALLX
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro processClaim_final
 DROP
@@ -2642,10 +2642,10 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 273
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 273
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 CALLREF {
 	CALL $processClaim_final_internal_macro$
 }
@@ -2656,18 +2656,18 @@ CALLREF {
 THROW 0
 
 .macro processClaim_final_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 33
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 33
 GETGLOB 9
 MYADDR
 SDEQ
 THROWIFNOT 1007
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 274
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 274
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 276
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 276
 DUP
 PUSHINT 34
 GETGLOBVAR
@@ -2700,7 +2700,7 @@ IFREFELSEREF
 	DUP
 	TUPLE 6
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 277
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 277
 OVER
 PUSHINT 32
 GETGLOBVAR
@@ -2722,9 +2722,9 @@ IFREFELSEREF
 	}
 	TRIPLE
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 279
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 279
 GETGLOB 13
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 280
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 280
 GETGLOB 12
 PUSH S3
 SECOND
@@ -2736,7 +2736,7 @@ CALLREF {
 	CALL $_veBoost_internal_macro$
 }
 SETGLOB 13
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 282
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 282
 PUSH S2
 PUSHINT 33
 GETGLOBVAR
@@ -2745,7 +2745,7 @@ DICTUDEL
 DROP
 PUSHINT 33
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 283
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 283
 PUSH S2
 PUSHINT 32
 GETGLOBVAR
@@ -2754,7 +2754,7 @@ DICTUDEL
 DROP
 PUSHINT 32
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 284
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 284
 ROT
 PUSHINT 34
 GETGLOBVAR
@@ -2763,11 +2763,11 @@ DICTUDEL
 DROP
 PUSHINT 34
 SETGLOBVAR
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 286
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 286
 CALLREF {
 	CALL $_claimRewards_internal_macro$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 288
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 288
 PUSH S3
 THIRD
 PUSH S4
@@ -2806,7 +2806,7 @@ STBREFR
 ENDC
 PUSHPOW2 7
 SENDRAWMSG
-.loc ../contracts/base/gauge_account/GaugeAccountBase.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountBase.sol, 0
 
 .macro receiveVeAccAddress
 DROP
@@ -2817,7 +2817,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 13
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 13
 OVER
 PUSHCONT {
 	LDREF
@@ -2827,7 +2827,7 @@ PUSHCONT {
 IF
 LDMSGADDR
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 CALLREF {
 	CALL $receiveVeAccAddress_internal_macro$
 }
@@ -2838,22 +2838,22 @@ CALLREF {
 THROW 0
 
 .macro receiveVeAccAddress_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 23
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 23
 PUSHINT 5001
 GETGLOB 9
 GETGLOB 22
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 14
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 14
 SETGLOB 23
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .globl	_reserve_internal
 .type	_reserve_internal, @function
 CALL $_reserve_internal_macro$
 
 .macro _reserve_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 38
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 38
 GETPARAM 7
 FIRST
 DEPTH
@@ -2863,14 +2863,14 @@ SUB
 UFITS 128
 PUSHINT 300000000
 MAX
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .globl	_veBoost_internal
 .type	_veBoost_internal, @function
 CALL $_veBoost_internal_macro$
 
 .macro _veBoost_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 65
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 65
 PUSH S3
 MULCONST 4
 UFITS 128
@@ -2887,7 +2887,7 @@ UFITS 128
 ADD
 UFITS 128
 MIN
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .macro calculateIntervalBalances
 DROP
@@ -2898,7 +2898,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 68
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 68
 OVER
 PUSHCONT {
 	LDU 128
@@ -2924,7 +2924,7 @@ ROLLREV 8
 TUPLE 8
 SWAP
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 CALLREF {
 	CALL $calculateIntervalBalances_internal_macro$
 }
@@ -2963,42 +2963,42 @@ THROW 0
 CALL $calculateIntervalBalances_internal_macro$
 
 .macro calculateIntervalBalances_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 68
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 68
 PUSHINT 0
 DUP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 72
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 72
 GETGLOB 17
 INDEX 5
 PUSH S3
 INDEX 5
 SUB
 UFITS 32
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 73
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 73
 PUSHINT 0
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 76
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 76
 OVER
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 81
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 81
 	GETGLOB 17
 	INDEX 4
 	GETGLOB 17
 	INDEX 5
 	MUL
 	UFITS 128
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 82
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 82
 	PUSH S5
 	INDEX 4
 	PUSH S6
 	INDEX 5
 	MUL
 	UFITS 128
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 83
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 83
 	DUP2
 	SUB
 	UFITS 128
 	PUSH S4
 	DIV
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 85
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 85
 	GETGLOB 17
 	THIRD
 	GETGLOB 17
@@ -3006,7 +3006,7 @@ PUSHCONT {
 	MUL
 	UFITS 128
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 86
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 86
 	PUSH S7
 	THIRD
 	PUSH S8
@@ -3014,13 +3014,13 @@ PUSHCONT {
 	MUL
 	UFITS 128
 	POP S2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 87
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 87
 	BLKPUSH 2, 2
 	SUB
 	UFITS 128
 	PUSH S5
 	DIV
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 89
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 89
 	GETGLOB 17
 	FIRST
 	GETGLOB 17
@@ -3028,7 +3028,7 @@ PUSHCONT {
 	MUL
 	UFITS 128
 	POP S4
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 90
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 90
 	PUSH S8
 	FIRST
 	PUSH S9
@@ -3036,13 +3036,13 @@ PUSHCONT {
 	MUL
 	UFITS 128
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 91
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 91
 	OVER2
 	SUB
 	UFITS 128
 	PUSH S6
 	DIV
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 93
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 93
 	GETGLOB 17
 	INDEX 6
 	GETGLOB 17
@@ -3050,7 +3050,7 @@ PUSHCONT {
 	MUL
 	UFITS 128
 	POP S5
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 94
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 94
 	PUSH S9
 	INDEX 6
 	PUSH S10
@@ -3058,37 +3058,37 @@ PUSHCONT {
 	MUL
 	UFITS 128
 	POP S4
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 95
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 95
 	BLKSWAP 2, 3
 	SUB
 	UFITS 128
 	PUSH S5
 	DIV
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 97
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 97
 	PUXC S3, S-1
 	SWAP2
 	CALLREF {
 		CALL $_veBoost_internal_macro$
 	}
 	POP S2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 101
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 101
 	GETGLOB 13
 	PUSH S2
 	MIN
 	POP S5
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 102
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 102
 	POP S3
 }
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 77
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 77
 	GETGLOB 12
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 78
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 78
 	GETGLOB 13
 	POP S4
 }
 IFELSE
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 DROP2
 BLKDROP2 1, 2
 
@@ -3096,7 +3096,7 @@ BLKDROP2 1, 2
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 106
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 106
 OVER
 PUSHCONT {
 	LDU 32
@@ -3133,7 +3133,7 @@ SWAP
 LDU 128
 LDU 32
 ENDS
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 CALLREF {
 	CALL $calculateRewards_internal_macro$
 }
@@ -3185,24 +3185,24 @@ THROW 0
 CALL $calculateRewards_internal_macro$
 
 .macro calculateRewards_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 106
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 106
 PUSHINT 0
 BLKPUSH 3, 0
 TUPLE 4
 PUSHINT 0
 BLKPUSH 2, 0
 TRIPLE
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 113
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 113
 PUSH S6
 FIRST
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 114
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 114
 	BLKSWAP 2, 4
 	BLKDROP2 5, 2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 IFNOTJMP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 116
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 116
 PUSHINT 0
 PUSH S7
 SECOND
@@ -3218,43 +3218,43 @@ CALLREF {
 	TUPLE 4
 }
 FIRST
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 119
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 119
 PUSH2 S3, S0
 LEQ
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 120
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 120
 	ROLL 3
 	PUXC S6, S-1
 	SETINDEX 3
 	POP S6
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 121
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 121
 	BLKSWAP 2, 4
 	BLKDROP2 5, 2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 IFJMP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 125
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 125
 PUSH S6
 INDEX 3
 PUSH S4
 LESS
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 126
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 126
 	PUSH S6
 	INDEX 3
 	OVER
 	LESS
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 127
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 127
 		PUSH2 S0, S3
 		MIN
 		PUXC S7, S-1
 		SETINDEX 3
 		POP S7
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 	}
 	IF
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 130
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 130
 	PUSH S7
 	FIRST
 	DEC
@@ -3273,7 +3273,7 @@ PUSHCONT {
 		TUPLE 4
 	}
 	SECOND
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 131
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 131
 	PUSH S8
 	FIRST
 	DEC
@@ -3283,7 +3283,7 @@ PUSHCONT {
 		GTINT -1
 	}
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 132
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 132
 		PUSH S8
 		INDEX 3
 		PUSH2 S1, S10
@@ -3302,7 +3302,7 @@ PUSHCONT {
 		FIRST
 		GEQ
 		PUSHCONT {
-			.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 133
+			.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 133
 			DUP
 			PUSHCONT {
 				PUSH2 S0, S10
@@ -3310,7 +3310,7 @@ PUSHCONT {
 				LESS
 			}
 			PUSHCONT {
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 134
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 134
 				PUSH2 S0, S10
 				SECOND
 				PUSHINT 32
@@ -3324,18 +3324,18 @@ PUSHCONT {
 					ENDS
 					TUPLE 4
 				}
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 135
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 135
 				PUSH2 S7, S0
 				FIRST
 				LEQ
 				PUSHCONT {
-					.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 136
+					.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 136
 					DROP
 					RETALT
-					.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+					.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 				}
 				IFJMP
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 139
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 139
 				DUP
 				SECOND
 				PUSHCONT {
@@ -3346,22 +3346,22 @@ PUSHCONT {
 					PUSH S7
 				}
 				IFELSE
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 140
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 140
 				DROP
 				PUSH2 S7, S0
 				SECOND
 				MIN
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 143
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 143
 				PUSH2 S0, S4
 				EQUAL
 				PUSHCONT {
-					.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 144
+					.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 144
 					PUSH S8
 					NIP
-					.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+					.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 				}
 				IF
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 148
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 148
 				PUSH2 S9, S11
 				SECOND
 				PUSH S13
@@ -3380,12 +3380,12 @@ PUSHCONT {
 				CALLREF {
 					CALL $_computeVesting_internal_macro$
 				}
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 165
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 165
 				ROT
 				PUXC S14, S-1
 				SETINDEX 1
 				POP S14
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 166
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 166
 				SWAP
 				PUSH2 S13, S13
 				THIRD
@@ -3394,61 +3394,61 @@ PUSHCONT {
 				UFITS 128
 				SETINDEX 2
 				POP S13
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 167
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 167
 				ROT
 				INDEX 3
 				PUXC S12, S-1
 				SETINDEX 0
 				POP S12
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 168
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 168
 				SWAP
 				PUXC S11, S-1
 				SETINDEX 3
 				POP S11
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 169
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 169
 				PUXC S9, S-1
 				SETINDEX 0
 				POP S9
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 133
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 133
 				INC
-				.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 			}
 			WHILEBRK
 			DROP
-			.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 171
+			.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 171
 			RETALT
-			.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+			.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 		}
 		IFJMP
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 131
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 131
 		DEC
 		UFITS 256
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 	}
 	WHILEBRK
 	DROP2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 IF
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 176
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 176
 BLKDROP 5
 BLKDROP2 1, 2
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .globl	_claimRewards_internal
 .type	_claimRewards_internal, @function
 CALL $_claimRewards_internal_macro$
 
 .macro _claimRewards_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 180
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 180
 GETGLOB 25
 THIRD
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 181
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 181
 GETGLOB 25
 PUSHINT 0
 SETINDEX 2
 SETGLOB 25
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 183
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 183
 GETGLOB 26
 FIRST
 PUSHINT 0
@@ -3468,7 +3468,7 @@ PUSHCONT {
 REPEAT
 BLKDROP2 2, 1
 PAIR
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 185
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 185
 PUSHINT 0
 PUSHCONT {
 	DUP
@@ -3477,7 +3477,7 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 186
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 186
 	DUP
 	GETGLOB 26
 	SECOND
@@ -3507,7 +3507,7 @@ PUSHCONT {
 	DICTUSETB
 	PAIR
 	POP S2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 187
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 187
 	GETGLOB 26
 	UNPAIR
 	PUXC S2, S-1
@@ -3542,43 +3542,43 @@ PUSHCONT {
 	DICTUSETB
 	PAIR
 	SETGLOB 26
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 185
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 185
 	INC
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 WHILE
 DROP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .globl	_saveDeposit_internal
 .type	_saveDeposit_internal, @function
 CALL $_saveDeposit_internal_macro$
 
 .macro _saveDeposit_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 193
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 193
 GETGLOB 11
 PUSH S3
 ADD
 UFITS 128
 SETGLOB 11
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 194
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 194
 GETGLOB 12
 PUSH S2
 ADD
 UFITS 128
 SETGLOB 12
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 196
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 196
 DUP
 GTINT 0
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 202
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 202
 	NOW
 	OVER
 	ADD
 	UFITS 32
 	MULCONST 100
 	UFITS 64
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 204
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 204
 	PUSHCONT {
 		DUP
 		GETGLOB 24
@@ -3602,13 +3602,13 @@ IFREFELSEREF
 		NEQINT 0
 	}
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 205
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 205
 		INC
 		UFITS 64
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 	}
 	WHILE
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 207
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 207
 	BLKPUSH 3, 3
 	NOW
 	TUPLE 4
@@ -3627,21 +3627,21 @@ IFREFELSEREF
 	PUSHINT 64
 	DICTUSETB
 	SETGLOB 24
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 208
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 208
 	GETGLOB 14
 	PUSH S3
 	ADD
 	UFITS 128
 	SETGLOB 14
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 209
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 209
 	GETGLOB 19
 	INC
 	UFITS 32
 	SETGLOB 19
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 IF
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 BLKDROP 3
 
 .globl	_updateBalanceAverage_internal
@@ -3649,7 +3649,7 @@ BLKDROP 3
 CALL $_updateBalanceAverage_internal_macro$
 
 .macro _updateBalanceAverage_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 216
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 216
 DUP
 GETGLOB 18
 LEQ
@@ -3657,7 +3657,7 @@ GETGLOB 18
 EQINT 0
 OR
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 218
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 218
 	GETGLOB 18
 	PUSHCONT {
 		GETGLOB 18
@@ -3667,17 +3667,17 @@ PUSHCONT {
 	}
 	IFELSE
 	SETGLOB 18
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 219
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 219
 	DROP
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 IFJMP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 222
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 222
 DUP
 GETGLOB 18
 SUB
 UFITS 32
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 223
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 223
 GETGLOB 16
 INDEX 4
 GETGLOB 16
@@ -3690,7 +3690,7 @@ MUL
 UFITS 128
 ADD
 UFITS 128
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 224
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 224
 GETGLOB 16
 INDEX 5
 PUSH S2
@@ -3702,7 +3702,7 @@ SWAP
 SETINDEX 4
 DUP
 SETGLOB 16
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 225
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 225
 DUP
 INDEX 5
 ROT
@@ -3710,19 +3710,19 @@ ADD
 UFITS 32
 SETINDEX 5
 SETGLOB 16
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 226
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 226
 SETGLOB 18
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .globl	_syncDeposits_internal
 .type	_syncDeposits_internal, @function
 CALL $_syncDeposits_internal_macro$
 
 .macro _syncDeposits_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 230
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 230
 FALSE
 DUP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 235
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 235
 PUSHINT -1
 GETGLOB 24
 PUSHINT 64
@@ -3738,61 +3738,61 @@ IFREF {
 	TUPLE 4
 	PAIR
 }
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 236
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 236
 PUSHINT 0
 DUP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 237
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 237
 BLKPUSH 3, 0
 TUPLE 4
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 238
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 238
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 241
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 241
 	PUSH S3
 	GTINT 49
 	PUSH S3
 	ISNULL
 	OR
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 242
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 242
 		PUSH S2
 		ISNULL
 		POP S5
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 243
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 243
 		RETALT
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 245
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 245
 	PUSH2 S2, S2
 	ISNULL
 	THROWIF 63
 	UNPAIR
 	BLKDROP2 2, 2
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 247
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 247
 	DUP
 	INDEX 3
 	OVER
 	THIRD
 	ADD
 	UFITS 32
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 249
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 249
 	PUSH2 S6, S0
 	LESS
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 250
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 250
 		TRUE
 		POP S6
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 251
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 251
 		DROP
 		RETALT
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 254
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 254
 	CALLREF {
 		CALL $_updateBalanceAverage_internal_macro$
 	}
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 256
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 256
 	DUP
 	SECOND
 	OVER
@@ -3803,14 +3803,14 @@ PUSHCONT {
 	SUBR
 	UFITS 128
 	SETGLOB 12
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 257
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 257
 	DUP
 	FIRST
 	GETGLOB 14
 	SUBR
 	UFITS 128
 	SETGLOB 14
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 258
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 258
 	DUP
 	SECOND
 	OVER
@@ -3821,24 +3821,24 @@ PUSHCONT {
 	ADD
 	UFITS 128
 	SETGLOB 15
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 259
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 259
 	GETGLOB 19
 	DEC
 	UFITS 32
 	SETGLOB 19
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 260
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 260
 	OVER
 	GETGLOB 24
 	PUSHINT 64
 	DICTUDEL
 	DROP
 	SETGLOB 24
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 262
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 262
 	PUSH S3
 	INC
 	UFITS 32
 	POP S4
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 263
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 263
 	OVER
 	GETGLOB 24
 	PUSHINT 64
@@ -3855,23 +3855,23 @@ PUSHCONT {
 		PAIR
 	}
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 AGAINBRK
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 265
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 265
 BLKDROP 4
 DUP
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 266
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 266
 	OVER
 	CALLREF {
 		CALL $_updateBalanceAverage_internal_macro$
 	}
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 267
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 267
 	GETGLOB 15
 	GTINT 0
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 268
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 268
 		GETGLOB 15
 		GETGLOB 21
 		GETGLOB 20
@@ -3889,25 +3889,25 @@ PUSHCONT {
 		ENDC
 		PUSHINT 0
 		SENDRAWMSG
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 269
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 269
 		PUSHINT 0
 		SETGLOB 15
-		.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 	}
 	IF
-	.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 }
 IF
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 272
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 272
 NIP
-.loc ../contracts/base/gauge_account/GaugeAccountHelpers.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountHelpers.sol, 0
 
 .globl	_rangeSum_internal
 .type	_rangeSum_internal, @function
 CALL $_rangeSum_internal_macro$
 
 .macro _rangeSum_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 10
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 10
 DUP
 MODPOW2 1
 PUSHCONT {
@@ -3932,14 +3932,14 @@ PUSHCONT {
 }
 IFELSE
 NIP
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 
 .globl	_unlockedShareForInterval_internal
 .type	_unlockedShareForInterval_internal, @function
 CALL $_unlockedShareForInterval_internal_macro$
 
 .macro _unlockedShareForInterval_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 15
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 15
 OVER
 CALLREF {
 	CALL $_rangeSum_internal_macro$
@@ -3950,23 +3950,23 @@ SWAP
 DIV
 SWAP
 DIV
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 
 .globl	_calcUnlockedForInterval_internal
 .type	_calcUnlockedForInterval_internal, @function
 CALL $_calcUnlockedForInterval_internal_macro$
 
 .macro _calcUnlockedForInterval_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 22
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 22
 BLKPUSH 3, 2
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 24
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 24
 GREATER
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 25
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 25
 	BLKPUSH 2, 2
 	SUB
 	UFITS 32
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 27
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 27
 	DUP
 	PUSHINT 1000000000000000000
 	PUSH S5
@@ -3980,15 +3980,15 @@ PUSHCONT {
 	SUBR
 	UFITS 128
 	POP S2
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 28
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 28
 	PUSH S3
 	SUBR
 	UFITS 32
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 }
 IF
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 31
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 31
 DUP
 SWAP2
 CALLREF {
@@ -3999,21 +3999,21 @@ MULDIV
 UFITS 128
 SUB
 UFITS 128
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 32
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 32
 TUCK
 SUB
 UFITS 128
 SWAP
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 
 .globl	_calcUnlocked_internal
 .type	_calcUnlocked_internal, @function
 CALL $_calcUnlocked_internal_macro$
 
 .macro _calcUnlocked_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 35
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 35
 PUSHINT 0
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 40
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 40
 PUSH S5
 EQINT 0
 PUSH S3
@@ -4023,13 +4023,13 @@ GEQ
 AND
 OR
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 41
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 41
 	BLKDROP 6
 	PUSHINT 0
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 }
 IFJMP
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 44
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 44
 PUSH S2
 PUSHCONT {
 	PUSH S2
@@ -4039,10 +4039,10 @@ PUSHCONT {
 }
 IFELSE
 POP S3
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 45
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 45
 PUSH2 S2, S4
 MIN
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 47
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 47
 ROLL 6
 SWAP
 ROLL 5
@@ -4052,11 +4052,11 @@ PUSH S3
 CALLREF {
 	CALL $_calcUnlockedForInterval_internal_macro$
 }
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 48
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 48
 BLKPUSH 2, 5
 GREATER
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 49
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 49
 	PUSH3 S0, S5, S4
 	SUB
 	UFITS 32
@@ -4070,14 +4070,14 @@ PUSHCONT {
 	ADD
 	UFITS 128
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 }
 IF
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 51
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 51
 DROP
 ADD
 UFITS 128
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 BLKDROP2 3, 1
 
 .globl	_computeVesting_internal
@@ -4085,16 +4085,16 @@ BLKDROP2 3, 1
 CALL $_computeVesting_internal_macro$
 
 .macro _computeVesting_internal_macro
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 54
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 54
 PUSHINT 0
 BLKPUSH 2, 0
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 66
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 66
 PUSH S12
 ROLL 11
 PUSHINT 1000000000000000000
 MULDIV
 UFITS 128
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 67
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 67
 ROLL 12
 ROLL 11
 PUSHINT 1000000000000000000
@@ -4102,28 +4102,28 @@ MULDIV
 UFITS 128
 SUBR
 UFITS 128
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 69
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 69
 PUSH S5
 GTINT 0
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 71
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 71
 	PUSH2 S0, S5
 	MUL
 	UFITS 128
 	PUSHINT 1000
 	DIV
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 72
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 72
 	DUP2
 	SUB
 	UFITS 128
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 74
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 74
 	PUSH3 S1, S11, S10
 	BLKPUSH 2, 12
 	CALLREF {
 		CALL $_calcUnlocked_internal_macro$
 	}
 	POP S5
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 77
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 77
 	PUSH2 S11, S6
 	GEQ
 	PUSHCONT {
@@ -4135,7 +4135,7 @@ PUSHCONT {
 		UFITS 32
 	}
 	IFELSE
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 78
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 78
 	PUSH2 S0, S9
 	GEQ
 	PUSHCONT {
@@ -4150,7 +4150,7 @@ PUSHCONT {
 		UFITS 128
 	}
 	IFELSE
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 83
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 83
 	PUSH S14
 	PUSHCONT {
 		PUSH2 S14, S0
@@ -4161,27 +4161,27 @@ PUSHCONT {
 		PUSHINT 0
 	}
 	IFELSE
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 84
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 84
 	PUSH2 S4, S7
 	SUB
 	UFITS 128
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 85
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 85
 	DUP2
 	ADD
 	UFITS 128
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 88
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 88
 	DUP
 	PUSHCONT {
 		PUSH S2
 		PUSHCONT {
 			OVER
 			PUSHCONT {
-				.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 98
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 98
 				PUSH S11
 				PUSH S17
 				SUB
 				UFITS 32
-				.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 99
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 99
 				PUSH S3
 				MUL
 				UFITS 128
@@ -4193,7 +4193,7 @@ PUSHCONT {
 				OVER
 				DIV
 				UFITS 32
-				.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 100
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 100
 				PUSH S17
 				SWAP
 				PUSH S15
@@ -4202,13 +4202,13 @@ PUSHCONT {
 				UFITS 32
 			}
 			PUSHCONT {
-				.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 95
+				.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 95
 				PUSH S11
 			}
 			IFELSE
 		}
 		PUSHCONT {
-			.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 92
+			.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 92
 			PUSH S16
 			PUSH S14
 			ADD
@@ -4217,12 +4217,12 @@ PUSHCONT {
 		IFELSE
 	}
 	PUSHCONT {
-		.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 89
+		.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 89
 		PUSH S16
 	}
 	IFELSE
 	POP S9
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 103
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 103
 	BLKDROP 3
 	PUSH S11
 	GTINT 0
@@ -4238,7 +4238,7 @@ PUSHCONT {
 	}
 	IFELSE
 	POP S6
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 104
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 104
 	PUSH S14
 	ROLL 4
 	ADD
@@ -4250,7 +4250,7 @@ PUSHCONT {
 	SUB
 	UFITS 128
 	POP S7
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 105
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 105
 	ROT
 	ADD
 	UFITS 128
@@ -4258,25 +4258,25 @@ PUSHCONT {
 	ADD
 	UFITS 128
 	POP S4
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 	DROP
 }
 PUSHCONT {
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 107
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 107
 	DUP
 	POP S3
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 108
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 108
 	PUSH S10
 	POP S4
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 109
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 109
 	PUSH S4
 	POP S2
-	.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+	.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 }
 IFELSE
 DROP
 BLKDROP2 7, 3
-.loc ../contracts/base/gauge_account/GaugeAccountVesting.sol, 0
+.loc ../contracts/gauge/base/gauge_account/GaugeAccountVesting.sol, 0
 
 .macro c4_to_c7
 PUSHROOT

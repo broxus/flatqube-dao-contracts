@@ -3,7 +3,6 @@ const {expect} = require("chai");
 const BigNumber = require('bignumber.js');
 const Token = require("./wrappers/token");
 const VoteEscrow = require('./wrappers/vote_ecsrow');
-const {factorySource} = require("../../build/factorySource");
 const {Dimensions, zeroAddress, Address} = require("locklift");
 const {getRandomNonce} = require("locklift/build/utils");
 const {convertCrystal} = locklift.utils;
@@ -30,13 +29,13 @@ const runTargets = async function(wallet, targets, methods, params_list, values)
         return await target.methods[method](params).encodeInternal();
     }));
 
-    return await wallet.accountContract.methods.sendTransactions({
+    return await locklift.features.trace(wallet.accountContract.methods.sendTransactions({
         dest: targets.map((contract) => contract.address.toString()),
         value: values,
         bounce: new Array(targets.length).fill(true),
         flags: new Array(targets.length).fill(0),
         payload: bodies,
-    }).sendExternal({publicKey: wallet.publicKey});
+    }).sendExternal({publicKey: wallet.publicKey}));
 }
 
 
@@ -69,7 +68,6 @@ const deployUsers = async function(count, initial_balance) {
         const _values = values.slice(i, i + chunkSize);
         // console.log(_values);
         await waitFinalized(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
-        console.log(i, chunkSize);
     }
 
     // await sleep(1000);
@@ -141,6 +139,7 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
         },
         locklift.utils.convertCrystal(2, Dimensions.Nano),
     );
+    await locklift.features.trace(tx);
 
     logger.log(`Token root address: ${_root.address.toString()}`);
 

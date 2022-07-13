@@ -89,8 +89,7 @@ class VoteEscrow {
     async voteEscrowAccount(account) {
         const addr = account.address === undefined ? account : account.address;
         const acc_addr = (await this.contract.methods.getVoteEscrowAccountAddress({answerId: 0, user: addr.toString()}).call()).value0;
-        const ve_acc = await locklift.factory.getContract('VoteEscrowAccount');
-        const ve = new locklift.provider.ever.Contract(ve_acc.abi, acc_addr);
+        const ve = await locklift.factory.getDeployedContract('VoteEscrowAccount', acc_addr);
         return new VoteEscrowAccount(ve);
     }
 
@@ -340,7 +339,7 @@ class VoteEscrow {
         let gas = null;
         if (calc_min_gas) {
             const ve_acc = await this.voteEscrowAccount(from_wallet._owner);
-            gas = (await ve_acc.contract.methods.calculateMinGas({answerId: 0}).call()).min_gas;
+            gas = (await ve_acc.contract.methods.calculateMinGas({answerId: 0}).call({})).min_gas;
             gas = new BigNumber(gas);
             gas = gas.plus(new BigNumber(3*10**9)).toFixed(0);
         }

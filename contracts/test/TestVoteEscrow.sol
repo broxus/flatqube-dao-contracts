@@ -4,7 +4,7 @@ pragma AbiHeader expire;
 
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "../libraries/Errors.sol";
-import "../base/vote_escrow/VoteEscrowBase.sol";
+import "../vote_escrow/base/vote_escrow/VoteEscrowBase.sol";
 
 
 contract TestVoteEscrow is VoteEscrowBase {
