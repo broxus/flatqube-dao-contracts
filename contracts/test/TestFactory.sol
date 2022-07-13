@@ -38,7 +38,7 @@ contract TestFactory is RandomNonce {
 
             wallets[pubkeys[i]] = new_wallet;
 
-            emit NewWallet(new_wallet, pubkeys[i]);
+//            emit NewWallet(new_wallet, pubkeys[i]);
         }
     }
 

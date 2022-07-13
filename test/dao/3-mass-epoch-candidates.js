@@ -73,7 +73,8 @@ describe("Vote Escrow mass deposits scenario", async function() {
 
         it('Deploy Vote Escrow', async function() {
             vote_escrow = await setupVoteEscrow({
-                owner, qube:qube_root, whitelist_price: whitelist_price, gauge_min_votes_ratio: 0, max_lock: lock_time, voting_time: 10, epoch_time: 20
+                owner, qube:qube_root, whitelist_price: whitelist_price,
+                gauge_min_votes_ratio: 0, max_lock: lock_time, voting_time: 10, epoch_time: 20
             });
 
             const details = await vote_escrow.getCurrentEpochDetails();
@@ -85,15 +86,15 @@ describe("Vote Escrow mass deposits scenario", async function() {
         let total_votes = 0;
 
         it('Making deposits', async function() {
-            await vote_escrow.deposit(user_qube_wallet, big_gauge_deposit, lock_time, 0, {compute: [null]}, false);
+            await vote_escrow.deposit(user_qube_wallet, big_gauge_deposit, lock_time, 0,  false);
 
             const mid = Math.floor(voters_count / 2);
             await Promise.all(voters_qube_wallets.slice(0, mid).map(async (qube_wallet, index) => {
-                await vote_escrow.deposit(qube_wallet, gauge_deposit, lock_time, index, {compute: [null]}, false);
+                await vote_escrow.deposit(qube_wallet, gauge_deposit, lock_time, index,  false);
             }))
 
             await Promise.all(voters_qube_wallets.slice(mid).map(async (qube_wallet, index) => {
-                await vote_escrow.deposit(qube_wallet, gauge_deposit, lock_time, index, {compute: [null]}, false);
+                await vote_escrow.deposit(qube_wallet, gauge_deposit, lock_time, index,  false);
             }))
 
             await vote_escrow.checkQubeBalance(gauge_deposit * voters_qube_wallets.length + big_gauge_deposit);

@@ -160,7 +160,7 @@ PUSHCONT {
 	PUSHINT 0
 	SENDRAWMSG
 	.loc ../contracts/test/TestFactory.sol, 39
-	PUSH3 S0, S1, S3
+	PUSH2 S1, S3
 	SECOND
 	PUSHINT 32
 	DICTUGET
@@ -170,22 +170,6 @@ PUSHCONT {
 	PUSHPOW2 8
 	DICTUSET
 	SETGLOB 12
-	.loc ../contracts/test/TestFactory.sol, 41
-	PUSH2 S1, S3
-	SECOND
-	PUSHINT 32
-	DICTUGET
-	THROWIFNOT 50
-	PLDU 256
-	SWAP
-	PUSHSLICE xc0000000000000000000000000739ff608
-	NEWC
-	STSLICE
-	STSLICE
-	STU 256
-	ENDC
-	PUSHINT 0
-	SENDRAWMSG
 	.loc ../contracts/test/TestFactory.sol, 22
 	INC
 	.loc ../contracts/test/TestFactory.sol, 0
