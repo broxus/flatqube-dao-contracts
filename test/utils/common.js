@@ -5,7 +5,7 @@ const Token = require("./wrappers/token");
 const VoteEscrow = require('./wrappers/vote_ecsrow');
 const {Dimensions, zeroAddress, Address} = require("locklift");
 const {getRandomNonce} = require("locklift/build/utils");
-const {convertCrystal} = locklift.utils;
+const {toNano} = locklift.utils;
 const {waitFinalized} = require('./waiter')
 
 
@@ -40,7 +40,7 @@ const runTargets = async function(wallet, targets, methods, params_list, values)
 
 
 const deployUsers = async function(count, initial_balance) {
-    let signers = await Promise.all([...Array(count).keys()].map(async (i) => await locklift.provider.keyStore.getSigner(i.toString())));
+    let signers = await Promise.all([...Array(count).keys()].map(async (i) => await locklift.keystore.getSigner(i.toString())));
     signers = signers.slice(0, count);
 
     let signers_map = {};
@@ -49,18 +49,16 @@ const deployUsers = async function(count, initial_balance) {
     })
 
     const TestWallet = await locklift.factory.getContractArtifacts('TestWallet');
-    const {contract: factory, tx} = await locklift.factory.deployContract(
-        'TestFactory',
-        {
-            initParams: { wallet_code: TestWallet.code, _randomNonce: getRandomNonce() },
-            publicKey: signers[0].publicKey
-        },
-        {},
-        convertCrystal(count * initial_balance + 100, Dimensions.Nano)
-    );
+    const {contract: factory, tx} = await locklift.factory.deployContract({
+        contract: 'TestFactory',
+        initParams: { wallet_code: TestWallet.code, _randomNonce: getRandomNonce() },
+        publicKey: signers[0].publicKey,
+        constructorParams: {},
+        value: toNano(count * initial_balance + 100)
+    });
 
     const pubkeys = signers.map((signer) => { return `0x${signer.publicKey}` });
-    const values = Array(count).fill(convertCrystal(initial_balance, Dimensions.Nano));
+    const values = Array(count).fill(toNano(initial_balance));
 
     const chunkSize = 60;
     for (let i = 0; i < count; i += chunkSize) {
@@ -86,21 +84,19 @@ const deployUsers = async function(count, initial_balance) {
 
 
 const deployUser = async function(initial_balance=100) {
-    const signer = await locklift.provider.keyStore.getSigner('0');
+    const signer = await locklift.keystore.getSigner('0');
     let accountsFactory = locklift.factory.getAccountsFactory('TestWallet');
-    const {account: _user, tx} = await accountsFactory.deployNewAccount(
-        signer.publicKey,
-        locklift.utils.convertCrystal(initial_balance, Dimensions.Nano).toString(),
-        {
-            initParams: {
-                _randomNonce: locklift.utils.getRandomNonce(),
-            },
-            publicKey: signer.publicKey,
+
+    const {account: _user, tx} = await locklift.tracing.trace(accountsFactory.deployNewAccount({
+        publicKey: signer.publicKey,
+        value: locklift.utils.toNano(initial_balance).toString(),
+        initParams: {
+            _randomNonce: locklift.utils.getRandomNonce(),
         },
-        {
+        constructorParams: {
             owner_pubkey: `0x${signer.publicKey}`
         },
-    );
+    }));
 
     const userBalance = await locklift.provider.getBalance(_user.address);
     expect(Number(userBalance)).to.be.above(0, 'Bad user balance');
@@ -111,24 +107,22 @@ const deployUser = async function(initial_balance=100) {
 
 
 const setupTokenRoot = async function(token_name, token_symbol, owner) {
-    const signer = await locklift.provider.keyStore.getSigner('0');
+    const signer = await locklift.keystore.getSigner('0');
 
     const TokenWallet = await locklift.factory.getContractArtifacts('TokenWallet');
-    const {contract: _root, tx} = await locklift.factory.deployContract(
-        'TokenRoot',
-        {
-            initParams: {
-                name_: token_name,
-                symbol_: token_symbol,
-                decimals_: 9,
-                rootOwner_: owner.address,
-                walletCode_: TokenWallet.code,
-                randomNonce_: locklift.utils.getRandomNonce(),
-                deployer_: zeroAddress
-            },
-            publicKey: signer.publicKey,
+    const {contract: _root, tx} = await locklift.tracing.trace(locklift.factory.deployContract({
+        contract: 'TokenRoot',
+        initParams: {
+            name_: token_name,
+            symbol_: token_symbol,
+            decimals_: 9,
+            rootOwner_: owner.address,
+            walletCode_: TokenWallet.code,
+            randomNonce_: locklift.utils.getRandomNonce(),
+            deployer_: zeroAddress
         },
-        {
+        publicKey: signer.publicKey,
+        constructorParams: {
             initialSupplyTo: zeroAddress,
             initialSupply: 0,
             deployWalletValue: 0,
@@ -137,9 +131,8 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
             burnPaused: false,
             remainingGasTo: owner.address
         },
-        locklift.utils.convertCrystal(2, Dimensions.Nano),
-    );
-    await locklift.tracing.trace(tx);
+        value: locklift.utils.toNano(2)
+    }));
 
     logger.log(`Token root address: ${_root.address.toString()}`);
 
@@ -169,29 +162,27 @@ const setupVoteEscrow = async function({
     const Platform = await locklift.factory.getContractArtifacts('Platform');
     const VoteEscrowAccount = await locklift.factory.getContractArtifacts('VoteEscrowAccount');
 
-    const signer = await locklift.provider.keyStore.getSigner('0');
-    const {contract: deployer, tx} = await locklift.factory.deployContract(
-        'VoteEscrowDeployer',
-        {
-            initParams: {
-                _randomNonce: locklift.utils.getRandomNonce(),
-                PlatformCode: Platform.code,
-                veAccountCode: VoteEscrowAccount.code
-            },
-            publicKey: signer.publicKey,
+    const signer = await locklift.keystore.getSigner('0');
+    const {contract: deployer, tx} = await locklift.factory.deployContract({
+        contract: 'VoteEscrowDeployer',
+        initParams: {
+            _randomNonce: locklift.utils.getRandomNonce(),
+            PlatformCode: Platform.code,
+            veAccountCode: VoteEscrowAccount.code
         },
-        {},
-        locklift.utils.convertCrystal(25, Dimensions.Nano),
-    );
+        publicKey: signer.publicKey,
+        constructorParams: {},
+        value: locklift.utils.toNano(25),
+    });
 
     logger.log(`Deployed Vote Escrow deployer`);
-    await deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer.publicKey});
+    await locklift.tracing.trace(deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer.publicKey}));
 
     if (start_time === null) {
         start_time = Math.floor(Date.now() / 1000 + 5);
     }
     logger.log(`Set Vote Escrow code`);
-    const tx2 = await deployer.methods.deployVoteEscrow({
+    const tx2 = await locklift.tracing.trace(deployer.methods.deployVoteEscrow({
         owner: owner.address,
         qube: qube.address,
         start_time,
@@ -207,7 +198,7 @@ const setupVoteEscrow = async function({
         gauge_max_downtime,
         max_gauges_per_vote,
         whitelist_price
-    }).sendExternal({publicKey: signer.publicKey});
+    }).sendExternal({publicKey: signer.publicKey}));
 
     const ve_addr = tx2.output._vote_escrow;
     const ve = await VoteEscrow.from_addr(ve_addr, owner);

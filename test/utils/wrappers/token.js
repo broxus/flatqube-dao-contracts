@@ -1,5 +1,5 @@
 const {
-    convertCrystal
+    toNano
 } = locklift.utils;
 const logger = require("mocha-logger");
 const TokenWallet = require("./token_wallet");
@@ -41,12 +41,12 @@ class Token {
         await user.runTarget(
             {
                 contract: token,
-                value: locklift.utils.convertCrystal(2, Dimensions.Nano),
+                value: locklift.utils.toNano(2),
             },
             (token) => token.methods.deployWallet({
                 answerId: 0,
                 walletOwner: user.address.toString(),
-                deployWalletValue: locklift.utils.convertCrystal(1, Dimensions.Nano),
+                deployWalletValue: locklift.utils.toNano(1),
             })
         );
 
@@ -60,12 +60,12 @@ class Token {
         await locklift.tracing.trace(this.owner.runTarget(
             {
                 contract: token,
-                value: locklift.utils.convertCrystal(5, Dimensions.Nano),
+                value: locklift.utils.toNano(5),
             },
             (token) => token.methods.mint({
                 amount: mint_amount,
                 recipient: user.address.toString(),
-                deployWalletValue: locklift.utils.convertCrystal(1, Dimensions.Nano),
+                deployWalletValue: locklift.utils.toNano(1),
                 remainingGasTo: this.owner.address.toString(),
                 notify: false,
                 payload: ''
@@ -73,7 +73,6 @@ class Token {
         ));
 
         const walletAddr = await this.walletAddr(user);
-        console.log(walletAddr);
         logger.log(`User token wallet: ${walletAddr.toString()}`);
         return await TokenWallet.from_addr(walletAddr, user);
     }

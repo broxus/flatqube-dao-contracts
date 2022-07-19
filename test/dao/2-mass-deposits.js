@@ -58,7 +58,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
     describe('Checking huge number of deposits works correctly', async function() {
         it(`Made ${count * packs_num} deposits`, async function() {
             // processing requires some time, so we must be sure it will not unlock until all deposits are processed
-            const lock_time = 700;
+            const lock_time = 800;
             logger.log(`Locking for ${lock_time} seconds`);
 
             const deposit_payload = await vote_escrow.depositPayload(user, lock_time);
@@ -76,13 +76,13 @@ describe("Vote Escrow mass deposits scenario", async function() {
             for (const i of Array.from(Array(packs_num).keys())) {
                 logger.log(`Sending pack #${i + 1} with ${count} deposits`)
                 const from = Date.now();
-                await runTargets(
+                await locklift.features.trace(runTargets(
                     user,
                     Array(count).fill(user_qube_wallet.contract),
                     Array(count).fill('transfer'),
                     Array(count).fill(params),
                     Array(count).fill(convertCrystal(50, Dimensions.Nano))
-                );
+                ));
                 const to = Date.now();
                 logger.log(`Pack processed in ${Math.floor((to - from) / 1000)}`);
                 time_passed += Math.floor((to - from) / 1000);

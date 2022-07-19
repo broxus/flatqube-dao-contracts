@@ -1,6 +1,6 @@
 const {Dimensions} = require("locklift");
 const {
-    convertCrystal
+    toNano
 } = locklift.utils;
 
 
@@ -36,7 +36,7 @@ class TokenWallet {
         return await this._owner.runTarget(
             {
                 contract: token,
-                value: value || convertCrystal(5, Dimensions.Nano)
+                value: value || toNano(5)
             },
             (token) => token.methods.transfer({
                 amount: amount,

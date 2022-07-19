@@ -6,8 +6,6 @@ const { setupTokenRoot, setupVoteEscrow, deployUser, sleep } = require("../utils
 
 
 describe("Main Vote Escrow scenarios", async function() {
-    this.timeout(3000000);
-
     let user;
     let owner;
 

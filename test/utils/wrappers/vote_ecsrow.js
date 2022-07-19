@@ -1,5 +1,5 @@
 const {
-    convertCrystal
+    toNano
 } = locklift.utils;
 const logger = require("mocha-logger");
 const TokenWallet = require("./token_wallet");
@@ -110,23 +110,10 @@ class VoteEscrow {
         return await owner.runTarget(
             {
                 contract: ve,
-                value: locklift.utils.convertCrystal(5, Dimensions.Nano),
+                value: locklift.utils.toNano(5),
             },
             (ve) => ve.methods.acceptOwnership({send_gas_to: owner.address.toString()})
         );
-    }
-
-    async installPlatformCode() {
-        const Platform = await locklift.factory.getContract('Platform');
-        return await this._owner.runTarget({
-            contract: this.contract,
-            method: 'installPlatformCode',
-            params: {
-                code: Platform.code,
-                send_gas_to: this._owner.address
-            },
-            value: convertCrystal(5, 'nano')
-        });
     }
 
     async installOrUpdateVeAccountCode(code) {
@@ -134,7 +121,7 @@ class VoteEscrow {
         return await this._owner.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5, Dimensions.Nano)
+                value: toNano(5)
             },
             (ve) => ve.methods.installOrUpdateVeAccountCode({code: code, send_gas_to: this._owner.address})
         );
@@ -142,16 +129,16 @@ class VoteEscrow {
 
     async startVoting(call_id=0) {
         const ve = this.contract;
-        return await this._owner.runTarget(
+        return await locklift.tracing.trace(this._owner.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5, Dimensions.Nano)
+                value: toNano(5)
             },
             (ve) => ve.methods.startVoting({
                 call_id: call_id,
                 send_gas_to: this._owner.address.toString()
             })
-        );
+        ));
     }
 
     async endVoting(call_id) {
@@ -159,7 +146,7 @@ class VoteEscrow {
         gas = gas.plus(new BigNumber(10**9)).toFixed(0)
 
         const ve = this.contract;
-        return await this._owner.runTarget(
+        return await locklift.tracing.trace(this._owner.runTarget(
             {
                 contract: ve,
                 value: gas
@@ -168,15 +155,15 @@ class VoteEscrow {
                 call_id: call_id,
                 send_gas_to: this._owner.address.toString()
             })
-        );
+        ));
     }
 
     async vote(voter, votes, call_id=0) {
         const ve = this.contract;
-        return await voter.runTarget(
+        return locklift.tracing.trace(voter.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5, Dimensions.Nano)
+                value: toNano(5)
             },
             (ve) => ve.methods.vote({
                 votes: votes,
@@ -184,7 +171,7 @@ class VoteEscrow {
                 nonce: 0,
                 send_gas_to: voter.address.toString()
             })
-        );
+        ));
     }
 
     // farming, treasury, team
@@ -197,7 +184,7 @@ class VoteEscrow {
                 call_id: call_id,
                 send_gas_to: this._owner.address
             },
-            value: convertCrystal(5, 'nano')
+            value: toNano(5)
         });
     }
 
@@ -210,7 +197,7 @@ class VoteEscrow {
                 call_id: call_id,
                 send_gas_to: this._owner.address
             },
-            value: convertCrystal(5, 'nano')
+            value: toNano(5)
         });
     }
 
@@ -238,7 +225,7 @@ class VoteEscrow {
                 call_id: call_id,
                 send_gas_to: this._owner.address
             },
-            value: convertCrystal(5, 'nano')
+            value: toNano(5)
         });
     }
 
@@ -251,7 +238,7 @@ class VoteEscrow {
                 call_id: call_id,
                 send_gas_to: this._owner.address
             },
-            value: convertCrystal(5, 'nano')
+            value: toNano(5)
         });
     }
 
@@ -265,7 +252,7 @@ class VoteEscrow {
                 call_id: 0,
                 send_gas_to: this._owner.address
             },
-            value: convertCrystal(5, 'nano')
+            value: toNano(5)
         });
     }
 
@@ -277,7 +264,7 @@ class VoteEscrow {
                 start_time: start_time,
                 send_gas_to: this._owner.address
             },
-            value: convertCrystal(5, 'nano')
+            value: toNano(5)
         });
     }
 
@@ -287,7 +274,7 @@ class VoteEscrow {
         return await user.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5, Dimensions.Nano)
+                value: toNano(5)
             },
             (ve) => ve.methods.deployVoteEscrowAccount({user: addr.toString()})
         );
@@ -362,7 +349,7 @@ class VoteEscrow {
         return await this._owner.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5, Dimensions.Nano)
+                value: toNano(5)
             },
             (ve) => ve.methods.upgrade({code: new_code, send_gas_to: this._owner.address})
         );
@@ -373,7 +360,7 @@ class VoteEscrow {
         return await user.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5, Dimensions.Nano)
+                value: toNano(5)
             },
             (ve) => ve.methods.upgradeVeAccount({nonce: 0, call_id: call_id, send_gas_to: user.address})
         );
@@ -385,7 +372,7 @@ class VoteEscrow {
         return await this._owner.runTarget(
             {
                 contract: ve,
-                value: convertCrystal(5 * users.length, Dimensions.Nano)
+                value: toNano(5 * users.length)
             },
             (ve) => ve.methods.forceUpgradeVeAccounts({users: users, send_gas_to: this._owner.address})
         );
