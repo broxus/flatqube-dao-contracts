@@ -118,13 +118,13 @@ describe("Vote Escrow mass deposits scenario", async function() {
             for (let i = 0; i < gauges_count; i += chunkSize) {
                 const _params = params.slice(i, i + chunkSize);
 
-                await runTargets(
+                await locklift.tracing.trace(runTargets(
                     user,
                     Array(_params.length).fill(user_qube_wallet.contract),
                     Array(_params.length).fill('transfer'),
                     _params,
                     Array(_params.length).fill(convertCrystal(50, 'nano'))
-                );
+                ));
             }
 
             await vote_escrow.whitelistDeposit(owner_qube_wallet, whitelist_price, big_gauge.address);

@@ -76,7 +76,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
             for (const i of Array.from(Array(packs_num).keys())) {
                 logger.log(`Sending pack #${i + 1} with ${count} deposits`)
                 const from = Date.now();
-                await locklift.features.trace(runTargets(
+                await locklift.tracing.trace(runTargets(
                     user,
                     Array(count).fill(user_qube_wallet.contract),
                     Array(count).fill('transfer'),

@@ -6,7 +6,7 @@
     "author": "30mb1 <steam.30mb1@gmail.com>",
     "license": "ISC",
     "dependencies": {
-        "@broxus/contracts": "^1.0.4",
+        "@broxus/contracts": "^1.1.0",
         "broxus-ton-tokens-contracts": "github:broxus/ton-eth-bridge-token-contracts#d3c1cd920c0320ffaab03b54c878dd0e06fed3c7",
         "locklift": "^2.1.6",
         "mocha-logger": "^1.0.7"
