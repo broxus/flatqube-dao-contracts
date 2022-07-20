@@ -24,10 +24,10 @@ describe("Main Vote Escrow scenarios", async function() {
 
     describe('Setup contracts', async function() {
         it('Deploy users', async function() {
-            user = await deployUser();
-            owner = await deployUser(1000);
+            user = await deployUser(20);
+            owner = await deployUser(40);
             for (const i of [1,2,3,4]) {
-                const account = await deployUser();
+                const account = await deployUser(3);
                 account.name = `Gauge ${i}`
                 gauges.push(account);
             }

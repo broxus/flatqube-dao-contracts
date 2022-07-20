@@ -54,7 +54,7 @@ const deployUsers = async function(count, initial_balance) {
         initParams: { wallet_code: TestWallet.code, _randomNonce: getRandomNonce() },
         publicKey: signers[0].publicKey,
         constructorParams: {},
-        value: toNano(count * initial_balance + 100)
+        value: toNano(count * initial_balance + 5)
     });
 
     const pubkeys = signers.map((signer) => { return `0x${signer.publicKey}` });
@@ -168,11 +168,11 @@ const setupVoteEscrow = async function({
         initParams: {
             _randomNonce: locklift.utils.getRandomNonce(),
             PlatformCode: Platform.code,
-            veAccountCode: VoteEscrowAccount.code
+            veAccountCode: VoteEscrowAccount.code,
         },
         publicKey: signer.publicKey,
         constructorParams: {},
-        value: locklift.utils.toNano(25),
+        value: locklift.utils.toNano(20),
     });
 
     logger.log(`Deployed Vote Escrow deployer`);
