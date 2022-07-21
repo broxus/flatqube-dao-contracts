@@ -8,11 +8,12 @@ import "../vote_escrow/base/vote_escrow/VoteEscrowBase.sol";
 
 
 contract TestVoteEscrow is VoteEscrowBase {
-    constructor(address _owner, address _qube) public {
+    constructor(address _owner, address _qube, address _dao) public {
         // Deployed by Deployer contract
         require (msg.sender.value != 0, Errors.BAD_SENDER);
         owner = _owner;
         qube = _qube;
+        dao = _dao;
 
         _setupTokenWallet();
     }
@@ -28,6 +29,8 @@ contract TestVoteEscrow is VoteEscrowBase {
             ve_account_version,
             ve_version,
             owner,
+            pendingOwner,
+            dao,
             qube,
             qubeWallet,
             treasuryTokens,

@@ -7,10 +7,10 @@ import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCa
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "../../../libraries/Errors.sol";
 import "../../../gauge/interfaces/IGaugeAccount.sol";
-import "./VoteEscrowVoting.sol";
+import "./VoteEscrowEpochVoting.sol";
 
 
-abstract contract VoteEscrowBase is VoteEscrowVoting {
+abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
     function transferOwnership(address new_owner, address send_gas_to) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 

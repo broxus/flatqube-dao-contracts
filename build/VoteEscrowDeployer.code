@@ -108,6 +108,10 @@ LDREF
 ENDS
 CTOS
 LDMSGADDR
+LDREF
+ENDS
+CTOS
+LDMSGADDR
 LDU 32
 LDU 32
 LDU 32
@@ -152,7 +156,7 @@ PUSHCONT {
 	STUR 98
 	SWAP
 	NEWC
-	STSLICECONST xb5a7256d
+	STSLICECONST xf002390a
 	STSLICE
 	STBREFR
 	ENDC
@@ -182,24 +186,24 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 48
-ACCEPT
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 49
+ACCEPT
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 50
 GETGLOB 14
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 50
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 51
 GETGLOB 12
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 51
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 52
 GETGLOB 13
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 53
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 54
 GETGLOB 2
 NEWC
 STU 256
@@ -225,10 +229,11 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 62
-ROLL 14
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 63
+BLKSWAP 2, 14
+SWAP
 MYADDR
-ROT
+ROLL 3
 DUP
 HASHCU
 MYADDR
@@ -240,8 +245,8 @@ STI 8
 STU 256
 ENDC
 CTOS
-ROLLREV 3
-PUSH S3
+ROLLREV 4
+PUSH S4
 NEWC
 STSLICECONST x62_
 STSLICE
@@ -272,19 +277,23 @@ CALLREF {
 }
 STREF
 STSLICECONST 1
+ROLLREV 3
+NEWC
+STSLICECONST x6cc0a239
+STSLICE
 ROTREV
 NEWC
-STSLICECONST x49fa7cdf
 STSLICE
 SWAP
 NEWC
 STSLICE
 STBREFR
 STBREFR
+STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 69
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 70
 DUP
 GETGLOB 12
 PUSH S2
@@ -302,7 +311,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 70
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 71
 DUP
 GETGLOB 13
 PUSH S2
@@ -320,7 +329,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 71
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 72
 DUP
 PUSHINT 0
 BLKSWAP 7, 4
@@ -347,7 +356,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 75
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 76
 DUP
 PUSHINT 0
 ROLL 5
@@ -371,7 +380,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 76
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 77
 DUP
 PUSHINT 0
 ROLL 4
@@ -395,7 +404,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 77
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 78
 DUP
 PUSHINT 0
 BLKSWAP 2, 4
@@ -417,7 +426,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 78
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 79
 DUP
 PUSHINT 0
 ROLL 3
@@ -437,7 +446,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 79
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 80
 DUP
 ROT
 PUSH S2
@@ -455,7 +464,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 80
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 81
 DUP
 ROT
 PUSH S2
@@ -798,7 +807,7 @@ THROW 0
 
 .macro public_function_selector
 DUP
-PUSHINT 1156408735
+PUSHINT 1482330212
 LEQ
 IFJMPREF {
 	DUP
@@ -806,12 +815,6 @@ IFJMPREF {
 	EQUAL
 	IFJMPREF {
 		CALL $owner$
-	}
-	DUP
-	PUSHINT 900146541
-	EQUAL
-	IFJMPREF {
-		CALL $deployVoteEscrow$
 	}
 	DUP
 	PUSHINT 995308319
@@ -825,22 +828,28 @@ IFJMPREF {
 	IFJMPREF {
 		CALL $installVoteEscrowCode$
 	}
-}
-DUP
-PUSHINT 1756716863
-LEQ
-IFJMPREF {
 	DUP
 	PUSHINT 1482330212
 	EQUAL
 	IFJMPREF {
 		CALL $transferOwnership$
 	}
+}
+DUP
+PUSHINT 1879193866
+LEQ
+IFJMPREF {
 	DUP
 	PUSHINT 1756716863
 	EQUAL
 	IFJMPREF {
 		CALL $constructor$
+	}
+	DUP
+	PUSHINT 1879193866
+	EQUAL
+	IFJMPREF {
+		CALL $deployVoteEscrow$
 	}
 }
 

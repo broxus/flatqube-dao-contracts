@@ -116,9 +116,12 @@ PUSHCONT {
 	.loc ../contracts/test/TestVoteEscrowAccount.sol, 36
 	GETGLOB 10
 	STUR 32
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 38
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 37
+	GETGLOB 13
+	STSLICER
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 39
 	STBREFR
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 40
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 41
 	GETGLOB 25
 	GETGLOB 24
 	GETGLOB 23
@@ -141,7 +144,7 @@ PUSHCONT {
 	STU 32
 	STDICT
 	ENDC
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 52
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 53
 	SWAP2
 	SWAP
 	NEWC
@@ -149,10 +152,10 @@ PUSHCONT {
 	STU 32
 	STREF
 	STBREFR
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 56
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 57
 	OVER
 	SETCODE
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 58
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 59
 	SWAP
 	CTOS
 	DUP
@@ -167,7 +170,7 @@ PUSHCONT {
 	CTOS
 	BLESS
 	POP C3
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 59
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 60
 	ENDC
 	CALLREF {
 		CALL $:onCodeUpgrade$
@@ -179,46 +182,47 @@ CALLX
 
 .internal-alias :onCodeUpgrade, 2
 .internal :onCodeUpgrade
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 63
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 64
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 65
-CTOS
 .loc ../contracts/test/TestVoteEscrowAccount.sol, 66
+CTOS
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 67
 DUP
 LDMSGADDR
 LDU 8
 LDMSGADDR
 POP S4
 NIP
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 69
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 70
 PUSH S2
 PUSHINT 0
 PUSHINT 1
 SSKIPFIRST
 POP S3
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 71
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 72
 PUSH S2
 LDREFRTOS
 SWAP
 POP S4
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 73
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 74
 PUSH S3
 LDREFRTOS
 SWAP
 POP S5
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 74
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 75
 LDU 32
 LDU 32
+LDMSGADDR
 DROP
-.loc ../contracts/test/TestVoteEscrowAccount.sol, 77
-DUP2
+.loc ../contracts/test/TestVoteEscrowAccount.sol, 78
+BLKPUSH 2, 2
 EQUAL
 PUSHCONT {
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 78
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 79
 	PUSHINT 0
 	SETGLOB 10
 	PUSHREFSLICE {
@@ -264,19 +268,22 @@ PUSHCONT {
 	SETGLOB 27
 	NEWDICT
 	SETGLOB 28
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 80
-	PUSH S4
-	SETGLOB 11
 	.loc ../contracts/test/TestVoteEscrowAccount.sol, 81
-	PUSH S2
-	LDMSGADDR
-	POP S4
-	SETGLOB 12
+	PUSH S5
+	SETGLOB 11
 	.loc ../contracts/test/TestVoteEscrowAccount.sol, 82
-	OVER
+	PUSH S3
+	LDMSGADDR
+	POP S5
+	SETGLOB 12
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 83
+	PUSH S2
 	SETGLOB 10
 	.loc ../contracts/test/TestVoteEscrowAccount.sol, 84
-	PUSH S3
+	DUP
+	SETGLOB 13
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 86
+	PUSH S4
 	GETGLOB 12
 	GETGLOB 11
 	NEWC
@@ -290,7 +297,7 @@ PUSHCONT {
 	STSLICE
 }
 PUSHCONT {
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 86
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 88
 	PUSHINT 0
 	SETGLOB 10
 	PUSHREFSLICE {
@@ -336,28 +343,31 @@ PUSHCONT {
 	SETGLOB 27
 	NEWDICT
 	SETGLOB 28
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 88
-	PUSH S4
-	SETGLOB 11
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 89
-	PUSH S2
-	LDMSGADDR
-	POP S4
-	SETGLOB 12
 	.loc ../contracts/test/TestVoteEscrowAccount.sol, 90
-	OVER
-	SETGLOB 10
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 92
 	PUSH S5
-	LDREF
-	POP S7
+	SETGLOB 11
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 91
+	PUSH S3
+	LDMSGADDR
+	POP S5
+	SETGLOB 12
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 92
+	PUSH S2
+	SETGLOB 10
 	.loc ../contracts/test/TestVoteEscrowAccount.sol, 93
+	DUP
+	SETGLOB 13
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 95
+	PUSH S6
+	LDREF
+	POP S8
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 96
 	CTOS
 	LDU 32
 	LDU 32
 	LDREF
 	ENDS
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 94
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 97
 	CTOS
 	LDU 128
 	LDU 128
@@ -381,10 +391,10 @@ PUSHCONT {
 	SETGLOB 23
 	SETGLOB 24
 	SETGLOB 25
-	.loc ../contracts/test/TestVoteEscrowAccount.sol, 121
-	PUSH S5
+	.loc ../contracts/test/TestVoteEscrowAccount.sol, 124
+	PUSH S6
 	XCHG S2
-	BLKPUSH 2, 4
+	BLKPUSH 2, 5
 	GETGLOB 12
 	GETGLOB 11
 	NEWC
@@ -411,7 +421,7 @@ ENDC
 PUSHPOW2 7
 SENDRAWMSG
 .loc ../contracts/test/TestVoteEscrowAccount.sol, 0
-BLKDROP 6
+BLKDROP 7
 CALLREF {
 	CALL $c7_to_c4$
 }

@@ -34,6 +34,7 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         TvmBuilder params;
         params.store(new_version);
         params.store(current_version);
+        params.store(dao_root);
 
         main_builder.storeRef(params); // ref3
 
@@ -67,14 +68,13 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         (address root_, , address send_gas_to) = s.decode(address, uint8, address);
         voteEscrow = root_;
 
-        // skip 0 bits and 1 ref (platform code), we dont need it
-        s.skip(0, 1);
+        platform_code = s.loadRef();
 
         TvmSlice initialData = s.loadRefAsSlice();
         user = initialData.decode(address);
 
         TvmSlice params = s.loadRefAsSlice();
-        (current_version, ) = params.decode(uint32, uint32);
+        (current_version, ,dao_root) = params.decode(uint32, uint32, address);
 
         IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
     }

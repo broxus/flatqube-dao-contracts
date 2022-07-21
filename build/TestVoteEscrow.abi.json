@@ -7,7 +7,8 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"_owner","type":"address"},
-				{"name":"_qube","type":"address"}
+				{"name":"_qube","type":"address"},
+				{"name":"_dao","type":"address"}
 			],
 			"outputs": [
 			]
@@ -495,6 +496,7 @@
 				{"name":"_owner","type":"address"},
 				{"name":"_pendingOwner","type":"address"},
 				{"name":"_qube","type":"address"},
+				{"name":"_dao","type":"address"},
 				{"name":"_qubeWallet","type":"address"},
 				{"name":"_treasuryTokens","type":"uint128"},
 				{"name":"_teamTokens","type":"uint128"},
@@ -1044,6 +1046,7 @@
 		{"name":"pendingOwner","type":"address"},
 		{"name":"qube","type":"address"},
 		{"name":"qubeWallet","type":"address"},
+		{"name":"dao","type":"address"},
 		{"name":"treasuryTokens","type":"uint128"},
 		{"name":"teamTokens","type":"uint128"},
 		{"name":"distributionScheme","type":"uint32[]"},

@@ -34,6 +34,7 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
         TvmBuilder params;
         params.store(new_version);
         params.store(current_version);
+        params.store(dao_root);
 
         main_builder.storeRef(params); // ref3
 
@@ -71,7 +72,7 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
         TvmSlice initialData = s.loadRefAsSlice();
 
         TvmSlice params = s.loadRefAsSlice();
-        (uint32 _current_version, uint32 _old_version) = params.decode(uint32, uint32);
+        (uint32 _current_version, uint32 _old_version, address _dao) = params.decode(uint32, uint32, address);
 
         // deploy
         if (_current_version == _old_version) {
@@ -80,6 +81,7 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
             voteEscrow = root_;
             user = initialData.decode(address);
             current_version = _current_version;
+            dao_root = _dao;
 
             IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
         } else {
@@ -88,6 +90,7 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
             voteEscrow = root_;
             user = initialData.decode(address);
             current_version = _current_version;
+            dao_root = _dao;
 
             TvmCell data = s.loadRef();
             (uint32 call_id, uint32 nonce, TvmCell storage_data) = abi.decode(data, (uint32, uint32, TvmCell));

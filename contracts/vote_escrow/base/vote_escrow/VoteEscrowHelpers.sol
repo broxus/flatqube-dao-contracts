@@ -19,6 +19,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         address _owner,
         address _pendingOwner,
         address _qube,
+        address _dao,
         address _qubeWallet,
         uint128 _treasuryTokens,
         uint128 _teamTokens,
@@ -37,6 +38,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _owner = owner;
         _pendingOwner = pendingOwner;
         _qube = qube;
+        _dao = dao;
         _qubeWallet = qubeWallet;
         _treasuryTokens = treasuryTokens;
         _teamTokens = teamTokens;

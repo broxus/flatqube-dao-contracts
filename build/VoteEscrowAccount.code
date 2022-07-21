@@ -116,9 +116,12 @@ PUSHCONT {
 	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 36
 	GETGLOB 10
 	STUR 32
-	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 38
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 37
+	GETGLOB 13
+	STSLICER
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 39
 	STBREFR
-	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 40
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 41
 	GETGLOB 25
 	GETGLOB 24
 	GETGLOB 23
@@ -141,7 +144,7 @@ PUSHCONT {
 	STU 32
 	STDICT
 	ENDC
-	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 52
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 53
 	SWAP2
 	SWAP
 	NEWC
@@ -149,10 +152,10 @@ PUSHCONT {
 	STU 32
 	STREF
 	STBREFR
-	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 56
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 57
 	OVER
 	SETCODE
-	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 58
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 59
 	SWAP
 	CTOS
 	DUP
@@ -167,7 +170,7 @@ PUSHCONT {
 	CTOS
 	BLESS
 	POP C3
-	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 59
+	.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 60
 	ENDC
 	CALLREF {
 		CALL $:onCodeUpgrade$
@@ -179,7 +182,7 @@ CALLX
 
 .internal-alias :onCodeUpgrade, 2
 .internal :onCodeUpgrade
-.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 63
+.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 64
 PUSHINT 0
 SETGLOB 10
 PUSHREFSLICE {
@@ -225,30 +228,29 @@ NEWDICT
 SETGLOB 27
 NEWDICT
 SETGLOB 28
-.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 64
+.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 65
 CALLREF {
 	CALL $_reserve_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 66
-CTOS
 .loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 67
+CTOS
+.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 68
 DUP
 LDMSGADDR
 LDU 8
 LDMSGADDR
 POP S4
 NIP
-.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 68
+.loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 69
 SWAP
 SETGLOB 11
 .loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 71
 OVER
-PUSHINT 0
-PUSHINT 1
-SSKIPFIRST
-POP S2
+LDREF
+POP S3
+SETGLOB 15
 .loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 73
 OVER
 LDREFRTOS
@@ -265,8 +267,12 @@ NIP
 .loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 77
 LDU 32
 LDU 32
-DROP2
+LDMSGADDR
+DROP
+XCHG S2
 SETGLOB 10
+DROP
+SETGLOB 13
 .loc ../contracts/vote_escrow/VoteEscrowAccount.sol, 79
 GETGLOB 12
 GETGLOB 11

@@ -15,6 +15,7 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     address pendingOwner;
     address qube;
     address qubeWallet;
+    address dao;
 
     uint128 treasuryTokens;
     uint128 teamTokens;

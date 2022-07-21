@@ -1,4 +1,4 @@
-pragma solidity ^0.60.0;
+pragma ever-solidity ^0.60.0;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
@@ -31,6 +31,7 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
     function deployVoteEscrow(
         address owner,
         address qube,
+        address dao,
         uint32 start_time,
         uint32 min_lock,
         uint32 max_lock,
@@ -64,7 +65,7 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
             value: 5 ton,
             wid: address(this).wid,
             flag: MsgFlag.SENDER_PAYS_FEES
-        }(address(this), qube);
+        }(address(this), qube, dao);
 
         IVoteEscrow(ve).installPlatformCode{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(PlatformCode, ve);
         IVoteEscrow(ve).installOrUpdateVeAccountCode{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(veAccountCode, ve);

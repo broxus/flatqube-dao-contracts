@@ -6,7 +6,6 @@ const VoteEscrow = require('./wrappers/vote_ecsrow');
 const {Dimensions, zeroAddress, Address} = require("locklift");
 const {getRandomNonce} = require("locklift/build/utils");
 const {toNano} = locklift.utils;
-const {waitFinalized} = require('./waiter')
 
 
 async function sleep(ms) {
@@ -65,7 +64,7 @@ const deployUsers = async function(count, initial_balance) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
         console.log(i, chunkSize)
-        await waitFinalized(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
+        await locklift.tracing.trace(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
     }
 
     // await sleep(1000);
@@ -144,6 +143,7 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
 const setupVoteEscrow = async function({
     owner,
     qube,
+    dao=zeroAddress,
     start_time=null,
     min_lock=1,
     max_lock=100,
@@ -185,6 +185,7 @@ const setupVoteEscrow = async function({
     const tx2 = await locklift.tracing.trace(deployer.methods.deployVoteEscrow({
         owner: owner.address,
         qube: qube.address,
+        dao,
         start_time,
         min_lock,
         max_lock,

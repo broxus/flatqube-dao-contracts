@@ -4,7 +4,6 @@ const {
 const logger = require("mocha-logger");
 const TokenWallet = require("./token_wallet");
 const {Dimensions} = require("locklift");
-const {waitFinalized} = require('../waiter');
 
 
 class Token {

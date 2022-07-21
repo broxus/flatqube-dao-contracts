@@ -6,7 +6,7 @@ import "../../interfaces/IVoteEscrowAccount.sol";
 import "./VoteEscrowDAO.sol";
 
 
-abstract contract VoteEscrowVoting is VoteEscrowDAO {
+abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
     function initialize(uint32 start_time, address send_gas_to) external override onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         // codes installed

@@ -90,6 +90,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
 
         constructor_params.store(ve_account_version); // 32
         constructor_params.store(ve_account_version); // 32
+        constructor_params.store(dao); // address
 
         return new Platform{
             stateInit: _buildInitData(_buildVoteEscrowAccountParams(user)),
