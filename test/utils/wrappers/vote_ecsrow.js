@@ -88,7 +88,7 @@ class VoteEscrow {
 
     async voteEscrowAccount(account) {
         const addr = account.address === undefined ? account : account.address;
-        const acc_addr = (await this.contract.methods.getVoteEscrowAccountAddress({answerId: 0, user: addr.toString()}).call()).value0;
+        const acc_addr = (await this.contract.methods.getVoteEscrowAccountAddress({answerId: 0, user: addr}).call()).value0;
         const ve = await locklift.factory.getDeployedContract('VoteEscrowAccount', acc_addr);
         return new VoteEscrowAccount(ve);
     }
