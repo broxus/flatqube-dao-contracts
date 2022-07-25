@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.60.0;
+pragma ever-solidity ^0.62.0;
 
 
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
@@ -71,7 +71,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
-    ) external pure onlyGaugeAccount(user) {
+    ) external view onlyGaugeAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit GaugeAccountUpgrade(call_id, user, old_version, new_version);

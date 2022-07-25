@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.60.0;
+pragma ever-solidity ^0.62.0;
 
 
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";

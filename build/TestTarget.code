@@ -1,4 +1,4 @@
-.version sol 0.60.0
+.version sol 0.62.0
 
 .macro constructor
 DROP
@@ -37,18 +37,18 @@ LDU 32
 ENDS
 .loc ../contracts/dao/test/TestTarget.sol, 0
 CALLREF {
-	CALL $call_internal_macro$
+	CALL $call_b4deabe7_internal_macro$
 }
 IFREF {
 	CALL $upd_only_time_in_c4$
 }
 THROW 0
 
-.globl	call_internal
-.type	call_internal, @function
-CALL $call_internal_macro$
+.globl	call_b4deabe7_internal
+.type	call_b4deabe7_internal, @function
+CALL $call_b4deabe7_internal_macro$
 
-.macro call_internal_macro
+.macro call_b4deabe7_internal_macro
 .loc ../contracts/dao/test/TestTarget.sol, 20
 MYADDR
 NEWC
@@ -84,7 +84,7 @@ LDU 256
 ENDS
 .loc ../contracts/dao/test/TestTarget.sol, 0
 CALLREF {
-	CALL $addDelegate_internal_macro$
+	CALL $addDelegate_5bcfd212_internal_macro$
 }
 DROP
 CALLREF {
@@ -92,11 +92,11 @@ CALLREF {
 }
 THROW 0
 
-.globl	addDelegate_internal
-.type	addDelegate_internal, @function
-CALL $addDelegate_internal_macro$
+.globl	addDelegate_5bcfd212_internal
+.type	addDelegate_5bcfd212_internal, @function
+CALL $addDelegate_5bcfd212_internal_macro$
 
-.macro addDelegate_internal_macro
+.macro addDelegate_5bcfd212_internal_macro
 .loc ../contracts/dao/test/TestTarget.sol, 24
 GETGLOB 9
 GETGLOB 12
@@ -186,7 +186,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/test/TestTarget.sol, 0
 CALLREF {
-	CALL $onProposalSuccess_internal_macro$
+	CALL $onProposalSuccess_3e91b767_internal_macro$
 }
 DROP
 CALLREF {
@@ -194,14 +194,14 @@ CALLREF {
 }
 THROW 0
 
-.globl	onProposalSuccess_internal
-.type	onProposalSuccess_internal, @function
-CALL $onProposalSuccess_internal_macro$
+.globl	onProposalSuccess_3e91b767_internal
+.type	onProposalSuccess_3e91b767_internal, @function
+CALL $onProposalSuccess_3e91b767_internal_macro$
 
-.macro onProposalSuccess_internal_macro
+.macro onProposalSuccess_3e91b767_internal_macro
 .loc ../contracts/dao/Delegate.sol, 12
 CALLREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/test/TestTarget.sol, 36
 DEPTH
@@ -232,7 +232,7 @@ LDU 256
 ENDS
 .loc ../contracts/dao/test/TestTarget.sol, 0
 CALLREF {
-	CALL $encodePayload_internal_macro$
+	CALL $encodePayload_e22034f7_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -261,11 +261,11 @@ IFREF {
 }
 THROW 0
 
-.globl	encodePayload_internal
-.type	encodePayload_internal, @function
-CALL $encodePayload_internal_macro$
+.globl	encodePayload_e22034f7_internal
+.type	encodePayload_e22034f7_internal, @function
+CALL $encodePayload_e22034f7_internal_macro$
 
-.macro encodePayload_internal_macro
+.macro encodePayload_e22034f7_internal_macro
 .loc ../contracts/dao/test/TestTarget.sol, 42
 SWAP
 NEWC
@@ -284,7 +284,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/test/TestTarget.sol, 0
 CALLREF {
-	CALL $getCallHash_internal_macro$
+	CALL $getCallHash_f48f6028_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -313,11 +313,11 @@ IFREF {
 }
 THROW 0
 
-.globl	getCallHash_internal
-.type	getCallHash_internal, @function
-CALL $getCallHash_internal_macro$
+.globl	getCallHash_f48f6028_internal
+.type	getCallHash_f48f6028_internal, @function
+CALL $getCallHash_f48f6028_internal_macro$
 
-.macro getCallHash_internal_macro
+.macro getCallHash_f48f6028_internal_macro
 .loc ../contracts/dao/test/TestTarget.sol, 46
 NEWC
 STSLICECONST x05419b99
@@ -326,11 +326,11 @@ ENDC
 HASHCU
 .loc ../contracts/dao/test/TestTarget.sol, 0
 
-.globl	checkDelegate_internal
-.type	checkDelegate_internal, @function
-CALL $checkDelegate_internal_macro$
+.globl	checkDelegate_c45d6a7d_internal
+.type	checkDelegate_c45d6a7d_internal, @function
+CALL $checkDelegate_c45d6a7d_internal_macro$
 
-.macro checkDelegate_internal_macro
+.macro checkDelegate_c45d6a7d_internal_macro
 .loc ../contracts/dao/Delegate.sol, 17
 GETGLOB 9
 GETGLOB 10
@@ -505,13 +505,11 @@ PUSHCONT {
 	PUSH S2
 	PUSHINT 64
 	DICTUGET
+	ZEROSWAPIFNOT
 	PUSHCONT {
 		PLDU 32
 	}
-	PUSHCONT {
-		PUSHINT 0
-	}
-	IFELSE
+	IF
 	PUSHREFSLICE {
 		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 	}

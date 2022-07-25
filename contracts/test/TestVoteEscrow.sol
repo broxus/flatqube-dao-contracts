@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.60.0;
+pragma ever-solidity ^0.62.0;
 pragma AbiHeader expire;
 
 
@@ -81,7 +81,7 @@ contract TestVoteEscrow is VoteEscrowBase {
 
     event Upgrade(uint32 old_version, uint32 new_version);
 
-    function onCodeUpgrade(TvmCell upgrade_data) private {
+    function onCodeUpgrade(TvmCell) private {
         ve_version += 1;
         emit Upgrade(ve_version - 1, ve_version);
     }

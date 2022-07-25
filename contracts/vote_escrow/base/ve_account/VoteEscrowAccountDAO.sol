@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.60.0;
+pragma ever-solidity ^0.62.0;
 
 
 import "./VoteEscrowAccountHelpers.sol";
@@ -59,6 +59,7 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
         TvmCell proposal_data,
         uint128 threshold
     ) override public onlyDaoRoot {
+        // TODO: SYNC VE QUBE BALANCE BEFORE APPLY
         if (qubeBalance - _lockedTokens() >= threshold) {
             _proposal_nonce++;
             _tmp_proposals[_proposal_nonce] = threshold;
@@ -79,13 +80,14 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
         created_proposals[proposal_id] = _tmp_proposals[nonce];
         delete _tmp_proposals[nonce];
         IProposer(user).onProposalCreated{
-        value: 0,
-        flag: MsgFlag.REMAINING_GAS,
-        bounce: false
+            value: 0,
+            flag: MsgFlag.REMAINING_GAS,
+            bounce: false
         }(answer_id, proposal_id);
     }
 
     function castVote(uint32 proposal_id, bool support, string reason) public override onlyVoteEscrowOrSelf {
+        // TODO: SYNC VE QUBE BALANCE BEFORE APPLY
         tvm.rawReserve(_reserve(), 0);
 
         uint16 error;
@@ -144,9 +146,9 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
             IVoter(user).onVotesUnlocked{value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false}(proposal_id);
         } else {
             IVoter(user).onVotesNotUnlocked{
-            value: 0,
-            flag: MsgFlag.REMAINING_GAS,
-            bounce: false
+                value: 0,
+                flag: MsgFlag.REMAINING_GAS,
+                bounce: false
             }(proposal_id, Errors.WRONG_PROPOSAL_STATE);
         }
     }
@@ -181,33 +183,26 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
             IVoter(user).onCastedVoteUnlocked{value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false}(proposal_id);
         } else {
             IVoter(user).onCastedVoteNotUnlocked{
-            value: 0,
-            flag: MsgFlag.REMAINING_GAS, bounce: false
+                value: 0,
+                flag: MsgFlag.REMAINING_GAS, bounce: false
             }([proposal_id], Errors.WRONG_PROPOSAL_STATE);
         }
     }
 
-    function _buildProposalInitialData(uint32 proposal_id) private view returns (TvmCell) {
+    function _buildProposalInitialData(uint32 proposal_id) private pure returns (TvmCell) {
         TvmBuilder builder;
         builder.store(proposal_id);
         return builder.toCell();
     }
 
-    function _lockedTokens() private view returns (uint128) {
-        uint128 locked = 0;
-        optional(uint32, uint128) pending_proposal = _tmp_proposals.min();
-        while (pending_proposal.hasValue()) {
-            (uint32 key, uint128 locked_value) = pending_proposal.get();
-            locked += locked_value;
-            pending_proposal = _tmp_proposals.next(key);
+    function _lockedTokens() private view returns (uint128 locked) {
+        locked = 0;
+        for ((,uint128 locked_val) : _tmp_proposals) {
+            locked += locked_val;
         }
 
-        optional(uint32, uint128) proposal = created_proposals.min();
-        while (proposal.hasValue()) {
-            (uint32 proposal_id, uint128 locked_value) = proposal.get();
-            locked += locked_value;
-            proposal = created_proposals.next(proposal_id);
+        for ((, uint128 locked_val) : created_proposals) {
+            locked += locked_val;
         }
-        return locked;
     }
 }

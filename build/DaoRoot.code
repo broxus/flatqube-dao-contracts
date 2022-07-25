@@ -1,4 +1,4 @@
-.version sol 0.60.0
+.version sol 0.62.0
 
 .macro constructor
 DROP
@@ -74,7 +74,7 @@ SETGLOB 4
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $getAdmin_internal_macro$
+	CALL $getAdmin_6e9960c3_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -134,11 +134,11 @@ IFREF {
 }
 THROW 0
 
-.globl	getAdmin_internal
-.type	getAdmin_internal, @function
-CALL $getAdmin_internal_macro$
+.globl	getAdmin_6e9960c3_internal
+.type	getAdmin_6e9960c3_internal, @function
+CALL $getAdmin_6e9960c3_internal_macro$
 
-.macro getAdmin_internal_macro
+.macro getAdmin_6e9960c3_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 89
 GETGLOB 4
 PUSHINT 0
@@ -169,7 +169,7 @@ SETGLOB 4
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $getPendingAdmin_internal_macro$
+	CALL $getPendingAdmin_d0468156_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -229,11 +229,11 @@ IFREF {
 }
 THROW 0
 
-.globl	getPendingAdmin_internal
-.type	getPendingAdmin_internal, @function
-CALL $getPendingAdmin_internal_macro$
+.globl	getPendingAdmin_d0468156_internal
+.type	getPendingAdmin_d0468156_internal, @function
+CALL $getPendingAdmin_d0468156_internal_macro$
 
-.macro getPendingAdmin_internal_macro
+.macro getPendingAdmin_d0468156_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 93
 GETGLOB 4
 PUSHINT 0
@@ -264,7 +264,7 @@ SETGLOB 4
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $getProposalCount_internal_macro$
+	CALL $getProposalCount_c08cc02d_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -317,11 +317,11 @@ IFREF {
 }
 THROW 0
 
-.globl	getProposalCount_internal
-.type	getProposalCount_internal, @function
-CALL $getProposalCount_internal_macro$
+.globl	getProposalCount_c08cc02d_internal
+.type	getProposalCount_c08cc02d_internal, @function
+CALL $getProposalCount_c08cc02d_internal_macro$
 
-.macro getProposalCount_internal_macro
+.macro getProposalCount_c08cc02d_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 97
 GETGLOB 4
 PUSHINT 0
@@ -352,7 +352,7 @@ SETGLOB 4
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $getVoteEscrowRoot_internal_macro$
+	CALL $getVoteEscrowRoot_ede1ab55_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -412,11 +412,11 @@ IFREF {
 }
 THROW 0
 
-.globl	getVoteEscrowRoot_internal
-.type	getVoteEscrowRoot_internal, @function
-CALL $getVoteEscrowRoot_internal_macro$
+.globl	getVoteEscrowRoot_ede1ab55_internal
+.type	getVoteEscrowRoot_ede1ab55_internal, @function
+CALL $getVoteEscrowRoot_ede1ab55_internal_macro$
 
-.macro getVoteEscrowRoot_internal_macro
+.macro getVoteEscrowRoot_ede1ab55_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 101
 GETGLOB 4
 PUSHINT 0
@@ -447,7 +447,7 @@ SETGLOB 4
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $getEthereumActionEventConfiguration_internal_macro$
+	CALL $getEthereumActionEventConfiguration_7747ab74_internal_macro$
 }
 PUSH S2
 PUSHCONT {
@@ -509,11 +509,11 @@ IFREF {
 }
 THROW 0
 
-.globl	getEthereumActionEventConfiguration_internal
-.type	getEthereumActionEventConfiguration_internal, @function
-CALL $getEthereumActionEventConfiguration_internal_macro$
+.globl	getEthereumActionEventConfiguration_7747ab74_internal
+.type	getEthereumActionEventConfiguration_7747ab74_internal, @function
+CALL $getEthereumActionEventConfiguration_7747ab74_internal_macro$
 
-.macro getEthereumActionEventConfiguration_internal_macro
+.macro getEthereumActionEventConfiguration_7747ab74_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 105
 GETGLOB 4
 PUSHINT 0
@@ -546,7 +546,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $expectedProposalAddress_internal_macro$
+	CALL $expectedProposalAddress_6c7b1708_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -606,11 +606,11 @@ IFREF {
 }
 THROW 0
 
-.globl	expectedProposalAddress_internal
-.type	expectedProposalAddress_internal, @function
-CALL $expectedProposalAddress_internal_macro$
+.globl	expectedProposalAddress_6c7b1708_internal
+.type	expectedProposalAddress_6c7b1708_internal, @function
+CALL $expectedProposalAddress_6c7b1708_internal_macro$
 
-.macro expectedProposalAddress_internal_macro
+.macro expectedProposalAddress_6c7b1708_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 109
 GETGLOB 4
 PUSHINT 0
@@ -621,7 +621,7 @@ FALSE
 SETINDEXQ 1
 SETGLOB 4
 CALLREF {
-	CALL $buildProposalStateInit_internal_macro$
+	CALL $buildProposalStateInit_8b8bacd3_internal_macro$
 }
 HASHCU
 NEWC
@@ -657,7 +657,7 @@ LDMSGADDR
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $expectedVoteEscrowAccountAddress_internal_macro$
+	CALL $expectedVoteEscrowAccountAddress_42237423_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -717,11 +717,11 @@ IFREF {
 }
 THROW 0
 
-.globl	expectedVoteEscrowAccountAddress_internal
-.type	expectedVoteEscrowAccountAddress_internal, @function
-CALL $expectedVoteEscrowAccountAddress_internal_macro$
+.globl	expectedVoteEscrowAccountAddress_42237423_internal
+.type	expectedVoteEscrowAccountAddress_42237423_internal, @function
+CALL $expectedVoteEscrowAccountAddress_42237423_internal_macro$
 
-.macro expectedVoteEscrowAccountAddress_internal_macro
+.macro expectedVoteEscrowAccountAddress_42237423_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 113
 GETGLOB 4
 PUSHINT 0
@@ -732,7 +732,7 @@ FALSE
 SETINDEXQ 1
 SETGLOB 4
 CALLREF {
-	CALL $buildVoteEscrowAccountStateInit_internal_macro$
+	CALL $buildVoteEscrowAccountStateInit_284e1f78_internal_macro$
 }
 HASHCU
 NEWC
@@ -767,7 +767,7 @@ LDREF
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $propose_internal_macro$
+	CALL $propose_7d666031_internal_macro$
 }
 DROP
 CALLREF {
@@ -775,11 +775,11 @@ CALLREF {
 }
 THROW 0
 
-.globl	propose_internal
-.type	propose_internal, @function
-CALL $propose_internal_macro$
+.globl	propose_7d666031_internal
+.type	propose_7d666031_internal, @function
+CALL $propose_7d666031_internal_macro$
 
-.macro propose_internal_macro
+.macro propose_7d666031_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 127
 PUSH S2
 FIRST
@@ -805,12 +805,12 @@ THROWIFNOT 113
 .loc ../contracts/dao/DaoRoot.sol, 131
 PUSH S2
 CALLREF {
-	CALL $calcTonActionsValue_internal_macro$
+	CALL $calcTonActionsValue_544cce14_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 132
 PUSH S2
 CALLREF {
-	CALL $calcEthActionsValue_internal_macro$
+	CALL $calcEthActionsValue_c09a3c97_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 133
 DEPTH
@@ -849,7 +849,7 @@ SWAP
 ENDC
 GETGLOB 9
 CALLREF {
-	CALL $expectedVoteEscrowAccountAddress_internal_macro$
+	CALL $expectedVoteEscrowAccountAddress_42237423_internal_macro$
 }
 NEWC
 STSLICECONST x62_
@@ -889,7 +889,7 @@ LDREF
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $deployProposal_internal_macro$
+	CALL $deployProposal_609dac0e_internal_macro$
 }
 DROP
 CALLREF {
@@ -897,17 +897,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	deployProposal_internal
-.type	deployProposal_internal, @function
-CALL $deployProposal_internal_macro$
+.globl	deployProposal_609dac0e_internal
+.type	deployProposal_609dac0e_internal, @function
+CALL $deployProposal_609dac0e_internal_macro$
 
-.macro deployProposal_internal_macro
+.macro deployProposal_609dac0e_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 148
 GETGLOB 9
 PUSH S2
 .loc ../contracts/dao/DaoRoot.sol, 69
 CALLREF {
-	CALL $expectedVoteEscrowAccountAddress_internal_macro$
+	CALL $expectedVoteEscrowAccountAddress_42237423_internal_macro$
 }
 SDEQ
 THROWIFNOT 106
@@ -1025,7 +1025,7 @@ ENDC
 GETGLOB 17
 GETGLOB 15
 CALLREF {
-	CALL $buildProposalStateInit_internal_macro$
+	CALL $buildProposalStateInit_8b8bacd3_internal_macro$
 }
 DUP
 HASHCU
@@ -1109,7 +1109,7 @@ SWAP
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $onProposalSucceeded_internal_macro$
+	CALL $onProposalSucceeded_e7f25252_internal_macro$
 }
 DROP
 CALLREF {
@@ -1117,17 +1117,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	onProposalSucceeded_internal
-.type	onProposalSucceeded_internal, @function
-CALL $onProposalSucceeded_internal_macro$
+.globl	onProposalSucceeded_e7f25252_internal
+.type	onProposalSucceeded_e7f25252_internal, @function
+CALL $onProposalSucceeded_e7f25252_internal_macro$
 
-.macro onProposalSucceeded_internal_macro
+.macro onProposalSucceeded_e7f25252_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 178
 GETGLOB 9
 PUSH S4
 .loc ../contracts/dao/DaoRoot.sol, 64
 CALLREF {
-	CALL $expectedProposalAddress_internal_macro$
+	CALL $expectedProposalAddress_6c7b1708_internal_macro$
 }
 SDEQ
 THROWIFNOT 105
@@ -1376,7 +1376,7 @@ PUSHCONT {
 		PLDU 256
 		OVER2
 		CALLREF {
-			CALL $encodeDaoEthereumActionData_internal_macro$
+			CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 		}
 		.loc ../contracts/dao/DaoRoot.sol, 224
 		LTIME
@@ -1454,7 +1454,7 @@ SWAP
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $calcTonActionsValue_internal_macro$
+	CALL $calcTonActionsValue_544cce14_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -1483,11 +1483,11 @@ IFREF {
 }
 THROW 0
 
-.globl	calcTonActionsValue_internal
-.type	calcTonActionsValue_internal, @function
-CALL $calcTonActionsValue_internal_macro$
+.globl	calcTonActionsValue_544cce14_internal
+.type	calcTonActionsValue_544cce14_internal, @function
+CALL $calcTonActionsValue_544cce14_internal_macro$
 
-.macro calcTonActionsValue_internal_macro
+.macro calcTonActionsValue_544cce14_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 234
 PUSHINT 0
 DUP
@@ -1546,7 +1546,7 @@ SWAP
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $calcEthActionsValue_internal_macro$
+	CALL $calcEthActionsValue_c09a3c97_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -1575,11 +1575,11 @@ IFREF {
 }
 THROW 0
 
-.globl	calcEthActionsValue_internal
-.type	calcEthActionsValue_internal, @function
-CALL $calcEthActionsValue_internal_macro$
+.globl	calcEthActionsValue_c09a3c97_internal
+.type	calcEthActionsValue_c09a3c97_internal, @function
+CALL $calcEthActionsValue_c09a3c97_internal_macro$
 
-.macro calcEthActionsValue_internal_macro
+.macro calcEthActionsValue_c09a3c97_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 243
 PUSHINT 0
 .loc ../contracts/dao/DaoRoot.sol, 244
@@ -1648,11 +1648,11 @@ DROP2
 NIP
 .loc ../contracts/dao/DaoRoot.sol, 0
 
-.globl	buildProposalStateInit_internal
-.type	buildProposalStateInit_internal, @function
-CALL $buildProposalStateInit_internal_macro$
+.globl	buildProposalStateInit_8b8bacd3_internal
+.type	buildProposalStateInit_8b8bacd3_internal, @function
+CALL $buildProposalStateInit_8b8bacd3_internal_macro$
 
-.macro buildProposalStateInit_internal_macro
+.macro buildProposalStateInit_8b8bacd3_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 256
 PUSHINT 1
 SWAP
@@ -1663,14 +1663,14 @@ STU 32
 ENDC
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $_buildInitData_internal_macro$
+	CALL $_buildInitData_15f25512_internal_macro$
 }
 
-.globl	buildVoteEscrowAccountStateInit_internal
-.type	buildVoteEscrowAccountStateInit_internal, @function
-CALL $buildVoteEscrowAccountStateInit_internal_macro$
+.globl	buildVoteEscrowAccountStateInit_284e1f78_internal
+.type	buildVoteEscrowAccountStateInit_284e1f78_internal, @function
+CALL $buildVoteEscrowAccountStateInit_284e1f78_internal_macro$
 
-.macro buildVoteEscrowAccountStateInit_internal_macro
+.macro buildVoteEscrowAccountStateInit_284e1f78_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 260
 PUSHINT 0
 NEWC
@@ -1717,11 +1717,11 @@ STOPTREF
 STZERO
 ENDC
 
-.globl	_buildInitData_internal
-.type	_buildInitData_internal, @function
-CALL $_buildInitData_internal_macro$
+.globl	_buildInitData_15f25512_internal
+.type	_buildInitData_15f25512_internal, @function
+CALL $_buildInitData_15f25512_internal_macro$
 
-.macro _buildInitData_internal_macro
+.macro _buildInitData_15f25512_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 274
 PUSHINT 0
 NEWC
@@ -1790,7 +1790,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $requestUpgradeProposal_internal_macro$
+	CALL $requestUpgradeProposal_7501c5a4_internal_macro$
 }
 DROP
 CALLREF {
@@ -1798,16 +1798,16 @@ CALLREF {
 }
 THROW 0
 
-.globl	requestUpgradeProposal_internal
-.type	requestUpgradeProposal_internal, @function
-CALL $requestUpgradeProposal_internal_macro$
+.globl	requestUpgradeProposal_7501c5a4_internal
+.type	requestUpgradeProposal_7501c5a4_internal, @function
+CALL $requestUpgradeProposal_7501c5a4_internal_macro$
 
-.macro requestUpgradeProposal_internal_macro
+.macro requestUpgradeProposal_7501c5a4_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 64
 GETGLOB 9
 SWAP
 CALLREF {
-	CALL $expectedProposalAddress_internal_macro$
+	CALL $expectedProposalAddress_6c7b1708_internal_macro$
 }
 SDEQ
 THROWIFNOT 105
@@ -1881,7 +1881,7 @@ LDMSGADDR
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $setVoteEscrowRoot_internal_macro$
+	CALL $setVoteEscrowRoot_5884ce40_internal_macro$
 }
 DROP
 CALLREF {
@@ -1889,17 +1889,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	setVoteEscrowRoot_internal
-.type	setVoteEscrowRoot_internal, @function
-CALL $setVoteEscrowRoot_internal_macro$
+.globl	setVoteEscrowRoot_5884ce40_internal
+.type	setVoteEscrowRoot_5884ce40_internal, @function
+CALL $setVoteEscrowRoot_5884ce40_internal_macro$
 
-.macro setVoteEscrowRoot_internal_macro
+.macro setVoteEscrowRoot_5884ce40_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 321
 DUP
@@ -1954,7 +1954,7 @@ LDMSGADDR
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $transferAdmin_internal_macro$
+	CALL $transferAdmin_75829def_internal_macro$
 }
 DROP
 CALLREF {
@@ -1962,17 +1962,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	transferAdmin_internal
-.type	transferAdmin_internal, @function
-CALL $transferAdmin_internal_macro$
+.globl	transferAdmin_75829def_internal
+.type	transferAdmin_75829def_internal, @function
+CALL $transferAdmin_75829def_internal_macro$
 
-.macro transferAdmin_internal_macro
+.macro transferAdmin_75829def_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 327
 DUP
@@ -2019,7 +2019,7 @@ IFREF {
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $acceptAdmin_internal_macro$
+	CALL $acceptAdmin_0e18b681_internal_macro$
 }
 DROP
 CALLREF {
@@ -2027,11 +2027,11 @@ CALLREF {
 }
 THROW 0
 
-.globl	acceptAdmin_internal
-.type	acceptAdmin_internal, @function
-CALL $acceptAdmin_internal_macro$
+.globl	acceptAdmin_0e18b681_internal
+.type	acceptAdmin_0e18b681_internal, @function
+CALL $acceptAdmin_0e18b681_internal_macro$
 
-.macro acceptAdmin_internal_macro
+.macro acceptAdmin_0e18b681_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 333
 GETGLOB 21
 PARSEMSGADDR
@@ -2103,7 +2103,7 @@ LDU 128
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateEthereumActionEventConfiguration_internal_macro$
+	CALL $updateEthereumActionEventConfiguration_cafb2a5b_internal_macro$
 }
 DROP
 CALLREF {
@@ -2111,17 +2111,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateEthereumActionEventConfiguration_internal
-.type	updateEthereumActionEventConfiguration_internal, @function
-CALL $updateEthereumActionEventConfiguration_internal_macro$
+.globl	updateEthereumActionEventConfiguration_cafb2a5b_internal
+.type	updateEthereumActionEventConfiguration_cafb2a5b_internal, @function
+CALL $updateEthereumActionEventConfiguration_cafb2a5b_internal_macro$
 
-.macro updateEthereumActionEventConfiguration_internal_macro
+.macro updateEthereumActionEventConfiguration_cafb2a5b_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 344
 DUP
@@ -2176,7 +2176,7 @@ LDREF
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateProposalCode_internal_macro$
+	CALL $updateProposalCode_bf98ea10_internal_macro$
 }
 DROP
 CALLREF {
@@ -2184,17 +2184,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateProposalCode_internal
-.type	updateProposalCode_internal, @function
-CALL $updateProposalCode_internal_macro$
+.globl	updateProposalCode_bf98ea10_internal
+.type	updateProposalCode_bf98ea10_internal, @function
+CALL $updateProposalCode_bf98ea10_internal_macro$
 
-.macro updateProposalCode_internal_macro
+.macro updateProposalCode_bf98ea10_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 356
 SETGLOB 17
@@ -2238,7 +2238,7 @@ LDU 128
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateQuorumVotes_internal_macro$
+	CALL $updateQuorumVotes_d8d43c10_internal_macro$
 }
 DROP
 CALLREF {
@@ -2246,17 +2246,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateQuorumVotes_internal
-.type	updateQuorumVotes_internal, @function
-CALL $updateQuorumVotes_internal_macro$
+.globl	updateQuorumVotes_d8d43c10_internal
+.type	updateQuorumVotes_d8d43c10_internal, @function
+CALL $updateQuorumVotes_d8d43c10_internal_macro$
 
-.macro updateQuorumVotes_internal_macro
+.macro updateQuorumVotes_d8d43c10_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 363
 DUP
@@ -2310,7 +2310,7 @@ LDU 128
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateThreshold_internal_macro$
+	CALL $updateThreshold_af9b052f_internal_macro$
 }
 DROP
 CALLREF {
@@ -2318,17 +2318,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateThreshold_internal
-.type	updateThreshold_internal, @function
-CALL $updateThreshold_internal_macro$
+.globl	updateThreshold_af9b052f_internal
+.type	updateThreshold_af9b052f_internal, @function
+CALL $updateThreshold_af9b052f_internal_macro$
 
-.macro updateThreshold_internal_macro
+.macro updateThreshold_af9b052f_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 373
 DUP
@@ -2382,7 +2382,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateTimeLock_internal_macro$
+	CALL $updateTimeLock_bc5b810d_internal_macro$
 }
 DROP
 CALLREF {
@@ -2390,17 +2390,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateTimeLock_internal
-.type	updateTimeLock_internal, @function
-CALL $updateTimeLock_internal_macro$
+.globl	updateTimeLock_bc5b810d_internal
+.type	updateTimeLock_bc5b810d_internal, @function
+CALL $updateTimeLock_bc5b810d_internal_macro$
 
-.macro updateTimeLock_internal_macro
+.macro updateTimeLock_bc5b810d_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 383
 DUP
@@ -2454,7 +2454,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateVotingPeriod_internal_macro$
+	CALL $updateVotingPeriod_33f48a5e_internal_macro$
 }
 DROP
 CALLREF {
@@ -2462,17 +2462,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateVotingPeriod_internal
-.type	updateVotingPeriod_internal, @function
-CALL $updateVotingPeriod_internal_macro$
+.globl	updateVotingPeriod_33f48a5e_internal
+.type	updateVotingPeriod_33f48a5e_internal, @function
+CALL $updateVotingPeriod_33f48a5e_internal_macro$
 
-.macro updateVotingPeriod_internal_macro
+.macro updateVotingPeriod_33f48a5e_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 393
 DUP
@@ -2526,7 +2526,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateVotingDelay_internal_macro$
+	CALL $updateVotingDelay_5730447c_internal_macro$
 }
 DROP
 CALLREF {
@@ -2534,17 +2534,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateVotingDelay_internal
-.type	updateVotingDelay_internal, @function
-CALL $updateVotingDelay_internal_macro$
+.globl	updateVotingDelay_5730447c_internal
+.type	updateVotingDelay_5730447c_internal, @function
+CALL $updateVotingDelay_5730447c_internal_macro$
 
-.macro updateVotingDelay_internal_macro
+.macro updateVotingDelay_5730447c_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 403
 DUP
@@ -2598,7 +2598,7 @@ LDU 32
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateGracePeriod_internal_macro$
+	CALL $updateGracePeriod_604e6a54_internal_macro$
 }
 DROP
 CALLREF {
@@ -2606,17 +2606,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateGracePeriod_internal
-.type	updateGracePeriod_internal, @function
-CALL $updateGracePeriod_internal_macro$
+.globl	updateGracePeriod_604e6a54_internal
+.type	updateGracePeriod_604e6a54_internal, @function
+CALL $updateGracePeriod_604e6a54_internal_macro$
 
-.macro updateGracePeriod_internal_macro
+.macro updateGracePeriod_604e6a54_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 413
 DUP
@@ -2678,7 +2678,7 @@ SWAP
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $updateProposalConfiguration_internal_macro$
+	CALL $updateProposalConfiguration_e46ce961_internal_macro$
 }
 DROP
 CALLREF {
@@ -2686,17 +2686,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	updateProposalConfiguration_internal
-.type	updateProposalConfiguration_internal, @function
-CALL $updateProposalConfiguration_internal_macro$
+.globl	updateProposalConfiguration_e46ce961_internal
+.type	updateProposalConfiguration_e46ce961_internal, @function
+CALL $updateProposalConfiguration_e46ce961_internal_macro$
 
-.macro updateProposalConfiguration_internal_macro
+.macro updateProposalConfiguration_e46ce961_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 423
 BLKPUSH 2, 0
@@ -2828,7 +2828,7 @@ LDU 256
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $addDelegate_internal_macro$
+	CALL $addDelegate_5bcfd212_internal_macro$
 }
 DROP
 CALLREF {
@@ -2836,17 +2836,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	addDelegate_internal
-.type	addDelegate_internal, @function
-CALL $addDelegate_internal_macro$
+.globl	addDelegate_5bcfd212_internal
+.type	addDelegate_5bcfd212_internal, @function
+CALL $addDelegate_5bcfd212_internal_macro$
 
-.macro addDelegate_internal_macro
+.macro addDelegate_5bcfd212_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 457
 OVER
@@ -2932,7 +2932,7 @@ LDREF
 ENDS
 .loc ../contracts/dao/DaoRoot.sol, 0
 CALLREF {
-	CALL $upgrade_internal_macro$
+	CALL $upgrade_7916ae0d_internal_macro$
 }
 DROP
 CALLREF {
@@ -2940,17 +2940,17 @@ CALLREF {
 }
 THROW 0
 
-.globl	upgrade_internal
-.type	upgrade_internal, @function
-CALL $upgrade_internal_macro$
+.globl	upgrade_7916ae0d_internal
+.type	upgrade_7916ae0d_internal, @function
+CALL $upgrade_7916ae0d_internal_macro$
 
-.macro upgrade_internal_macro
+.macro upgrade_7916ae0d_internal_macro
 .loc ../contracts/dao/DaoRoot.sol, 57
 GETGLOB 9
 GETGLOB 20
 SDEQ
 IFNOTREF {
-	CALL $checkDelegate_internal_macro$
+	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
 .loc ../contracts/dao/DaoRoot.sol, 468
 DEPTH
@@ -3054,11 +3054,11 @@ CALLREF {
 COMMIT
 THROW 0
 
-.globl	checkDelegate_internal
-.type	checkDelegate_internal, @function
-CALL $checkDelegate_internal_macro$
+.globl	checkDelegate_c45d6a7d_internal
+.type	checkDelegate_c45d6a7d_internal, @function
+CALL $checkDelegate_c45d6a7d_internal_macro$
 
-.macro checkDelegate_internal_macro
+.macro checkDelegate_c45d6a7d_internal_macro
 .loc ../contracts/dao/Delegate.sol, 17
 GETGLOB 9
 GETGLOB 10
@@ -3208,7 +3208,7 @@ SWAP
 ENDS
 .loc ../contracts/dao/DaoCellEncoder.sol, 0
 CALLREF {
-	CALL $encodeDaoEthereumActionData_internal_macro$
+	CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -3237,11 +3237,11 @@ IFREF {
 }
 THROW 0
 
-.globl	encodeDaoEthereumActionData_internal
-.type	encodeDaoEthereumActionData_internal, @function
-CALL $encodeDaoEthereumActionData_internal_macro$
+.globl	encodeDaoEthereumActionData_2394a3ac_internal
+.type	encodeDaoEthereumActionData_2394a3ac_internal, @function
+CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 
-.macro encodeDaoEthereumActionData_internal_macro
+.macro encodeDaoEthereumActionData_2394a3ac_internal_macro
 .loc ../contracts/dao/DaoCellEncoder.sol, 15
 REVERSE 4, 0
 NEWC
@@ -3266,7 +3266,7 @@ LDREF
 ENDS
 .loc ../contracts/dao/DaoCellEncoder.sol, 0
 CALLREF {
-	CALL $decodeDaoEthereumActionData_internal_macro$
+	CALL $decodeDaoEthereumActionData_a3d3c7a3_internal_macro$
 }
 PUSH S4
 PUSHCONT {
@@ -3306,11 +3306,11 @@ IFREF {
 }
 THROW 0
 
-.globl	decodeDaoEthereumActionData_internal
-.type	decodeDaoEthereumActionData_internal, @function
-CALL $decodeDaoEthereumActionData_internal_macro$
+.globl	decodeDaoEthereumActionData_a3d3c7a3_internal
+.type	decodeDaoEthereumActionData_a3d3c7a3_internal, @function
+CALL $decodeDaoEthereumActionData_a3d3c7a3_internal_macro$
 
-.macro decodeDaoEthereumActionData_internal_macro
+.macro decodeDaoEthereumActionData_a3d3c7a3_internal_macro
 .loc ../contracts/dao/DaoCellEncoder.sol, 19
 PUSHINT 0
 BLKPUSH 2, 0
@@ -3321,8 +3321,7 @@ LDI 8
 LDU 256
 LDU 32
 LDU 32
-LDDICT
-DROP
+PLDDICT
 PAIR
 REVERSE 4, 0
 POP S6
@@ -3397,13 +3396,11 @@ PUSHCONT {
 	PUSH S2
 	PUSHINT 64
 	DICTUGET
+	ZEROSWAPIFNOT
 	PUSHCONT {
 		PLDU 32
 	}
-	PUSHCONT {
-		PUSHINT 0
-	}
-	IFELSE
+	IF
 	PUSHREFSLICE {
 		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 	}

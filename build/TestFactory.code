@@ -1,4 +1,4 @@
-.version sol 0.60.0
+.version sol 0.62.0
 
 .macro constructor
 DROP
@@ -41,7 +41,7 @@ SWAP
 ENDS
 .loc ../contracts/test/TestFactory.sol, 0
 CALLREF {
-	CALL $deployUsers_internal_macro$
+	CALL $deployUsers_d80a7c0e_internal_macro$
 }
 DROP
 CALLREF {
@@ -49,7 +49,7 @@ CALLREF {
 }
 THROW 0
 
-.macro deployUsers_internal_macro
+.macro deployUsers_d80a7c0e_internal_macro
 .loc ../contracts/test/TestFactory.sol, 19
 OVER
 FIRST
@@ -99,8 +99,7 @@ PUSHCONT {
 	DICTUGET
 	THROWIFNOT 50
 	PLDU 256
-	SWAP
-	DUP
+	XCPU S1, S0
 	HASHCU
 	MYADDR
 	PARSEMSGADDR
@@ -209,13 +208,11 @@ PUSHCONT {
 	OVER
 	PUSHINT 64
 	DICTUGET
+	ZEROSWAPIFNOT
 	PUSHCONT {
 		PLDU 256
 	}
-	PUSHCONT {
-		PUSHINT 0
-	}
-	IFELSE
+	IF
 	PUSHINT 2
 	PUSH S2
 	PUSHINT 64

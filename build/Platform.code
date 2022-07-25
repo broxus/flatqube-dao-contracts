@@ -1,4 +1,4 @@
-.version sol 0.60.0
+.version sol 0.62.0
 
 .macro constructor
 DROP
@@ -32,7 +32,7 @@ PUSHCONT {
 	.loc ../node_modules/@broxus/contracts/contracts/platform/Platform.sol, 16
 	BLKPUSH 3, 2
 	CALLREF {
-		CALL $initialize_internal_macro$
+		CALL $initialize_4c288c12_internal_macro$
 	}
 }
 PUSHCONT {
@@ -58,11 +58,11 @@ CALLREF {
 }
 THROW 0
 
-.globl	initialize_internal
-.type	initialize_internal, @function
-CALL $initialize_internal_macro$
+.globl	initialize_4c288c12_internal
+.type	initialize_4c288c12_internal, @function
+CALL $initialize_4c288c12_internal_macro$
 
-.macro initialize_internal_macro
+.macro initialize_4c288c12_internal_macro
 .loc ../node_modules/@broxus/contracts/contracts/platform/Platform.sol, 24
 GETGLOB 10
 NEWC
@@ -160,13 +160,11 @@ PUSHCONT {
 	PUSH S2
 	PUSHINT 64
 	DICTUGET
+	ZEROSWAPIFNOT
 	PUSHCONT {
 		PLDU 8
 	}
-	PUSHCONT {
-		PUSHINT 0
-	}
-	IFELSE
+	IF
 	PUSHINT 3
 	PUSH S3
 	PUSHINT 64

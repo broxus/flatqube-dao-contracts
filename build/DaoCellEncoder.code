@@ -1,4 +1,4 @@
-.version sol 0.60.0
+.version sol 0.62.0
 
 .macro constructor
 DROP
@@ -32,7 +32,7 @@ SWAP
 ENDS
 .loc ../contracts/dao/DaoCellEncoder.sol, 0
 CALLREF {
-	CALL $encodeDaoEthereumActionData_internal_macro$
+	CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -61,11 +61,11 @@ IFREF {
 }
 THROW 0
 
-.globl	encodeDaoEthereumActionData_internal
-.type	encodeDaoEthereumActionData_internal, @function
-CALL $encodeDaoEthereumActionData_internal_macro$
+.globl	encodeDaoEthereumActionData_2394a3ac_internal
+.type	encodeDaoEthereumActionData_2394a3ac_internal, @function
+CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 
-.macro encodeDaoEthereumActionData_internal_macro
+.macro encodeDaoEthereumActionData_2394a3ac_internal_macro
 .loc ../contracts/dao/DaoCellEncoder.sol, 15
 REVERSE 4, 0
 NEWC
@@ -90,7 +90,7 @@ LDREF
 ENDS
 .loc ../contracts/dao/DaoCellEncoder.sol, 0
 CALLREF {
-	CALL $decodeDaoEthereumActionData_internal_macro$
+	CALL $decodeDaoEthereumActionData_a3d3c7a3_internal_macro$
 }
 PUSH S4
 PUSHCONT {
@@ -130,11 +130,11 @@ IFREF {
 }
 THROW 0
 
-.globl	decodeDaoEthereumActionData_internal
-.type	decodeDaoEthereumActionData_internal, @function
-CALL $decodeDaoEthereumActionData_internal_macro$
+.globl	decodeDaoEthereumActionData_a3d3c7a3_internal
+.type	decodeDaoEthereumActionData_a3d3c7a3_internal, @function
+CALL $decodeDaoEthereumActionData_a3d3c7a3_internal_macro$
 
-.macro decodeDaoEthereumActionData_internal_macro
+.macro decodeDaoEthereumActionData_a3d3c7a3_internal_macro
 .loc ../contracts/dao/DaoCellEncoder.sol, 19
 PUSHINT 0
 BLKPUSH 2, 0
@@ -145,8 +145,7 @@ LDI 8
 LDU 256
 LDU 32
 LDU 32
-LDDICT
-DROP
+PLDDICT
 PAIR
 REVERSE 4, 0
 POP S6

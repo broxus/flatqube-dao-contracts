@@ -1,4 +1,4 @@
-.version sol 0.60.0
+.version sol 0.62.0
 
 .macro constructor
 DROP
@@ -37,7 +37,7 @@ PUSHCONT {
 }
 IF
 CALLREF {
-	CALL $setOwnership_internal_macro$
+	CALL $setOwnership_3e1af783_internal_macro$
 }
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
 CALLREF {
@@ -59,7 +59,7 @@ LDREF
 ENDS
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
 CALLREF {
-	CALL $installVoteEscrowCode_internal_macro$
+	CALL $installVoteEscrowCode_99ce8c6e_internal_macro$
 }
 DROP
 CALLREF {
@@ -67,7 +67,7 @@ CALLREF {
 }
 THROW 0
 
-.macro installVoteEscrowCode_internal_macro
+.macro installVoteEscrowCode_99ce8c6e_internal_macro
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
 GETGLOB 5
 DUP
@@ -139,7 +139,7 @@ LDU 128
 ENDS
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
 CALLREF {
-	CALL $deployVoteEscrow_internal_macro$
+	CALL $deployVoteEscrow_dc0b072b_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -167,13 +167,12 @@ PUSHCONT {
 	DROP
 }
 IFELSE
-DROP
-CALLREF {
-	CALL $c7_to_c4$
+IFREF {
+	CALL $upd_only_time_in_c4$
 }
 THROW 0
 
-.macro deployVoteEscrow_internal_macro
+.macro deployVoteEscrow_dc0b072b_internal_macro
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
 GETGLOB 5
 DUP
@@ -408,8 +407,7 @@ SENDRAWMSG
 DUP
 PUSHINT 0
 BLKSWAP 2, 4
-SWAP
-PUSH S4
+XCPU S1, S4
 NEWC
 STSLICECONST x62_
 STSLICE
@@ -487,11 +485,11 @@ PUSHINT 1
 SENDRAWMSG
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
 
-.globl	setOwnership_internal
-.type	setOwnership_internal, @function
-CALL $setOwnership_internal_macro$
+.globl	setOwnership_3e1af783_internal
+.type	setOwnership_3e1af783_internal, @function
+CALL $setOwnership_3e1af783_internal_macro$
 
-.macro setOwnership_internal_macro
+.macro setOwnership_3e1af783_internal_macro
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 23
 GETGLOB 11
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 25
@@ -529,7 +527,7 @@ LDU 256
 ENDS
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 0
 CALLREF {
-	CALL $transferOwnership_internal_macro$
+	CALL $transferOwnership_d23e8489_internal_macro$
 }
 DROP
 CALLREF {
@@ -537,7 +535,7 @@ CALLREF {
 }
 THROW 0
 
-.macro transferOwnership_internal_macro
+.macro transferOwnership_d23e8489_internal_macro
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
 GETGLOB 5
 DUP
@@ -557,7 +555,7 @@ THROWIFNOT 1102
 ACCEPT
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 39
 CALLREF {
-	CALL $setOwnership_internal_macro$
+	CALL $setOwnership_3e1af783_internal_macro$
 }
 .loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 0
 
@@ -596,13 +594,11 @@ PUSHCONT {
 	OVER
 	PUSHINT 64
 	DICTUGET
+	ZEROSWAPIFNOT
 	PUSHCONT {
 		PLDU 256
 	}
-	PUSHCONT {
-		PUSHINT 0
-	}
-	IFELSE
+	IF
 	PUSHINT 0
 	PUSHINT 2
 	PUSH S3

@@ -1,5 +1,5 @@
 {
-    "name": "qube-dao-contracts",
+    "name": "qube-contracts",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -8,7 +8,7 @@
     "dependencies": {
         "@broxus/contracts": "^1.1.0",
         "broxus-ton-tokens-contracts": "github:broxus/ton-eth-bridge-token-contracts#d3c1cd920c0320ffaab03b54c878dd0e06fed3c7",
-        "locklift": "^2.1.6",
+        "locklift": "^2.1.8",
         "mocha-logger": "^1.0.7"
     }
 }

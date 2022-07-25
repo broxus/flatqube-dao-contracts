@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.60.0;
+pragma ever-solidity ^0.62.0;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
@@ -45,7 +45,7 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
         uint8 gauge_max_downtime,
         uint32 max_gauges_per_vote,
         uint128 whitelist_price
-    ) external onlyOwner returns (address _vote_escrow) {
+    ) external view onlyOwner returns (address _vote_escrow) {
         tvm.accept();
         require (!VoteEscrowCode.toSlice().empty(), 1000);
         require (!PlatformCode.toSlice().empty(), 1000);
