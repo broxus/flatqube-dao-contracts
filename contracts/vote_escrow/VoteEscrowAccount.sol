@@ -41,7 +41,6 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         TvmCell storage_data = abi.encode(
             qubeBalance,
             veQubeBalance,
-            expiredVeQubes,
             unlockedQubes,
             veQubeAverage,
             veQubeAveragePeriod,

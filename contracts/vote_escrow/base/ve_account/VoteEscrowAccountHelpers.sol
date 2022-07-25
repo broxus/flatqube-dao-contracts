@@ -17,7 +17,6 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
         address _voteEscrow,
         address _user,
         uint128 _qubeBalance, // total amount of deposited qubes
-        uint128 _expiredVeQubes, // expired ve qubes that should be withdrawn from vote escrow contract
         uint128 _unlockedQubes, // qubes with expired lock, that can be withdraw
         uint32 _lastUpdateTime,
         uint32 _lastEpochVoted, // number of last epoch when user voted
@@ -28,7 +27,6 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             voteEscrow,
             user,
             qubeBalance, // total amount of deposited qubes
-            expiredVeQubes, // expired ve qubes that should be withdrawn from vote escrow contract
             unlockedQubes, // qubes with expired lock, that can be withdraw
             lastUpdateTime,
             lastEpochVoted, // number of last epoch when user voted
@@ -73,8 +71,9 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
     // @return finished - indicate if we checked all required deposits up to this moment
     function _syncDeposits(uint32 sync_time) internal returns (bool finished) {
         finished = false;
+        uint128 expiredVeQubes = 0;
 
-        uint32 counter;
+        uint32 counter = 0;
         // get deposit with lowest unlock time
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
         uint64 cur_key;
@@ -110,7 +109,6 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             _updateVeAverage(sync_time);
             if (expiredVeQubes > 0) {
                 IVoteEscrow(voteEscrow).burnVeQubes{value: 0.1 ton}(user, expiredVeQubes);
-                expiredVeQubes = 0;
             }
         }
         return finished;
@@ -134,12 +132,15 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
         activeDeposits += 1;
     }
 
-    // view function for getting actual ve stats without modifying data on given time point
+    // View function for getting actual ve stats
     // @dev If now <= lastUpdateTime, will just return values stored on contract
-    function calculateVeAverage() external view returns (uint128 _veQubeBalance, uint128 _veQubeAverage, uint128 _veQubeAveragePeriod) {
+    function calculateVeAverage() external view returns (
+        uint128 _veQubeBalance, uint128 _expiredVeQubes, uint128 _veQubeAverage, uint128 _veQubeAveragePeriod
+    ) {
         _veQubeAverage = veQubeAverage;
         _veQubeAveragePeriod = veQubeAveragePeriod;
         _veQubeBalance = veQubeBalance;
+        _expiredVeQubes = 0;
         uint32 _lastUpdateTime = lastUpdateTime;
 
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
@@ -162,6 +163,7 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             _veQubeAveragePeriod += last_period;
             _lastUpdateTime = deposit_lock_end;
             _veQubeBalance -= cur_deposit.veAmount;
+            _expiredVeQubes += cur_deposit.veAmount;
 
             pointer = deposits.next(cur_key);
         }

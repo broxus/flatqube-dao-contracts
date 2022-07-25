@@ -41,7 +41,6 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
         TvmCell storage_data = abi.encode(
             qubeBalance,
             veQubeBalance,
-            expiredVeQubes,
             unlockedQubes,
             veQubeAverage,
             veQubeAveragePeriod,
@@ -97,7 +96,6 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
             (
                 qubeBalance,
                 veQubeBalance,
-                expiredVeQubes,
                 unlockedQubes,
                 veQubeAverage,
                 veQubeAveragePeriod,
@@ -108,7 +106,6 @@ contract TestVoteEscrowAccount is VoteEscrowAccountBase {
             ) = abi.decode(
                 storage_data,
                 (
-                    uint128,
                     uint128,
                     uint128,
                     uint128,

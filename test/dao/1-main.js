@@ -1,5 +1,6 @@
 const BigNumber = require('bignumber.js');
 const logger = require('mocha-logger');
+const { expect } = require('chai');
 const { getRandomNonce, toNano } = locklift.utils;
 const {deployUser, setupTokenRoot, setupVoteEscrow} = require("../utils/common");
 
@@ -27,9 +28,15 @@ const proposalConfiguration = {
     gracePeriod: 60 * 60 * 24 * 14
 }
 
+const arr_to_map = function(arr) {
+    return arr.reduce((map, elem) => {
+        map[elem[0]] = elem[1];
+        return map;
+    }, {});
+}
+
 
 const description = 'proposal-test-1';
-const bridge = '0:9cc3d8668d57d387eae54c4398a1a0b478b6a8c3a0f2b5265e641a212b435231'
 
 const CALL_VALUE = toNano(51);
 
@@ -93,7 +100,7 @@ describe('Test DAO in VoteEscrow', async function () {
 
     describe('DAO', async function () {
         const getVeAccount = async function (_user_address) {
-            return voteEscrow.voteEscrowAccount(_user_address);
+            return (await voteEscrow.voteEscrowAccount(_user_address)).contract;
         }
         const DEPOSIT_VALUE = 100000;
         let userAccount0;
@@ -115,11 +122,12 @@ describe('Test DAO in VoteEscrow', async function () {
             userTokenWallet1 = await qubeToken.mint(DEPOSIT_VALUE * 2, userAccount1);
 
             logger.log(`Depositing test tokens`);
+
             const tx = await voteEscrow.deposit(userTokenWallet0, DEPOSIT_VALUE * 2, lock_time, 1, false);
-            await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
+            // await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
 
             const tx1 = await voteEscrow.deposit(userTokenWallet1, DEPOSIT_VALUE, lock_time, 2, false);
-            await locklift.tracing.trace(tx1, {allowedCodes: {compute: [null]}});
+            // await locklift.tracing.trace(tx1, {allowedCodes: {compute: [null]}});
 
             veAccount0 = await getVeAccount(userAccount0.address);
             veAccount1 = await getVeAccount(userAccount1.address);
@@ -164,6 +172,12 @@ describe('Test DAO in VoteEscrow', async function () {
                     target: testTarget.address,
                     payload: (await testTarget.methods.encodePayload({addr: testTarget.address, callHash}).call()).value0
                 }];
+
+                // locklift.tracing.setAllowCodes({compute: [60]})
+                // locklift.tracing.allowCodesForAddress(userAccount0.address.toString(), {compute: [60]});
+                // const config = {allowedCodes: {contracts: {}}}
+                // config.allowedCodes.contracts[userAccount0.address.toString()] = {compute: [60]}
+                // locklift.tracing.allowCodesForAddress({address: userAccount0.address.toString(), allowedCodes: {compute: [60]}});
                 await locklift.tracing.trace(userAccount0.runTarget(
                     {
                         contract: daoRoot,
@@ -175,48 +189,45 @@ describe('Test DAO in VoteEscrow', async function () {
                         ethActions,
                         description
                     })
-                ));
+                ),
+                {
+                        allowedCodes: {
+                            contracts: {
+                                [userAccount0.address.toString()]: {compute:[60]}
+                            }
+                        }
+                    }
+                );
 
+                const deployedProposals = (await veAccount0.methods.created_proposals({}).call()).created_proposals;
+                console.log(deployedProposals);
+                proposalId = deployedProposals[0][0];
 
-                const deployedProposals = await veAccount0.methods.created_proposals().call();
-                proposalId = Object.keys(deployedProposals)[0];
+                const expectedProposalAddress = (await daoRoot.methods.expectedProposalAddress({proposalId: proposalId, answerId: 0}).call()).value0;
+                proposal = await locklift.factory.getDeployedContract('Proposal', expectedProposalAddress);
 
-                const expectedProposalAddress = await daoRoot.call({
-                    method: 'expectedProposalAddress',
-                    params: {proposalId: proposalId}
-                });
-                proposal = await locklift.factory.getContractArtifacts('Proposal');
-                proposal.setAddress(expectedProposalAddress);
-                proposal.afterRun = afterRun;
                 logger.log(`Deployed Proposal #${proposalId}: ${expectedProposalAddress}`);
                 logger.log(`TonActions: \n${JSON.stringify(tonActions, null, 4)}`);
                 logger.log(`EthActions: \n${JSON.stringify(ethActions, null, 4)}`);
             })
-            it('Check is staking is Active', async function () {
-                expect(await voteEscrow.call({method: 'isActive'}))
-                    .to.be.equal(true, 'taking is not Active');
-            })
-            it('Check balance', async function () {
-                expect((await veAccount0.call({method: 'getDetails'})).token_balance.toString())
-                    .to.be.equal((DEPOSIT_VALUE * 2).toString(), 'veAccount0 wrong token_balance');
-                expect((await veAccount1.call({method: 'getDetails'})).token_balance.toString())
-                    .to.be.equal(DEPOSIT_VALUE.toString(), 'veAccount1 wrong token_balance');
-            });
+
             describe('Check proposal deployed correct', async function () {
                 it('Check proposer', async function () {
-                    const proposer = await proposal.call({method: 'proposer'});
-                    expect(proposer)
+                    const proposer = (await proposal.methods.getProposer({answerId: 0}).call()).value0;
+                    expect(proposer.toString())
                         .to
-                        .equal(userAccount0.address, 'Wrong proposal proposer');
+                        .equal(userAccount0.address.toString(), 'Wrong proposal proposer');
                 });
                 it('Check locked tokens', async function () {
-                    const proposalId = await proposal.call({method: 'id'});
+                    const proposalId = await proposal.methods.id({}).call();
                     const expectedThreshold = proposalConfiguration.threshold.toString();
                     logger.log(`Expected threshold: ${expectedThreshold.toString()}`);
-                    const createdProposalLockedVotes = (await veAccount0.call({method: 'created_proposals'}))[proposalId];
+                    const created_proposals = (await veAccount0.methods.created_proposals({}).call()).created_proposals;
+                    const map_proposals = arr_to_map(created_proposals);
+                    const createdProposalLockedVotes = map_proposals[proposalId];
                     logger.log(`Current locked votes for proposal creation: ${createdProposalLockedVotes}`);
-                    const lockedVotes = await veAccount0.call({method: 'lockedTokens'});
-                    const totalVotes = (await veAccount0.call({method: 'getDetails'})).token_balance;
+                    const lockedVotes = (await veAccount0.methods.lockedTokens({answerId: 0}).call()).value0;
+                    const totalVotes = (await veAccount0.methods.calculateVeAverage({}).call())._veQubeBalance;
                     logger.log(`veAccount0 totalVotes: ${totalVotes.toString()}`);
                     logger.log(`veAccount0 availableVotes: ${totalVotes.minus(lockedVotes).toString()}`);
                     expect(createdProposalLockedVotes.toString())

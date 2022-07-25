@@ -185,7 +185,6 @@
 				{"name":"_voteEscrow","type":"address"},
 				{"name":"_user","type":"address"},
 				{"name":"_qubeBalance","type":"uint128"},
-				{"name":"_expiredVeQubes","type":"uint128"},
 				{"name":"_unlockedQubes","type":"uint128"},
 				{"name":"_lastUpdateTime","type":"uint32"},
 				{"name":"_lastEpochVoted","type":"uint32"},
@@ -207,6 +206,7 @@
 			],
 			"outputs": [
 				{"name":"_veQubeBalance","type":"uint128"},
+				{"name":"_expiredVeQubes","type":"uint128"},
 				{"name":"_veQubeAverage","type":"uint128"},
 				{"name":"_veQubeAveragePeriod","type":"uint128"}
 			]
@@ -306,7 +306,6 @@
 		{"name":"platform_code","type":"cell"},
 		{"name":"qubeBalance","type":"uint128"},
 		{"name":"veQubeBalance","type":"uint128"},
-		{"name":"expiredVeQubes","type":"uint128"},
 		{"name":"unlockedQubes","type":"uint128"},
 		{"name":"veQubeAverage","type":"uint128"},
 		{"name":"veQubeAveragePeriod","type":"uint32"},

@@ -16,7 +16,6 @@ abstract contract VoteEscrowAccountStorage is IVoteEscrowAccount {
 
     uint128 qubeBalance; // total amount of deposited qubes
     uint128 veQubeBalance; // current ve balance
-    uint128 expiredVeQubes; // expired ve qubes that should be withdrawn from vote escrow contract
     uint128 unlockedQubes; // qubes with expired lock, that can be withdraw
 
     // this is updated every time user deposit qubes/ve expire
