@@ -47,20 +47,12 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
         return {value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false} _lockedTokens();
     }
 
-    function canWithdrawVotes() override external view responsible returns (bool) {
-        return {value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false} _canWithdrawVotes();
-    }
-
-    function _canWithdrawVotes() private view returns (bool) {
-        return (casted_votes.empty() && _tmp_proposals.empty() && created_proposals.empty());
-    }
-
     function propose(
         TvmCell proposal_data,
         uint128 threshold
     ) override public onlyDaoRoot {
         // TODO: SYNC VE QUBE BALANCE BEFORE APPLY
-        if (qubeBalance - _lockedTokens() >= threshold) {
+        if (veQubeBalance - _lockedTokens() >= threshold) {
             _proposal_nonce++;
             _tmp_proposals[_proposal_nonce] = threshold;
             IDaoRoot(dao_root).deployProposal{
@@ -101,12 +93,12 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
             return;
         }
 
-        emit VoteCast(proposal_id, support, qubeBalance, reason);
+        emit VoteCast(proposal_id, support, veQubeBalance, reason);
         casted_votes[proposal_id] = support;
         IProposal(getProposalAddress(proposal_id)).castVote{
             value: 0,
             flag: MsgFlag.ALL_NOT_RESERVED
-        }(proposal_id, user, qubeBalance, support, reason);
+        }(proposal_id, user, veQubeBalance, support, reason);
     }
 
     function voteCasted(uint32 proposal_id) override public onlyDaoProposal(proposal_id) {

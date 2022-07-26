@@ -42,5 +42,4 @@ interface IVoteEscrowAccount {
     function tryUnlockCastedVotes(uint32[] proposalIds) external view;
 
     function lockedTokens() external view responsible returns(uint128);
-    function canWithdrawVotes() external view responsible returns (bool);
 }
