@@ -1,11 +1,10 @@
-const logger = require('mocha-logger');
-const { expect } = require('chai');
-const { getRandomNonce } = locklift.utils;
+const {expect} = require('chai');
+const {getRandomNonce} = locklift.utils;
 var should = require('chai').should();
-const { setupTokenRoot, setupVoteEscrow, deployUser, sleep } = require("../utils/common");
+const {setupTokenRoot, setupVoteEscrow, deployUser, sleep} = require("../utils/common");
 
 
-describe("Main Vote Escrow scenarios", async function() {
+describe("Main Vote Escrow scenarios", async function () {
     let user;
     let owner;
 
@@ -22,22 +21,22 @@ describe("Main Vote Escrow scenarios", async function() {
     let user_qube_wallet;
     let owner_qube_wallet;
 
-    describe('Setup contracts', async function() {
-        it('Deploy users', async function() {
+    describe('Setup contracts', async function () {
+        it('Deploy users', async function () {
             user = await deployUser(20);
             owner = await deployUser(40);
-            for (const i of [1,2,3,4]) {
+            for (const i of [1, 2, 3, 4]) {
                 const account = await deployUser(3);
                 account.name = `Gauge ${i}`
                 gauges.push(account);
             }
         });
 
-        it('Deploy token', async function() {
-           qube_root = await setupTokenRoot('QUBE', 'QUBE', owner);
+        it('Deploy token', async function () {
+            qube_root = await setupTokenRoot('QUBE', 'QUBE', owner);
         });
 
-        it('Deploy token wallets + mint', async function() {
+        it('Deploy token wallets + mint', async function () {
             owner_qube_wallet = await qube_root.mint(1000000000, owner);
             user_qube_wallet = await qube_root.mint(1000000000, user);
 
@@ -48,7 +47,7 @@ describe("Main Vote Escrow scenarios", async function() {
             }));
         });
 
-        it('Deploy Vote Escrow', async function() {
+        it('Deploy Vote Escrow', async function () {
             vote_escrow = await setupVoteEscrow({
                 owner, qube: qube_root
             });
@@ -58,9 +57,9 @@ describe("Main Vote Escrow scenarios", async function() {
         })
     });
 
-    describe('Running scenarios', async function() {
-        describe('Making deposits & whitelisting gauges & send distribution QUBEs', async function() {
-            it('Making 1st deposit', async function() {
+    describe('Running scenarios', async function () {
+        describe('Making deposits & whitelisting gauges & send distribution QUBEs', async function () {
+            it('Making 1st deposit', async function () {
                 const lock_time = 100;
                 const tx = await vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, false);
                 await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
@@ -82,7 +81,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(ve_details._veQubeAverage).to.be.eq('1000');
             });
 
-            it('Making 2nd deposit', async function() {
+            it('Making 2nd deposit', async function () {
                 const lock_time = 90;
                 await locklift.tracing.trace(vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 2));
                 const event = await vote_escrow.getEvent('Deposit');
@@ -101,7 +100,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(ve_details._veQubeBalance).to.be.eq('1900');
             });
 
-            it('Whitelisting gauges', async function() {
+            it('Whitelisting gauges', async function () {
                 let payments = 0;
 
                 for (const gauge of gauges) {
@@ -130,7 +129,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(voting_details._gaugesNum).to.be.eq('4');
             });
 
-            it('Send QUBEs for distribution', async function() {
+            it('Send QUBEs for distribution', async function () {
                 const supply = 6000000;
                 await vote_escrow.distributionDeposit(owner_qube_wallet, supply, '1');
                 const event = await vote_escrow.getEvent('DistributionSupplyIncrease');
@@ -143,8 +142,8 @@ describe("Main Vote Escrow scenarios", async function() {
             });
         });
 
-        describe('Case #1 - all gauges get equal votes', async function() {
-            it('Voting', async function() {
+        describe('Case #1 - all gauges get equal votes', async function () {
+            it('Voting', async function () {
                 const ve_balances = await ve_account.calculateVeAverage();
 
                 let votes = {};
@@ -175,7 +174,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 }
             });
 
-            it('End voting', async function() {
+            it('End voting', async function () {
                 await sleep(5000);
 
                 const details = await vote_escrow.details();
@@ -224,11 +223,11 @@ describe("Main Vote Escrow scenarios", async function() {
             });
         });
 
-        describe('Case #2 - excess, low and valid vote counts', async function() {
+        describe('Case #2 - excess, low and valid vote counts', async function () {
             let votes = {};
             let total_votes;
 
-            it('Voting', async function() {
+            it('Voting', async function () {
                 const ve_balances = await ve_account.calculateVeAverage();
 
                 // default max for 1 gauge is 30%, min is 2%
@@ -237,7 +236,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 votes[gauges[2].address] = Math.floor(ve_balances._veQubeBalance * 0.1); // 10% => 30% (+20%: 24% + 5% + 1% - 10% overflow)
                 votes[gauges[3].address] = Math.floor(ve_balances._veQubeBalance * 0.01); // 1% => 0%
 
-                total_votes = Object.values(votes).reduce((prev,next) => prev + next, 0);
+                total_votes = Object.values(votes).reduce((prev, next) => prev + next, 0);
                 // sleep a bit so that voting time starts
 
                 let votes_flat = [];
@@ -263,7 +262,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 }
             });
 
-            it('End voting', async function() {
+            it('End voting', async function () {
                 await sleep(5000);
 
                 const details = await vote_escrow.details();
@@ -322,12 +321,12 @@ describe("Main Vote Escrow scenarios", async function() {
             });
         });
 
-        describe('Case #3 - gauge removed from whitelist because of downtime', async function() {
+        describe('Case #3 - gauge removed from whitelist because of downtime', async function () {
             let votes = {};
             let total_votes;
 
             // just copying previous round logic
-            it('Voting', async function() {
+            it('Voting', async function () {
                 const ve_balances = await ve_account.calculateVeAverage();
 
                 // default max for 1 gauge is 30%, min is 2%
@@ -341,7 +340,7 @@ describe("Main Vote Escrow scenarios", async function() {
                     votes_flat.push([addr.toString(), val]);
                 }
 
-                total_votes = Object.values(votes).reduce((prev,next) => prev + next, 0);
+                total_votes = Object.values(votes).reduce((prev, next) => prev + next, 0);
                 // sleep a bit so that voting time starts
                 await sleep(4000);
                 await vote_escrow.vote(user, votes_flat, 3);
@@ -361,7 +360,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 }
             });
 
-            it('End voting', async function() {
+            it('End voting', async function () {
                 await sleep(5000);
 
                 const details = await vote_escrow.details();
@@ -427,11 +426,11 @@ describe("Main Vote Escrow scenarios", async function() {
             });
         });
 
-        describe('Case #4 - all votes are low/excess', async function() {
+        describe('Case #4 - all votes are low/excess', async function () {
             let votes = {};
             let total_votes;
 
-            it('Voting', async function() {
+            it('Voting', async function () {
                 const ve_balances = await ve_account.calculateVeAverage();
 
                 // default max for 1 gauge is 30%, min is 2%
@@ -439,7 +438,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 votes[gauges[1].address] = Math.floor(ve_balances._veQubeBalance * 0.49); // 49% => 30%
                 votes[gauges[2].address] = Math.floor(ve_balances._veQubeBalance * 0.01); // 1% => 0%
 
-                total_votes = Object.values(votes).reduce((prev,next) => prev + next, 0);
+                total_votes = Object.values(votes).reduce((prev, next) => prev + next, 0);
 
                 let votes_flat = [];
                 for (const [addr, val] of Object.entries(votes)) {
@@ -464,7 +463,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(all_votes[gauges[2].address].toString()).to.be.eq(votes[gauges[2].address].toString());
             });
 
-            it('End voting', async function() {
+            it('End voting', async function () {
                 await sleep(5000);
 
                 const details = await vote_escrow.details();
@@ -520,8 +519,8 @@ describe("Main Vote Escrow scenarios", async function() {
 
         });
 
-        describe('Case #5 - no one voted', async function() {
-            it('Start voting', async function() {
+        describe('Case #5 - no one voted', async function () {
+            it('Start voting', async function () {
                 // sleep a bit so that voting time starts
                 await sleep(4000);
                 await vote_escrow.startVoting(5);
@@ -530,7 +529,7 @@ describe("Main Vote Escrow scenarios", async function() {
                 expect(start_event.call_id).to.be.eq('5');
             });
 
-            it('End voting', async function() {
+            it('End voting', async function () {
                 await sleep(5000);
 
                 const details = await vote_escrow.details();

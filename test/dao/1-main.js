@@ -8,6 +8,8 @@ const stringToBytesArray = (dataString) => {
     return Buffer.from(dataString).toString('hex')
 };
 
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const ProposalState = [
     'Pending',
     'Active',
@@ -18,6 +20,8 @@ const ProposalState = [
     'Queued',
     'Executed'
 ]
+
+const configAddr = '0:0000000000000000000000000000000000000000000000000000000000001234';
 
 const proposalConfiguration = {
     votingDelay: 0,
@@ -74,6 +78,16 @@ describe('Test DAO in VoteEscrow', async function () {
             value: toNano(10)
         });
         daoRoot = contract;
+
+        await veOwner.runTarget(
+            {
+                contract: daoRoot
+            },
+            (dao) => dao.methods.updateEthereumActionEventConfiguration({
+                newConfiguration: configAddr,
+                newDeployEventValue: toNano(2)
+            })
+        )
 
         logger.log(`DaoRoot address: ${daoRoot.address}`);
         logger.log(`Installing Proposal code`);
@@ -165,19 +179,19 @@ describe('Test DAO in VoteEscrow', async function () {
                 }
             ];
             before('Deploy proposal', async function () {
-                let callHash = '0x' + (await testTarget.methods.getCallHash({newParam}).call()).value0.toString(16);
+                let callHash = (await testTarget.methods.getCallHash({newParam}).call()).value0;
+                const callHashHex = '0x' + (new BigNumber(callHash)).toString(16)
 
                 tonActions = [{
                     value: toNano(1),
                     target: testTarget.address,
-                    payload: (await testTarget.methods.encodePayload({addr: testTarget.address, callHash}).call()).value0
+                    payload: (await testTarget.methods.encodePayload({addr: testTarget.address, callHash: callHashHex}).call()).value0
                 }];
 
-                // locklift.tracing.setAllowCodes({compute: [60]})
-                // locklift.tracing.allowCodesForAddress(userAccount0.address.toString(), {compute: [60]});
-                // const config = {allowedCodes: {contracts: {}}}
-                // config.allowedCodes.contracts[userAccount0.address.toString()] = {compute: [60]}
-                // locklift.tracing.allowCodesForAddress({address: userAccount0.address.toString(), allowedCodes: {compute: [60]}});
+                // our test-wallet doesn't have dao callback handlers
+                locklift.tracing.setAllowedCodesForAddress(userAccount0.address.toString(), {compute: [60]});
+                locklift.tracing.setAllowedCodesForAddress(userAccount1.address.toString(), {compute: [60]});
+
                 await locklift.tracing.trace(userAccount0.runTarget(
                     {
                         contract: daoRoot,
@@ -188,19 +202,10 @@ describe('Test DAO in VoteEscrow', async function () {
                         tonActions,
                         ethActions,
                         description
-                    })
-                ),
-                {
-                        allowedCodes: {
-                            contracts: {
-                                [userAccount0.address.toString()]: {compute:[60]}
-                            }
-                        }
-                    }
+                    }))
                 );
 
                 const deployedProposals = (await veAccount0.methods.created_proposals({}).call()).created_proposals;
-                console.log(deployedProposals);
                 proposalId = deployedProposals[0][0];
 
                 const expectedProposalAddress = (await daoRoot.methods.expectedProposalAddress({proposalId: proposalId, answerId: 0}).call()).value0;
@@ -224,12 +229,12 @@ describe('Test DAO in VoteEscrow', async function () {
                     logger.log(`Expected threshold: ${expectedThreshold.toString()}`);
                     const created_proposals = (await veAccount0.methods.created_proposals({}).call()).created_proposals;
                     const map_proposals = arr_to_map(created_proposals);
-                    const createdProposalLockedVotes = map_proposals[proposalId];
+                    const createdProposalLockedVotes = map_proposals[proposalId.id];
                     logger.log(`Current locked votes for proposal creation: ${createdProposalLockedVotes}`);
                     const lockedVotes = (await veAccount0.methods.lockedTokens({answerId: 0}).call()).value0;
                     const totalVotes = (await veAccount0.methods.calculateVeAverage({}).call())._veQubeBalance;
                     logger.log(`veAccount0 totalVotes: ${totalVotes.toString()}`);
-                    logger.log(`veAccount0 availableVotes: ${totalVotes.minus(lockedVotes).toString()}`);
+                    logger.log(`veAccount0 availableVotes: ${totalVotes - lockedVotes}`);
                     expect(createdProposalLockedVotes.toString())
                         .to
                         .equal(expectedThreshold.toString(), 'Wrong threshold');
@@ -238,28 +243,28 @@ describe('Test DAO in VoteEscrow', async function () {
                         .equal(expectedThreshold.toString(), 'Wrong lockedVotes');
                 });
                 it('Check TonActions', async function () {
-                    const actualTonActions = await proposal.call({method: 'tonActions'});
-                    expect(actualTonActions.length)
+                    const actualTonActions = await proposal.methods.tonActions({}).call();
+                    expect(actualTonActions.tonActions.length)
                         .to
                         .equal(tonActions.length, 'Wrong TonActions amount');
-                    for (const [i, actualTonAction] of actualTonActions.entries()) {
+                    for (const [i, actualTonAction] of actualTonActions.tonActions.entries()) {
                         expect(actualTonAction.value)
                             .to
                             .equal(tonActions[i].value, 'Wrong TonAction value');
-                        expect(actualTonAction.target)
+                        expect(actualTonAction.target.toString())
                             .to
-                            .equal(tonActions[i].target, 'Wrong TonAction target');
+                            .equal(tonActions[i].target.toString(), 'Wrong TonAction target');
                         expect(actualTonAction.payload)
                             .to
                             .equal(tonActions[i].payload, 'Wrong TonAction payload');
                     }
                 });
                 it('Check EthActions', async function () {
-                    const actualEthActions = await proposal.call({method: 'ethActions'});
-                    expect(actualEthActions.length)
+                    const actualEthActions = await proposal.methods.ethActions({}).call();
+                    expect(actualEthActions.ethActions.length)
                         .to
                         .equal(ethActions.length, 'Wrong EthActions amount');
-                    for (const [i, actualEthAction] of actualEthActions.entries()) {
+                    for (const [i, actualEthAction] of actualEthActions.ethActions.entries()) {
                         expect(new BigNumber(actualEthAction.value).toString())
                             .to
                             .equal(ethActions[i].value.toString(), 'Wrong EthActions value');
@@ -278,7 +283,7 @@ describe('Test DAO in VoteEscrow', async function () {
                     }
                 });
                 it('Check State', async function () {
-                    const state = await proposal.call({method: 'getState'});
+                    const state = (await proposal.methods.getState({answerId: 0}).call()).value0;
                     logger.log(`Actual state: ${ProposalState[state]}`);
                     expect(['Active', 'Pending'])
                         .to
@@ -291,30 +296,34 @@ describe('Test DAO in VoteEscrow', async function () {
                 let againstVotesBefore;
                 let castedVoteBefore;
                 before('Make vote support Vote', async function () {
-                    castedVoteBefore = (await veAccount0.call({method: 'casted_votes'}))[proposalId];
-                    votesToCast = (await veAccount0.call({method: 'getDetails'})).token_balance;
-                    forVotesBefore = await proposal.call({method: 'forVotes'});
-                    againstVotesBefore = await proposal.call({method: 'againstVotes'});
+                    castedVoteBefore = (await veAccount0.methods.casted_votes({}).call()).casted_votes;
+                    castedVoteBefore = (arr_to_map(castedVoteBefore))[proposalId];
+                    votesToCast = (await veAccount0.methods.calculateVeAverage({}).call())._veQubeBalance;
+
+                    forVotesBefore = (await proposal.methods.forVotes({}).call()).forVotes;
+                    againstVotesBefore = (await proposal.methods.againstVotes({}).call()).againstVotes;
                     logger.log(`Account0 Cast Vote for Proposal ${proposalId}, amount: ${votesToCast.toString()}, support: True`)
                     logger.log(`DaoAccount0 casted vote Before: ${castedVoteBefore}`)
-                    await userAccount0.runTarget({
-                        contract: voteEscrow,
-                        method: 'castVote',
-                        params: {
-                            proposal_id: proposalId,
-                            support: true
+
+                    await wait(500); // make sure status is Active
+                    await locklift.tracing.trace(userAccount0.runTarget(
+                        {
+                            contract: voteEscrow.contract,
+                            value: CALL_VALUE
                         },
-                        value: CALL_VALUE
-                    })
+                        (ve) => ve.methods.castVote({proposal_id: proposalId, support: true})
+                    ));
                 });
+
                 it('Check votes after', async function () {
-                    const forVotes = await proposal.call({method: 'forVotes'});
-                    const againstVotes = await proposal.call({method: 'againstVotes'});
-                    const castedVote = (await veAccount0.call({method: 'casted_votes'}))[proposalId];
+                    const forVotes = (await proposal.methods.forVotes({}).call()).forVotes;
+                    const againstVotes = (await proposal.methods.againstVotes({}).call()).againstVotes;
+                    const tmp = (await veAccount0.methods.casted_votes({}).call()).casted_votes;
+                    const castedVote = (arr_to_map(tmp))[proposalId];
                     logger.log(`Proposal ForVotes: ${forVotes.toString()}`);
                     logger.log(`Proposal againstVotes: ${againstVotes.toString()}`);
                     logger.log(`DaoAccount0 castedVote: ${castedVote}`);
-                    expect(forVotesBefore.plus(votesToCast).toString())
+                    expect((Number(forVotesBefore) + Number(votesToCast)).toString())
                         .to
                         .equal(forVotes.toString(), 'Wrong forVotes');
                     expect(againstVotes.toString())
@@ -334,30 +343,31 @@ describe('Test DAO in VoteEscrow', async function () {
                 let againstVotesBefore;
                 let castedVotesBefore;
                 before('Make vote support Vote', async function () {
-                    votesToCast = (await veAccount1.call({method: 'getDetails'})).token_balance;
-                    forVotesBefore = await proposal.call({method: 'forVotes'});
-                    againstVotesBefore = await proposal.call({method: 'againstVotes'});
-                    castedVotesBefore = (await veAccount1.call({method: 'casted_votes'}))[proposalId];
+                    votesToCast = (await veAccount1.methods.calculateVeAverage({}).call())._veQubeBalance;
+                    forVotesBefore = (await proposal.methods.forVotes({}).call()).forVotes;
+                    againstVotesBefore = (await proposal.methods.againstVotes({}).call()).againstVotes;
+                    castedVotesBefore = (await veAccount1.methods.casted_votes({}).call()).casted_votes;
+                    castedVotesBefore = (arr_to_map(castedVotesBefore))[proposalId];
                     logger.log(`Account1 Cast Vote for Proposal ${proposalId}, amount: ${votesToCast.toString()}, support: False`);
                     logger.log(`DaoAccount1 castedVotes Before: ${castedVotesBefore}`);
-                    await userAccount1.runTarget({
-                        contract: voteEscrow,
-                        method: 'castVote',
-                        params: {
-                            proposal_id: proposalId,
-                            support: false
+                    await locklift.tracing.trace(userAccount1.runTarget(
+                        {
+                            contract: voteEscrow.contract,
+                            value: CALL_VALUE
                         },
-                        value: CALL_VALUE
-                    })
+                        (ve) => ve.methods.castVote({proposal_id: proposalId, support: false})
+                    ));
                 });
                 it('Check votes after', async function () {
-                    const forVotes = await proposal.call({method: 'forVotes'});
-                    const againstVotes = await proposal.call({method: 'againstVotes'});
-                    const castedVote = (await veAccount1.call({method: 'casted_votes'}))[proposalId];
+                    const forVotes = (await proposal.methods.forVotes({}).call()).forVotes;
+                    const againstVotes = (await proposal.methods.againstVotes({}).call()).againstVotes;
+                    const tmp = (await veAccount1.methods.casted_votes({}).call()).casted_votes;
+                    const castedVote = (arr_to_map(tmp))[proposalId];
                     logger.log(`Proposal ForVotes: ${forVotes.toString()}`);
                     logger.log(`Proposal againstVotes: ${againstVotes.toString()}`);
                     logger.log(`DaoAccount1 castedVote: ${castedVote}`);
-                    expect(againstVotesBefore.plus(votesToCast).toString())
+                    // console.log(againstVotesBefore, votesToCast, againstVotes);
+                    expect((Number(againstVotesBefore) + Number(votesToCast)).toString())
                         .to
                         .equal(againstVotes.toString(), 'Wrong againstVotes');
                     expect(forVotes.toString())
@@ -374,13 +384,13 @@ describe('Test DAO in VoteEscrow', async function () {
             describe('Check proposal execution', async function () {
                 let timeLeft;
                 before('Make vote support Vote', async function () {
-                    const voteEndTime = await proposal.call({method: 'endTime'});
+                    const voteEndTime = (await proposal.methods.endTime({}).call()).endTime;
                     timeLeft = voteEndTime - Math.floor(Date.now() / 1000);
                     logger.log(`Time left to vote end: ${timeLeft}`);
                     await wait((timeLeft + 5) * 1000);
                 });
                 it('Check status after vote end', async function () {
-                    let state = await proposal.call({method: 'getState'});
+                    let state = (await proposal.methods.getState({answerId: 0}).call()).value0;
                     logger.log(`Current state: ${ProposalState[state]}`);
                     expect(ProposalState[state])
                         .to
@@ -388,86 +398,90 @@ describe('Test DAO in VoteEscrow', async function () {
                 });
                 it('Check proposal Queue', async function () {
                     logger.log('Queue proposal');
-                    await proposal.run({method: 'queue'});
-                    state = await proposal.call({method: 'getState'});
+                    await locklift.tracing.trace(proposal.methods.queue({}).sendExternal({withoutSignature: true}));
+                    let state = (await proposal.methods.getState({answerId: 0}).call()).value0;
                     logger.log(`Current state: ${ProposalState[state]}`);
                     expect(ProposalState[state])
                         .to
                         .equal('Queued', 'Wrong state');
                 });
                 it('Check proposal Executing', async function () {
-                    const targetExecutedBefore = await testTarget.call({method: 'executed'});
+                    const targetExecutedBefore = (await testTarget.methods.executed({}).call()).executed;
 
                     expect(targetExecutedBefore)
                         .to
                         .equal(false, 'Wrong executed state in target before executing');
 
                     logger.log('Executing proposal');
-                    await proposal.run({method: 'execute'});
-                    state = await proposal.call({method: 'getState'});
+                    const tx = await locklift.tracing.trace(
+                        proposal.methods.execute({}).sendExternal({withoutSignature: true}),
+                        {allowedCodes: {contracts: {[configAddr]: {compute: [null]}}}}
+                    );
+                    let state = (await proposal.methods.getState({answerId: 0}).call()).value0;
                     logger.log(`Current state: ${ProposalState[state]}`);
                     expect(ProposalState[state])
                         .to
                         .equal('Executed', 'Wrong state');
-                    await userAccount1.runTarget({
-                        contract: testTarget,
-                        method: 'call',
-                        params: {newParam},
-                    })
-                    await userAccount1.runTarget({
-                        contract: testTarget,
-                        method: 'call',
-                        params: {newParam: 0},
-                    })
-                    const targetExecuted = await testTarget.call({method: 'executed'});
-                    const targetParam = await testTarget.call({method: 'param'});
+
+                    await locklift.tracing.trace(userAccount1.runTarget(
+                        {
+                            contract: testTarget
+                        },
+                        (tt) => tt.methods.call({newParam})
+                    ));
+                    await locklift.tracing.trace(
+                        userAccount1.runTarget(
+                            {
+                                contract: testTarget
+                            },
+                            (tt) => tt.methods.call({newParam: 0})
+                        ),
+                        {
+                            allowedCodes: {contracts: {[testTarget.address]: {compute: [1201]}}} // allowed to fail
+                        }
+                    );
+                    const targetExecuted = (await testTarget.methods.executed({}).call()).executed;
+                    const targetParam = (await testTarget.methods.param({}).call()).param;
                     expect(targetExecuted)
                         .to
                         .equal(true, 'Wrong executed state in target after executing');
-                    expect(targetParam.toNumber())
+                    expect(targetParam.toString())
                         .to
-                        .equal(newParam, 'Wrong target new param after executing');
+                        .equal(newParam.toString(), 'Wrong target new param after executing');
                 });
             })
             describe('Check unlock proposer vote tokens', async function () {
                 it('Check votes amount after unlock', async function () {
-                    const lockedVotes = await veAccount0.call({method: 'lockedTokens'});
-                    const totalVotes = (await veAccount0.call({method: 'getDetails'})).token_balance;
+                    const lockedVotes = (await veAccount0.methods.lockedTokens({answerId: 0}).call()).value0;
+                    const totalVotes = (await veAccount0.methods.calculateVeAverage({}).call())._veQubeBalance;
                     logger.log(`DaoAccount0 lockedVotes: ${lockedVotes.toString()}`);
                     logger.log(`DaoAccount0 totalVotes: ${totalVotes.toString()}`);
-                    expect(lockedVotes.toNumber())
+                    expect(lockedVotes.toString())
                         .to
-                        .equal(0, 'Wrong locked votes');
+                        .equal('0', 'Wrong locked votes');
                 });
             });
             describe('Check unlock casted votes', async function () {
                 let castedVotesBefore;
-                let canWithdrawBefore;
+
                 before('Unlock casted votes', async function () {
-                    castedVotesBefore = Object.keys(await veAccount0.call({method: 'casted_votes'}));
+                    const castedVotesBefore_arr = (await veAccount0.methods.casted_votes({}).call()).casted_votes;
+                    castedVotesBefore = arr_to_map(castedVotesBefore_arr);
                     logger.log(`Casted votes before unlock: ${JSON.stringify(castedVotesBefore)}`);
-                    canWithdrawBefore = await veAccount0.call({method: 'canWithdrawVotes'});
-                    logger.log(`Casted withdraw before unlock: ${canWithdrawBefore}`);
-                    await userAccount0.runTarget({
-                        contract: voteEscrow,
-                        method: 'tryUnlockCastedVotes',
-                        params: {proposal_ids: castedVotesBefore},
-                        value: CALL_VALUE
-                    });
+
+                    await locklift.tracing.trace(userAccount0.runTarget(
+                        {
+                            contract: voteEscrow.contract,
+                            value: CALL_VALUE
+                        },
+                        (ve) => ve.methods.tryUnlockCastedVotes({proposal_ids: Object.keys(castedVotesBefore)})
+                    ));
                 });
-                it('Check casted votes before unlock', async function () {
-                    expect(canWithdrawBefore)
-                        .to
-                        .equal(false, 'Wrong canWithdrawVotes before');
-                });
+
                 it('Check casted votes after unlock', async function () {
-                    const castedVotes = Object.keys(await veAccount0.call({method: 'casted_votes'}));
+                    const castedVotes_arr = (await veAccount0.methods.casted_votes({}).call()).casted_votes;
+                    const castedVotes = Object.keys(arr_to_map(castedVotes_arr));
                     logger.log(`Casted votes after unlock: ${JSON.stringify(castedVotes)}`);
-                    const canWithdraw = await veAccount0.call({method: 'canWithdrawVotes'});
-                    logger.log(`Casted withdraw after unlock: ${canWithdraw}`);
-                    expect(canWithdraw)
-                        .to
-                        .equal(true, 'Wrong canWithdrawVotes after');
                 });
             });
         });
@@ -482,12 +496,14 @@ describe('Test DAO in VoteEscrow', async function () {
             }
             let currentConfiguration;
             before('Update proposals configuration', async function () {
-                await veOwner.runTarget({
-                    contract: daoRoot,
-                    method: 'updateProposalConfiguration',
-                    params: {newConfig: newConfiguration},
-                });
-                currentConfiguration = await daoRoot.call({method: 'proposalConfiguration'});
+                await veOwner.runTarget(
+                    {
+                        contract: daoRoot
+                    },
+                    (dao) => dao.methods.updateProposalConfiguration({newConfig: newConfiguration})
+                )
+
+                currentConfiguration = (await daoRoot.methods.proposalConfiguration({}).call()).proposalConfiguration;
             })
             it('Check new configuration', async function () {
                 expect(currentConfiguration.votingDelay.toString())
@@ -515,23 +531,24 @@ describe('Test DAO in VoteEscrow', async function () {
             let newDaoRoot;
             before('Run update function', async function () {
                 TestUpgrade = await locklift.factory.getContractArtifacts('TestUpgrade');
-                await veOwner.runTarget({
-                    contract: daoRoot,
-                    method: 'upgrade',
-                    params: {code: TestUpgrade.code},
-                    value: toNano(3)
-                });
-                newDaoRoot = TestUpgrade;
-                newDaoRoot.setAddress(daoRoot.address);
+                await veOwner.runTarget(
+                    {
+                        contract: daoRoot,
+                        value: toNano(3)
+                    },
+                    (dao) => dao.methods.upgrade({code: TestUpgrade.code})
+                )
+
+                newDaoRoot = await locklift.factory.getDeployedContract('TestUpgrade', daoRoot.address);
             })
             it('Check new DAO Root contract', async function () {
-                expect(await newDaoRoot.call({method: 'storedData'}))
+                expect((await newDaoRoot.methods.storedData({}).call()).storedData)
                     .to
                     .not
                     .equal(null, 'Emtpy data after upgrade');
-                expect(await newDaoRoot.call({method: 'isUpgraded'}))
+                expect((await newDaoRoot.methods.isUpgraded({}).call()).isUpgraded)
                     .to
-                    .equal(true, 'Wrong votingPeriod');
+                    .equal(true, 'Empty data after upgrade');
             })
         })
     });

@@ -88,15 +88,6 @@
 			]
 		},
 		{
-			"name": "canWithdrawVotes",
-			"inputs": [
-				{"name":"answerId","type":"uint32"}
-			],
-			"outputs": [
-				{"name":"value0","type":"bool"}
-			]
-		},
-		{
 			"name": "propose",
 			"inputs": [
 				{"name":"proposal_data","type":"cell"},
