@@ -47,22 +47,36 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
         return {value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false} _lockedTokens();
     }
 
-    function propose(
-        TvmCell proposal_data,
-        uint128 threshold
-    ) override public onlyDaoRoot {
-        // TODO: SYNC VE QUBE BALANCE BEFORE APPLY
-        if (veQubeBalance - _lockedTokens() >= threshold) {
+    function propose(TvmCell proposal_data, uint128 threshold) override public onlyDaoRoot {
+        tvm.rawReserve(_reserve(), 0);
+
+        // check gas only at beginning
+        if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
+            IProposer(user).onProposalNotCreated{
+                value: 0,
+                flag: MsgFlag.ALL_NOT_RESERVED,
+                bounce: false
+            }(proposal_data.toSlice().decode(uint32));
+            return;
+        }
+
+        bool update_finished = _syncDeposits(now);
+        if (!update_finished) {
+            IVoteEscrowAccount(address(this)).propose{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(proposal_data, threshold);
+            return;
+        }
+
+        if (veQubeBalance > _lockedTokens() && (veQubeBalance - _lockedTokens()) >= threshold) {
             _proposal_nonce++;
             _tmp_proposals[_proposal_nonce] = threshold;
             IDaoRoot(dao_root).deployProposal{
                 value: 0,
-                flag: MsgFlag.REMAINING_GAS
+                flag: MsgFlag.ALL_NOT_RESERVED
             }(_proposal_nonce, user, proposal_data);
         } else {
             IProposer(user).onProposalNotCreated{
                 value: 0,
-                flag: MsgFlag.REMAINING_GAS,
+                flag: MsgFlag.ALL_NOT_RESERVED,
                 bounce: false
             }(proposal_data.toSlice().decode(uint32));
         }
@@ -79,17 +93,21 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
     }
 
     function castVote(uint32 proposal_id, bool support, string reason) public override onlyVoteEscrowOrSelf {
-        // TODO: SYNC VE QUBE BALANCE BEFORE APPLY
         tvm.rawReserve(_reserve(), 0);
 
         uint16 error;
-
-        if (msg.value < Gas.CAST_VOTE_VALUE) error = Errors.LOW_MSG_VALUE;
+        if (msg.sender == voteEscrow && msg.value < calculateMinGas()) error = Errors.LOW_MSG_VALUE;
         if (casted_votes.exists(proposal_id)) error = Errors.ALREADY_VOTED;
         if (bytes(reason).length > MAX_REASON_LENGTH) error = Errors.REASON_IS_TOO_LONG;
 
         if (error != 0){
             IVoter(user).onVoteRejected{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(proposal_id, error);
+            return;
+        }
+
+        bool update_finished = _syncDeposits(now);
+        if (!update_finished) {
+            IVoteEscrowAccount(address(this)).castVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(proposal_id, support, reason);
             return;
         }
 
