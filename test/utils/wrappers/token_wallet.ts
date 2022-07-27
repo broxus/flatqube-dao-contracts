@@ -12,6 +12,7 @@ export class TokenWallet {
     public contract: Contract<FactorySource["TokenWallet"]>;
     public _owner: AccountType | null;
     public address: Address;
+    public name: string | undefined;
 
     constructor(wallet_contract: Contract<FactorySource["TokenWallet"]>, wallet_owner: AccountType | null) {
         this.contract = wallet_contract;

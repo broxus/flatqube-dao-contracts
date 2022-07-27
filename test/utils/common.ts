@@ -13,16 +13,16 @@ const {getRandomNonce} = require("locklift/build/utils");
 const {toNano} = locklift.utils;
 
 
-declare type AccountType = Account<FactorySource["TestWallet"]>;
+export declare type AccountType = Account<FactorySource["TestWallet"]>;
 
 
-async function sleep(ms = 1000) {
+export async function sleep(ms = 1000) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
 // allow sending N internal messages via batch method
-const runTargets = async function (
+export const runTargets = async function (
     wallet: AccountType,
     targets: Contract<any>[],
     methods: string[],
@@ -46,7 +46,7 @@ const runTargets = async function (
 }
 
 
-const deployUsers = async function (count: number, initial_balance: number) {
+export const deployUsers = async function (count: number, initial_balance: number) {
     // @ts-ignore
     let signers = await Promise.all([...Array(count).keys()].map(async (i) => await locklift.keystore.getSigner(i.toString())));
     signers = signers.slice(0, count);
@@ -98,7 +98,7 @@ const deployUsers = async function (count: number, initial_balance: number) {
 }
 
 
-const deployUser = async function (initial_balance = 100) {
+export const deployUser = async function (initial_balance = 100) {
     const signer = await locklift.keystore.getSigner('0');
     let accountsFactory = locklift.factory.getAccountsFactory('TestWallet');
 
@@ -121,7 +121,7 @@ const deployUser = async function (initial_balance = 100) {
 }
 
 
-const setupTokenRoot = async function (token_name: string, token_symbol: string, owner: AccountType) {
+export const setupTokenRoot = async function (token_name: string, token_symbol: string, owner: AccountType) {
     const signer = await locklift.keystore.getSigner('0');
 
     const TokenWallet = await locklift.factory.getContractArtifacts('TokenWallet');
@@ -156,7 +156,7 @@ const setupTokenRoot = async function (token_name: string, token_symbol: string,
 }
 
 
-const setupVoteEscrow = async function ({
+export const setupVoteEscrow = async function ({
         // @ts-ignore
         owner,
         // @ts-ignore
@@ -224,14 +224,4 @@ const setupVoteEscrow = async function ({
     logger.log(`Accepted ownership`);
 
     return ve;
-}
-
-
-module.exports = {
-    setupTokenRoot,
-    setupVoteEscrow,
-    deployUser,
-    deployUsers,
-    runTargets,
-    sleep
 }

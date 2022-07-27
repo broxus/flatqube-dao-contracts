@@ -1,7 +1,6 @@
 const {
     toNano
 } = locklift.utils;
-const VoteEscrowAccount = require("./ve_account");
 const {expect} = require('chai');
 
 const Bignumber = require("bignumber.js");
@@ -9,6 +8,7 @@ import {FactorySource} from "../../../build/factorySource";
 import {Address, Contract} from "locklift";
 import {TokenWallet} from "./token_wallet";
 import {Account} from "locklift/build/factory";
+import {VoteEscrowAccount} from "./ve_account";
 
 
 declare type AccountType = Account<FactorySource["TestWallet"]>;
@@ -318,11 +318,15 @@ export class VoteEscrow {
 
     async withdraw(user: AccountType, call_id = 0) {
         const ve_acc = await this.voteEscrowAccount(user.address);
-        const gas = await ve_acc.contract.methods.calculateMinGas({}).call();
+        let gas;
+        gas = (await ve_acc.contract.methods.calculateMinGas({answerId: 0}).call()).min_gas;
+        gas = new Bignumber(gas);
+        gas = gas.plus(new Bignumber(3 * 10 ** 9)).toFixed(0);
+
         return await user.runTarget(
             {
                 contract: this.contract,
-                value: gas.plus(new Bignumber(3 * 10 ** 9)).toFixed(0)
+                value: gas
             },
             (ve) => ve.methods.withdraw({
                 nonce: 0,
