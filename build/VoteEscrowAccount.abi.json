@@ -34,7 +34,7 @@
 			]
 		},
 		{
-			"name": "processEpochVote",
+			"name": "processVoteEpoch",
 			"inputs": [
 				{"name":"voteEpoch","type":"uint32"},
 				{"name":"votes","type":"map(address,uint128)"},

@@ -265,7 +265,7 @@
 			]
 		},
 		{
-			"name": "vote",
+			"name": "voteEpoch",
 			"inputs": [
 				{"name":"votes","type":"map(address,uint128)"},
 				{"name":"call_id","type":"uint32"},

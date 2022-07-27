@@ -15,7 +15,7 @@ interface IVoteEscrowAccount {
         uint32 createdAt; // timestamp of deposit
         uint32 lockTime; // lock interval
     }
-    function processEpochVote(
+    function processVoteEpoch(
         uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
     ) external;
     function processDeposit(

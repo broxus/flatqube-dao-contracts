@@ -17,7 +17,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         sendGasTo.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function processEpochVote(
+    function processVoteEpoch(
         uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
     ) external override onlyVoteEscrowOrSelf {
         require (lastEpochVoted < voteEpoch, Errors.ALREADY_VOTED);
@@ -32,7 +32,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
 
         bool update_finished = _syncDeposits(now);
         if (!update_finished) {
-            IVoteEscrowAccount(address(this)).processEpochVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            IVoteEscrowAccount(address(this)).processVoteEpoch{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 voteEpoch, votes, call_id, nonce, send_gas_to
             );
             return;

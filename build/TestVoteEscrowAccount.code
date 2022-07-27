@@ -483,7 +483,7 @@ SENDRAWMSG
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountBase.sol, 0
 DROP2
 
-.macro processEpochVote
+.macro processVoteEpoch
 DROP
 GETGLOB 6
 THROWIFNOT 76
@@ -514,7 +514,7 @@ LDMSGADDR
 ENDS
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountBase.sol, 0
 CALLREF {
-	CALL $processEpochVote_26354d4a_internal_macro$
+	CALL $processVoteEpoch_1cba45cb_internal_macro$
 }
 DROP
 CALLREF {
@@ -522,7 +522,7 @@ CALLREF {
 }
 THROW 0
 
-.macro processEpochVote_26354d4a_internal_macro
+.macro processVoteEpoch_1cba45cb_internal_macro
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 42
 PUSHINT 3000
 GETGLOB 9
@@ -609,7 +609,7 @@ PUSHCONT {
 		STUR 111
 		ROLLREV 5
 		NEWC
-		STSLICECONST x1d5a2a7a
+		STSLICECONST x3dcffd0f
 		STU 32
 		STDICT
 		STU 32
@@ -3652,15 +3652,9 @@ IFJMPREF {
 		}
 	}
 	DUP
-	PUSHINT 601637728
+	PUSHINT 688139567
 	LEQ
 	IFJMPREF {
-		DUP
-		PUSHINT 492448378
-		EQUAL
-		IFJMPREF {
-			CALL $processEpochVote$
-		}
 		DUP
 		PUSHINT 557591039
 		EQUAL
@@ -3679,17 +3673,17 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $onDeployRetry$
 		}
-	}
-	DUP
-	PUSHINT 1020673756
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 688139567
 		EQUAL
 		IFJMPREF {
 			CALL $unlockVoteTokens$
 		}
+	}
+	DUP
+	PUSHINT 1037040911
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 748730991
 		EQUAL
@@ -3707,6 +3701,12 @@ IFJMPREF {
 		EQUAL
 		IFJMPREF {
 			CALL $deposits$
+		}
+		DUP
+		PUSHINT 1037040911
+		EQUAL
+		IFJMPREF {
+			CALL $processVoteEpoch$
 		}
 	}
 	DUP

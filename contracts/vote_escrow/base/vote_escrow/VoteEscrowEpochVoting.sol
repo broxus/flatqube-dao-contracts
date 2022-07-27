@@ -125,7 +125,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
     // @param call_id - id helper for front/indexing
     // @param nonce - nonce for callback, ignored if == 0
     // @param send_gas_to - address to send unspent gas
-    function vote(mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external onlyActive {
+    function voteEpoch(mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external onlyActive {
         require (msg.value >= Gas.MIN_MSG_VALUE + maxGaugesPerVote * Gas.PER_GAUGE_VOTE_GAS, Errors.LOW_MSG_VALUE);
 
         if (currentVotingStartTime == 0) {
@@ -145,7 +145,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         tvm.rawReserve(_reserve(), 0);
 
         address ve_acc_addr = getVoteEscrowAccountAddress(msg.sender);
-        IVoteEscrowAccount(ve_acc_addr).processEpochVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        IVoteEscrowAccount(ve_acc_addr).processVoteEpoch{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             currentEpoch, votes, call_id, nonce, send_gas_to
         );
     }
