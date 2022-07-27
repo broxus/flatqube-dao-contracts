@@ -1,15 +1,17 @@
-const {
-    convertCrystal
-} = locklift.utils;
+import {FactorySource} from "../../../build/factorySource";
+import {Address, Contract} from "locklift";
 
 
-class VoteEscrowAccount {
-    constructor(ve_acc_contract) {
+export class VoteEscrowAccount {
+    public contract: Contract<FactorySource["VoteEscrowAccount"]>
+    public address: Address;
+
+    constructor(ve_acc_contract: Contract<FactorySource["VoteEscrowAccount"]>) {
         this.contract = ve_acc_contract;
         this.address = this.contract.address;
     }
 
-    static async from_addr(addr) {
+    static async from_addr(addr: Address) {
         const contract = await locklift.factory.getDeployedContract('VoteEscrowAccount', addr);
         return new VoteEscrowAccount(contract);
     }
@@ -22,5 +24,3 @@ class VoteEscrowAccount {
         return await this.contract.methods.calculateVeAverage({}).call();
     }
 }
-
-module.exports = VoteEscrowAccount

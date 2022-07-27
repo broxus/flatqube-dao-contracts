@@ -1,35 +1,43 @@
+import {TokenWallet} from "./wrappers/token_wallet";
+import {Token} from "./wrappers/token";
+import {VoteEscrow} from "./wrappers/vote_ecsrow";
+import {VoteEscrowAccount} from "./wrappers/ve_account";
+import {Account} from "locklift/build/factory";
+import {FactorySource} from "../../build/factorySource";
+import {Address, Contract, zeroAddress} from "locklift";
+
 const logger = require("mocha-logger");
 const {expect} = require("chai");
-const BigNumber = require('bignumber.js');
-const Token = require("./wrappers/token");
-const VoteEscrow = require('./wrappers/vote_ecsrow');
-const {Dimensions, zeroAddress, Address} = require("locklift");
+
 const {getRandomNonce} = require("locklift/build/utils");
 const {toNano} = locklift.utils;
 
 
-async function sleep(ms) {
-    ms = ms === undefined ? 1000 : ms;
+declare type AccountType = Account<FactorySource["TestWallet"]>;
+
+
+async function sleep(ms = 1000) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
-const checkTokenBalance = async function(token_wallet, expected_bal) {
-    const balance = await token_wallet.balance();
-    expect(balance.toFixed(0)).to.be.eq(expected_bal.toFixed(0));
-}
-
-
 // allow sending N internal messages via batch method
-const runTargets = async function(wallet, targets, methods, params_list, values) {
-    let bodies = await Promise.all(targets.map(async function(target, idx) {
+const runTargets = async function (
+    wallet: AccountType,
+    targets: Contract<any>[],
+    methods: string[],
+    params_list: Object[],
+    values: any[]
+) {
+    let bodies = await Promise.all(targets.map(async function (target, idx) {
         const method = methods[idx];
         const params = params_list[idx];
+        // @ts-ignore
         return await target.methods[method](params).encodeInternal();
     }));
 
     return await locklift.tracing.trace(wallet.accountContract.methods.sendTransactions({
-        dest: targets.map((contract) => contract.address.toString()),
+        dest: targets.map((contract) => contract.address),
         value: values,
         bounce: new Array(targets.length).fill(true),
         flags: new Array(targets.length).fill(0),
@@ -38,25 +46,29 @@ const runTargets = async function(wallet, targets, methods, params_list, values)
 }
 
 
-const deployUsers = async function(count, initial_balance) {
+const deployUsers = async function (count: number, initial_balance: number) {
+    // @ts-ignore
     let signers = await Promise.all([...Array(count).keys()].map(async (i) => await locklift.keystore.getSigner(i.toString())));
     signers = signers.slice(0, count);
 
     let signers_map = {};
     signers.map((signer) => {
+        // @ts-ignore
         signers_map[`0x${signer.publicKey}`.toLowerCase()] = signer;
     })
 
     const TestWallet = await locklift.factory.getContractArtifacts('TestWallet');
     const {contract: factory, tx} = await locklift.factory.deployContract({
         contract: 'TestFactory',
-        initParams: { wallet_code: TestWallet.code, _randomNonce: getRandomNonce() },
-        publicKey: signers[0].publicKey,
+        initParams: {wallet_code: TestWallet.code, _randomNonce: getRandomNonce()},
+        publicKey: signers[0]?.publicKey as string,
         constructorParams: {},
         value: toNano(count * initial_balance + 5)
     });
 
-    const pubkeys = signers.map((signer) => { return `0x${signer.publicKey}` });
+    const pubkeys = signers.map((signer) => {
+        return `0x${signer?.publicKey}`
+    });
     const values = Array(count).fill(toNano(initial_balance));
 
     const chunkSize = 60;
@@ -64,36 +76,40 @@ const deployUsers = async function(count, initial_balance) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
         console.log(i, chunkSize)
-        await locklift.tracing.trace(factory.methods.deployUsers({pubkeys: _pubkeys, values: _values}).sendExternal({publicKey: signers[0].publicKey}));
+        await locklift.tracing.trace(factory.methods.deployUsers({
+            pubkeys: _pubkeys,
+            values: _values
+        }).sendExternal({publicKey: signers[0]?.publicKey as string}));
     }
 
     // await sleep(1000);
     const {wallets} = await factory.methods.wallets({}).call();
-    const wallets_map = wallets.reduce((map, elem) => {
+    const wallets_map: { [id: string]: Address } = wallets.reduce((map, elem) => {
         const pubkey = elem[0];
+        // @ts-ignore
         map[signers_map[pubkey].publicKey] = elem[1];
         return map;
     }, {});
 
     let accountsFactory = locklift.factory.getAccountsFactory('TestWallet');
-    return await Promise.all(Object.entries(wallets_map).map(async function([pubkey, addr]) {
+    return await Promise.all(Object.entries(wallets_map).map(async function ([pubkey, addr]) {
         return accountsFactory.getAccount(addr, pubkey);
     }));
 }
 
 
-const deployUser = async function(initial_balance=100) {
+const deployUser = async function (initial_balance = 100) {
     const signer = await locklift.keystore.getSigner('0');
     let accountsFactory = locklift.factory.getAccountsFactory('TestWallet');
 
     const {account: _user, tx} = await locklift.tracing.trace(accountsFactory.deployNewAccount({
-        publicKey: signer.publicKey,
+        publicKey: signer?.publicKey as string,
         value: locklift.utils.toNano(initial_balance).toString(),
         initParams: {
             _randomNonce: locklift.utils.getRandomNonce(),
         },
         constructorParams: {
-            owner_pubkey: `0x${signer.publicKey}`
+            owner_pubkey: `0x${signer?.publicKey}`
         },
     }));
 
@@ -105,7 +121,7 @@ const deployUser = async function(initial_balance=100) {
 }
 
 
-const setupTokenRoot = async function(token_name, token_symbol, owner) {
+const setupTokenRoot = async function (token_name: string, token_symbol: string, owner: AccountType) {
     const signer = await locklift.keystore.getSigner('0');
 
     const TokenWallet = await locklift.factory.getContractArtifacts('TokenWallet');
@@ -118,11 +134,11 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
             rootOwner_: owner.address,
             walletCode_: TokenWallet.code,
             randomNonce_: locklift.utils.getRandomNonce(),
-            deployer_: zeroAddress
+            deployer_: new Address(zeroAddress)
         },
-        publicKey: signer.publicKey,
+        publicKey: signer?.publicKey as string,
         constructorParams: {
-            initialSupplyTo: zeroAddress,
+            initialSupplyTo: new Address(zeroAddress),
             initialSupply: 0,
             deployWalletValue: 0,
             mintDisabled: false,
@@ -140,24 +156,26 @@ const setupTokenRoot = async function(token_name, token_symbol, owner) {
 }
 
 
-const setupVoteEscrow = async function({
-    owner,
-    qube,
-    dao=zeroAddress,
-    start_time=null,
-    min_lock=1,
-    max_lock=100,
-    distribution_scheme=[8000, 1000, 1000],
-    distribution=[1000000, 1000000, 1000000, 1000000, 1000000, 1000000],
-    epoch_time=10,
-    time_before_voting=4,
-    voting_time=5,
-    gauge_min_votes_ratio=200,
-    gauge_max_votes_ratio=3000,
-    gauge_max_downtime=2,
-    max_gauges_per_vote=15,
-    whitelist_price=1000000
-}) {
+const setupVoteEscrow = async function ({
+        // @ts-ignore
+        owner,
+        // @ts-ignore
+        qube,
+        dao = new Address(zeroAddress),
+        start_time = Math.floor(Date.now() / 1000 + 5),
+        min_lock = 1,
+        max_lock = 100,
+        distribution_scheme = [8000, 1000, 1000],
+        distribution = [1000000, 1000000, 1000000, 1000000, 1000000, 1000000],
+        epoch_time = 10,
+        time_before_voting = 4,
+        voting_time = 5,
+        gauge_min_votes_ratio = 200,
+        gauge_max_votes_ratio = 3000,
+        gauge_max_downtime = 2,
+        max_gauges_per_vote = 15,
+        whitelist_price = 1000000
+    }) {
     const VoteEscrowContract = await locklift.factory.getContractArtifacts('VoteEscrow');
     const Platform = await locklift.factory.getContractArtifacts('Platform');
     const VoteEscrowAccount = await locklift.factory.getContractArtifacts('VoteEscrowAccount');
@@ -170,19 +188,16 @@ const setupVoteEscrow = async function({
             PlatformCode: Platform.code,
             veAccountCode: VoteEscrowAccount.code,
         },
-        publicKey: signer.publicKey,
+        publicKey: signer?.publicKey as string,
         constructorParams: {},
         value: locklift.utils.toNano(20),
     });
 
     logger.log(`Deployed Vote Escrow deployer`);
-    await locklift.tracing.trace(deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer.publicKey}));
+    await locklift.tracing.trace(deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer?.publicKey as string}));
 
-    if (start_time === null) {
-        start_time = Math.floor(Date.now() / 1000 + 5);
-    }
     logger.log(`Set Vote Escrow code`);
-    const tx2 = await locklift.tracing.trace(deployer.methods.deployVoteEscrow({
+    const tx2 = await deployer.methods.deployVoteEscrow({
         owner: owner.address,
         qube: qube.address,
         dao,
@@ -199,11 +214,11 @@ const setupVoteEscrow = async function({
         gauge_max_downtime,
         max_gauges_per_vote,
         whitelist_price
-    }).sendExternal({publicKey: signer.publicKey}));
+    }).sendExternal({publicKey: signer?.publicKey as string});
 
-    const ve_addr = tx2.output._vote_escrow;
-    const ve = await VoteEscrow.from_addr(ve_addr, owner);
-    logger.log(`Deployed and configured Vote Escrow: ${ve_addr.toString()}`);
+    const ve_addr = tx2?.output?._vote_escrow;
+    const ve = await VoteEscrow.from_addr(ve_addr as Address, owner);
+    logger.log(`Deployed and configured Vote Escrow: ${ve_addr?.toString()}`);
 
     await ve.acceptOwnership(owner);
     logger.log(`Accepted ownership`);
@@ -218,6 +233,5 @@ module.exports = {
     deployUser,
     deployUsers,
     runTargets,
-    sleep,
-    checkTokenBalance
+    sleep
 }
