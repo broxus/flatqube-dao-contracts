@@ -96,4 +96,17 @@ interface IGauge {
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
     function onGaugeAccountDeploy(address user, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;
+    function setupTokens(
+        address _depositTokenRoot,
+        address _qubeTokenRoot,
+        address[] _extraRewardTokenRoot
+    ) external;
+    function setupVesting(
+        uint32 _qubeVestingPeriod,
+        uint32 _qubeVestingRatio,
+        uint32[] _extraVestingPeriods,
+        uint32[] _extraVestingRatios,
+        uint32 _withdrawAllLockPeriod,
+        uint32 call_id
+    ) external;
 }

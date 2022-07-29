@@ -54,7 +54,7 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
         TvmCell stateInit = tvm.buildStateInit({
             contr: VoteEscrow,
             varInit: {
-                deploy_nonce: uint64(_randomNonce)
+                deploy_nonce: uint32(_randomNonce)
             },
             pubkey: tvm.pubkey(),
             code: VoteEscrowCode

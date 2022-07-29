@@ -20,8 +20,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         IGaugeFactory(factory).processUpdateGaugeAccountCodeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
     }
 
-    function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external override {
-        require (msg.sender == factory, Errors.NOT_FACTORY);
+    function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external onlyFactory override {
         tvm.rawReserve(_reserve(), 0);
 
         if (new_version == gauge_account_version) {
@@ -44,8 +43,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         IGaugeFactory(factory).processUpgradeGaugeRequest{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, send_gas_to);
     }
 
-    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external view override {
-        require (msg.sender == factory, Errors.NOT_FACTORY);
+    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external view onlyFactory override {
         tvm.rawReserve(_reserve(), 0);
 
         address gauge_account = getGaugeAccountAddress(user);

@@ -24,7 +24,7 @@ abstract contract GaugeBase is GaugeRewards {
     ) external override {
         tvm.rawReserve(_reserve(), 0);
 
-        if (msg.sender == depositTokenWallet) {
+        if (msg.sender == depositTokenData.tokenWallet) {
             // check if payload assembled correctly
             (address deposit_owner, uint32 lock_time, bool claim, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
 
@@ -32,14 +32,14 @@ abstract contract GaugeBase is GaugeRewards {
                 // too low deposit value or too low msg.value or incorrect deposit payload
                 // for incorrect deposit payload send tokens back to sender
                 emit DepositRevert(call_id, deposit_owner, amount);
-                _transferTokens(depositTokenWallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
+                _transferTokens(depositTokenData.tokenWallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
                 return;
             }
 
             updateRewardData();
 
             uint128 boosted_amount = calculateBoostedBalance(amount, lock_time);
-            depositTokenBalance += amount;
+            depositTokenData.tokenBalance += amount;
             lockBoostedSupply += boosted_amount;
 
             deposit_nonce += 1;
@@ -90,14 +90,14 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         PendingDeposit deposit = deposits[_deposit_nonce];
-        depositTokenBalance -= deposit.amount;
+        depositTokenData.tokenBalance -= deposit.amount;
         lockBoostedSupply -= deposit.boosted_amount;
 
         emit DepositRevert(deposit.call_id, deposit.user, deposit.amount);
         delete deposits[_deposit_nonce];
 
         _transferTokens(
-            depositTokenWallet,
+            depositTokenData.tokenWallet,
             deposit.amount,
             deposit.user,
             _makeCell(deposit.nonce),
@@ -188,7 +188,7 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
-        depositTokenBalance -= amount;
+        depositTokenData.tokenBalance -= amount;
         lockBoostedSupply -= amount;
 
         emit Withdraw(call_id, user, amount);
@@ -205,7 +205,7 @@ abstract contract GaugeBase is GaugeRewards {
         }
 
         // we dont need additional callback, we always send tokens as last action
-        _transferTokens(depositTokenWallet, amount, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferTokens(depositTokenData.tokenWallet, amount, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function finishClaim(

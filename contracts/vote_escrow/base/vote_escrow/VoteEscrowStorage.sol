@@ -5,7 +5,7 @@ import "../../interfaces/IVoteEscrow.sol";
 
 
 abstract contract VoteEscrowStorage is IVoteEscrow {
-    uint64 static deploy_nonce;
+    uint32 static deploy_nonce;
     TvmCell platformCode;
     TvmCell veAccountCode;
     uint32 ve_account_version;

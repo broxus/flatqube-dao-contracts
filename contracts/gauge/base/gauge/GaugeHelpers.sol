@@ -165,51 +165,6 @@ abstract contract GaugeHelpers is GaugeStorage {
         return (_qube_amount, _extra_amount, _qube_debt, _extra_debt);
     }
 
-    /*
-        @notice Creates token wallet for configured root token, initialize arrays and send callback to factory
-    */
-    function _setUpTokenWallets() internal view {
-        // Deploy vault's token wallet
-        ITokenRoot(depositTokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
-            address(this), // owner
-            Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
-        );
-
-        // deploy qube wallet
-        ITokenRoot(qubeTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
-            address(this), // owner
-            Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
-        );
-
-        for (uint i = 0; i < extraTokenData.length; i++) {
-            ITokenRoot(extraTokenData[i].tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress}(
-                address(this), // owner address
-                Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
-            );
-        }
-    }
-
-    /*
-        @notice Store vault's token wallet address
-        @dev Only root can call with correct params
-        @param wallet Gauge's token wallet
-    */
-    function receiveTokenWalletAddress(address wallet) external override {
-        tvm.rawReserve(_reserve(), 0);
-
-        if (msg.sender == depositTokenRoot) {
-            depositTokenWallet = wallet;
-        } else if (msg.sender == qubeTokenData.tokenRoot) {
-            qubeTokenData.tokenWallet = wallet;
-        } else {
-            for (uint i = 0; i < extraTokenData.length; i++) {
-                if (msg.sender == extraTokenData[i].tokenRoot) {
-                    extraTokenData[i].tokenWallet = wallet;
-                }
-            }
-        }
-    }
-
     function _sendCallbackOrGas(address callback_receiver, uint32 nonce, bool success, address send_gas_to) internal pure {
         if (nonce > 0) {
             if (success) {
@@ -258,6 +213,11 @@ abstract contract GaugeHelpers is GaugeStorage {
 
     modifier onlyOwner() {
         require(msg.sender == owner, Errors.NOT_OWNER);
+        _;
+    }
+
+    modifier onlyFactory() {
+        require (msg.sender == factory, Errors.NOT_FACTORY);
         _;
     }
 

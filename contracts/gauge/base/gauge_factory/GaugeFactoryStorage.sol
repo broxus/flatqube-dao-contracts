@@ -18,6 +18,7 @@ abstract contract GaugeFactoryStorage is IGaugeFactory {
     uint32 default_qube_vesting_ratio;
 
     address qube;
+    address voteEscrow;
 
     TvmCell static GaugeAccountCode;
     TvmCell static GaugeCode;

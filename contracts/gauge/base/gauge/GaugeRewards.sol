@@ -1,10 +1,10 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeUpgradable.sol";
+import "./GaugeDeploy.sol";
 
 
-abstract contract GaugeRewards is GaugeUpgradable {
+abstract contract GaugeRewards is GaugeDeploy {
     // @dev Create new qube reward round with given parameters. Reward per second is set according to len and amount
     // @param qubes_amount - amount of qubes that should be distributed along new round
     // @param round_len - length of new round in seconds
@@ -173,6 +173,5 @@ abstract contract GaugeRewards is GaugeUpgradable {
         ) = calculateRewardData();
 
         updateSupplyAverage();
-
     }
 }

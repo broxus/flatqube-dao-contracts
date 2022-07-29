@@ -7,13 +7,20 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 contract GaugeFactory is GaugeFactoryBase {
-    constructor(address _owner, address _qube, uint32 _qube_vesting_ratio, uint32 _qube_vesting_period) public {
+    constructor(
+        address _owner,
+        address _qube,
+        address _vote_escrow,
+        uint32 _qube_vesting_ratio,
+        uint32 _qube_vesting_period
+    ) public {
         require (tvm.pubkey() != 0, Errors.WRONG_PUBKEY);
         require (tvm.pubkey() == msg.pubkey(), Errors.WRONG_PUBKEY);
         tvm.accept();
 
         owner = _owner;
         qube = _qube;
+        voteEscrow = _vote_escrow;
 
         default_qube_vesting_period = _qube_vesting_period;
         default_qube_vesting_ratio = _qube_vesting_ratio;
@@ -30,6 +37,7 @@ contract GaugeFactory is GaugeFactoryBase {
             gauges_count,
             owner,
             pending_owner,
+            voteEscrow,
             default_qube_vesting_period,
             default_qube_vesting_ratio,
             qube,

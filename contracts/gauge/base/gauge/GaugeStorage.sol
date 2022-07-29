@@ -13,7 +13,7 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     // constants
-    uint128 constant CONTRACT_MIN_BALANCE = 1 ton;
+    uint128 constant CONTRACT_MIN_BALANCE = 1 ever;
     uint8 constant MAX_STORED_ROUNDS = 10;
 
     uint32 constant MAX_UINT32 = 0xFFFFFFFF;
@@ -31,9 +31,7 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint32 lastAverageUpdateTime;
 
     // deposit token data
-    address depositTokenRoot;
-    address depositTokenWallet;
-    uint128 depositTokenBalance;
+    TokenData depositTokenData;
 
     // sum of all deposits boosted with locks
     uint128 lockBoostedSupply;

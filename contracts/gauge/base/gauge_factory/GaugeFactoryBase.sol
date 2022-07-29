@@ -92,7 +92,8 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
         uint32 call_id
     ) internal {
         tvm.rawReserve(_reserve(), 0);
-        require (msg.value >= Gas.GAUGE_DEPLOY_VALUE, Errors.LOW_MSG_VALUE);
+        uint128 extra_tokens_value = uint128(extraRewardTokenRoot.length) * Gas.TOKEN_WALLET_DEPLOY_VALUE;
+        require (msg.value >= Gas.GAUGE_DEPLOY_VALUE + extra_tokens_value, Errors.LOW_MSG_VALUE);
 
         TvmCell stateInit = tvm.buildStateInit({
             contr: Gauge,
@@ -109,30 +110,19 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
         });
         gauges_count += 1;
 
-        new Gauge{
+        address new_gauge = new Gauge{
             stateInit: stateInit,
-            value: 0,
-            wid: address(this).wid,
-            flag: MsgFlag.ALL_NOT_RESERVED
-        }(
-            owner, depositTokenRoot, qube, qubeVestingPeriod, qubeVestingRatio, extraRewardTokenRoot,
-            extraVestingPeriods, extraVestingRatios, withdrawAllLockPeriod, call_id
+            value: Gas.GAUGE_DEPLOY_VALUE + extra_tokens_value - 1 ever,
+            wid: address(this).wid
+        }(owner, voteEscrow);
+        Gauge(new_gauge).setupTokens{value: 0.1 ever}(depositTokenRoot, qube, extraRewardTokenRoot);
+        Gauge(new_gauge).setupVesting{value: 0.1 ever}(
+            qubeVestingPeriod, qubeVestingRatio, extraVestingPeriods, extraVestingRatios, withdrawAllLockPeriod, call_id
         );
+        msg.sender.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function onGaugeDeploy(
-        uint32 deploy_nonce,
-        address owner,
-        address depositTokenRoot,
-        address qubeTokenRoot,
-        uint32 qubeVestingPeriod,
-        uint32 qubeVestingRatio,
-        address[] extraRewardTokenRoot,
-        uint32[] extraVestingPeriods,
-        uint32[] extraVestingRatios,
-        uint32 withdrawAllLockPeriod,
-        uint32 call_id
-    ) external override {
+    function onGaugeDeploy(uint32 deploy_nonce, uint32 call_id) external override {
         TvmCell stateInit = tvm.buildStateInit({
             contr: Gauge,
             varInit: {
@@ -149,9 +139,6 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
         address gauge_address = address(tvm.hash(stateInit));
         require (msg.sender == gauge_address, Errors.NOT_GAUGE);
 
-        emit NewGauge(
-            call_id,gauge_address, owner, depositTokenRoot, qubeTokenRoot, qubeVestingPeriod, qubeVestingRatio,
-            extraRewardTokenRoot, extraVestingPeriods, extraVestingRatios, withdrawAllLockPeriod
-        );
+        emit NewGauge(call_id, gauge_address);
     }
 }
