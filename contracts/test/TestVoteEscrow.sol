@@ -18,6 +18,20 @@ contract TestVoteEscrow is VoteEscrowBase {
         _setupTokenWallet();
     }
 
+    // ONLY FOR TESTING!
+    function sendQubesToGauge(
+        uint128 qube_amount,
+        address gauge,
+        uint32 round_len,
+        uint32 round_start
+    ) external view {
+        TvmBuilder builder;
+        builder.store(round_start);
+        builder.store(round_len);
+        TvmCell payload = builder.toCell();
+        _transferQubes(qube_amount, gauge, payload, owner, MsgFlag.SENDER_PAYS_FEES);
+    }
+
     function upgrade(TvmCell code, address send_gas_to) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 

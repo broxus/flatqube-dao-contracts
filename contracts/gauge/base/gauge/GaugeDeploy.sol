@@ -2,6 +2,7 @@ pragma ever-solidity ^0.62.0;
 
 
 import "./GaugeUpgradable.sol";
+import "../../../libraries/Errors.sol";
 
 
 abstract contract GaugeDeploy is GaugeUpgradable {
@@ -24,7 +25,8 @@ abstract contract GaugeDeploy is GaugeUpgradable {
             extraTokenData.push(TokenData(_extraRewardTokenRoot[i], address.makeAddrNone(), 0));
         }
 
-        _setUpTokenWallets();
+        init_mask <<= 1;
+        _setupTokenWallets();
     }
 
     function setupVesting(
@@ -32,8 +34,7 @@ abstract contract GaugeDeploy is GaugeUpgradable {
         uint32 _qubeVestingRatio,
         uint32[] _extraVestingPeriods,
         uint32[] _extraVestingRatios,
-        uint32 _withdrawAllLockPeriod,
-        uint32 call_id
+        uint32 _withdrawAllLockPeriod
     ) external onlyFactory override {
         // all arrays should have the same dimension
         require (
@@ -59,13 +60,31 @@ abstract contract GaugeDeploy is GaugeUpgradable {
         extraVestingRatios = _extraVestingRatios;
         withdrawAllLockPeriod = _withdrawAllLockPeriod;
 
+        init_mask <<= 1;
+    }
+
+
+    function setupBoostLock(uint32 _maxBoost, uint32 _maxLockTime) external onlyFactory override {
+        if (_maxLockTime > 0) {
+            require (_maxBoost >= BOOST_BASE, Errors.BAD_LOCK_SETUP);
+        }
+
+        maxBoost = _maxBoost;
+        maxLockTime = _maxLockTime;
+
+        init_mask <<= 1;
+    }
+
+    function initialize(uint32 call_id) external onlyFactory override {
+        require (init_mask == (1 << 3), Errors.CANT_BE_INITIALIZED);
+        initialized = true;
         IGaugeFactory(factory).onGaugeDeploy{value: 0, flag: MsgFlag.REMAINING_GAS }(deploy_nonce, call_id);
     }
 
     /*
         @notice Creates token wallet for configured root token, initialize arrays and send callback to factory
     */
-    function _setUpTokenWallets() internal view {
+    function _setupTokenWallets() internal view {
         // Deploy vault's token wallet
         ITokenRoot(depositTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
             address(this), // owner
@@ -92,8 +111,6 @@ abstract contract GaugeDeploy is GaugeUpgradable {
         @param wallet Gauge's token wallet
     */
     function receiveTokenWalletAddress(address wallet) external override {
-        tvm.rawReserve(_reserve(), 0);
-
         if (msg.sender == depositTokenData.tokenRoot) {
             depositTokenData.tokenWallet = wallet;
         } else if (msg.sender == qubeTokenData.tokenRoot) {

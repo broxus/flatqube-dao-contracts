@@ -8,11 +8,14 @@ abstract contract GaugeRewards is GaugeDeploy {
     // @dev Create new qube reward round with given parameters. Reward per second is set according to len and amount
     // @param qubes_amount - amount of qubes that should be distributed along new round
     // @param round_len - length of new round in seconds
-    function _addQubeRewardRound(uint128 qubes_amount, uint32 round_len) internal {
+    function _addQubeRewardRound(uint128 qubes_amount, uint32 round_start, uint32 round_len) internal {
         RewardRound new_qube_round;
         RewardRound[] cur_rounds = qubeRewardRounds;
-        RewardRound last_qube_round = cur_rounds[cur_rounds.length - 1];
-        uint32 start_time = now > last_qube_round.endTime ? now : last_qube_round.endTime;
+        uint32 start_time = round_start;
+        if (cur_rounds.length > 0) {
+            RewardRound last_qube_round = cur_rounds[cur_rounds.length - 1];
+            start_time = round_start > last_qube_round.endTime ? round_start : last_qube_round.endTime;
+        }
 
         new_qube_round.startTime = start_time;
         new_qube_round.endTime = start_time + round_len;
@@ -42,12 +45,15 @@ abstract contract GaugeRewards is GaugeDeploy {
             RewardRound[] _cur_rounds = extraRewardRounds[ids[i]];
 
             require (new_rounds[i].startTime >= now, Errors.BAD_REWARD_ROUNDS_INPUT);
-            require (new_rounds[i].startTime > _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_REWARD_ROUNDS_INPUT);
             require (extraRewardEnded[ids[i]] == false, Errors.BAD_REWARD_ROUNDS_INPUT);
+
+            if (_cur_rounds.length > 0) {
+                require (new_rounds[i].startTime > _cur_rounds[_cur_rounds.length - 1].startTime, Errors.BAD_REWARD_ROUNDS_INPUT);
+                _cur_rounds[_cur_rounds.length - 1].endTime = new_rounds[i].startTime;
+            }
 
             new_rounds[i].endTime = 0;
             new_rounds[i].accRewardPerShare = 0;
-            _cur_rounds[_cur_rounds.length - 1].endTime = new_rounds[i].startTime;
             _cur_rounds.push(new_rounds[i]);
 
             extraRewardRounds[ids[i]] = _cur_rounds;

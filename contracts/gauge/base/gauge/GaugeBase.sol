@@ -63,8 +63,9 @@ abstract contract GaugeBase is GaugeRewards {
             );
         } else if (msg.sender == qubeTokenData.tokenWallet && sender == voteEscrow) {
             TvmSlice slice = payload.toSlice();
+            uint32 round_start = slice.decode(uint32);
             uint32 round_len = slice.decode(uint32);
-            _addQubeRewardRound(amount, round_len);
+            _addQubeRewardRound(amount, round_start, round_len);
             remainingGasTo.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
         } else {
             for (uint i = 0; i < extraTokenData.length; i++) {

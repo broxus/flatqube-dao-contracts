@@ -37,6 +37,8 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
     function deployGauge(
         address gauge_owner,
         address depositTokenRoot,
+        uint32 maxBoost,
+        uint32 maxLockTime,
         address[] rewardTokenRoots,
         uint32[] vestingPeriods,
         uint32[] vestingRatios,
@@ -46,6 +48,8 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
         _deployGauge(
             gauge_owner,
             depositTokenRoot,
+            maxBoost,
+            maxLockTime,
             default_qube_vesting_period,
             default_qube_vesting_ratio,
             rewardTokenRoots,
@@ -59,6 +63,8 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
     function deployGaugeByOwner(
         address gauge_owner,
         address depositTokenRoot,
+        uint32 maxBoost,
+        uint32 maxLockTime,
         uint32 qubeVestingPeriod,
         uint32 qubeVestingRatio,
         address[] rewardTokenRoots,
@@ -70,6 +76,8 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
         _deployGauge(
             gauge_owner,
             depositTokenRoot,
+            maxBoost,
+            maxLockTime,
             qubeVestingPeriod,
             qubeVestingRatio,
             rewardTokenRoots,
@@ -83,6 +91,8 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
     function _deployGauge(
         address owner,
         address depositTokenRoot,
+        uint32 maxBoost,
+        uint32 maxLockTime,
         uint32 qubeVestingPeriod,
         uint32 qubeVestingRatio,
         address[] extraRewardTokenRoot,
@@ -117,8 +127,10 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
         }(owner, voteEscrow);
         Gauge(new_gauge).setupTokens{value: 0.1 ever}(depositTokenRoot, qube, extraRewardTokenRoot);
         Gauge(new_gauge).setupVesting{value: 0.1 ever}(
-            qubeVestingPeriod, qubeVestingRatio, extraVestingPeriods, extraVestingRatios, withdrawAllLockPeriod, call_id
+            qubeVestingPeriod, qubeVestingRatio, extraVestingPeriods, extraVestingRatios, withdrawAllLockPeriod
         );
+        Gauge(new_gauge).setupBoostLock{value: 0.1 ever}(maxBoost, maxLockTime);
+        Gauge(new_gauge).initialize{value: 0.1 ever}(call_id);
         msg.sender.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 

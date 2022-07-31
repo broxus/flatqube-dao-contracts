@@ -106,7 +106,8 @@ interface IGauge {
         uint32 _qubeVestingRatio,
         uint32[] _extraVestingPeriods,
         uint32[] _extraVestingRatios,
-        uint32 _withdrawAllLockPeriod,
-        uint32 call_id
+        uint32 _withdrawAllLockPeriod
     ) external;
+    function setupBoostLock(uint32 _maxBoost, uint32 _maxLockTime) external;
+    function initialize(uint32 call_id) external;
 }

@@ -48,6 +48,9 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint32 maxLockTime;
     uint32 constant BOOST_BASE = 1000;
 
+    uint8 init_mask = 1;
+    bool initialized;
+
     // qube data
     // storing in structs is better, but much more expensive
     TokenData qubeTokenData;

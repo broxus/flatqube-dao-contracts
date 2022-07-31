@@ -16,7 +16,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         // distribution params
         require (distributionSchedule.length > 0, Errors.CANT_BE_INITIALIZED);
         require (distributionScheme.length > 0, Errors.CANT_BE_INITIALIZED);
-        // people can but whitelist
+        // people can buy whitelist
         require (gaugeWhitelistPrice > 0, Errors.CANT_BE_INITIALIZED);
         // voting params were installed
         require (epochTime > 0 && timeBeforeVoting > 0 && votingTime > 0, Errors.CANT_BE_INITIALIZED);
@@ -366,6 +366,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         uint32 counter = 0;
 
         TvmBuilder builder;
+        builder.store(currentEpochStartTime);
         builder.store(epochTime);
         TvmCell payload = builder.toCell();
 

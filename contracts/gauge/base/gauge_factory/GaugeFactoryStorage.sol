@@ -20,8 +20,8 @@ abstract contract GaugeFactoryStorage is IGaugeFactory {
     address qube;
     address voteEscrow;
 
-    TvmCell static GaugeAccountCode;
-    TvmCell static GaugeCode;
+    TvmCell GaugeAccountCode;
+    TvmCell GaugeCode;
     TvmCell static PlatformCode;
 
     // factory deployment seed

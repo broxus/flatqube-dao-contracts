@@ -13,10 +13,10 @@ library Errors {
     uint16 constant NOT_TOKEN_WALLET = 1006;
     uint16 constant BAD_SENDER = 1007;
     uint16 constant EMERGENCY = 1008;
+    uint16 constant CANT_BE_INITIALIZED = 2001;
 
     // VOTE ESCROW
     uint16 constant NOT_VOTE_ESCROW_ACCOUNT = 2000;
-    uint16 constant CANT_BE_INITIALIZED = 2001;
     uint16 constant ALREADY_INITIALIZED = 2002;
     uint16 constant NOT_INITIALIZED = 2003;
     uint16 constant LAST_EPOCH = 2004;
@@ -32,9 +32,13 @@ library Errors {
     // VE ACCOUNT
     uint16 constant NOT_VOTE_ESCROW = 3000;
     uint16 constant ALREADY_VOTED = 3001;
+    // DAO STAFF
     uint16 constant NOT_PROPOSAL = 3002;
     uint16 constant NOT_DAO_ROOT = 3003;
-    uint16 constant OLD_VERSION = 3004;
+    uint16 constant REASON_IS_TOO_LONG = 3004;
+    uint16 constant PROPOSAL_IS_NOT_ACTIVE = 3005;
+    uint16 constant WRONG_PROPOSAL_ID = 3006;
+    uint16 constant WRONG_PROPOSAL_STATE = 3007;
 
     // GAUGE
     uint16 constant NOT_GAUGE_ACCOUNT = 4000;
@@ -45,10 +49,7 @@ library Errors {
     uint16 constant BAD_VESTING_SETUP = 4005;
     uint16 constant BAD_DEPOSIT_TOKEN = 4006;
     uint16 constant BAD_REWARD_TOKENS_INPUT = 4007;
-    uint16 constant REASON_IS_TOO_LONG = 4008;
-    uint16 constant PROPOSAL_IS_NOT_ACTIVE = 4009;
-    uint16 constant WRONG_PROPOSAL_ID = 4010;
-    uint16 constant WRONG_PROPOSAL_STATE = 4011;
+    uint16 constant BAD_LOCK_SETUP = 4008;
 
     // GAUGE ACCOUNT
     uint16 constant NOT_GAUGE = 5000;
