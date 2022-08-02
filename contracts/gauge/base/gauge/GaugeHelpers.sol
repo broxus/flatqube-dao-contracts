@@ -5,20 +5,80 @@ import "./GaugeStorage.sol";
 import "../../../libraries/Errors.sol";
 import "../../../libraries/Gas.sol";
 import "../../../libraries/PlatformTypes.sol";
-import "../../../Platform.sol";
+import {RPlatform as Platform} from "../../../Platform.sol";
 import "../../interfaces/IGaugeAccount.sol";
 import "../../interfaces/ICallbackReceiver.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 abstract contract GaugeHelpers is GaugeStorage {
-    // TODO: sync
-//    function getDetails() external view responsible returns (Details) {
-//        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }Details(
-//            lastRewardTime, voteEscrow, depositTokenRoot, depositTokenWallet, depositTokenBalance,
-//            qubeReward, extraRewards, owner, factory,gauge_account_version, gauge_version
-//        );
-//    }
+    function getDetails() external view responsible returns (
+        address _owner,
+        address _voteEscrow,
+        uint128 _lockBoostedSupply,
+        uint128 _veBoostedSupply,
+        uint32 _maxBoost,
+        uint32 _maxLockTime,
+        uint256[] _lastExtraRewardRoundIdx,
+        uint256 _lastQubeRewardRoundIdx,
+        uint32 _lastRewardTime,
+        uint32 _lastAverageUpdateTime,
+        bool _initialized
+    ) {
+        _owner = owner;
+        _voteEscrow = voteEscrow;
+        _lockBoostedSupply = lockBoostedSupply;
+        _veBoostedSupply = veBoostedSupply;
+        _maxBoost = maxBoost;
+        _maxLockTime = maxLockTime;
+        _lastExtraRewardRoundIdx = lastExtraRewardRoundIdx;
+        _lastQubeRewardRoundIdx = lastQubeRewardRoundIdx;
+        _lastRewardTime = lastRewardTime;
+        _lastAverageUpdateTime = lastAverageUpdateTime;
+        _initialized = initialized;
+    }
+
+    function getRewardDetails() external view returns (
+        RewardRound[] _qubeRewardRounds,
+        uint32 _qubeVestingPeriod,
+        uint32 _qubeVestingRatio,
+        RewardRound[][] _extraRewardRounds,
+        uint32[] _extraVestingPeriods,
+        uint32[] _extraVestingRatios,
+        bool[] _extraRewardEnded,
+        uint32 _withdrawAllLockPeriod
+    ) {
+        _qubeRewardRounds = qubeRewardRounds;
+        _qubeVestingPeriod = qubeVestingPeriod;
+        _qubeVestingRatio = qubeVestingRatio;
+        _extraRewardRounds = extraRewardRounds;
+        _extraVestingPeriods = extraVestingPeriods;
+        _extraVestingRatios = extraVestingRatios;
+        _extraRewardEnded = extraRewardEnded;
+        _withdrawAllLockPeriod = withdrawAllLockPeriod;
+    }
+
+    function getTokenDetails() external view returns (
+        TokenData _depositTokenData,
+        TokenData _qubeTokenData,
+        TokenData[] _extraTokenData
+    ) {
+        _depositTokenData = depositTokenData;
+        _qubeTokenData = qubeTokenData;
+        _extraTokenData = extraTokenData;
+    }
+
+    function getCodes() external view returns (
+        TvmCell _platformCode,
+        TvmCell _gaugeAccountCode,
+        uint32 _gaugeAccountVersion,
+        uint32 _gaugeVersion
+    ) {
+        _platformCode = platformCode;
+        _gaugeAccountCode = gaugeAccountCode;
+        _gaugeAccountVersion = gauge_account_version;
+        _gaugeVersion = gauge_version;
+    }
 
     function calculateBoostedBalance(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {
         if (maxLockTime == 0) {

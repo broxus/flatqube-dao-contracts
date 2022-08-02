@@ -157,16 +157,32 @@ abstract contract GaugeRewards is GaugeDeploy {
         _lastRewardTime = now;
     }
 
-    function updateSupplyAverage() internal {
-        if (now <= lastAverageUpdateTime || lastAverageUpdateTime == 0) {
-            // already updated on this block or this is our first update
-            lastAverageUpdateTime = now;
-            return;
-        }
+    function calculateSupplyAverage() public view returns (
+        uint128 _lockBoostedSupplyAverage,
+        uint32 _lockBoostedSupplyAveragePeriod,
+        uint32 _lastAverageUpdateTime
+    ) {
+        _lockBoostedSupplyAverage = lockBoostedSupplyAverage;
+        _lockBoostedSupplyAveragePeriod = lockBoostedSupplyAveragePeriod;
+        _lastAverageUpdateTime = lastAverageUpdateTime;
 
-        uint32 last_period = now - lastAverageUpdateTime;
-        lockBoostedSupplyAverage = (lockBoostedSupplyAverage * lockBoostedSupplyAveragePeriod + lockBoostedSupply * last_period) / (lockBoostedSupplyAveragePeriod + last_period);
-        lockBoostedSupplyAveragePeriod += last_period;
+        if (now <= _lastAverageUpdateTime || _lastAverageUpdateTime == 0) {
+            // already updated on this block or this is our first update
+            _lastAverageUpdateTime = now;
+        } else {
+            uint32 last_period = now - _lastAverageUpdateTime;
+            _lockBoostedSupplyAverage = (_lockBoostedSupplyAverage * _lockBoostedSupplyAveragePeriod + lockBoostedSupply * last_period) / (_lockBoostedSupplyAveragePeriod + last_period);
+            _lockBoostedSupplyAveragePeriod += last_period;
+            _lastAverageUpdateTime = now;
+        }
+    }
+
+    function updateSupplyAverage() internal {
+        (
+            lockBoostedSupplyAverage,
+            lockBoostedSupplyAveragePeriod,
+            lastAverageUpdateTime
+        ) = calculateSupplyAverage();
     }
 
     function updateRewardData() internal {

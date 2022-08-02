@@ -35,18 +35,6 @@ interface IGauge {
         uint128 tokenBalance;
     }
 
-    // TODO: up
-    struct Details {
-        uint32 lastRewardTime;
-        address voteEscrow;
-        address depositTokenRoot;
-        address depositTokenWallet;
-        uint128 depositTokenBalance;
-        address owner;
-        address factory;
-        uint32 gauge_account_version;
-        uint32 gauge_version;
-    }
     struct PendingDeposit {
         address user;
         uint128 amount;

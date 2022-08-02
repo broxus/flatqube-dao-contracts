@@ -7,7 +7,7 @@ import "../../interfaces/IGaugeAccount.sol";
 import "../../../vote_escrow/interfaces/IVoteEscrow.sol";
 import "../../../libraries/PlatformTypes.sol";
 import "../../../libraries/Errors.sol";
-import "../../../Platform.sol";
+import {RPlatform as Platform} from "../../../Platform.sol";
 
 
 abstract contract GaugeBase is GaugeRewards {

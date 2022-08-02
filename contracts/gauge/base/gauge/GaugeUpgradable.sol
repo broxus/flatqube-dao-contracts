@@ -9,7 +9,7 @@ import "../../interfaces/IGaugeAccount.sol";
 import "../../interfaces/IGaugeFactory.sol";
 import "../../GaugeAccount.sol";
 import "./GaugeHelpers.sol";
-import "../../../Platform.sol";
+import {RPlatform as Platform} from "../../../Platform.sol";
 
 
 abstract contract GaugeUpgradable is GaugeHelpers {

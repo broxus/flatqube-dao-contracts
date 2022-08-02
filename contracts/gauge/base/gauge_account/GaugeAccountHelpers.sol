@@ -61,6 +61,9 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
     //    }
 
     function _veBoost(uint128 ud, uint128 td, uint128 ve, uint128 tve) internal pure returns (uint128) {
+        if (ve == 0 || tve == 0) {
+            return (ud * 4) / 10;
+        }
         // min(0.4 * Ud + 0.6 * Td * (Ve/Tve), Ud)
         return math.min(((ud * 4) / 10) + uint128(math.muldiv(((td * 6) / 10), ve, tve)), ud);
     }
@@ -146,9 +149,9 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
 
                         // qube
                         (
-                        uint128 updated_locked,
-                        uint128 new_unlocked,
-                        uint32 updated_vesting_time
+                            uint128 updated_locked,
+                            uint128 new_unlocked,
+                            uint32 updated_vesting_time
                         ) = _computeVesting(
                             interval_balance,
                             reward_data.lockedReward,

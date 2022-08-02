@@ -1,8 +1,8 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
+import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRootUpgradeable.sol";
+import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWalletUpgradeable.sol";
 import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 
 import "../../interfaces/IGaugeAccount.sol";
@@ -30,9 +30,6 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
 
     uint32 lastAverageUpdateTime;
 
-    // deposit token data
-    TokenData depositTokenData;
-
     // sum of all deposits boosted with locks
     uint128 lockBoostedSupply;
     // sum of all deposits boosted with locks + with veQubes
@@ -41,6 +38,7 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint128 lockBoostedSupplyAverage;
     uint32 lockBoostedSupplyAveragePeriod;
 
+    address owner;
     // VE contract that manage qube emission
     address voteEscrow;
 
@@ -50,6 +48,9 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
 
     uint8 init_mask = 1;
     bool initialized;
+
+    // deposit token data
+    TokenData depositTokenData;
 
     // qube data
     // storing in structs is better, but much more expensive
@@ -64,8 +65,6 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint32[] extraVestingPeriods;
     uint32[] extraVestingRatios;
     bool[] extraRewardEnded;
-
-    address owner;
 
     uint32 deposit_nonce = 0;
     // this is used to prevent data loss on bounced messages during deposit

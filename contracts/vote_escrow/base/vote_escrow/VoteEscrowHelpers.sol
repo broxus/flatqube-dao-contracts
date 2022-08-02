@@ -14,7 +14,6 @@ import "../../../libraries/Errors.sol";
 
 
 abstract contract VoteEscrowHelpers is VoteEscrowStorage {
-    // TODO: Up
     function getDetails() external view returns (
         address _owner,
         address _pendingOwner,
@@ -87,7 +86,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         uint32 _epochTime, // length of epoch in seconds
         uint32 _votingTime, // length of voting in seconds
         uint32 _timeBeforeVoting, // time after epoch start when next voting will take place
-         uint32 _gaugeMaxVotesRatio, // up to 10000 (100%). Gauge cant have more votes. All exceeded votes will be distributed among other gauges
+        uint32 _gaugeMaxVotesRatio, // up to 10000 (100%). Gauge cant have more votes. All exceeded votes will be distributed among other gauges
         uint32 _gaugeMinVotesRatio, // up to 10000 (100%). If gauge doesn't have min votes, it will not be elected in epoch
         uint8 _gaugeMaxDowntime, // if gauge was not elected for N times in a row, it is deleted from whitelist
         uint32 _maxGaugesPerVote, // max number of gauges user can vote for
@@ -104,15 +103,15 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     }
 
     function getCodes() external view returns (
-        TvmCell _platform_code,
-        TvmCell _ve_acc_code,
-        uint32 _ve_acc_version,
-        uint32 _ve_version
+        TvmCell _platformCode,
+        TvmCell _voteEscrowAccountCode,
+        uint32 _voteEscrowAccountVersion,
+        uint32 _voteEscrowVersion
     ) {
-        _platform_code = platformCode;
-        _ve_acc_code = veAccountCode;
-        _ve_acc_version = ve_account_version;
-        _ve_version = ve_version;
+        _platformCode = platformCode;
+        _voteEscrowAccountCode = veAccountCode;
+        _voteEscrowAccountVersion = ve_account_version;
+        _voteEscrowVersion = ve_version;
     }
 
     // @param deposit_owner -address on which behalf sender making deposit

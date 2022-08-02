@@ -24,7 +24,7 @@ library Gas {
     // GAUGE
     uint128 constant REQUEST_UPGRADE_VALUE = 2 ever;
     uint128 constant GAUGE_ACCOUNT_UPGRADE_VALUE = 1.5 ever;
-    uint128 constant GAUGE_ACCOUNT_DEPLOY_VALUE = 0.5 ever;
+    uint128 constant GAUGE_ACCOUNT_DEPLOY_VALUE = 0.7 ever;
     uint128 constant INCREASE_DEBT_VALUE = 0.2 ever;
 
     // FACTORY
