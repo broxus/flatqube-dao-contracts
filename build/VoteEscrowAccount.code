@@ -1549,7 +1549,7 @@ PUSHCONT {
 	PUSHCONT {
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 101
 		DROP
-		PUSHINT 4008
+		PUSHINT 3004
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 0
 	}
 	IF
@@ -1763,7 +1763,7 @@ PUSHCONT {
 }
 IF
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 130
-PUSHINT 4009
+PUSHINT 3005
 SWAP
 GETGLOB 12
 FALSE
@@ -1850,7 +1850,7 @@ PUSHCONT {
 	PUSHCONT {
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 142
 		DROP
-		PUSHINT 4010
+		PUSHINT 3006
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 0
 	}
 	IFNOT
@@ -1990,7 +1990,7 @@ PUSHCONT {
 }
 PUSHCONT {
 	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 158
-	PUSHINT 4011
+	PUSHINT 3007
 	OVER
 	GETGLOB 12
 	FALSE
@@ -2254,7 +2254,7 @@ PUSHCONT {
 }
 PUSHCONT {
 	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountDAO.sol, 195
-	PUSHINT 4011
+	PUSHINT 3007
 	OVER
 	PUSHINT 0
 	NEWDICT

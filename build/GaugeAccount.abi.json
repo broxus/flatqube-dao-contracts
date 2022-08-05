@@ -48,12 +48,7 @@
 			"inputs": [
 				{"name":"amount","type":"uint128"},
 				{"name":"claim","type":"bool"},
-				{"name":"lockBoostedSupply","type":"uint128"},
-				{"name":"lockBoostedSupplyAverage","type":"uint128"},
-				{"name":"lockBoostedSupplyAveragePeriod","type":"uint32"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extra_reward_rounds","type":"tuple[][]"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qube_reward_rounds","type":"tuple[]"},
-				{"name":"poolLastRewardTime","type":"uint32"},
+				{"components":[{"name":"supply","type":"uint128"},{"name":"supplyAverage","type":"uint128"},{"name":"supplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"gauge_sync_data","type":"tuple"},
 				{"name":"call_id","type":"uint32"},
 				{"name":"callback_nonce","type":"uint32"},
 				{"name":"send_gas_to","type":"address"}
@@ -64,12 +59,7 @@
 		{
 			"name": "processClaim",
 			"inputs": [
-				{"name":"lockBoostedSupply","type":"uint128"},
-				{"name":"lockBoostedSupplyAverage","type":"uint128"},
-				{"name":"lockBoostedSupplyAveragePeriod","type":"uint32"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extra_reward_rounds","type":"tuple[][]"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qube_reward_rounds","type":"tuple[]"},
-				{"name":"poolLastRewardTime","type":"uint32"},
+				{"components":[{"name":"supply","type":"uint128"},{"name":"supplyAverage","type":"uint128"},{"name":"supplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"gauge_sync_data","type":"tuple"},
 				{"name":"call_id","type":"uint32"},
 				{"name":"callback_nonce","type":"uint32"},
 				{"name":"send_gas_to","type":"address"}
@@ -82,15 +72,10 @@
 			"inputs": [
 				{"name":"deposit_nonce","type":"uint32"},
 				{"name":"amount","type":"uint128"},
-				{"name":"boosted_amount","type":"uint128"},
-				{"name":"lock_time","type":"uint32"},
+				{"name":"boostedAmount","type":"uint128"},
+				{"name":"lockTime","type":"uint32"},
 				{"name":"claim","type":"bool"},
-				{"name":"lockBoostedSupply","type":"uint128"},
-				{"name":"lockBoostedSupplyAverage","type":"uint128"},
-				{"name":"lockBoostedSupplyAveragePeriod","type":"uint32"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extra_reward_rounds","type":"tuple[][]"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qube_reward_rounds","type":"tuple[]"},
-				{"name":"poolLastRewardTime","type":"uint32"}
+				{"components":[{"name":"supply","type":"uint128"},{"name":"supplyAverage","type":"uint128"},{"name":"supplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"gauge_sync_data","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -121,7 +106,7 @@
 			"name": "syncDepositsRecursive",
 			"inputs": [
 				{"name":"nonce","type":"uint32"},
-				{"name":"sync_time","type":"uint32"},
+				{"name":"syncTime","type":"uint32"},
 				{"name":"reserve","type":"bool"}
 			],
 			"outputs": [
@@ -131,8 +116,8 @@
 			"name": "updateQubeReward",
 			"inputs": [
 				{"name":"nonce","type":"uint32"},
-				{"name":"interval_ve_balance","type":"uint128"},
-				{"name":"interval_lock_balance","type":"uint128"}
+				{"name":"intervalTBoostedBalance","type":"uint128"},
+				{"name":"intervalLockBalance","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -141,8 +126,8 @@
 			"name": "updateExtraReward",
 			"inputs": [
 				{"name":"nonce","type":"uint32"},
-				{"name":"interval_ve_balance","type":"uint128"},
-				{"name":"interval_lock_balance","type":"uint128"},
+				{"name":"intervalTBoostedBalance","type":"uint128"},
+				{"name":"intervalLockBalance","type":"uint128"},
 				{"name":"idx","type":"uint256"}
 			],
 			"outputs": [
@@ -181,13 +166,27 @@
 			]
 		},
 		{
-			"name": "calculateIntervalBalances",
+			"name": "calculateTotalBoostedBalance",
 			"inputs": [
-				{"components":[{"name":"veQubeAverage","type":"uint128"},{"name":"veQubeAveragePeriod","type":"uint32"},{"name":"veAccQubeAverage","type":"uint128"},{"name":"veAccQubeAveragePeriod","type":"uint32"},{"name":"lockBoostedBalanceAverage","type":"uint128"},{"name":"lockBoostedBalanceAveragePeriod","type":"uint32"},{"name":"gaugeLockBoostedSupplyAverage","type":"uint128"},{"name":"gaugeLockBoostedSupplyAveragePeriod","type":"uint32"}],"name":"last_avg_state","type":"tuple"}
+				{"name":"balance","type":"uint128"},
+				{"name":"lockBoostedBalance","type":"uint128"},
+				{"name":"totalSupply","type":"uint128"},
+				{"name":"veAccBalance","type":"uint128"},
+				{"name":"veSupply","type":"uint128"}
 			],
 			"outputs": [
-				{"name":"interval_ve_balance","type":"uint128"},
-				{"name":"interval_lock_balance","type":"uint128"}
+				{"name":"_veBoostedBalance","type":"uint128"},
+				{"name":"_totalBoostedBalance","type":"uint128"}
+			]
+		},
+		{
+			"name": "calculateIntervalBalances",
+			"inputs": [
+				{"components":[{"name":"veQubeAverage","type":"uint128"},{"name":"veQubeAveragePeriod","type":"uint32"},{"name":"veAccQubeAverage","type":"uint128"},{"name":"veAccQubeAveragePeriod","type":"uint32"},{"name":"lockBoostedBalanceAverage","type":"uint128"},{"name":"lockBoostedBalanceAveragePeriod","type":"uint32"},{"name":"gaugeSupplyAverage","type":"uint128"},{"name":"gaugeSupplyAveragePeriod","type":"uint32"}],"name":"_curAverageState","type":"tuple"}
+			],
+			"outputs": [
+				{"name":"intervalTBoostedBalance","type":"uint128"},
+				{"name":"intervalLockBalance","type":"uint128"}
 			]
 		},
 		{
@@ -217,10 +216,10 @@
 		{"name":"balance","type":"uint128"},
 		{"name":"lockBoostedBalance","type":"uint128"},
 		{"name":"veBoostedBalance","type":"uint128"},
+		{"name":"totalBoostedBalance","type":"uint128"},
 		{"name":"lockedBalance","type":"uint128"},
-		{"name":"expiredLockBoostedBalance","type":"uint128"},
-		{"components":[{"name":"veQubeAverage","type":"uint128"},{"name":"veQubeAveragePeriod","type":"uint32"},{"name":"veAccQubeAverage","type":"uint128"},{"name":"veAccQubeAveragePeriod","type":"uint32"},{"name":"lockBoostedBalanceAverage","type":"uint128"},{"name":"lockBoostedBalanceAveragePeriod","type":"uint32"},{"name":"gaugeLockBoostedSupplyAverage","type":"uint128"},{"name":"gaugeLockBoostedSupplyAveragePeriod","type":"uint32"}],"name":"lastRewardAverageState","type":"tuple"},
-		{"components":[{"name":"veQubeAverage","type":"uint128"},{"name":"veQubeAveragePeriod","type":"uint32"},{"name":"veAccQubeAverage","type":"uint128"},{"name":"veAccQubeAveragePeriod","type":"uint32"},{"name":"lockBoostedBalanceAverage","type":"uint128"},{"name":"lockBoostedBalanceAveragePeriod","type":"uint32"},{"name":"gaugeLockBoostedSupplyAverage","type":"uint128"},{"name":"gaugeLockBoostedSupplyAveragePeriod","type":"uint32"}],"name":"curAverageState","type":"tuple"},
+		{"components":[{"name":"veQubeAverage","type":"uint128"},{"name":"veQubeAveragePeriod","type":"uint32"},{"name":"veAccQubeAverage","type":"uint128"},{"name":"veAccQubeAveragePeriod","type":"uint32"},{"name":"lockBoostedBalanceAverage","type":"uint128"},{"name":"lockBoostedBalanceAveragePeriod","type":"uint32"},{"name":"gaugeSupplyAverage","type":"uint128"},{"name":"gaugeSupplyAveragePeriod","type":"uint32"}],"name":"lastAverageState","type":"tuple"},
+		{"components":[{"name":"veQubeAverage","type":"uint128"},{"name":"veQubeAveragePeriod","type":"uint32"},{"name":"veAccQubeAverage","type":"uint128"},{"name":"veAccQubeAveragePeriod","type":"uint32"},{"name":"lockBoostedBalanceAverage","type":"uint128"},{"name":"lockBoostedBalanceAveragePeriod","type":"uint32"},{"name":"gaugeSupplyAverage","type":"uint128"},{"name":"gaugeSupplyAveragePeriod","type":"uint32"}],"name":"curAverageState","type":"tuple"},
 		{"name":"lastUpdateTime","type":"uint32"},
 		{"name":"lockedDepositsNum","type":"uint32"},
 		{"name":"gauge","type":"address"},
@@ -237,6 +236,6 @@
 		{"components":[{"name":"deposit_nonce","type":"uint32"},{"name":"amount","type":"uint128"},{"name":"boostedAmount","type":"uint128"},{"name":"lockTime","type":"uint32"},{"name":"claim","type":"bool"}],"name":"_deposits","type":"map(uint32,tuple)"},
 		{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"_claims","type":"map(uint32,tuple)"},
 		{"name":"_actions","type":"map(uint32,uint8)"},
-		{"components":[{"name":"poolLastRewardTime","type":"uint32"},{"name":"lockBoostedSupply","type":"uint128"},{"name":"veSupply","type":"uint128"},{"name":"veAccBalance","type":"uint128"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"}],"name":"_sync_data","type":"map(uint32,tuple)"}
+		{"components":[{"name":"poolLastRewardTime","type":"uint32"},{"name":"supply","type":"uint128"},{"name":"veSupply","type":"uint128"},{"name":"veAccBalance","type":"uint128"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"}],"name":"_sync_data","type":"map(uint32,tuple)"}
 	]
 }

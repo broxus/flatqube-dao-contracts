@@ -9,19 +9,19 @@ declare type AccountType = Account<FactorySource["TestWallet"]>;
 
 
 export class TokenWallet {
-    public contract: Contract<FactorySource["TokenWallet"]>;
+    public contract: Contract<FactorySource["TokenWalletUpgradeable"]>;
     public _owner: AccountType | null;
     public address: Address;
     public name: string | undefined;
 
-    constructor(wallet_contract: Contract<FactorySource["TokenWallet"]>, wallet_owner: AccountType | null) {
+    constructor(wallet_contract: Contract<FactorySource["TokenWalletUpgradeable"]>, wallet_owner: AccountType | null) {
         this.contract = wallet_contract;
         this._owner = wallet_owner;
         this.address = this.contract.address;
     }
 
     static async from_addr(addr: Address, owner: AccountType | null) {
-        const wallet = await locklift.factory.getDeployedContract('TokenWallet', addr);
+        const wallet = await locklift.factory.getDeployedContract('TokenWalletUpgradeable', addr);
         return new TokenWallet(wallet, owner);
     }
 

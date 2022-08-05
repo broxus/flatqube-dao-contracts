@@ -10,18 +10,18 @@ declare type AccountType = Account<FactorySource["TestWallet"]>;
 
 
 export class Token {
-    public contract: Contract<FactorySource["TokenRoot"]>;
+    public contract: Contract<FactorySource["TokenRootUpgradeable"]>;
     public owner: AccountType;
     public address: Address;
 
-    constructor(token_contract: Contract<FactorySource["TokenRoot"]>, token_owner: AccountType) {
+    constructor(token_contract: Contract<FactorySource["TokenRootUpgradeable"]>, token_owner: AccountType) {
         this.contract = token_contract;
         this.owner = token_owner;
         this.address = this.contract.address;
     }
 
     static async from_addr(addr: Address, owner: AccountType) {
-        const contract = await locklift.factory.getDeployedContract('TokenRoot', addr);
+        const contract = await locklift.factory.getDeployedContract('TokenRootUpgradeable', addr);
         return new Token(contract, owner);
     }
 

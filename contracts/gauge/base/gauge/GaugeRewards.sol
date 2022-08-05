@@ -141,7 +141,7 @@ abstract contract GaugeRewards is GaugeDeploy {
         _extraRewardRounds = extraRewardRounds;
 
         for (uint i = 0; i < extraTokenData.length; i++) {
-            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdatedRewardRounds(extraRewardRounds[i], lastExtraRewardRoundIdx[i], lockBoostedSupply);
+            (_extraRewardRounds[i], _sync_idx[i]) = _getUpdatedRewardRounds(_extraRewardRounds[i], _sync_idx[i], lockBoostedSupply);
         }
     }
 
@@ -153,17 +153,21 @@ abstract contract GaugeRewards is GaugeDeploy {
         uint256 _qube_sync_idx
     ) {
         (_extraRewardRounds, _extra_sync_idx) = _getUpdatedExtraRewardRounds();
-        (_qubeRewardRounds, _qube_sync_idx) = _getUpdatedRewardRounds(qubeRewardRounds, lastQubeRewardRoundIdx, veBoostedSupply);
+        (_qubeRewardRounds, _qube_sync_idx) = _getUpdatedRewardRounds(qubeRewardRounds, lastQubeRewardRoundIdx, totalBoostedSupply);
         _lastRewardTime = now;
     }
 
     function calculateSupplyAverage() public view returns (
         uint128 _lockBoostedSupplyAverage,
         uint32 _lockBoostedSupplyAveragePeriod,
+        uint128 _supplyAverage,
+        uint32 _supplyAveragePeriod,
         uint32 _lastAverageUpdateTime
     ) {
         _lockBoostedSupplyAverage = lockBoostedSupplyAverage;
         _lockBoostedSupplyAveragePeriod = lockBoostedSupplyAveragePeriod;
+        _supplyAverage = supplyAverage;
+        _supplyAveragePeriod = supplyAveragePeriod;
         _lastAverageUpdateTime = lastAverageUpdateTime;
 
         if (now <= _lastAverageUpdateTime || _lastAverageUpdateTime == 0) {
@@ -173,6 +177,8 @@ abstract contract GaugeRewards is GaugeDeploy {
             uint32 last_period = now - _lastAverageUpdateTime;
             _lockBoostedSupplyAverage = (_lockBoostedSupplyAverage * _lockBoostedSupplyAveragePeriod + lockBoostedSupply * last_period) / (_lockBoostedSupplyAveragePeriod + last_period);
             _lockBoostedSupplyAveragePeriod += last_period;
+            _supplyAverage = (_supplyAverage * _supplyAveragePeriod + depositTokenData.tokenBalance * last_period) / (_supplyAveragePeriod + last_period);
+            _supplyAveragePeriod += last_period;
             _lastAverageUpdateTime = now;
         }
     }
@@ -181,6 +187,8 @@ abstract contract GaugeRewards is GaugeDeploy {
         (
             lockBoostedSupplyAverage,
             lockBoostedSupplyAveragePeriod,
+            supplyAverage,
+            supplyAveragePeriod,
             lastAverageUpdateTime
         ) = calculateSupplyAverage();
     }

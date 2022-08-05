@@ -22,6 +22,15 @@ interface IGauge {
     event GaugeAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
     event GaugeAccountDeploy(address user);
 
+    struct GaugeSyncData {
+        uint128 supply;
+        uint128 supplyAverage;
+        uint32 supplyAveragePeriod;
+        IGauge.RewardRound[][] extraRewardRounds;
+        IGauge.RewardRound[] qubeRewardRounds;
+        uint32 poolLastRewardTime;
+    }
+
     struct RewardRound {
         uint32 startTime;
         uint32 endTime;
@@ -50,8 +59,8 @@ interface IGauge {
         uint128 qube_reward,
         uint128[] extra_rewards,
         bool claim,
-        uint128 ve_bal_old,
-        uint128 ve_bal_new,
+        uint128 boosted_bal_old,
+        uint128 boosted_bal_new,
         uint32 _deposit_nonce
     ) external;
     function finishWithdraw(
@@ -60,8 +69,8 @@ interface IGauge {
         uint128 qube_reward,
         uint128[] extra_reward,
         bool claim,
-        uint128 ve_bal_old,
-        uint128 ve_bal_new,
+        uint128 boosted_bal_old,
+        uint128 boosted_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
@@ -70,8 +79,8 @@ interface IGauge {
         address user,
         uint128 qube_amount,
         uint128[] extra_amounts,
-        uint128 ve_bal_old,
-        uint128 ve_bal_new,
+        uint128 boosted_bal_old,
+        uint128 boosted_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to

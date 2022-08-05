@@ -10,18 +10,16 @@ abstract contract GaugeAccountStorage is IGaugeAccount {
 
     // amount of all deposited tokens
     uint128 balance;
-    // balance + bonus for locking deposit
+    // balance + bonus for locking deposit on moment of last action
     uint128 lockBoostedBalance;
-    // balance + bonus for locking deposit + ve boost
+    // balance + ve boost on moment of last action
     uint128 veBoostedBalance;
-
+    // balance + lock boost + ve boost on moment of last action
+    uint128 totalBoostedBalance;
     // aggregated amount of locked deposited tokens
     uint128 lockedBalance;
-    // this used for storing expired lock boosted balance during sync
-    uint128 expiredLockBoostedBalance;
-
     // full state of user stats from all contracts (ve/veAcc/gauge) on moment of last action
-    Averages lastRewardAverageState;
+    Averages lastAverageState;
     // same as above, but is used during sync
     Averages curAverageState;
 

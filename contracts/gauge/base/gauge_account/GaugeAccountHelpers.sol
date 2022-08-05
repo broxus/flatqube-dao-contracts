@@ -68,41 +68,59 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         return math.min(((ud * 4) / 10) + uint128(math.muldiv(((td * 6) / 10), ve, tve)), ud);
     }
 
+    function calculateTotalBoostedBalance(
+        uint128 balance,
+        uint128 lockBoostedBalance,
+        uint128 totalSupply,
+        uint128 veAccBalance,
+        uint128 veSupply
+    ) public pure returns (uint128 _veBoostedBalance, uint128 _totalBoostedBalance) {
+        _veBoostedBalance = _veBoost(balance, totalSupply, veAccBalance, veSupply);
+        uint256 lock_bonus = math.muldiv(lockBoostedBalance, SCALING_FACTOR, balance);
+        // ve takes 0.4 of balance as base and boost it to 1.0
+        uint256 ve_bonus = math.muldiv(_veBoostedBalance, SCALING_FACTOR, (balance * 4) / 10);
+        _totalBoostedBalance = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
+    }
+
     function calculateIntervalBalances(
-        Averages last_avg_state
-    ) public view returns (uint128 interval_ve_balance, uint128 interval_lock_balance) {
+        Averages _curAverageState
+    ) public view returns (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) {
         // calculate new veBoostedBalance
-        uint128 time_delta = curAverageState.lockBoostedBalanceAveragePeriod - last_avg_state.lockBoostedBalanceAveragePeriod;
-        uint128 avg_ve_boosted_bal;
+        uint128 time_delta = _curAverageState.lockBoostedBalanceAveragePeriod - lastAverageState.lockBoostedBalanceAveragePeriod;
         // not time delta, calculate using current averages
         // we check only 1 delta, because they all gathered together at the same time
         if (time_delta == 0) {
-            interval_lock_balance = lockBoostedBalance;
-            interval_ve_balance = veBoostedBalance;
+            intervalLockBalance = lockBoostedBalance;
+            intervalTBoostedBalance = totalBoostedBalance;
         } else {
             // 1. Calculate average lockBoostedBalance from the moment of last action
-            uint128 cur_avg = curAverageState.lockBoostedBalanceAverage * curAverageState.lockBoostedBalanceAveragePeriod;
-            uint128 last_avg = last_avg_state.lockBoostedBalanceAverage * last_avg_state.lockBoostedBalanceAveragePeriod;
-            uint128 boosted_bal_avg = (cur_avg - last_avg) / time_delta;
+            uint128 cur_avg = _curAverageState.lockBoostedBalanceAverage * _curAverageState.lockBoostedBalanceAveragePeriod;
+            uint128 last_avg = lastAverageState.lockBoostedBalanceAverage * lastAverageState.lockBoostedBalanceAveragePeriod;
+            uint128 lock_boosted_bal_avg = (cur_avg - last_avg) / time_delta;
             // 2. Calculate average veAcc balances
-            cur_avg = curAverageState.veAccQubeAverage * curAverageState.veAccQubeAveragePeriod;
-            last_avg = last_avg_state.veAccQubeAverage * last_avg_state.veAccQubeAveragePeriod;
+            cur_avg = _curAverageState.veAccQubeAverage * _curAverageState.veAccQubeAveragePeriod;
+            last_avg = lastAverageState.veAccQubeAverage * lastAverageState.veAccQubeAveragePeriod;
             uint128 ve_acc_avg = (cur_avg - last_avg) / time_delta;
             // 3. Calculate average ve balances
-            cur_avg = curAverageState.veQubeAverage * curAverageState.veQubeAveragePeriod;
-            last_avg = last_avg_state.veQubeAverage * last_avg_state.veQubeAveragePeriod;
+            cur_avg = _curAverageState.veQubeAverage * _curAverageState.veQubeAveragePeriod;
+            last_avg = lastAverageState.veQubeAverage * lastAverageState.veQubeAveragePeriod;
             uint128 ve_avg = (cur_avg - last_avg) / time_delta;
-            // 4. Calculate average total supply
-            cur_avg = curAverageState.gaugeLockBoostedSupplyAverage * curAverageState.gaugeLockBoostedSupplyAveragePeriod;
-            last_avg = last_avg_state.gaugeLockBoostedSupplyAverage * last_avg_state.gaugeLockBoostedSupplyAveragePeriod;
-            uint128 total_supply_avg = (cur_avg - last_avg) / time_delta;
+            // 4. Calculate gauge total supply average
+            cur_avg = _curAverageState.gaugeSupplyAverage * _curAverageState.gaugeSupplyAveragePeriod;
+            last_avg = lastAverageState.gaugeSupplyAverage * lastAverageState.gaugeSupplyAveragePeriod;
+            uint128 supply_avg = (cur_avg - last_avg) / time_delta;
             // our average boosted balance for last interval
-            avg_ve_boosted_bal = _veBoost(boosted_bal_avg, total_supply_avg, ve_acc_avg, ve_avg);
-
+            uint128 ve_boosted_bal_avg = _veBoost(balance, supply_avg, ve_acc_avg, ve_avg);
             // if veBoostedBalance is bigger, it means some locked deposits/ve qubes expired and our boost decreased
             // if average boosted balance is bigger, it means we added some ve qubes, but didnt sync it
-            interval_ve_balance = math.min(veBoostedBalance, avg_ve_boosted_bal);
-            interval_lock_balance = boosted_bal_avg;
+            ve_boosted_bal_avg = math.min(ve_boosted_bal_avg, veBoostedBalance);
+
+            uint256 lock_bonus = math.muldiv(lock_boosted_bal_avg, SCALING_FACTOR, balance);
+            // ve takes 0.4 of balance as base and boost it to 1.0
+            uint256 ve_bonus = math.muldiv(ve_boosted_bal_avg, SCALING_FACTOR, (balance * 4) / 10);
+
+            intervalTBoostedBalance = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
+            intervalLockBalance = lock_boosted_bal_avg;
         }
     }
 
@@ -223,14 +241,16 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         }
 
         uint32 last_period = up_to_moment - lastUpdateTime;
-        uint128 weighted_sum = lastRewardAverageState.lockBoostedBalanceAverage * lastRewardAverageState.lockBoostedBalanceAveragePeriod + lockBoostedBalance * last_period;
-        lastRewardAverageState.lockBoostedBalanceAverage = weighted_sum / (lastRewardAverageState.lockBoostedBalanceAveragePeriod + last_period);
-        lastRewardAverageState.lockBoostedBalanceAveragePeriod += last_period;
+        // boosted balance average
+        uint128 weighted_sum = lastAverageState.lockBoostedBalanceAverage * lastAverageState.lockBoostedBalanceAveragePeriod + lockBoostedBalance * last_period;
+        lastAverageState.lockBoostedBalanceAverage = weighted_sum / (lastAverageState.lockBoostedBalanceAveragePeriod + last_period);
+        lastAverageState.lockBoostedBalanceAveragePeriod += last_period;
         lastUpdateTime = up_to_moment;
     }
 
     function _syncDeposits(uint32 sync_time) internal returns (bool finished) {
         finished = false;
+        uint128 expiredLockBoostedBalance = 0;
 
         uint32 counter;
         // TODO: check how many deposits can be processed in 1 txn

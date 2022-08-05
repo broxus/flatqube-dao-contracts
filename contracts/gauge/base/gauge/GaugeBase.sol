@@ -54,12 +54,7 @@ abstract contract GaugeBase is GaugeRewards {
                 boosted_amount,
                 lock_time,
                 claim,
-                lockBoostedSupply,
-                lockBoostedSupplyAverage,
-                lockBoostedSupplyAveragePeriod,
-                extraRewardRounds,
-                qubeRewardRounds,
-                lastRewardTime
+                syncData()
             );
         } else if (msg.sender == qubeTokenData.tokenWallet && sender == voteEscrow) {
             TvmSlice slice = payload.toSlice();
@@ -117,8 +112,7 @@ abstract contract GaugeBase is GaugeRewards {
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            amount, claim, lockBoostedSupply, lockBoostedSupplyAverage, lockBoostedSupplyAveragePeriod,
-            extraRewardRounds, qubeRewardRounds, lastRewardTime, call_id, nonce, send_gas_to
+            amount, claim, syncData(), call_id, nonce, send_gas_to
         );
     }
 
@@ -138,8 +132,7 @@ abstract contract GaugeBase is GaugeRewards {
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            lockBoostedSupply, lockBoostedSupplyAverage, lockBoostedSupplyAveragePeriod,
-            extraRewardRounds, qubeRewardRounds, lastRewardTime, call_id, nonce, send_gas_to
+            syncData(), call_id, nonce, send_gas_to
         );
     }
 
@@ -148,14 +141,14 @@ abstract contract GaugeBase is GaugeRewards {
         uint128 qube_reward,
         uint128[] extra_reward,
         bool claim,
-        uint128 ve_bal_old,
-        uint128 ve_bal_new,
+        uint128 boosted_bal_old,
+        uint128 boosted_bal_new,
         uint32 _deposit_nonce
     ) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
         PendingDeposit deposit = deposits[_deposit_nonce];
 
-        veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
+        totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
 
         emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.lock_time);
         delete deposits[_deposit_nonce];
@@ -180,15 +173,15 @@ abstract contract GaugeBase is GaugeRewards {
         uint128 qube_reward,
         uint128[] extra_reward,
         bool claim,
-        uint128 ve_bal_old,
-        uint128 ve_bal_new,
+        uint128 boosted_bal_old,
+        uint128 boosted_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
     ) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
-        veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
+        totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
         depositTokenData.tokenBalance -= amount;
         lockBoostedSupply -= amount;
 
@@ -213,15 +206,15 @@ abstract contract GaugeBase is GaugeRewards {
         address user,
         uint128 qube_reward,
         uint128[] extra_reward,
-        uint128 ve_bal_old,
-        uint128 ve_bal_new,
+        uint128 boosted_bal_old,
+        uint128 boosted_bal_new,
         uint32 call_id,
         uint32 nonce,
         address send_gas_to
     ) external onlyGaugeAccount(user) override {
         tvm.rawReserve(_reserve(), 0);
 
-        veBoostedSupply = veBoostedSupply + ve_bal_new - ve_bal_old;
+        totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
         (
             uint128 _qube_amount,
             uint128[] _extra_amount,
@@ -321,12 +314,7 @@ abstract contract GaugeBase is GaugeRewards {
                 deposit.boosted_amount,
                 deposit.lock_time,
                 deposit.claim,
-                lockBoostedSupply,
-                lockBoostedSupplyAverage,
-                lockBoostedSupplyAveragePeriod,
-                extraRewardRounds,
-                qubeRewardRounds,
-                lastRewardTime
+                syncData()
             );
         }
     }

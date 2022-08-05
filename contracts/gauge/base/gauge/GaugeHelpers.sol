@@ -12,11 +12,11 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 abstract contract GaugeHelpers is GaugeStorage {
-    function getDetails() external view responsible returns (
+    function getDetails() external view returns (
         address _owner,
         address _voteEscrow,
         uint128 _lockBoostedSupply,
-        uint128 _veBoostedSupply,
+        uint128 _totalBoostedSupply,
         uint32 _maxBoost,
         uint32 _maxLockTime,
         uint256[] _lastExtraRewardRoundIdx,
@@ -28,7 +28,7 @@ abstract contract GaugeHelpers is GaugeStorage {
         _owner = owner;
         _voteEscrow = voteEscrow;
         _lockBoostedSupply = lockBoostedSupply;
-        _veBoostedSupply = veBoostedSupply;
+        _totalBoostedSupply = totalBoostedSupply;
         _maxBoost = maxBoost;
         _maxLockTime = maxLockTime;
         _lastExtraRewardRoundIdx = lastExtraRewardRoundIdx;
@@ -78,6 +78,17 @@ abstract contract GaugeHelpers is GaugeStorage {
         _gaugeAccountCode = gaugeAccountCode;
         _gaugeAccountVersion = gauge_account_version;
         _gaugeVersion = gauge_version;
+    }
+
+    function syncData() public view returns (GaugeSyncData) {
+        return GaugeSyncData(
+            depositTokenData.tokenBalance,
+            supplyAverage,
+            supplyAveragePeriod,
+            extraRewardRounds,
+            qubeRewardRounds,
+            lastRewardTime
+        );
     }
 
     function calculateBoostedBalance(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {

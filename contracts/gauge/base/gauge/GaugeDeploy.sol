@@ -21,6 +21,7 @@ abstract contract GaugeDeploy is GaugeUpgradable {
         qubeTokenData.tokenRoot = _qubeTokenRoot;
         extraRewardEnded = new bool[](_extraRewardTokenRoot.length);
         extraRewardRounds = new RewardRound[][](_extraRewardTokenRoot.length);
+        lastExtraRewardRoundIdx = new uint256[](_extraRewardTokenRoot.length);
         for (uint i = 0; i < _extraRewardTokenRoot.length; i++) {
             extraTokenData.push(TokenData(_extraRewardTokenRoot[i], address.makeAddrNone(), 0));
         }

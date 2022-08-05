@@ -12,8 +12,8 @@ interface IGaugeAccount {
         uint32 veAccQubeAveragePeriod;
         uint128 lockBoostedBalanceAverage;
         uint32 lockBoostedBalanceAveragePeriod;
-        uint128 gaugeLockBoostedSupplyAverage;
-        uint32 gaugeLockBoostedSupplyAveragePeriod;
+        uint128 gaugeSupplyAverage;
+        uint32 gaugeSupplyAveragePeriod;
     }
 
     struct DepositData {
@@ -59,10 +59,10 @@ interface IGaugeAccount {
         address send_gas_to;
     }
 
-    // common sync data for all actions
+    // common gauge sync data for all actions
     struct SyncData {
         uint32 poolLastRewardTime;
-        uint128 lockBoostedSupply;
+        uint128 supply;
         uint128 veSupply;
         uint128 veAccBalance;
         IGauge.RewardRound[][] extraRewardRounds;
@@ -77,35 +77,20 @@ interface IGaugeAccount {
         uint128 boosted_amount,
         uint32 lock_time,
         bool claim,
-        uint128 lockBoostedSupply,
-        uint128 lockBoostedSupplyAverage,
-        uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.RewardRound[][] extra_reward_rounds,
-        IGauge.RewardRound[] qube_reward_rounds,
-        uint32 poolLastRewardTime
+        IGauge.GaugeSyncData gauge_sync_data
     ) external;
 
     function processWithdraw(
         uint128 amount,
         bool claim,
-        uint128 lockBoostedSupply,
-        uint128 lockBoostedSupplyAverage,
-        uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.RewardRound[][] extra_reward_rounds,
-        IGauge.RewardRound[] qube_reward_rounds,
-        uint32 poolLastRewardTime,
+        IGauge.GaugeSyncData gauge_sync_data,
         uint32 call_id,
         uint32 callback_nonce,
         address send_gas_to
     ) external;
 
     function processClaim(
-        uint128 lockBoostedSupply,
-        uint128 lockBoostedSupplyAverage,
-        uint32 lockBoostedSupplyAveragePeriod,
-        IGauge.RewardRound[][] extra_reward_rounds,
-        IGauge.RewardRound[] qube_reward_rounds,
-        uint32 poolLastRewardTime,
+        IGauge.GaugeSyncData gauge_sync_data,
         uint32 call_id,
         uint32 callback_nonce,
         address send_gas_to

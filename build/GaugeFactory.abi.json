@@ -8,6 +8,7 @@
 			"inputs": [
 				{"name":"_owner","type":"address"},
 				{"name":"_qube","type":"address"},
+				{"name":"_vote_escrow","type":"address"},
 				{"name":"_qube_vesting_ratio","type":"uint32"},
 				{"name":"_qube_vesting_period","type":"uint32"}
 			],
@@ -56,6 +57,8 @@
 			"inputs": [
 				{"name":"gauge_owner","type":"address"},
 				{"name":"depositTokenRoot","type":"address"},
+				{"name":"maxBoost","type":"uint32"},
+				{"name":"maxLockTime","type":"uint32"},
 				{"name":"rewardTokenRoots","type":"address[]"},
 				{"name":"vestingPeriods","type":"uint32[]"},
 				{"name":"vestingRatios","type":"uint32[]"},
@@ -70,6 +73,8 @@
 			"inputs": [
 				{"name":"gauge_owner","type":"address"},
 				{"name":"depositTokenRoot","type":"address"},
+				{"name":"maxBoost","type":"uint32"},
+				{"name":"maxLockTime","type":"uint32"},
 				{"name":"qubeVestingPeriod","type":"uint32"},
 				{"name":"qubeVestingRatio","type":"uint32"},
 				{"name":"rewardTokenRoots","type":"address[]"},
@@ -85,15 +90,6 @@
 			"name": "onGaugeDeploy",
 			"inputs": [
 				{"name":"deploy_nonce","type":"uint32"},
-				{"name":"owner","type":"address"},
-				{"name":"depositTokenRoot","type":"address"},
-				{"name":"qubeTokenRoot","type":"address"},
-				{"name":"qubeVestingPeriod","type":"uint32"},
-				{"name":"qubeVestingRatio","type":"uint32"},
-				{"name":"extraRewardTokenRoot","type":"address[]"},
-				{"name":"extraVestingPeriods","type":"uint32[]"},
-				{"name":"extraVestingRatios","type":"uint32[]"},
-				{"name":"withdrawAllLockPeriod","type":"uint32"},
 				{"name":"call_id","type":"uint32"}
 			],
 			"outputs": [
@@ -168,10 +164,8 @@
 		}
 	],
 	"data": [
-		{"key":1,"name":"GaugeAccountCode","type":"cell"},
-		{"key":2,"name":"GaugeCode","type":"cell"},
-		{"key":3,"name":"PlatformCode","type":"cell"},
-		{"key":4,"name":"nonce","type":"uint128"}
+		{"key":1,"name":"PlatformCode","type":"cell"},
+		{"key":2,"name":"nonce","type":"uint128"}
 	],
 	"events": [
 		{
@@ -232,16 +226,7 @@
 			"name": "NewGauge",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
-				{"name":"gauge","type":"address"},
-				{"name":"gauge_owner","type":"address"},
-				{"name":"depositTokenRoot","type":"address"},
-				{"name":"qubeTokenRoot","type":"address"},
-				{"name":"qubeVestingPeriod","type":"uint32"},
-				{"name":"qubeVestingRatio","type":"uint32"},
-				{"name":"extraRewardTokenRoot","type":"address[]"},
-				{"name":"extraVestingPeriods","type":"uint32[]"},
-				{"name":"extraVestingRatios","type":"uint32[]"},
-				{"name":"withdrawAllLockPeriod","type":"uint32"}
+				{"name":"gauge","type":"address"}
 			],
 			"outputs": [
 			]
@@ -260,6 +245,7 @@
 		{"name":"default_qube_vesting_period","type":"uint32"},
 		{"name":"default_qube_vesting_ratio","type":"uint32"},
 		{"name":"qube","type":"address"},
+		{"name":"voteEscrow","type":"address"},
 		{"name":"GaugeAccountCode","type":"cell"},
 		{"name":"GaugeCode","type":"cell"},
 		{"name":"PlatformCode","type":"cell"},

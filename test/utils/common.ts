@@ -75,7 +75,6 @@ export const deployUsers = async function (count: number, initial_balance: numbe
     for (let i = 0; i < count; i += chunkSize) {
         const _pubkeys = pubkeys.slice(i, i + chunkSize);
         const _values = values.slice(i, i + chunkSize);
-        console.log(i, chunkSize)
         await locklift.tracing.trace(factory.methods.deployUsers({
             pubkeys: _pubkeys,
             values: _values
@@ -123,10 +122,11 @@ export const deployUser = async function (initial_balance = 100) {
 
 export const setupTokenRoot = async function (token_name: string, token_symbol: string, owner: AccountType) {
     const signer = await locklift.keystore.getSigner('0');
+    const TokenPlatform = await locklift.factory.getContractArtifacts('TokenWalletPlatform');
 
-    const TokenWallet = await locklift.factory.getContractArtifacts('TokenWallet');
+    const TokenWallet = await locklift.factory.getContractArtifacts('TokenWalletUpgradeable');
     const {contract: _root, tx} = await locklift.tracing.trace(locklift.factory.deployContract({
-        contract: 'TokenRoot',
+        contract: 'TokenRootUpgradeable',
         initParams: {
             name_: token_name,
             symbol_: token_symbol,
@@ -134,7 +134,8 @@ export const setupTokenRoot = async function (token_name: string, token_symbol: 
             rootOwner_: owner.address,
             walletCode_: TokenWallet.code,
             randomNonce_: locklift.utils.getRandomNonce(),
-            deployer_: new Address(zeroAddress)
+            deployer_: new Address(zeroAddress),
+            platformCode_: TokenPlatform.code
         },
         publicKey: signer?.publicKey as string,
         constructorParams: {
@@ -156,26 +157,80 @@ export const setupTokenRoot = async function (token_name: string, token_symbol: 
 }
 
 
+export const setupGaugeFactory = async function({
+    _owner,
+    _qube,
+    _voteEscrow,
+    _qubeVestingRatio=0,
+    _qubeVestingPeriod=0
+}: {_owner: AccountType, _qube: Token, _voteEscrow: VoteEscrow, _qubeVestingRatio: number, _qubeVestingPeriod: number}
+): Promise<Contract<FactorySource["GaugeFactory"]>> {
+    const Gauge = await locklift.factory.getContractArtifacts('Gauge');
+    const GaugeAccount = await locklift.factory.getContractArtifacts('GaugeAccount');
+    const Platform = await locklift.factory.getContractArtifacts('Platform');
+
+    const signer = await locklift.keystore.getSigner('0');
+    const {contract: factory, tx} = await locklift.factory.deployContract({
+        contract: 'GaugeFactory',
+        initParams: {
+            nonce: getRandomNonce(),
+            PlatformCode: Platform.code
+        },
+        publicKey: signer?.publicKey as string,
+        constructorParams: {
+            _owner: _owner.address,
+            _qube: _qube.address,
+            _vote_escrow: _voteEscrow.address,
+            _qube_vesting_period: _qubeVestingPeriod,
+            _qube_vesting_ratio: _qubeVestingRatio
+        },
+        value: locklift.utils.toNano(5),
+    });
+    logger.log('Deployed gauge factory');
+
+    await locklift.tracing.trace(_owner.runTarget(
+        {
+            contract: factory
+        },
+        (factory) => factory.methods.installNewGaugeCode({
+            gauge_code: Gauge.code, send_gas_to: _owner.address
+        })
+    ));
+    logger.log('Installed gauge code');
+
+    await locklift.tracing.trace(_owner.runTarget(
+        {
+            contract: factory
+        },
+        (factory) => factory.methods.installNewGaugeAccountCode({
+            gauge_account_code: GaugeAccount.code, send_gas_to: _owner.address
+        })
+    ));
+    logger.log('Installed gauge account code');
+    return factory;
+}
+
+
 export const setupVoteEscrow = async function ({
-        // @ts-ignore
-        owner,
-        // @ts-ignore
-        qube,
-        dao = new Address(zeroAddress),
-        start_time = Math.floor(Date.now() / 1000 + 5),
-        min_lock = 1,
-        max_lock = 100,
-        distribution_scheme = [8000, 1000, 1000],
-        distribution = [1000000, 1000000, 1000000, 1000000, 1000000, 1000000],
-        epoch_time = 10,
-        time_before_voting = 4,
-        voting_time = 5,
-        gauge_min_votes_ratio = 200,
-        gauge_max_votes_ratio = 3000,
-        gauge_max_downtime = 2,
-        max_gauges_per_vote = 15,
-        whitelist_price = 1000000
-    }) {
+    // @ts-ignore
+    owner,
+    // @ts-ignore
+    qube,
+    dao = new Address(zeroAddress),
+    start_time = Math.floor(Date.now() / 1000 + 5) + locklift.testing.getTimeOffset(),
+    min_lock = 1,
+    max_lock = 100,
+    distribution_scheme = [8000, 1000, 1000],
+    distribution = [1000000, 1000000, 1000000, 1000000, 1000000, 1000000],
+    epoch_time = 10,
+    time_before_voting = 4,
+    voting_time = 5,
+    gauge_min_votes_ratio = 200,
+    gauge_max_votes_ratio = 3000,
+    gauge_max_downtime = 2,
+    max_gauges_per_vote = 15,
+    whitelist_price = 1000000
+}) {
     const VoteEscrowContract = await locklift.factory.getContractArtifacts('VoteEscrow');
     const Platform = await locklift.factory.getContractArtifacts('Platform');
     const VoteEscrowAccount = await locklift.factory.getContractArtifacts('VoteEscrowAccount');
@@ -197,7 +252,7 @@ export const setupVoteEscrow = async function ({
     await locklift.tracing.trace(deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer?.publicKey as string}));
 
     logger.log(`Set Vote Escrow code`);
-    const tx2 = await deployer.methods.deployVoteEscrow({
+    const tx2 = await locklift.tracing.trace(deployer.methods.deployVoteEscrow({
         owner: owner.address,
         qube: qube.address,
         dao,
@@ -214,7 +269,7 @@ export const setupVoteEscrow = async function ({
         gauge_max_downtime,
         max_gauges_per_vote,
         whitelist_price
-    }).sendExternal({publicKey: signer?.publicKey as string});
+    }).sendExternal({publicKey: signer?.publicKey as string}));
 
     const ve_addr = tx2?.output?._vote_escrow;
     const ve = await VoteEscrow.from_addr(ve_addr as Address, owner);

@@ -14,6 +14,17 @@
 			]
 		},
 		{
+			"name": "sendQubesToGauge",
+			"inputs": [
+				{"name":"qube_amount","type":"uint128"},
+				{"name":"gauge","type":"address"},
+				{"name":"round_len","type":"uint32"},
+				{"name":"round_start","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "upgrade",
 			"inputs": [
 				{"name":"code","type":"cell"},
@@ -573,10 +584,10 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_platform_code","type":"cell"},
-				{"name":"_ve_acc_code","type":"cell"},
-				{"name":"_ve_acc_version","type":"uint32"},
-				{"name":"_ve_version","type":"uint32"}
+				{"name":"_platformCode","type":"cell"},
+				{"name":"_voteEscrowAccountCode","type":"cell"},
+				{"name":"_voteEscrowAccountVersion","type":"uint32"},
+				{"name":"_voteEscrowVersion","type":"uint32"}
 			]
 		},
 		{
@@ -708,7 +719,7 @@
 		}
 	],
 	"data": [
-		{"key":1,"name":"deploy_nonce","type":"uint64"}
+		{"key":1,"name":"deploy_nonce","type":"uint32"}
 	],
 	"events": [
 		{
@@ -1037,7 +1048,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"deploy_nonce","type":"uint64"},
+		{"name":"deploy_nonce","type":"uint32"},
 		{"name":"platformCode","type":"cell"},
 		{"name":"veAccountCode","type":"cell"},
 		{"name":"ve_account_version","type":"uint32"},

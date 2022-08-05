@@ -29,14 +29,18 @@ abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {
     uint256 lastQubeRewardRoundIdx;
 
     uint32 lastAverageUpdateTime;
-
     // sum of all deposits boosted with locks
     uint128 lockBoostedSupply;
-    // sum of all deposits boosted with locks + with veQubes
-    uint128 veBoostedSupply;
-
+    // average sum of all lock-boosted deposits
     uint128 lockBoostedSupplyAverage;
     uint32 lockBoostedSupplyAveragePeriod;
+
+    // average sum of all deposits
+    uint128 supplyAverage;
+    uint32 supplyAveragePeriod;
+
+    // sum of all deposits boosted with locks + with veQubes
+    uint128 totalBoostedSupply;
 
     address owner;
     // VE contract that manage qube emission
