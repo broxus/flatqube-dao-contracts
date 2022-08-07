@@ -10,7 +10,6 @@ import "../../../libraries/Errors.sol";
 
 abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
     function installPlatformCode(TvmCell code, address send_gas_to) external override onlyOwner {
-        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         require(platformCode.toSlice().empty(), Errors.ALREADY_INITIALIZED);
 
         tvm.rawReserve(_reserve(), 0);
@@ -21,7 +20,6 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
     }
 
     function installOrUpdateVeAccountCode(TvmCell code, address send_gas_to) external override onlyOwner {
-        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         veAccountCode = code;

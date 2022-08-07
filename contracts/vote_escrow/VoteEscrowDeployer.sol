@@ -32,7 +32,7 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
         address owner,
         address qube,
         address dao,
-        uint32 start_time,
+        uint32 start_offset,
         uint32 min_lock,
         uint32 max_lock,
         uint32[] distribution_scheme,
@@ -62,23 +62,23 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
 
         address ve = new VoteEscrow{
             stateInit: stateInit,
-            value: 5 ton,
+            value: 1 ever,
             wid: address(this).wid,
             flag: MsgFlag.SENDER_PAYS_FEES
         }(address(this), qube, dao);
 
-        IVoteEscrow(ve).installPlatformCode{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(PlatformCode, ve);
-        IVoteEscrow(ve).installOrUpdateVeAccountCode{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(veAccountCode, ve);
-        IVoteEscrow(ve).setVotingParams{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(
+        IVoteEscrow(ve).installPlatformCode{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(PlatformCode, ve);
+        IVoteEscrow(ve).installOrUpdateVeAccountCode{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(veAccountCode, ve);
+        IVoteEscrow(ve).setVotingParams{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(
             epoch_time, time_before_voting, voting_time, gauge_min_votes_ratio,
             gauge_max_votes_ratio, gauge_max_downtime, max_gauges_per_vote, 0, ve
         );
-        IVoteEscrow(ve).setDistributionScheme{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(distribution_scheme, 0, ve);
-        IVoteEscrow(ve).setDistribution{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(distribution, 0, ve);
-        IVoteEscrow(ve).setQubeLockTimeLimits{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(min_lock, max_lock, 0, ve);
-        IVoteEscrow(ve).setWhitelistPrice{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(whitelist_price, 0, ve);
-        IVoteEscrow(ve).initialize{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(start_time, ve);
-        IVoteEscrow(ve).transferOwnership{value: 1.5 ton, flag: MsgFlag.SENDER_PAYS_FEES}(owner, ve);
+        IVoteEscrow(ve).setDistributionScheme{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution_scheme, 0, ve);
+        IVoteEscrow(ve).setDistribution{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution, 0, ve);
+        IVoteEscrow(ve).setQubeLockTimeLimits{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(min_lock, max_lock, 0, ve);
+        IVoteEscrow(ve).setWhitelistPrice{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(whitelist_price, 0, ve);
+        IVoteEscrow(ve).initialize{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(start_offset, ve);
+        IVoteEscrow(ve).transferOwnership{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(owner, ve);
         return ve;
     }
 }

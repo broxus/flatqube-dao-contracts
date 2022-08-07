@@ -7,10 +7,8 @@ import "./VoteEscrowDAO.sol";
 
 
 abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
-    function initialize(uint32 start_time, address send_gas_to) external override onlyOwner {
-        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
+    function initialize(uint32 start_offset, address send_gas_to) external override onlyOwner {
         // codes installed
-        require (start_time > now, Errors.CANT_BE_INITIALIZED);
         require (!platformCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
         require (!veAccountCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
         // distribution params
@@ -24,6 +22,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         require (gaugeMaxVotesRatio > 0 && maxGaugesPerVote > 0, Errors.CANT_BE_INITIALIZED);
         require (!initialized, Errors.ALREADY_INITIALIZED);
 
+        uint32 start_time = now + start_offset;
         tvm.rawReserve(_reserve(), 0);
         currentEpochStartTime = start_time;
         currentEpochEndTime = start_time + epochTime;

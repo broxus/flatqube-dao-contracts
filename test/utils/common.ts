@@ -21,6 +21,16 @@ export async function sleep(ms = 1000) {
 }
 
 
+export async function tryIncreaseTime(seconds: number) {
+    // @ts-ignore
+    if (locklift.testing.isEnabled) {
+        await locklift.testing.increaseTime(seconds);
+    } else {
+        await sleep(seconds * 1000);
+    }
+}
+
+
 // allow sending N internal messages via batch method
 export const runTargets = async function (
     wallet: AccountType,
@@ -217,7 +227,7 @@ export const setupVoteEscrow = async function ({
     // @ts-ignore
     qube,
     dao = new Address(zeroAddress),
-    start_time = Math.floor(Date.now() / 1000 + 5) + locklift.testing.getTimeOffset(),
+    start_offset = 5,
     min_lock = 1,
     max_lock = 100,
     distribution_scheme = [8000, 1000, 1000],
@@ -245,7 +255,7 @@ export const setupVoteEscrow = async function ({
         },
         publicKey: signer?.publicKey as string,
         constructorParams: {},
-        value: locklift.utils.toNano(20),
+        value: locklift.utils.toNano(6.5),
     });
 
     logger.log(`Deployed Vote Escrow deployer`);
@@ -256,7 +266,7 @@ export const setupVoteEscrow = async function ({
         owner: owner.address,
         qube: qube.address,
         dao,
-        start_time,
+        start_offset,
         min_lock,
         max_lock,
         distribution_scheme,

@@ -172,7 +172,7 @@ export class VoteEscrow {
     }
 
     async voteEpoch(voter: AccountType, votes: any, call_id = 0) {
-        return locklift.tracing.trace(voter.runTarget(
+        return await locklift.tracing.trace(voter.runTarget(
             {
                 contract: this.contract,
                 value: toNano(5)
@@ -269,14 +269,14 @@ export class VoteEscrow {
         );
     }
 
-    async initialize(start_time: number) {
+    async initialize(start_offset: number) {
         return await this._owner.runTarget(
             {
                 contract: this.contract,
                 value: toNano(5)
             },
             (ve) => ve.methods.initialize({
-                start_time: start_time,
+                start_offset: start_offset,
                 send_gas_to: this._owner.address
             })
         );
