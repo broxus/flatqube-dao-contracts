@@ -1,7 +1,7 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
+import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 
 
 interface IVoteEscrow is IAcceptTokensTransferCallback {

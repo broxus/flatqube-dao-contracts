@@ -1,8 +1,8 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRoot.sol";
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWallet.sol";
+import "broxus-token-contracts/contracts/interfaces/ITokenRoot.sol";
+import "broxus-token-contracts/contracts/interfaces/ITokenWallet.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "./VoteEscrowStorage.sol";
 import {RPlatform as Platform} from "../../../Platform.sol";

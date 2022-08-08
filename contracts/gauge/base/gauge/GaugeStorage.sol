@@ -1,9 +1,9 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenRootUpgradeable.sol";
-import "broxus-ton-tokens-contracts/contracts/interfaces/ITokenWalletUpgradeable.sol";
-import "broxus-ton-tokens-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
+import "broxus-token-contracts/contracts/interfaces/ITokenRootUpgradeable.sol";
+import "broxus-token-contracts/contracts/interfaces/ITokenWalletUpgradeable.sol";
+import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 
 import "../../interfaces/IGaugeAccount.sol";
 import "../../interfaces/IGauge.sol";
