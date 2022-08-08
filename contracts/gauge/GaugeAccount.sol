@@ -104,7 +104,7 @@ contract GaugeAccount is GaugeAccountBase {
             extraVesting[i].vestingRatio = extraVestingRatios[i];
         }
 
-        IVoteEscrow(voteEscrow).getVoteEscrowAccountAddress{value: 0.1 ton, callback: IGaugeAccount.receiveVeAccAddress}(user);
+        IVoteEscrow(voteEscrow).getVoteEscrowAccountAddress{value: 0.1 ever, callback: IGaugeAccount.receiveVeAccAddress}(user);
         IGauge(gauge).onGaugeAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
     }
 }

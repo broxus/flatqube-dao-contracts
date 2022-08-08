@@ -26,5 +26,5 @@ abstract contract GaugeFactoryStorage is IGaugeFactory {
 
     // factory deployment seed
     uint128 static nonce;
-    uint128 constant CONTRACT_MIN_BALANCE = 1 ton;
+    uint128 constant CONTRACT_MIN_BALANCE = 1 ever;
 }

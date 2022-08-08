@@ -1,4 +1,4 @@
-pragma ton-solidity >= 0.39.0;
+pragma ever-solidity >= 0.39.0;
 
 import "Proposal.sol";
 
@@ -23,10 +23,10 @@ contract DaoRoot is DaoCellEncoder, IDaoRoot, IUpgradable, Delegate {
     uint8 public constant proposalMaxOperations = 10;
     uint16 public constant proposalMaxDescriptionLen = 4096;
 
-    uint128 public constant MIN_PROPOSAL_THRESHOLD = 10_000 ton;
-    uint128 public constant MAX_PROPOSAL_THRESHOLD = 7_000_000 ton;
-    uint128 public constant MIN_PROPOSAL_QUORUM = 50_000 ton;
-    uint128 public constant MAX_PROPOSAL_QUORUM = 7_000_000 ton;
+    uint128 public constant MIN_PROPOSAL_THRESHOLD = 10_000 ever;
+    uint128 public constant MAX_PROPOSAL_THRESHOLD = 7_000_000 ever;
+    uint128 public constant MIN_PROPOSAL_QUORUM = 50_000 ever;
+    uint128 public constant MAX_PROPOSAL_QUORUM = 7_000_000 ever;
     uint32 public constant MIN_VOTING_PERIOD = 24 hours;
     uint32 public constant MAX_VOTING_PERIOD = 30 days;
     uint32 public constant MIN_VOTING_DELAY = 24 hours;

@@ -34,6 +34,6 @@ abstract contract VoteEscrowAccountStorage is IVoteEscrowAccount {
     mapping(uint32 /*proposal_id*/ => bool /*support*/) public casted_votes;
 
     uint32 constant MAX_ITERATIONS_PER_MSG = 50;
-    uint128 constant CONTRACT_MIN_BALANCE = 0.3 ton;
+    uint128 constant CONTRACT_MIN_BALANCE = 0.3 ever;
     uint16 constant public MAX_REASON_LENGTH = 512;
 }

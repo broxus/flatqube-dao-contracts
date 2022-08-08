@@ -49,7 +49,7 @@ abstract contract GaugeAccountStorage is IGaugeAccount {
     mapping (uint32 => ActionType) _actions;
     mapping (uint32 => SyncData) _sync_data;
 
-    uint128 constant CONTRACT_MIN_BALANCE = 0.3 ton;
+    uint128 constant CONTRACT_MIN_BALANCE = 0.3 ever;
     uint32 constant MAX_VESTING_RATIO = 1000;
     uint256 constant SCALING_FACTOR = 1e18;
     uint128 constant MAX_ITERATIONS_PER_MSG = 50;

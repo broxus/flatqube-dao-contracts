@@ -288,7 +288,7 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         if (finished) {
             _updateBalanceAverage(sync_time);
             if (expiredLockBoostedBalance > 0) {
-                IGauge(gauge).burnBoostedBalance{value: 0.1 ton}(user, expiredLockBoostedBalance);
+                IGauge(gauge).burnBoostedBalance{value: 0.1 ever}(user, expiredLockBoostedBalance);
                 expiredLockBoostedBalance = 0;
             }
         }

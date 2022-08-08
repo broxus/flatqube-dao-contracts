@@ -168,7 +168,7 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
 
         uint16 error;
 
-        if (msg.value < proposal_ids.length * Gas.UNLOCK_CASTED_VOTE_VALUE + 1 ton) error = Errors.LOW_MSG_VALUE;
+        if (msg.value < proposal_ids.length * Gas.UNLOCK_CASTED_VOTE_VALUE + 1 ever) error = Errors.LOW_MSG_VALUE;
 
         if (error != 0){
             IVoter(user).onCastedVoteNotUnlocked{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(proposal_ids, error);

@@ -108,7 +108,7 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
         if (finished) {
             _updateVeAverage(sync_time);
             if (expiredVeQubes > 0) {
-                IVoteEscrow(voteEscrow).burnVeQubes{value: 0.1 ton}(user, expiredVeQubes);
+                IVoteEscrow(voteEscrow).burnVeQubes{value: 0.1 ever}(user, expiredVeQubes);
             }
         }
         return finished;

@@ -293,7 +293,7 @@ abstract contract GaugeBase is GaugeRewards {
             uint32 _deposit_nonce = slice.decode(uint32);
             PendingDeposit deposit = deposits[_deposit_nonce];
             // deploy VE account
-            IVoteEscrow(voteEscrow).deployVoteEscrowAccount{value: Gas.VE_ACCOUNT_DEPLOY_VALUE + 0.1 ton}(deposit.user);
+            IVoteEscrow(voteEscrow).deployVoteEscrowAccount{value: Gas.VE_ACCOUNT_DEPLOY_VALUE + 0.1 ever}(deposit.user);
             // deploy Gauge account
             address gauge_account_addr = deployGaugeAccount(deposit.user);
             // deploy qube and other wallets
