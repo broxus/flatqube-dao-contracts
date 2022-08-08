@@ -1,9 +1,12 @@
 import { LockliftConfig } from "locklift/config";
 import { FactorySource } from "./build/factorySource";
 import {GiverWallet, SimpleGiver, TestnetGiver} from "./giverSettings";
+import * as dotenv from "dotenv";
 declare global {
     const locklift: import("locklift").Locklift<FactorySource>;
 }
+dotenv.config();
+
 
 const config: LockliftConfig = {
     compiler: {
@@ -71,7 +74,7 @@ const config: LockliftConfig = {
                 // Check if you need provide custom giver
                 giverFactory: (ever, keyPair, address) => new TestnetGiver(ever, keyPair, address),
                 address: "0:a4053fd2e9798d0457c9e8f012cef203e49da863d76f36d52d5e2e62c326b217",
-                key: "",
+                key: process.env.TESTNET_GIVER_KEY ?? "",
             },
             tracing: {
                 endpoint: 'https://net.ton.dev/graphql',
@@ -84,6 +87,21 @@ const config: LockliftConfig = {
                 amount: 500
             },
         },
+        main: {
+            connection: "mainnet",
+            giver: {
+                // Mainnet giver has the same abi as testnet one
+                giverFactory: (ever, keyPair, address) => new TestnetGiver(ever, keyPair, address),
+                address: "0:3bcef54ea5fe3e68ac31b17799cdea8b7cffd4da75b0b1a70b93a18b5c87f723",
+                key: process.env.MAIN_GIVER_KEY ?? "",
+            },
+            tracing: {
+                endpoint: 'https://main.ton.dev/graphql'
+            },
+            keys: {
+                amount: 500
+            }
+        }
     },
     mocha: {
         timeout: 3000000,
