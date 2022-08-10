@@ -26,16 +26,21 @@ export class Gauge {
         return new Gauge(contract, owner);
     }
 
+    async gaugeAccount(user: Address) {
+        const addr = (await this.contract.methods.getGaugeAccountAddress({user: user, answerId: 0}).call()).value0;
+        return locklift.factory.getDeployedContract('GaugeAccount', addr);
+    }
+
     async getDetails() {
-        return this.contract.methods.getDetails({}).call();
+        return this.contract.methods.getDetails().call();
     }
 
     async getTokenDetails() {
-        return this.contract.methods.getTokenDetails({}).call();
+        return this.contract.methods.getTokenDetails().call();
     }
 
     async getRewardDetails() {
-        return this.contract.methods.getRewardDetails({}).call();
+        return this.contract.methods.getRewardDetails().call();
     }
 
     async depositPayload(deposit_owner: Address, lock_time: number, claim=false,call_id = 0) {
@@ -53,6 +58,22 @@ export class Gauge {
             nonce: 0,
             call_id: call_id
         }).call()).reward_deposit_payload;
+    }
+
+    async withdraw(user: AccountType, amount: number, claim: boolean, call_id=0) {
+        return await user.runTarget(
+            {
+                contract: this.contract,
+                value: toNano(2)
+            },
+            (gauge) => gauge.methods.withdraw({
+                amount: amount,
+                claim: claim,
+                nonce: 0,
+                call_id: call_id,
+                send_gas_to: user.address
+            })
+        );
     }
 
     async deposit(from_wallet: TokenWallet, amount: number, lock_time: number, claim: boolean, call_id = 0) {

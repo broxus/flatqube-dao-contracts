@@ -21,6 +21,6 @@ export class VoteEscrowAccount {
     }
 
     async calculateVeAverage() {
-        return await this.contract.methods.calculateVeAverage({}).call();
+        return await this.contract.methods.calculateVeAverage().call();
     }
 }

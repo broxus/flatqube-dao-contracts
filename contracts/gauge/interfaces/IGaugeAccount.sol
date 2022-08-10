@@ -60,9 +60,9 @@ interface IGaugeAccount {
     }
 
     // common gauge sync data for all actions
-    struct SyncData {
+    struct AccountSyncData {
         uint32 poolLastRewardTime;
-        uint128 supply;
+        uint128 gaugeDepositSupply;
         uint128 veSupply;
         uint128 veAccBalance;
         IGauge.RewardRound[][] extraRewardRounds;

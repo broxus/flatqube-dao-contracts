@@ -15,12 +15,12 @@ abstract contract VoteEscrowAccountStorage is IVoteEscrowAccount {
     TvmCell platform_code;
 
     uint128 qubeBalance; // total amount of deposited qubes
-    uint128 veQubeBalance; // current ve balance
+    uint128 veQubeBalance; // ve balance on moment of last update
     uint128 unlockedQubes; // qubes with expired lock, that can be withdraw
 
     // this is updated every time user deposit qubes/ve expire
-    uint128 veQubeAverage;
-    uint32 veQubeAveragePeriod;
+    uint128 veQubeAverage; // on moment of last update
+    uint32 veQubeAveragePeriod; // on moment of last update
     uint32 lastUpdateTime;
 
     uint32 lastEpochVoted; // number of last epoch when user voted

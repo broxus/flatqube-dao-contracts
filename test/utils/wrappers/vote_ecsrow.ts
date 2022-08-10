@@ -39,19 +39,19 @@ export class VoteEscrow {
     }
 
     async details() {
-        return await this.contract.methods.getDetails({}).call();
+        return await this.contract.methods.getDetails().call();
     }
 
     async getCodes() {
-        return await this.contract.methods.getCodes({}).call();
+        return await this.contract.methods.getCodes().call();
     }
 
     async votingDetails() {
-        return await this.contract.methods.getVotingDetails({}).call();
+        return await this.contract.methods.getVotingDetails().call();
     }
 
     async getCurrentEpochDetails() {
-        return await this.contract.methods.getCurrentEpochDetails({}).call();
+        return await this.contract.methods.getCurrentEpochDetails().call();
     }
 
     async checkQubeBalance(expected_balance: number) {
@@ -340,7 +340,7 @@ export class VoteEscrow {
         let gas = null;
         if (calc_min_gas) {
             const ve_acc = await this.voteEscrowAccount(from_wallet._owner?.address as Address);
-            gas = (await ve_acc.contract.methods.calculateMinGas({answerId: 0}).call({})).min_gas;
+            gas = (await ve_acc.contract.methods.calculateMinGas({answerId: 0}).call()).min_gas;
             gas = new Bignumber(gas);
             gas = gas.plus(new Bignumber(3 * 10 ** 9)).toFixed(0);
         }

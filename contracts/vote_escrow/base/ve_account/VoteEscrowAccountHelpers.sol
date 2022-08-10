@@ -12,24 +12,33 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
 abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
+    // @notice Returns all variables stored on contract.
+    // Note that these vars are actual on moment of last update of contract data!
+    // To get real-time values for time-dependant vars (e.g veQubeBalance), you may use calculateVeAverage method
     function getDetails() external view responsible returns (
         uint32 _current_version,
         address _voteEscrow,
         address _user,
-        uint128 _qubeBalance, // total amount of deposited qubes
-        uint128 _unlockedQubes, // qubes with expired lock, that can be withdraw
+        uint128 _qubeBalance,
+        uint128 _veQubeBalance,
+        uint128 _veQubeAverage,
+        uint32 _veQubeAveragePeriod,
+        uint128 _unlockedQubes,
         uint32 _lastUpdateTime,
-        uint32 _lastEpochVoted, // number of last epoch when user voted
+        uint32 _lastEpochVoted,
         uint32 _activeDeposits
     ) {
         return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false }(
             current_version,
             voteEscrow,
             user,
-            qubeBalance, // total amount of deposited qubes
-            unlockedQubes, // qubes with expired lock, that can be withdraw
+            qubeBalance,
+            veQubeBalance,
+            veQubeAverage,
+            veQubeAveragePeriod,
+            unlockedQubes,
             lastUpdateTime,
-            lastEpochVoted, // number of last epoch when user voted
+            lastEpochVoted,
             activeDeposits
         );
     }
@@ -135,11 +144,18 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
     // View function for getting actual ve stats
     // @dev If now <= lastUpdateTime, will just return values stored on contract
     function calculateVeAverage() external view returns (
-        uint128 _veQubeBalance, uint128 _expiredVeQubes, uint128 _veQubeAverage, uint128 _veQubeAveragePeriod
+        uint128 _qubeBalance,
+        uint128 _veQubeBalance,
+        uint128 _expiredVeQubes,
+        uint128 _unlockedQubes,
+        uint128 _veQubeAverage,
+        uint128 _veQubeAveragePeriod
     ) {
+        _qubeBalance = qubeBalance;
         _veQubeAverage = veQubeAverage;
         _veQubeAveragePeriod = veQubeAveragePeriod;
         _veQubeBalance = veQubeBalance;
+        _unlockedQubes = unlockedQubes;
         _expiredVeQubes = 0;
         uint32 _lastUpdateTime = lastUpdateTime;
 
@@ -163,6 +179,7 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             _veQubeAveragePeriod += last_period;
             _lastUpdateTime = deposit_lock_end;
             _veQubeBalance -= cur_deposit.veAmount;
+            _unlockedQubes += cur_deposit.amount;
             _expiredVeQubes += cur_deposit.veAmount;
 
             pointer = deposits.next(cur_key);

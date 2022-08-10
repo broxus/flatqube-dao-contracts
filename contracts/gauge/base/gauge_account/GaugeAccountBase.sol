@@ -42,10 +42,9 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         // TODO: min gas?
         _nonce += 1;
         _withdraws[_nonce] = PendingWithdraw(amount, claim, call_id, callback_nonce, send_gas_to);
-        _sync_data[_nonce] = SyncData(
+        _sync_data[_nonce] = AccountSyncData(
             gauge_sync_data.poolLastRewardTime,
-            gauge_sync_data.supply,
-            // TODO: remove
+            gauge_sync_data.depositSupply,
             0,
             0,
             gauge_sync_data.extraRewardRounds,
@@ -53,8 +52,8 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         );
         _actions[_nonce] = ActionType.Withdraw;
 
-        curAverageState.gaugeSupplyAverage = gauge_sync_data.supplyAverage;
-        curAverageState.gaugeSupplyAveragePeriod = gauge_sync_data.supplyAveragePeriod;
+        curAverageState.gaugeSupplyAverage = gauge_sync_data.depositSupplyAverage;
+        curAverageState.gaugeSupplyAveragePeriod = gauge_sync_data.depositSupplyAveragePeriod;
 
         tvm.rawReserve(_reserve(), 0);
         IVoteEscrow(voteEscrow).getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_nonce);
@@ -69,9 +68,9 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         // TODO: min gas?
         _nonce += 1;
         _claims[_nonce] = PendingClaim(call_id, callback_nonce, send_gas_to);
-        _sync_data[_nonce] = SyncData(
+        _sync_data[_nonce] = AccountSyncData(
             gauge_sync_data.poolLastRewardTime,
-            gauge_sync_data.supply,
+            gauge_sync_data.depositSupply,
             0,
             0,
             gauge_sync_data.extraRewardRounds,
@@ -79,8 +78,8 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         );
         _actions[_nonce] = ActionType.Claim;
 
-        curAverageState.gaugeSupplyAverage = gauge_sync_data.supplyAverage;
-        curAverageState.gaugeSupplyAveragePeriod = gauge_sync_data.supplyAveragePeriod;
+        curAverageState.gaugeSupplyAverage = gauge_sync_data.depositSupplyAverage;
+        curAverageState.gaugeSupplyAveragePeriod = gauge_sync_data.depositSupplyAveragePeriod;
 
         tvm.rawReserve(_reserve(), 0);
         IVoteEscrow(voteEscrow).getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_nonce);
@@ -97,9 +96,9 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         // TODO: min gas?
         _nonce += 1;
         _deposits[_nonce] = PendingDeposit(deposit_nonce, amount, boostedAmount, lockTime, claim);
-        _sync_data[_nonce] = SyncData(
+        _sync_data[_nonce] = AccountSyncData(
             gauge_sync_data.poolLastRewardTime,
-            gauge_sync_data.supply,
+            gauge_sync_data.depositSupply,
             0,
             0,
             gauge_sync_data.extraRewardRounds,
@@ -107,8 +106,8 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         );
         _actions[_nonce] = ActionType.Deposit;
 
-        curAverageState.gaugeSupplyAverage = gauge_sync_data.supplyAverage;
-        curAverageState.gaugeSupplyAveragePeriod = gauge_sync_data.supplyAveragePeriod;
+        curAverageState.gaugeSupplyAverage = gauge_sync_data.depositSupplyAverage;
+        curAverageState.gaugeSupplyAveragePeriod = gauge_sync_data.depositSupplyAveragePeriod;
 
         tvm.rawReserve(_reserve(), 0);
         IVoteEscrow(voteEscrow).getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_nonce);
@@ -153,7 +152,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
             return;
         }
 
-        (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) = calculateIntervalBalances(lastAverageState);
+        (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) = calculateIntervalBalances(curAverageState);
         lastAverageState = curAverageState;
 
         IGaugeAccount(address(this)).updateQubeReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
@@ -166,7 +165,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     ) external override onlySelf {
         tvm.rawReserve(_reserve(), 0);
 
-        SyncData _data = _sync_data[nonce];
+        AccountSyncData _data = _sync_data[nonce];
 
         (
             qubeReward,
@@ -188,7 +187,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     ) external override onlySelf {
         tvm.rawReserve(_reserve(), 0);
 
-        SyncData _data = _sync_data[nonce];
+        AccountSyncData _data = _sync_data[nonce];
 
         (
             extraReward[idx],
@@ -220,14 +219,14 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     function processDeposit_final(uint32 nonce) external override onlySelf {
         tvm.rawReserve(_reserve(), 0);
 
-        SyncData _data = _sync_data[nonce];
+        AccountSyncData _data = _sync_data[nonce];
         PendingDeposit _deposit = _deposits[nonce];
 
         _saveDeposit(_deposit.amount, _deposit.boostedAmount, _deposit.lockTime);
 
         uint128 totalBoostedOld = totalBoostedBalance;
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
-            balance, lockBoostedBalance, _data.supply, _data.veAccBalance, _data.veSupply
+            _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
 //        console.log(format('veBoosted - {}, tboosted - {}', veBoostedBalance, totalBoostedBalance));
@@ -250,7 +249,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     function processWithdraw_final(uint32 nonce) external override onlySelf {
         tvm.rawReserve(_reserve(), 0);
 
-        SyncData _data = _sync_data[nonce];
+        AccountSyncData _data = _sync_data[nonce];
         PendingWithdraw _withdraw = _withdraws[nonce];
 
         uint128 unlocked_balance = balance - lockedBalance;
@@ -266,9 +265,9 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
 
         uint128 totalBoostedOld = totalBoostedBalance;
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
-            balance, lockBoostedBalance, _data.supply, _data.veAccBalance, _data.veSupply
+            _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
-
+        
         delete _actions[nonce];
         delete _withdraws[nonce];
         delete _sync_data[nonce];
@@ -288,12 +287,12 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     function processClaim_final(uint32 nonce) external override onlySelf {
         tvm.rawReserve(_reserve(), 0);
 
-        SyncData _data = _sync_data[nonce];
+        AccountSyncData _data = _sync_data[nonce];
         PendingClaim _claim = _claims[nonce];
 
         uint128 totalBoostedOld = totalBoostedBalance;
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
-            balance, lockBoostedBalance, _data.supply, _data.veAccBalance, _data.veSupply
+            _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
         delete _actions[nonce];

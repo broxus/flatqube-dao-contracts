@@ -108,7 +108,7 @@ abstract contract GaugeDeploy is GaugeUpgradable {
 
     /*
         @notice Store vault's token wallet address
-        @dev Only root can call with correct params
+        @dev Only one of the roots can call with correct params
         @param wallet Gauge's token wallet
     */
     function receiveTokenWalletAddress(address wallet) external override {

@@ -72,79 +72,168 @@ describe("Gauge main scenario (no extra rewards, no vesting)", async function() 
     });
 
     describe('Running scenarios', async function() {
-        describe('Testing simple deposits', async function() {
+        describe('Testing simple scenarios', async function() {
             const deposit_amount = 1000;
+            let gauge_inited = false;
 
             beforeEach('Deploy gauge', async function() {
-                await locklift.tracing.trace(owner.runTarget(
-                    {
-                        contract: gauge_factory,
-                        value: toNano(5)
-                    },
-                    (gf) => gf.methods.deployGauge({
-                        gauge_owner: owner.address,
-                        depositTokenRoot: deposit_root.address,
-                        maxBoost: 2000,
-                        maxLockTime: 100,
-                        rewardTokenRoots: [],
-                        vestingPeriods: [],
-                        vestingRatios: [],
-                        withdrawAllLockPeriod: 0,
-                        call_id: 1
-                    })
-                ));
-                const event = (await gauge_factory.getPastEvents({filter: (event) => event.event === 'NewGauge'})).events[0].data;
-                // @ts-ignore
-                gauge = await Gauge.from_addr(event.gauge as Address, owner);
+                if (!gauge_inited) {
+                    await locklift.tracing.trace(owner.runTarget(
+                        {
+                            contract: gauge_factory,
+                            value: toNano(5)
+                        },
+                        (gf) => gf.methods.deployGauge({
+                            gauge_owner: owner.address,
+                            depositTokenRoot: deposit_root.address,
+                            maxBoost: 2000,
+                            maxLockTime: 100,
+                            rewardTokenRoots: [],
+                            vestingPeriods: [],
+                            vestingRatios: [],
+                            withdrawAllLockPeriod: 0,
+                            call_id: 1
+                        })
+                    ));
+                    const event = (await gauge_factory.getPastEvents({filter: (event) => event.event === 'NewGauge'})).events[0].data;
+                    // @ts-ignore
+                    gauge = await Gauge.from_addr(event.gauge as Address, owner);
+                    gauge_inited = true;
+                }
             })
 
-           it('Simple deposit', async function() {
-                await locklift.tracing.trace(
-                    gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
-                    {allowedCodes: {compute: [null]}}
-                );
+            describe('Common deposit', async function() {
+                it('Deposit', async function() {
+                    await locklift.tracing.trace(
+                        gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
+                        {allowedCodes: {compute: [null]}}
+                    );
 
-                const details = await gauge.getDetails();
-                const token_details = await gauge.getTokenDetails();
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
 
-                expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
-                expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
-                expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
-           });
+                    expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
+                    expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
+                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
 
-            it('Lock deposit', async function() {
-                await locklift.tracing.trace(
-                    gauge.deposit(user1_deposit_wallet, deposit_amount, 100, false, 0),
-                    {allowedCodes: {compute: [null]}}
-                );
+                    const acc = await gauge.gaugeAccount(user1.address);
+                    const averages = await acc.methods.calculateLockBalanceAverage().call();
 
-                const details = await gauge.getDetails();
-                const token_details = await gauge.getTokenDetails();
+                    expect(averages._lockedBalance).to.be.eq('0');
+                    expect(averages._lockBoostedBalance).to.be.eq(deposit_amount.toString());
+                    expect(averages._lockBoostedBalanceAverage).to.be.eq(deposit_amount.toString());
+                });
 
-                expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 2).toString());
-                expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 2).toString());
-                expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                it('Withdraw', async function() {
+                    await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount, false));
+
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
+
+                    expect(details._lockBoostedSupply).to.be.eq('0');
+                    expect(details._totalBoostedSupply).to.be.eq('0');
+                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+
+                    const acc = await gauge.gaugeAccount(user1.address);
+                    const averages = await acc.methods.calculateLockBalanceAverage().call();
+
+                    expect(averages._lockedBalance).to.be.eq('0');
+                    expect(averages._lockBoostedBalance).to.be.eq('0');
+                    gauge_inited = false;
+                });
+            })
+
+            describe('Lock deposit', async function() {
+                it('Deposit', async function() {
+                    await locklift.tracing.trace(
+                        gauge.deposit(user1_deposit_wallet, deposit_amount, 100, false, 0),
+                        {allowedCodes: {compute: [null]}}
+                    );
+
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
+
+                    expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 2).toString());
+                    expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 2).toString());
+                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+
+                    const acc = await gauge.gaugeAccount(user1.address);
+                    const averages = await acc.methods.calculateLockBalanceAverage({}).call();
+
+                    expect(averages._lockedBalance).to.be.eq(deposit_amount.toString());
+                    expect(averages._lockBoostedBalance).to.be.eq((deposit_amount * 2).toString());
+                    expect(averages._lockBoostedBalanceAverage).to.be.eq((deposit_amount * 2).toString());
+                });
+
+                it('Withdraw', async function() {
+                    await locklift.testing.increaseTime(100);
+                    await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount, false));
+
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
+
+                    expect(details._lockBoostedSupply).to.be.eq('0');
+                    expect(details._totalBoostedSupply).to.be.eq('0');
+                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+
+                    const acc = await gauge.gaugeAccount(user1.address);
+                    const averages = await acc.methods.calculateLockBalanceAverage().call();
+
+                    expect(averages._lockedBalance).to.be.eq('0');
+                    expect(averages._lockBoostedBalance).to.be.eq('0');
+                    gauge_inited = false;
+                });
             });
 
-            it('Ve boosted deposit', async function() {
-                await locklift.tracing.trace(
-                    vote_escrow.deposit(user1_qube_wallet, deposit_amount, 100, 0),
-                    {allowedCodes: {compute: [null]}}
-                );
+            describe('Ve boosted deposit', async function() {
+                it('Deposit', async function() {
+                    await locklift.tracing.trace(
+                        vote_escrow.deposit(user1_qube_wallet, deposit_amount, 100, 0),
+                        {allowedCodes: {compute: [null]}}
+                    );
 
-                await locklift.tracing.trace(
-                    gauge.deposit(user1_deposit_wallet, deposit_amount, 100, false, 0),
-                    {allowedCodes: {compute: [null]}}
-                );
+                    await locklift.tracing.trace(
+                        gauge.deposit(user1_deposit_wallet, deposit_amount, 100, false, 0),
+                        {allowedCodes: {compute: [null]}}
+                    );
 
-                const details = await gauge.getDetails();
-                const token_details = await gauge.getTokenDetails();
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
 
-                // 2.5x boost + 2x boost
-                expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 2).toString());
-                expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 3.5).toString());
-                expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                    // 2.5x boost + 2x boost
+                    expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 2).toString());
+                    expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 3.5).toString());
+                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+
+                    const acc = await gauge.gaugeAccount(user1.address);
+                    const averages = await acc.methods.calculateLockBalanceAverage().call();
+
+                    expect(averages._lockedBalance).to.be.eq(deposit_amount.toString());
+                    expect(averages._lockBoostedBalance).to.be.eq((deposit_amount * 2).toString());
+                    expect(averages._lockBoostedBalanceAverage).to.be.eq((deposit_amount * 2).toString());
+                });
+
+                it('Withdraw', async function() {
+                    await locklift.testing.increaseTime(100);
+                    await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount, false));
+
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
+
+                    expect(details._lockBoostedSupply).to.be.eq('0');
+                    expect(details._totalBoostedSupply).to.be.eq('0');
+                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+
+                    const acc = await gauge.gaugeAccount(user1.address);
+                    const averages = await acc.methods.calculateLockBalanceAverage().call();
+
+                    expect(averages._lockedBalance).to.be.eq('0');
+                    expect(averages._lockBoostedBalance).to.be.eq('0');
+                    gauge_inited = false;
+                });
             });
         });
+
+        // describe()
     });
 });

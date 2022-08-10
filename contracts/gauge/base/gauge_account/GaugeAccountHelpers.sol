@@ -7,6 +7,7 @@ import "../../../vote_escrow/interfaces/IVoteEscrow.sol";
 import "../../../vote_escrow/interfaces/IVoteEscrowAccount.sol";
 import "../../../libraries/Errors.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import "locklift/src/console.sol";
 
 
 abstract contract GaugeAccountHelpers is GaugeAccountVesting {
@@ -38,27 +39,100 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         return math.max(address(this).balance - msg.value, CONTRACT_MIN_BALANCE);
     }
 
-    //        // TODO: up
-    //    function getDetails() external responsible view override returns (GaugeAccountDetails) {
-    //        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }GaugeAccountDetails(
-    //            pool_debt, entitled, vestingTime, amount, rewardDebt, farmPool, user, current_version
-    //        );
-    //    }
 
-    // user_amount and user_reward_debt should be fetched from GaugeAccount at first
-    //    function pendingReward(
-    //        uint256[] _accRewardPerShare,
-    //        uint32 poolLastRewardTime,
-    //        uint32 farmEndTime
-    //    ) external view returns (uint128[] _entitled, uint128[] _vested, uint128[] _pool_debt, uint32[] _vesting_time) {
-    //        (
-    //        _entitled,
-    //        _vested,
-    //        _vesting_time
-    //        ) = _computeVesting(amount, rewardDebt, _accRewardPerShare, poolLastRewardTime, farmEndTime);
-    //
-    //        return (_entitled, _vested, pool_debt, _vesting_time);
-    //    }
+    function getDetails() external view responsible returns (
+        address _gauge,
+        address _user,
+        address _voteEscrow,
+        address _veAccount,
+        uint32 _current_version,
+        uint128 _balance,
+        uint128 _lockBoostedBalance,
+        uint128 _veBoostedBalance,
+        uint128 _totalBoostedBalance,
+        uint128 _lockedBalance,
+        uint32 _lastUpdateTime,
+        uint32 _lockedDepositsNum
+    ) {
+        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }(
+            gauge,
+            user,
+            voteEscrow,
+            veAccount,
+            current_version,
+            balance,
+            lockBoostedBalance,
+            veBoostedBalance,
+            totalBoostedBalance,
+            lockedBalance,
+            lastUpdateTime,
+            lockedDepositsNum
+        );
+    }
+
+    function getAverages() external view responsible returns (Averages _lastAverageState, Averages _curAverageState) {
+        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }(lastAverageState, curAverageState);
+    }
+
+    function getRewardDetails() external view responsible returns (
+        RewardData _qubeReward,
+        RewardData[] _extraReward,
+        VestingData _qubeVesting,
+        VestingData[] _extraVesting
+    ) {
+        return { value: 0, bounce: false, flag: MsgFlag.REMAINING_GAS }(qubeReward, extraReward, qubeVesting, extraVesting);
+    }
+
+    function pendingReward(
+        uint128 _veQubeAverage,
+        uint32 _veQubeAveragePeriod,
+        uint128 _veAccQubeAverage,
+        uint32 _veAccQubeAveragePeriod,
+        IGauge.GaugeSyncData gauge_sync_data
+    ) external view returns (
+        RewardData _qubeReward,
+        VestingData _qubeVesting,
+        RewardData[] _extraReward,
+        VestingData[] _extraVesting
+    ) {
+        (,,, uint128 _lockBoostedBalanceAverage, uint32 _lockBoostedBalanceAveragePeriod) = calculateLockBalanceAverage();
+        Averages cur_average = Averages(
+            _veQubeAverage,
+            _veQubeAveragePeriod,
+            _veAccQubeAverage,
+            _veAccQubeAveragePeriod,
+            _lockBoostedBalanceAverage,
+            _lockBoostedBalanceAveragePeriod,
+            gauge_sync_data.depositSupplyAverage,
+            gauge_sync_data.depositSupplyAveragePeriod
+        );
+        (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) = calculateIntervalBalances(cur_average);
+        (
+            _qubeReward,
+            _qubeVesting
+        ) = calculateRewards(
+            gauge_sync_data.qubeRewardRounds,
+            qubeReward,
+            qubeVesting,
+            intervalTBoostedBalance,
+            gauge_sync_data.poolLastRewardTime
+        );
+
+        _extraReward = extraReward;
+        _extraVesting = extraVesting;
+        for (uint i = 0; i < _extraVesting.length; i++) {
+            (
+                _extraReward[i],
+                _extraVesting[i]
+            ) = calculateRewards(
+                gauge_sync_data.extraRewardRounds[i],
+                _extraReward[i],
+                _extraVesting[i],
+                intervalLockBalance,
+                gauge_sync_data.poolLastRewardTime
+            );
+        }
+    }
 
     function _veBoost(uint128 ud, uint128 td, uint128 ve, uint128 tve) internal pure returns (uint128) {
         if (ve == 0 || tve == 0) {
@@ -69,14 +143,16 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
     }
 
     function calculateTotalBoostedBalance(
-        uint128 balance,
-        uint128 lockBoostedBalance,
-        uint128 totalSupply,
-        uint128 veAccBalance,
-        uint128 veSupply
-    ) public pure returns (uint128 _veBoostedBalance, uint128 _totalBoostedBalance) {
-        _veBoostedBalance = _veBoost(balance, totalSupply, veAccBalance, veSupply);
+        uint128 _gaugeDepositSupply,
+        uint128 _veAccBalance,
+        uint128 _veSupply
+    ) public view returns (uint128 _veBoostedBalance, uint128 _totalBoostedBalance) {
+        if (balance == 0) {
+            return (_veBoostedBalance, _totalBoostedBalance);
+        }
+
         uint256 lock_bonus = math.muldiv(lockBoostedBalance, SCALING_FACTOR, balance);
+        _veBoostedBalance = _veBoost(balance, _gaugeDepositSupply, _veAccBalance, _veSupply);
         // ve takes 0.4 of balance as base and boost it to 1.0
         uint256 ve_bonus = math.muldiv(_veBoostedBalance, SCALING_FACTOR, (balance * 4) / 10);
         _totalBoostedBalance = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
@@ -119,7 +195,9 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
             // ve takes 0.4 of balance as base and boost it to 1.0
             uint256 ve_bonus = math.muldiv(ve_boosted_bal_avg, SCALING_FACTOR, (balance * 4) / 10);
 
-            intervalTBoostedBalance = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
+            uint128 avg_tboosted_bal = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
+            // make sure average balance is lower than balance that we used for reward reserving in gauge
+            intervalTBoostedBalance = math.min(avg_tboosted_bal, totalBoostedBalance);
             intervalLockBalance = lock_boosted_bal_avg;
         }
     }
@@ -197,6 +275,56 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         return (reward_data, vesting_data);
     }
 
+    function calculateLockBalanceAverage() public view returns (
+        uint128 _balance,
+        uint128 _lockedBalance,
+        uint128 _lockBoostedBalance,
+        uint128 _lockBoostedBalanceAverage,
+        uint32 _lockBoostedBalanceAveragePeriod
+    ) {
+        _balance = balance;
+        _lockedBalance = lockedBalance;
+        _lockBoostedBalance = lockBoostedBalance;
+        _lockBoostedBalanceAverage = curAverageState.lockBoostedBalanceAverage;
+        _lockBoostedBalanceAveragePeriod = curAverageState.lockBoostedBalanceAveragePeriod;
+        uint32 _lastUpdateTime = lastUpdateTime;
+
+        optional(uint64, DepositData) pointer = lockedDeposits.next(-1);
+        uint64 cur_key;
+        DepositData cur_deposit;
+        while (true) {
+            // if we reached iteration limit -> stop, we dont need gas overflow
+            // if we checked all deposits -> stop
+            if (!pointer.hasValue()) {
+                break;
+            }
+            (cur_key, cur_deposit) = pointer.get();
+            uint32 deposit_lock_end = cur_deposit.createdAt + cur_deposit.lockTime;
+            // no need to check further, deposits are sorted by lock time
+            if (now < deposit_lock_end) {
+                break;
+            }
+
+            uint32 last_period = deposit_lock_end - _lastUpdateTime;
+            // boosted balance average
+            uint128 weighted_sum = _lockBoostedBalanceAverage * _lockBoostedBalanceAveragePeriod + _lockBoostedBalance * last_period;
+            _lockBoostedBalanceAverage = weighted_sum / (_lockBoostedBalanceAveragePeriod + last_period);
+            _lockBoostedBalanceAveragePeriod += last_period;
+            _lastUpdateTime = deposit_lock_end;
+
+            _lockBoostedBalance -= cur_deposit.boostedAmount - cur_deposit.amount;
+            _lockedBalance -= cur_deposit.amount;
+
+            pointer = lockedDeposits.next(cur_key);
+        }
+        if (now > _lastUpdateTime && _lastUpdateTime > 0) {
+            uint32 last_period = now - _lastUpdateTime;
+            uint128 weighted_sum = _lockBoostedBalanceAverage * _lockBoostedBalanceAveragePeriod + _lockBoostedBalance * last_period;
+            _lockBoostedBalanceAverage = weighted_sum / (_lockBoostedBalanceAveragePeriod + last_period);
+            _lockBoostedBalanceAveragePeriod += last_period;
+        }
+    }
+
     function _claimRewards() internal returns (uint128 qube_reward, uint128[] extra_rewards) {
         qube_reward = qubeReward.unlockedReward;
         qubeReward.unlockedReward = 0;
@@ -242,9 +370,9 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
 
         uint32 last_period = up_to_moment - lastUpdateTime;
         // boosted balance average
-        uint128 weighted_sum = lastAverageState.lockBoostedBalanceAverage * lastAverageState.lockBoostedBalanceAveragePeriod + lockBoostedBalance * last_period;
-        lastAverageState.lockBoostedBalanceAverage = weighted_sum / (lastAverageState.lockBoostedBalanceAveragePeriod + last_period);
-        lastAverageState.lockBoostedBalanceAveragePeriod += last_period;
+        uint128 weighted_sum = curAverageState.lockBoostedBalanceAverage * curAverageState.lockBoostedBalanceAveragePeriod + lockBoostedBalance * last_period;
+        curAverageState.lockBoostedBalanceAverage = weighted_sum / (curAverageState.lockBoostedBalanceAveragePeriod + last_period);
+        curAverageState.lockBoostedBalanceAveragePeriod += last_period;
         lastUpdateTime = up_to_moment;
     }
 
@@ -289,7 +417,6 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
             _updateBalanceAverage(sync_time);
             if (expiredLockBoostedBalance > 0) {
                 IGauge(gauge).burnBoostedBalance{value: 0.1 ever}(user, expiredLockBoostedBalance);
-                expiredLockBoostedBalance = 0;
             }
         }
         return finished;

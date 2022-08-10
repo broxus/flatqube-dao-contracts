@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {AccountType, deployUser, setupTokenRoot, setupVoteEscrow, sleep} from "../utils/common";
+import {AccountType, deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 import {Token} from "../utils/wrappers/token";
@@ -28,8 +28,8 @@ describe("Main Vote Escrow scenarios", async function () {
 
     describe('Setup contracts', async function () {
         it('Deploy users', async function () {
-            user = await deployUser(20);
-            owner = await deployUser(40);
+            user = await deployUser(10);
+            owner = await deployUser(10);
             for (const i of [1, 2, 3, 4]) {
                 const account = await deployUser(3);
                 // @ts-ignore
@@ -57,7 +57,7 @@ describe("Main Vote Escrow scenarios", async function () {
 
         it('Deploy Vote Escrow', async function () {
             vote_escrow = await setupVoteEscrow({
-                owner, qube: qube_root
+                owner, qube: qube_root, max_lock: 10000
             });
 
             const details = await vote_escrow.getCurrentEpochDetails();
@@ -68,30 +68,29 @@ describe("Main Vote Escrow scenarios", async function () {
     describe('Running scenarios', async function () {
         describe('Making deposits & whitelisting gauges & send distribution QUBEs', async function () {
             it('Making 1st deposit', async function () {
-                const lock_time = 100;
+                const lock_time = 10000;
                 const tx = vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, false);
                 await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
-
 
                 const event = await vote_escrow.getEvent('Deposit') as any;
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
                 expect(event.call_id.toString()).to.be.eq('1');
                 expect(event.amount.toString()).to.be.eq('1000');
-                expect(event.lock_time.toString()).to.be.eq('100');
+                expect(event.lock_time.toString()).to.be.eq(lock_time.toString());
                 expect(event.ve_amount.toString()).to.be.eq(ve_expected.toString());
 
                 ve_account = await vote_escrow.voteEscrowAccount(user.address);
                 await vote_escrow.checkQubeBalance(1000);
 
-                await locklift.testing.increaseTime(1);
+                await tryIncreaseTime(1);
                 const ve_details = await ve_account.calculateVeAverage();
                 expect(ve_details._veQubeBalance).to.be.eq('1000');
                 expect(ve_details._veQubeAverage).to.be.eq('1000');
             });
 
             it('Making 2nd deposit', async function () {
-                const lock_time = 90;
+                const lock_time = 9000;
                 await locklift.tracing.trace(vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 2));
                 const event = await vote_escrow.getEvent('Deposit') as any;
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
@@ -167,7 +166,7 @@ describe("Main Vote Escrow scenarios", async function () {
                     votes_flat.push([addr.toString(), val]);
                 }
                 // sleep a bit so that voting time starts
-                await locklift.testing.increaseTime(4);
+                await tryIncreaseTime(4);
                 await vote_escrow.voteEpoch(user, votes_flat, 1);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -186,7 +185,7 @@ describe("Main Vote Escrow scenarios", async function () {
             });
 
             it('End voting', async function () {
-                await locklift.testing.increaseTime(5);
+                await tryIncreaseTime(5);
 
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
@@ -257,7 +256,7 @@ describe("Main Vote Escrow scenarios", async function () {
                     votes_flat.push([addr.toString(), val]);
                 }
 
-                await locklift.testing.increaseTime(4);
+                await tryIncreaseTime(4);
                 await vote_escrow.voteEpoch(user, votes_flat, 2);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -276,7 +275,7 @@ describe("Main Vote Escrow scenarios", async function () {
             });
 
             it('End voting', async function () {
-                await locklift.testing.increaseTime(5);
+                await tryIncreaseTime(5);
 
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
@@ -355,7 +354,7 @@ describe("Main Vote Escrow scenarios", async function () {
 
                 total_votes = Object.values(votes).reduce((prev, next) => prev + next, 0);
                 // sleep a bit so that voting time starts
-                await locklift.testing.increaseTime(4);
+                await tryIncreaseTime(4);
                 await vote_escrow.voteEpoch(user, votes_flat, 3);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -374,7 +373,7 @@ describe("Main Vote Escrow scenarios", async function () {
             });
 
             it('End voting', async function () {
-                await locklift.testing.increaseTime(5);
+                await tryIncreaseTime(5);
 
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
@@ -458,7 +457,7 @@ describe("Main Vote Escrow scenarios", async function () {
                     votes_flat.push([addr.toString(), val]);
                 }
                 // sleep a bit so that voting time starts
-                await locklift.testing.increaseTime(4);
+                await tryIncreaseTime(4);
                 await vote_escrow.voteEpoch(user, votes_flat, 4);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -477,7 +476,7 @@ describe("Main Vote Escrow scenarios", async function () {
             });
 
             it('End voting', async function () {
-                await locklift.testing.increaseTime(5);
+                await tryIncreaseTime(5);
 
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
@@ -535,7 +534,7 @@ describe("Main Vote Escrow scenarios", async function () {
         describe('Case #5 - no one voted', async function () {
             it('Start voting', async function () {
                 // sleep a bit so that voting time starts
-                await locklift.testing.increaseTime(4);
+                await tryIncreaseTime(4);
                 await vote_escrow.startVoting(5);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -543,7 +542,7 @@ describe("Main Vote Escrow scenarios", async function () {
             });
 
             it('End voting', async function () {
-                await locklift.testing.increaseTime(5);
+                await tryIncreaseTime(5);
 
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;

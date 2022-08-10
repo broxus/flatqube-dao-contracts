@@ -23,9 +23,9 @@ interface IGauge {
     event GaugeAccountDeploy(address user);
 
     struct GaugeSyncData {
-        uint128 supply;
-        uint128 supplyAverage;
-        uint32 supplyAveragePeriod;
+        uint128 depositSupply;
+        uint128 depositSupplyAverage;
+        uint32 depositSupplyAveragePeriod;
         IGauge.RewardRound[][] extraRewardRounds;
         IGauge.RewardRound[] qubeRewardRounds;
         uint32 poolLastRewardTime;

@@ -10,15 +10,15 @@ abstract contract GaugeAccountStorage is IGaugeAccount {
 
     // amount of all deposited tokens
     uint128 balance;
-    // balance + bonus for locking deposit on moment of last action
+    // balance + bonus for locking deposit on moment of last update
     uint128 lockBoostedBalance;
-    // balance + ve boost on moment of last action
+    // balance + ve boost on moment of last update
     uint128 veBoostedBalance;
-    // balance + lock boost + ve boost on moment of last action
+    // balance + lock boost + ve boost on moment of last update
     uint128 totalBoostedBalance;
-    // aggregated amount of locked deposited tokens
+    // aggregated amount of locked deposited tokens on moment of last update
     uint128 lockedBalance;
-    // full state of user stats from all contracts (ve/veAcc/gauge) on moment of last action
+    // full state of user stats from all contracts (ve/veAcc/gauge) on moment of last update
     Averages lastAverageState;
     // same as above, but is used during sync
     Averages curAverageState;
@@ -34,7 +34,7 @@ abstract contract GaugeAccountStorage is IGaugeAccount {
     address veAccount;
 
     // locked deposits are stored independently
-    mapping (uint64 => DepositData) lockedDeposits;
+    mapping (uint64 => DepositData) public lockedDeposits;
 
     RewardData qubeReward;
     RewardData[] extraReward;
@@ -47,7 +47,7 @@ abstract contract GaugeAccountStorage is IGaugeAccount {
     mapping (uint32 => PendingDeposit) _deposits;
     mapping (uint32 => PendingClaim) _claims;
     mapping (uint32 => ActionType) _actions;
-    mapping (uint32 => SyncData) _sync_data;
+    mapping (uint32 => AccountSyncData) _sync_data;
 
     uint128 constant CONTRACT_MIN_BALANCE = 0.3 ever;
     uint32 constant MAX_VESTING_RATIO = 1000;
