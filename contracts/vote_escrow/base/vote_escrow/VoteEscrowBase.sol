@@ -247,7 +247,7 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
 
         uint32 last_period = now - lastUpdateTime;
         _veQubeAverage = (veQubeAverage * veQubeAveragePeriod + veQubeBalance * last_period) / (veQubeAveragePeriod + last_period);
-        _veQubeAveragePeriod += last_period;
+        _veQubeAveragePeriod = veQubeAveragePeriod + last_period;
         _lastUpdateTime = now;
         _veQubeBalance = veQubeBalance;
     }

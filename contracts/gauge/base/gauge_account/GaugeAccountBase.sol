@@ -267,7 +267,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
             _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
-        
+
         delete _actions[nonce];
         delete _withdraws[nonce];
         delete _sync_data[nonce];

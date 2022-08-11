@@ -158,11 +158,16 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         _totalBoostedBalance = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
     }
 
+    function _seriesAvg(uint128 _series_from, uint128 _series_to, uint32 time_delta) internal pure returns (uint128) {
+        // when avg is ~0, we can receive small negative number because of number rounding and async vm
+        return _series_to < _series_from ? 0 : ((_series_to - _series_from) / time_delta);
+    }
+
     function calculateIntervalBalances(
         Averages _curAverageState
     ) public view returns (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) {
         // calculate new veBoostedBalance
-        uint128 time_delta = _curAverageState.lockBoostedBalanceAveragePeriod - lastAverageState.lockBoostedBalanceAveragePeriod;
+        uint32 time_delta = _curAverageState.lockBoostedBalanceAveragePeriod - lastAverageState.lockBoostedBalanceAveragePeriod;
         // not time delta, calculate using current averages
         // we check only 1 delta, because they all gathered together at the same time
         if (time_delta == 0) {
@@ -170,21 +175,21 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
             intervalTBoostedBalance = totalBoostedBalance;
         } else {
             // 1. Calculate average lockBoostedBalance from the moment of last action
-            uint128 cur_avg = _curAverageState.lockBoostedBalanceAverage * _curAverageState.lockBoostedBalanceAveragePeriod;
-            uint128 last_avg = lastAverageState.lockBoostedBalanceAverage * lastAverageState.lockBoostedBalanceAveragePeriod;
-            uint128 lock_boosted_bal_avg = (cur_avg - last_avg) / time_delta;
+            uint128 cur_series_sum = _curAverageState.lockBoostedBalanceAverage * _curAverageState.lockBoostedBalanceAveragePeriod;
+            uint128 last_series_sum = lastAverageState.lockBoostedBalanceAverage * lastAverageState.lockBoostedBalanceAveragePeriod;
+            uint128 lock_boosted_bal_avg = _seriesAvg(last_series_sum, cur_series_sum, time_delta);
             // 2. Calculate average veAcc balances
-            cur_avg = _curAverageState.veAccQubeAverage * _curAverageState.veAccQubeAveragePeriod;
-            last_avg = lastAverageState.veAccQubeAverage * lastAverageState.veAccQubeAveragePeriod;
-            uint128 ve_acc_avg = (cur_avg - last_avg) / time_delta;
+            cur_series_sum = _curAverageState.veAccQubeAverage * _curAverageState.veAccQubeAveragePeriod;
+            last_series_sum = lastAverageState.veAccQubeAverage * lastAverageState.veAccQubeAveragePeriod;
+            uint128 ve_acc_avg = _seriesAvg(last_series_sum, cur_series_sum, time_delta);
             // 3. Calculate average ve balances
-            cur_avg = _curAverageState.veQubeAverage * _curAverageState.veQubeAveragePeriod;
-            last_avg = lastAverageState.veQubeAverage * lastAverageState.veQubeAveragePeriod;
-            uint128 ve_avg = (cur_avg - last_avg) / time_delta;
+            cur_series_sum = _curAverageState.veQubeAverage * _curAverageState.veQubeAveragePeriod;
+            last_series_sum = lastAverageState.veQubeAverage * lastAverageState.veQubeAveragePeriod;
+            uint128 ve_avg = _seriesAvg(last_series_sum, cur_series_sum, time_delta);
             // 4. Calculate gauge total supply average
-            cur_avg = _curAverageState.gaugeSupplyAverage * _curAverageState.gaugeSupplyAveragePeriod;
-            last_avg = lastAverageState.gaugeSupplyAverage * lastAverageState.gaugeSupplyAveragePeriod;
-            uint128 supply_avg = (cur_avg - last_avg) / time_delta;
+            cur_series_sum = _curAverageState.gaugeSupplyAverage * _curAverageState.gaugeSupplyAveragePeriod;
+            last_series_sum = lastAverageState.gaugeSupplyAverage * lastAverageState.gaugeSupplyAveragePeriod;
+            uint128 supply_avg = _seriesAvg(last_series_sum, cur_series_sum, time_delta);
             // our average boosted balance for last interval
             uint128 ve_boosted_bal_avg = _veBoost(balance, supply_avg, ve_acc_avg, ve_avg);
             // if veBoostedBalance is bigger, it means some locked deposits/ve qubes expired and our boost decreased
