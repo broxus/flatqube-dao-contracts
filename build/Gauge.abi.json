@@ -376,7 +376,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"supply","type":"uint128"},{"name":"supplyAverage","type":"uint128"},{"name":"supplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"value0","type":"tuple"}
+				{"components":[{"name":"depositSupply","type":"uint128"},{"name":"depositSupplyAverage","type":"uint128"},{"name":"depositSupplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"value0","type":"tuple"}
 			]
 		},
 		{

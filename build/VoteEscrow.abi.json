@@ -213,7 +213,7 @@
 		{
 			"name": "initialize",
 			"inputs": [
-				{"name":"start_time","type":"uint32"},
+				{"name":"start_offset","type":"uint32"},
 				{"name":"send_gas_to","type":"address"}
 			],
 			"outputs": [

@@ -176,6 +176,9 @@
 				{"name":"_voteEscrow","type":"address"},
 				{"name":"_user","type":"address"},
 				{"name":"_qubeBalance","type":"uint128"},
+				{"name":"_veQubeBalance","type":"uint128"},
+				{"name":"_veQubeAverage","type":"uint128"},
+				{"name":"_veQubeAveragePeriod","type":"uint32"},
 				{"name":"_unlockedQubes","type":"uint128"},
 				{"name":"_lastUpdateTime","type":"uint32"},
 				{"name":"_lastEpochVoted","type":"uint32"},
@@ -196,8 +199,10 @@
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"_qubeBalance","type":"uint128"},
 				{"name":"_veQubeBalance","type":"uint128"},
 				{"name":"_expiredVeQubes","type":"uint128"},
+				{"name":"_unlockedQubes","type":"uint128"},
 				{"name":"_veQubeAverage","type":"uint128"},
 				{"name":"_veQubeAveragePeriod","type":"uint128"}
 			]
