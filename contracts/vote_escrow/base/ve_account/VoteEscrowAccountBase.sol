@@ -102,8 +102,8 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
             return;
         }
 
-        _saveDeposit(qube_amount, ve_amount, lock_time);
-        IVoteEscrow(voteEscrow).finishDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, deposit_nonce);
+        uint64 deposit_key = _saveDeposit(qube_amount, ve_amount, lock_time);
+        IVoteEscrow(voteEscrow).finishDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, deposit_key, deposit_nonce);
     }
 
     // Update averages up to current moment taking into account expired deposits

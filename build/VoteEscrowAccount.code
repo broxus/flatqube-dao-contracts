@@ -917,10 +917,11 @@ PUSHCONT {
 	STSLICE
 	PUSHINT 1
 	STUR 111
-	ROTREV
+	ROLLREV 3
 	NEWC
-	STSLICECONST x2c7d7751
+	STSLICECONST x7d9597f7
 	STSLICE
+	STU 64
 	STU 32
 	STBREFR
 	ENDC
@@ -2715,7 +2716,7 @@ CALL $_syncDeposits_a660e50d_internal_macro$
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 82
 FALSE
 BLKPUSH 2, 0
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 87
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 86
 PUSHINT -1
 GETGLOB 24
 PUSHINT 64
@@ -2731,100 +2732,108 @@ IFREF {
 	TUPLE 4
 	PAIR
 }
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 88
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 87
 PUSHINT 0
-DUP
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 89
-BLKPUSH 3, 0
-TUPLE 4
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 90
+NEWDICT
+PAIR
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 88
 PUSHCONT {
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 93
-	PUSH S3
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 91
+	PUSH S2
 	GTINT 49
-	PUSH S3
+	PUSH S2
 	ISNULL
 	OR
 	PUSHCONT {
-		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 94
-		PUSH S2
+		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 92
+		OVER
 		ISNULL
-		POP S6
-		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 95
+		POP S5
+		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 93
 		RETALT
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 97
-	PUSH2 S2, S2
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 95
+	PUSH2 S1, S1
 	ISNULL
 	THROWIF 63
 	UNPAIR
-	BLKDROP2 2, 2
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 99
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 97
 	DUP
 	THIRD
 	OVER
 	INDEX 3
 	ADD
 	UFITS 32
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 101
-	PUSH2 S7, S0
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 99
+	PUSH2 S8, S0
 	LESS
 	PUSHCONT {
-		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 102
+		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 100
 		TRUE
-		POP S7
-		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 103
-		DROP
+		POP S8
+		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 101
+		BLKDROP 3
 		RETALT
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 106
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 104
 	CALLREF {
 		CALL $_updateVeAverage_4a9f932e_internal_macro$
 	}
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 108
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 106
 	DUP
 	SECOND
 	GETGLOB 17
 	SUBR
 	UFITS 128
 	SETGLOB 17
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 109
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 107
 	DUP
 	SECOND
-	PUSH S5
+	PUSH S6
 	ADD
 	UFITS 128
-	POP S5
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 110
-	DUP
+	POP S6
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 108
 	FIRST
 	GETGLOB 18
 	ADD
 	UFITS 128
 	SETGLOB 18
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 111
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 109
 	GETGLOB 23
 	DEC
 	UFITS 32
 	SETGLOB 23
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 112
-	OVER
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 110
+	DUP
 	GETGLOB 24
 	PUSHINT 64
 	DICTUDEL
 	DROP
 	SETGLOB 24
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 114
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 112
 	PUSH S3
 	INC
 	UFITS 32
 	POP S4
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 115
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 113
+	DUP2
+	NEWC
+	STU 64
+	SWAP
+	UNPAIR
 	OVER
+	INC
+	ROLLREV 3
+	PUSHINT 32
+	DICTUSETB
+	PAIR
+	POP S2
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 114
 	GETGLOB 24
 	PUSHINT 64
 	DICTUGETNEXT
@@ -2839,25 +2848,24 @@ PUSHCONT {
 		TUPLE 4
 		PAIR
 	}
-	POP S3
+	POP S2
 	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 }
 AGAINBRK
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 117
-BLKDROP 4
-OVER
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 116
+PUSH S4
 PUSHCONT {
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 118
-	PUSH S2
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 117
+	PUSH S5
 	CALLREF {
 		CALL $_updateVeAverage_4a9f932e_internal_macro$
 	}
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 119
-	DUP
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 118
+	PUSH S3
 	GTINT 0
 	PUSHCONT {
-		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 120
-		DUP
+		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 119
+		PUSH2 S0, S3
 		GETGLOB 12
 		GETGLOB 11
 		NEWC
@@ -2865,11 +2873,16 @@ PUSHCONT {
 		STSLICE
 		PUSHINT 2803819077499249229031122585109857988247553
 		STUR 143
-		ROTREV
+		ROLLREV 3
 		NEWC
-		STSLICECONST x0f8b63e9
+		STSLICECONST x31cf30e9
 		STSLICE
 		STU 128
+		SWAP
+		UNPAIR
+		XCHG S2
+		STU 32
+		STDICT
 		STBREFR
 		ENDC
 		PUSHINT 0
@@ -2880,8 +2893,8 @@ PUSHCONT {
 	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 }
 IF
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 123
-DROP
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 122
+BLKDROP 4
 NIP
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 
@@ -2890,14 +2903,14 @@ NIP
 CALL $_saveDeposit_b09bd925_internal_macro$
 
 .macro _saveDeposit_b09bd925_internal_macro
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 133
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 132
 NOW
 OVER
 ADD
 UFITS 32
 MULCONST 100
 UFITS 64
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 135
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 134
 PUSHCONT {
 	DUP
 	GETGLOB 24
@@ -2921,19 +2934,20 @@ IFREFELSEREF
 	NEQINT 0
 }
 PUSHCONT {
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 136
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 135
 	INC
 	UFITS 64
 	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 }
 WHILE
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 138
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 137
 OVER2
 NOW
 ROLL 4
 TUPLE 4
+OVER
 GETGLOB 24
-SWAP
+ROT
 CALLREF {
 	UNTUPLE 4
 	REVERSE 4, 0
@@ -2947,17 +2961,19 @@ ROTREV
 PUSHINT 64
 DICTUSETB
 SETGLOB 24
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 139
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 138
 GETGLOB 17
+ROT
 ADD
 UFITS 128
 SETGLOB 17
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 140
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 139
 GETGLOB 16
+ROT
 ADD
 UFITS 128
 SETGLOB 16
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 141
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 140
 GETGLOB 23
 INC
 UFITS 32
@@ -2973,7 +2989,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 146
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 145
 ENDS
 .loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 CALLREF {
@@ -3016,28 +3032,28 @@ IFREF {
 THROW 0
 
 .macro calculateVeAverage_3049bada_internal_macro
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 146
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 145
 PUSHINT 0
 BLKPUSH 3, 0
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 154
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 153
 GETGLOB 16
 POP S4
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 155
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 154
 GETGLOB 19
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 156
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 155
 GETGLOB 20
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 157
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 156
 GETGLOB 17
 POP S5
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 158
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 157
 GETGLOB 18
 POP S3
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 159
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 158
 PUSHINT 0
 POP S4
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 160
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 159
 GETGLOB 21
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 162
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 161
 PUSHINT -1
 GETGLOB 24
 PUSHINT 64
@@ -3053,47 +3069,40 @@ IFREF {
 	TUPLE 4
 	PAIR
 }
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 163
-PUSHINT 0
-DUP
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 164
-BLKPUSH 3, 0
-TUPLE 4
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 165
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 162
 PUSHCONT {
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 166
-	PUSH S2
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 163
+	DUP
 	ISNULL
 	IFRETALT
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 169
-	PUSH2 S2, S2
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 166
+	BLKPUSH 2, 0
 	ISNULL
 	THROWIF 63
 	UNPAIR
-	BLKDROP2 2, 2
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 171
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 168
 	DUP
 	THIRD
 	OVER
 	INDEX 3
 	ADD
 	UFITS 32
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 173
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 170
 	NOW
 	OVER
 	LESS
 	PUSHCONT {
-		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 174
-		DROP
+		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 171
+		BLKDROP 3
 		RETALT
 		.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 	}
 	IFJMP
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 177
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 174
 	PUSH2 S0, S4
 	SUB
 	UFITS 32
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 178
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 175
 	BLKPUSH 2, 7
 	MUL
 	UFITS 128
@@ -3107,36 +3116,34 @@ PUSHCONT {
 	UFITS 128
 	DIV
 	POP S8
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 179
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 176
 	PUSH S6
 	ADD
 	UFITS 128
 	POP S6
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 180
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 177
 	POP S4
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 181
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 178
 	DUP
 	SECOND
 	PUSH S9
 	SUBR
 	UFITS 128
 	POP S9
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 182
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 179
 	DUP
 	FIRST
 	PUSH S7
 	ADD
 	UFITS 128
 	POP S7
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 183
-	DUP
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 180
 	SECOND
-	PUSH S8
+	PUSH S7
 	ADD
 	UFITS 128
-	POP S8
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 185
-	OVER
+	POP S7
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 182
 	GETGLOB 24
 	PUSHINT 64
 	DICTUGETNEXT
@@ -3151,12 +3158,12 @@ PUSHCONT {
 		TUPLE 4
 		PAIR
 	}
-	POP S3
+	NIP
 	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 0
 }
 AGAINBRK
-.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 187
-BLKDROP 3
+.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 184
+DROP
 NOW
 OVER
 GREATER
@@ -3164,12 +3171,12 @@ OVER
 GTINT 0
 AND
 PUSHCONT {
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 188
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 185
 	NOW
 	OVER
 	SUB
 	UFITS 32
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 189
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 186
 	OVER2
 	MUL
 	UFITS 128
@@ -3183,7 +3190,7 @@ PUSHCONT {
 	UFITS 128
 	DIV
 	POP S4
-	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 190
+	.loc ../contracts/vote_escrow/base/ve_account/VoteEscrowAccountHelpers.sol, 187
 	PUSH S2
 	ADD
 	UFITS 128

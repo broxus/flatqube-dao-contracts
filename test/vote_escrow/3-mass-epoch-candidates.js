@@ -158,12 +158,12 @@ describe("Vote Escrow mass deposits scenario", async function() {
                     votes[gauge.address] = vote;
                     total_votes += vote;
                 });
-                await vote_escrow.vote(voter, votes);
+                await vote_escrow.voteEpoch(voter, votes);
             }));
 
             let votes_big = {};
             votes_big[big_gauge.address] = big_gauge_deposit.toString();
-            await vote_escrow.vote(user, votes_big);
+            await vote_escrow.voteEpoch(user, votes_big);
             total_votes += big_gauge_deposit;
 
             const details = await vote_escrow.getCurrentEpochDetails();

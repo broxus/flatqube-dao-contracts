@@ -8,6 +8,7 @@ import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "../../../libraries/Errors.sol";
 import "../../../gauge/interfaces/IGaugeAccount.sol";
 import "./VoteEscrowEpochVoting.sol";
+import "locklift/src/console.sol";
 
 
 abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
@@ -115,12 +116,12 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         );
     }
 
-    function finishDeposit(address user, uint32 deposit_nonce) external override onlyVoteEscrowAccount(user) {
+    function finishDeposit(address user, uint64 deposit_key, uint32 deposit_nonce) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
         PendingDeposit deposit = pending_deposits[deposit_nonce];
         delete pending_deposits[deposit_nonce];
 
-        emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.ve_amount, deposit.lock_time);
+        emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.ve_amount, deposit.lock_time, deposit_key);
         updateAverage();
         qubeBalance += deposit.amount;
         veQubeBalance += deposit.ve_amount;
@@ -157,12 +158,12 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         _transferQubes(unlockedQubes, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function burnVeQubes(address user, uint128 expiredVeQubes) external override onlyVoteEscrowAccount(user) {
+    function burnVeQubes(address user, uint128 expiredVeQubes, uint64[] expiredDeposits) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         updateAverage();
         veQubeBalance -= expiredVeQubes;
-        emit VeQubesBurn(user, expiredVeQubes);
+        emit VeQubesBurn(user, expiredVeQubes, expiredDeposits);
 
         user.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
@@ -220,11 +221,6 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
 
         _removeFromWhitelist(gauge, call_id);
         send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
-    }
-
-    function calculateVeMint(uint128 qube_amount, uint32 lock_time) public view returns (uint128 ve_amount) {
-        // qube has 18 decimals, there should be no problems with division precision
-        return math.muldiv(qube_amount, lock_time, qubeMaxLockTime);
     }
 
     function getVeAverage(uint32 nonce) external override {

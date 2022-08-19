@@ -23,7 +23,7 @@ contract TestFactory is RandomNonce {
             TvmCell stateInit = tvm.buildStateInit({
                 contr: TestWallet,
                 varInit: {
-                    _randomNonce: tx.timestamp + i
+                    _randomNonce: rnd.next()
                 },
                 pubkey: 0,
                 code: wallet_code

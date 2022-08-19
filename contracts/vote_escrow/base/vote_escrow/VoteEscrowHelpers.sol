@@ -114,6 +114,11 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _voteEscrowVersion = ve_version;
     }
 
+    function calculateVeMint(uint128 qube_amount, uint32 lock_time) public view returns (uint128 ve_amount) {
+        // qube has 18 decimals, there should be no problems with division precision
+        return math.muldiv(qube_amount, lock_time, qubeMaxLockTime);
+    }
+
     // @param deposit_owner -address on which behalf sender making deposit
     // @param nonce - nonce, that will be sent with callback, should be > 0 if callback is needed
     // @param lock_time - lock time for deposited qubes

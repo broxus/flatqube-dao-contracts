@@ -84,6 +84,7 @@
 			"name": "finishDeposit",
 			"inputs": [
 				{"name":"user","type":"address"},
+				{"name":"deposit_key","type":"uint64"},
 				{"name":"deposit_nonce","type":"uint32"}
 			],
 			"outputs": [
@@ -126,7 +127,8 @@
 			"name": "burnVeQubes",
 			"inputs": [
 				{"name":"user","type":"address"},
-				{"name":"expiredVeQubes","type":"uint128"}
+				{"name":"expiredVeQubes","type":"uint128"},
+				{"name":"expiredDeposits","type":"uint64[]"}
 			],
 			"outputs": [
 			]
@@ -190,16 +192,6 @@
 				{"name":"send_gas_to","type":"address"}
 			],
 			"outputs": [
-			]
-		},
-		{
-			"name": "calculateVeMint",
-			"inputs": [
-				{"name":"qube_amount","type":"uint128"},
-				{"name":"lock_time","type":"uint32"}
-			],
-			"outputs": [
-				{"name":"ve_amount","type":"uint128"}
 			]
 		},
 		{
@@ -591,6 +583,16 @@
 			]
 		},
 		{
+			"name": "calculateVeMint",
+			"inputs": [
+				{"name":"qube_amount","type":"uint128"},
+				{"name":"lock_time","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"ve_amount","type":"uint128"}
+			]
+		},
+		{
 			"name": "encodeDepositPayload",
 			"inputs": [
 				{"name":"deposit_owner","type":"address"},
@@ -755,7 +757,8 @@
 				{"name":"user","type":"address"},
 				{"name":"amount","type":"uint128"},
 				{"name":"ve_amount","type":"uint128"},
-				{"name":"lock_time","type":"uint32"}
+				{"name":"lock_time","type":"uint32"},
+				{"name":"key","type":"uint64"}
 			],
 			"outputs": [
 			]
@@ -829,7 +832,8 @@
 			"name": "VeQubesBurn",
 			"inputs": [
 				{"name":"user","type":"address"},
-				{"name":"amount","type":"uint128"}
+				{"name":"amount","type":"uint128"},
+				{"name":"expiredDeposits","type":"uint64[]"}
 			],
 			"outputs": [
 			]

@@ -1,4 +1,3 @@
-import {TokenWallet} from "./wrappers/token_wallet";
 import {Token} from "./wrappers/token";
 import {VoteEscrow} from "./wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "./wrappers/ve_account";
@@ -73,7 +72,7 @@ export const deployUsers = async function (count: number, initial_balance: numbe
         initParams: {wallet_code: TestWallet.code, _randomNonce: getRandomNonce()},
         publicKey: signers[0]?.publicKey as string,
         constructorParams: {},
-        value: toNano(count * initial_balance + 5)
+        value: toNano(count * initial_balance + 10)
     });
 
     const pubkeys = signers.map((signer) => {
@@ -144,12 +143,12 @@ export const setupTokenRoot = async function (token_name: string, token_symbol: 
             rootOwner_: owner.address,
             walletCode_: TokenWallet.code,
             randomNonce_: locklift.utils.getRandomNonce(),
-            deployer_: new Address(zeroAddress),
+            deployer_: zeroAddress,
             platformCode_: TokenPlatform.code
         },
         publicKey: signer?.publicKey as string,
         constructorParams: {
-            initialSupplyTo: new Address(zeroAddress),
+            initialSupplyTo: zeroAddress,
             initialSupply: 0,
             deployWalletValue: 0,
             mintDisabled: false,
@@ -226,7 +225,7 @@ export const setupVoteEscrow = async function ({
     owner,
     // @ts-ignore
     qube,
-    dao = new Address(zeroAddress),
+    dao = zeroAddress,
     start_offset = 5,
     min_lock = 1,
     max_lock = 100,

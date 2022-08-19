@@ -7,7 +7,7 @@ import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallbac
 interface IVoteEscrow is IAcceptTokensTransferCallback {
     event NewOwner(address prev_owner, address new_owner);
     event NewPendingOwner(address pending_owner);
-    event Deposit(uint32 call_id, address user, uint128 amount, uint128 ve_amount, uint32 lock_time);
+    event Deposit(uint32 call_id, address user, uint128 amount, uint128 ve_amount, uint32 lock_time, uint64 key);
     event DepositRevert(uint32 call_id, address user, uint128 amount);
     event GaugeWhitelist(uint32 call_id, address gauge);
     event GaugeRemoveWhitelist(uint32 call_id, address gauge);
@@ -15,7 +15,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     event DistributionSupplyIncrease(uint32 call_id, uint128 amount);
     event Withdraw(uint32 call_id, address user, uint128 amount);
     event WithdrawRevert(uint32 call_id, address user);
-    event VeQubesBurn(address user, uint128 amount);
+    event VeQubesBurn(address user, uint128 amount, uint64[] expiredDeposits);
     event VoteEscrowAccountDeploy(address user);
     event Initialize(uint32 init_time, uint32 epoch_start, uint32 epoch_end);
     event DistributionScheduleUpdate(uint32 call_id, uint128[] distribution);
@@ -86,11 +86,11 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     enum DepositType { userDeposit, whitelist, adminDeposit }
 
     function getVeAverage(uint32 nonce) external;
-    function finishDeposit(address user, uint32 deposit_nonce) external;
+    function finishDeposit(address user, uint64 deposit_key, uint32 deposit_nonce) external;
     function revertDeposit(address user, uint32 deposit_nonce) external;
     function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function finishWithdraw(address user, uint128 unlockedQubes, uint32 call_id, uint32 nonce, address send_gas_to) external;
-    function burnVeQubes(address user, uint128 expiredVeQubes) external;
+    function burnVeQubes(address user, uint128 expiredVeQubes, uint64[] expiredDeposits) external;
     function finishVote(address user, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;

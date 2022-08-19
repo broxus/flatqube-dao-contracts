@@ -81,12 +81,10 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
     function _syncDeposits(uint32 sync_time) internal returns (bool finished) {
         finished = false;
         uint128 expiredVeQubes = 0;
-
         uint32 counter = 0;
         // get deposit with lowest unlock time
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
-        uint64 cur_key;
-        QubeDeposit cur_deposit;
+        uint64[] deleted_keys;
         while (true) {
             // if we reached iteration limit -> stop, we dont need gas overflow
             // if we checked all deposits -> stop
@@ -94,7 +92,7 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
                 finished = !pointer.hasValue();
                 break;
             }
-            (cur_key, cur_deposit) = pointer.get();
+            (uint64 cur_key, QubeDeposit cur_deposit) = pointer.get();
 
             uint32 deposit_lock_end = cur_deposit.createdAt + cur_deposit.lockTime;
             // no need to check further, deposits are sorted by lock time
@@ -112,30 +110,31 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
             delete deposits[cur_key];
 
             counter += 1;
+            deleted_keys.push(cur_key);
             pointer = deposits.next(cur_key);
         }
         if (finished) {
             _updateVeAverage(sync_time);
             if (expiredVeQubes > 0) {
-                IVoteEscrow(voteEscrow).burnVeQubes{value: 0.1 ever}(user, expiredVeQubes);
+                IVoteEscrow(voteEscrow).burnVeQubes{value: 0.1 ever}(user, expiredVeQubes, deleted_keys);
             }
         }
         return finished;
     }
 
     // @dev Store deposits in mapping using unlock time as a key so we can iterate through deposits ordered by unlock time
-    function _saveDeposit(uint128 qube_amount, uint128 ve_amount, uint32 lock_time) internal {
+    function _saveDeposit(uint128 qube_amount, uint128 ve_amount, uint32 lock_time) internal returns (uint64 key) {
         // we multiply by 100 to create 'window' for collisions,
         // so user can have up to 100 deposits with equal unlock time and they will be stored sequentially
         // without breaking sort order of keys
         // In worst case user (user has 101 deposits with unlock time N and M deposits with unlock time N + 1 and etc.)
         // user will have excess boost for 101th deposit for several seconds
-        uint64 save_key = uint64(now + lock_time) * 100;
+        key = uint64(now + lock_time) * 100;
         // infinite loop is bad, but in reality it is practically impossible to make many deposits with equal unlock time
-        while (deposits[save_key].amount != 0) {
-            save_key++;
+        while (deposits[key].amount != 0) {
+            key++;
         }
-        deposits[save_key] = QubeDeposit(qube_amount, ve_amount, now, lock_time);
+        deposits[key] = QubeDeposit(qube_amount, ve_amount, now, lock_time);
         veQubeBalance += ve_amount;
         qubeBalance += qube_amount;
         activeDeposits += 1;
@@ -160,13 +159,11 @@ abstract contract VoteEscrowAccountHelpers is VoteEscrowAccountStorage {
         uint32 _lastUpdateTime = lastUpdateTime;
 
         optional(uint64, QubeDeposit) pointer = deposits.next(-1);
-        uint64 cur_key;
-        QubeDeposit cur_deposit;
         while (true) {
             if (!pointer.hasValue()) {
                 break;
             }
-            (cur_key, cur_deposit) = pointer.get();
+            (uint64 cur_key, QubeDeposit cur_deposit) = pointer.get();
 
             uint32 deposit_lock_end = cur_deposit.createdAt + cur_deposit.lockTime;
             // no need to check further, deposits are sorted by lock time
