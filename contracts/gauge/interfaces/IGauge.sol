@@ -1,6 +1,9 @@
 pragma ever-solidity ^0.62.0;
 
 
+import "../../libraries/Callback.sol";
+
+
 interface IGauge {
     // Events
     event Deposit(uint32 call_id, address user, uint128 amount, uint32 lock_time);
@@ -26,8 +29,8 @@ interface IGauge {
         uint128 depositSupply;
         uint128 depositSupplyAverage;
         uint32 depositSupplyAveragePeriod;
-        IGauge.RewardRound[][] extraRewardRounds;
-        IGauge.RewardRound[] qubeRewardRounds;
+        RewardRound[][] extraRewardRounds;
+        RewardRound[] qubeRewardRounds;
         uint32 poolLastRewardTime;
     }
 
@@ -50,9 +53,7 @@ interface IGauge {
         uint128 boosted_amount;
         uint32 lock_time;
         bool claim;
-        address send_gas_to;
-        uint32 nonce;
-        uint32 call_id;
+        Callback.CallMeta meta;
     }
     function finishDeposit(
         address user,
@@ -71,9 +72,7 @@ interface IGauge {
         bool claim,
         uint128 boosted_bal_old,
         uint128 boosted_bal_new,
-        uint32 call_id,
-        uint32 nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
     function finishClaim(
         address user,
@@ -81,16 +80,14 @@ interface IGauge {
         uint128[] extra_amounts,
         uint128 boosted_bal_old,
         uint128 boosted_bal_new,
-        uint32 call_id,
-        uint32 nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
-    function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
+    function revertWithdraw(address user, Callback.CallMeta meta) external;
     function revertDeposit(address user, uint32 _deposit_nonce) external;
     function burnBoostedBalance(address user, uint128 expired_boosted) external;
-    function forceUpgradeGaugeAccount(address user, uint32 call_id, address send_gas_to) external view;
-    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
-    function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external;
+    function forceUpgradeGaugeAccount(address user, Callback.CallMeta meta) external view;
+    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;
+    function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;
     function onGaugeAccountDeploy(address user, address send_gas_to) external;
     function receiveTokenWalletAddress(address wallet) external;
     function setupTokens(

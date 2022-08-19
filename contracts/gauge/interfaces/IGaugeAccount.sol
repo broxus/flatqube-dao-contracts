@@ -43,20 +43,18 @@ interface IGaugeAccount {
         uint128 boostedAmount;
         uint32 lockTime;
         bool claim;
+        Callback.CallMeta meta;
     }
 
     struct PendingWithdraw {
         uint128 amount;
         bool claim;
-        uint32 call_id;
-        uint32 nonce;
-        address send_gas_to;
+        Callback.CallMeta meta;
+
     }
 
     struct PendingClaim {
-        uint32 call_id;
-        uint32 nonce;
-        address send_gas_to;
+        Callback.CallMeta meta;
     }
 
     // common gauge sync data for all actions
@@ -77,23 +75,20 @@ interface IGaugeAccount {
         uint128 boosted_amount,
         uint32 lock_time,
         bool claim,
-        IGauge.GaugeSyncData gauge_sync_data
+        IGauge.GaugeSyncData gauge_sync_data,
+        Callback.CallMeta meta
     ) external;
 
     function processWithdraw(
         uint128 amount,
         bool claim,
         IGauge.GaugeSyncData gauge_sync_data,
-        uint32 call_id,
-        uint32 callback_nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
 
     function processClaim(
         IGauge.GaugeSyncData gauge_sync_data,
-        uint32 call_id,
-        uint32 callback_nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
 
     function increasePoolDebt(uint128 qube_debt, uint128[] extra_debt, address send_gas_to) external;
@@ -116,5 +111,5 @@ interface IGaugeAccount {
     function processDeposit_final(uint32 nonce) external;
     function processWithdraw_final(uint32 nonce) external;
     function processClaim_final(uint32 nonce) external;
-    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to) external;
+    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;
 }

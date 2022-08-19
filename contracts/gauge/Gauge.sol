@@ -3,6 +3,7 @@ pragma ever-solidity ^0.62.0;
 
 import "./base/gauge/GaugeBase.sol";
 import "../libraries/Errors.sol";
+import "../libraries/Callback.sol";
 
 
 contract Gauge is GaugeBase {
@@ -11,12 +12,12 @@ contract Gauge is GaugeBase {
         voteEscrow = _voteEscrow;
     }
 
-    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, address send_gas_to) external override {
+    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external override {
         require (msg.sender == factory, Errors.NOT_FACTORY);
 
         if (new_version == gauge_version) {
             tvm.rawReserve(_reserve(), 0);
-            send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+            meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
             return;
         }
 

@@ -6,32 +6,32 @@ import "../../Gauge.sol";
 
 
 abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
-    function transferOwnership(address new_owner, address send_gas_to) external onlyOwner {
+    function transferOwnership(address new_owner, Callback.CallMeta meta) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        emit NewPendingOwner(new_owner);
+        emit NewPendingOwner(meta.call_id, new_owner);
         pending_owner = new_owner;
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function acceptOwnership(address send_gas_to) external {
+    function acceptOwnership(Callback.CallMeta meta) external {
         require (msg.sender == pending_owner, Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
 
-        emit NewOwner(owner, pending_owner);
+        emit NewOwner(meta.call_id, owner, pending_owner);
         owner = pending_owner;
         pending_owner = address.makeAddrNone();
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function setDefaultQubeVestingParams(uint32 _vesting_period, uint32 _vesting_ratio, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setDefaultQubeVestingParams(uint32 _vesting_period, uint32 _vesting_ratio, Callback.CallMeta meta) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         default_qube_vesting_period = _vesting_period;
         default_qube_vesting_ratio = _vesting_ratio;
 
-        emit QubeVestingParamsUpdate(call_id, default_qube_vesting_period, default_qube_vesting_ratio);
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        emit QubeVestingParamsUpdate(meta.call_id, default_qube_vesting_period, default_qube_vesting_ratio);
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
     function deployGauge(

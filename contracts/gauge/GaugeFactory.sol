@@ -26,11 +26,12 @@ contract GaugeFactory is GaugeFactoryBase {
         default_qube_vesting_ratio = _qube_vesting_ratio;
     }
 
-    function upgrade(TvmCell new_code, address send_gas_to) public onlyOwner {
+    function upgrade(TvmCell new_code, Callback.CallMeta meta) public onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
         TvmCell data = abi.encode(
-            send_gas_to,
+            meta.send_gas_to,
+            meta.call_id,
             factory_version,
             gauge_version,
             gauge_account_version,

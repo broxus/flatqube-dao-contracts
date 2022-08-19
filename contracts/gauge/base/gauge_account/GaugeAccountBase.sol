@@ -6,6 +6,7 @@ import "../../interfaces/IGauge.sol";
 import "../../../vote_escrow/interfaces/IVoteEscrow.sol";
 import "../../../vote_escrow/interfaces/IVoteEscrowAccount.sol";
 import "../../../libraries/Errors.sol";
+import "../../../libraries/Callback.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "locklift/src/console.sol";
 
@@ -31,17 +32,15 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         uint128 amount,
         bool claim,
         IGauge.GaugeSyncData gauge_sync_data,
-        uint32 call_id,
-        uint32 callback_nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external override onlyGauge {
         if (amount > balance) {
-            IGauge(gauge).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, callback_nonce, send_gas_to);
+            IGauge(gauge).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, meta);
             return;
         }
         // TODO: min gas?
         _nonce += 1;
-        _withdraws[_nonce] = PendingWithdraw(amount, claim, call_id, callback_nonce, send_gas_to);
+        _withdraws[_nonce] = PendingWithdraw(amount, claim, meta);
         _sync_data[_nonce] = AccountSyncData(
             gauge_sync_data.poolLastRewardTime,
             gauge_sync_data.depositSupply,
@@ -59,15 +58,10 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         IVoteEscrow(voteEscrow).getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_nonce);
     }
 
-    function processClaim(
-        IGauge.GaugeSyncData gauge_sync_data,
-        uint32 call_id,
-        uint32 callback_nonce,
-        address send_gas_to
-    ) external override onlyGauge {
+    function processClaim(IGauge.GaugeSyncData gauge_sync_data, Callback.CallMeta meta) external override onlyGauge {
         // TODO: min gas?
         _nonce += 1;
-        _claims[_nonce] = PendingClaim(call_id, callback_nonce, send_gas_to);
+        _claims[_nonce] = PendingClaim(meta);
         _sync_data[_nonce] = AccountSyncData(
             gauge_sync_data.poolLastRewardTime,
             gauge_sync_data.depositSupply,
@@ -91,11 +85,12 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         uint128 boostedAmount,
         uint32 lockTime,
         bool claim,
-        IGauge.GaugeSyncData gauge_sync_data
+        IGauge.GaugeSyncData gauge_sync_data,
+        Callback.CallMeta meta
     ) external override onlyGauge {
         // TODO: min gas?
         _nonce += 1;
-        _deposits[_nonce] = PendingDeposit(deposit_nonce, amount, boostedAmount, lockTime, claim);
+        _deposits[_nonce] = PendingDeposit(deposit_nonce, amount, boostedAmount, lockTime, claim, meta);
         _sync_data[_nonce] = AccountSyncData(
             gauge_sync_data.poolLastRewardTime,
             gauge_sync_data.depositSupply,
@@ -254,9 +249,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
 
         uint128 unlocked_balance = balance - lockedBalance;
         if (_withdraw.amount > balance || _withdraw.amount > unlocked_balance) {
-            IGauge(gauge).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                user, _withdraw.call_id, _withdraw.nonce, _withdraw.send_gas_to
-            );
+            IGauge(gauge).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _withdraw.meta);
             return;
         }
 
@@ -279,8 +272,8 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         }
 
         IGauge(gauge).finishWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            user, _withdraw.amount, qube_reward, extra_rewards, _withdraw.claim, totalBoostedOld,
-            totalBoostedBalance, _withdraw.call_id, _withdraw.nonce, _withdraw.send_gas_to
+            user, _withdraw.amount, qube_reward, extra_rewards, _withdraw.claim,
+            totalBoostedOld, totalBoostedBalance, _withdraw.meta
         );
     }
 
@@ -302,8 +295,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         (uint128 qube_reward, uint128[] extra_rewards) = _claimRewards();
 
         IGauge(gauge).finishClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            user, qube_reward, extra_rewards, totalBoostedOld,
-            totalBoostedBalance, _claim.call_id, _claim.nonce, _claim.send_gas_to
+            user, qube_reward, extra_rewards, totalBoostedOld, totalBoostedBalance, _claim.meta
         );
     }
 }

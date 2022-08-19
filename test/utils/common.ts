@@ -198,11 +198,9 @@ export const setupGaugeFactory = async function({
     logger.log('Deployed gauge factory');
 
     await locklift.tracing.trace(_owner.runTarget(
-        {
-            contract: factory
-        },
+        {contract: factory},
         (factory) => factory.methods.installNewGaugeCode({
-            gauge_code: Gauge.code, send_gas_to: _owner.address
+            gauge_code: Gauge.code, meta: {call_id: 0, nonce: 0, send_gas_to: _owner.address}
         })
     ));
     logger.log('Installed gauge code');
@@ -212,7 +210,7 @@ export const setupGaugeFactory = async function({
             contract: factory
         },
         (factory) => factory.methods.installNewGaugeAccountCode({
-            gauge_account_code: GaugeAccount.code, send_gas_to: _owner.address
+            gauge_account_code: GaugeAccount.code, meta: {call_id: 0, nonce: 0, send_gas_to: _owner.address}
         })
     ));
     logger.log('Installed gauge account code');

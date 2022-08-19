@@ -69,9 +69,7 @@ export class Gauge {
             (gauge) => gauge.methods.withdraw({
                 amount: amount,
                 claim: claim,
-                nonce: 0,
-                call_id: call_id,
-                send_gas_to: user.address
+                meta: {nonce: 0, call_id: call_id, send_gas_to: user.address}
             })
         );
     }

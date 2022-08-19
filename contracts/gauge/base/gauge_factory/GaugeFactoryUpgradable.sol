@@ -4,6 +4,7 @@ pragma ever-solidity ^0.62.0;
 import "./GaugeFactoryStorage.sol";
 import "../../../libraries/Errors.sol";
 import "../../../libraries/Gas.sol";
+import "../../../libraries/Callback.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 
 
@@ -17,76 +18,74 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
         return math.max(address(this).balance - msg.value, CONTRACT_MIN_BALANCE);
     }
 
-    function installNewGaugeCode(TvmCell gauge_code, address send_gas_to) external onlyOwner {
+    function installNewGaugeCode(TvmCell gauge_code, Callback.CallMeta meta) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         GaugeCode = gauge_code;
         gauge_version++;
-        emit GaugeCodeUpdate(gauge_version - 1, gauge_version);
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        emit GaugeCodeUpdate(meta.call_id, gauge_version - 1, gauge_version);
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function installNewGaugeAccountCode(TvmCell gauge_account_code, address send_gas_to) external onlyOwner {
+    function installNewGaugeAccountCode(TvmCell gauge_account_code, Callback.CallMeta meta) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         GaugeAccountCode = gauge_account_code;
         gauge_account_version++;
-        emit GaugeAccountCodeUpdate(gauge_account_version - 1, gauge_account_version);
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        emit GaugeAccountCodeUpdate(meta.call_id, gauge_account_version - 1, gauge_account_version);
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function upgradeGauges(address[] gauges, uint32 call_id, address send_gas_to) external view onlyOwner {
+    function upgradeGauges(address[] gauges, Callback.CallMeta meta) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * gauges.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         for (uint i = 0; i < gauges.length; i++) {
             IGauge(gauges[i]).upgrade{value: Gas.GAUGE_UPGRADE_VALUE, flag: MsgFlag.SENDER_PAYS_FEES}(
-                GaugeCode, gauge_version, call_id, send_gas_to
+                GaugeCode, gauge_version, meta
             );
         }
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function updateGaugeAccountsCode(address[] gauges, uint32 call_id, address send_gas_to) external view onlyOwner {
+    function updateGaugeAccountsCode(address[] gauges, Callback.CallMeta meta) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * gauges.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         for (uint i = 0; i < gauges.length; i++) {
             IGauge(gauges[i]).updateGaugeAccountCode{value: Gas.GAUGE_UPGRADE_VALUE, flag: MsgFlag.SENDER_PAYS_FEES}(
-                GaugeAccountCode, gauge_account_version, call_id, send_gas_to
+                GaugeAccountCode, gauge_account_version, meta
             );
         }
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function forceUpgradeGaugeAccounts(address gauge, address[] users, uint32 call_id, address send_gas_to) external view onlyOwner {
+    function forceUpgradeGaugeAccounts(address gauge, address[] users, Callback.CallMeta meta) external view onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * users.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         for (uint i = 0; i < users.length; i++) {
-            IGauge(gauge).forceUpgradeGaugeAccount{value: 0, flag: MsgFlag.SENDER_PAYS_FEES}(users[i], call_id, send_gas_to);
+            IGauge(gauge).forceUpgradeGaugeAccount{value: 0, flag: MsgFlag.SENDER_PAYS_FEES}(users[i], meta);
         }
 
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function processUpgradeGaugeRequest(uint32 call_id, address send_gas_to) external view override {
+    function processUpgradeGaugeRequest(Callback.CallMeta meta) external view override {
         require (msg.value >= Gas.GAUGE_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
-        IGauge(msg.sender).upgrade{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            GaugeCode, gauge_version, call_id, send_gas_to
-        );
+        IGauge(msg.sender).upgrade{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(GaugeCode, gauge_version, meta);
     }
 
-    function processUpdateGaugeAccountCodeRequest(uint32 call_id, address send_gas_to) external view override {
+    function processUpdateGaugeAccountCodeRequest(Callback.CallMeta meta) external view override {
         require (msg.value >= Gas.GAUGE_UPGRADE_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         IGauge(msg.sender).updateGaugeAccountCode{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            GaugeAccountCode, gauge_account_version, call_id, send_gas_to
+            GaugeAccountCode, gauge_account_version, meta
         );
     }
 }

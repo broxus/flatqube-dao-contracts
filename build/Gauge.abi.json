@@ -17,8 +17,7 @@
 			"inputs": [
 				{"name":"new_code","type":"cell"},
 				{"name":"new_version","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -54,39 +53,6 @@
 			]
 		},
 		{
-			"name": "withdraw",
-			"inputs": [
-				{"name":"amount","type":"uint128"},
-				{"name":"claim","type":"bool"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "revertWithdraw",
-			"inputs": [
-				{"name":"user","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "claimReward",
-			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "finishDeposit",
 			"inputs": [
 				{"name":"user","type":"address"},
@@ -101,6 +67,33 @@
 			]
 		},
 		{
+			"name": "withdraw",
+			"inputs": [
+				{"name":"amount","type":"uint128"},
+				{"name":"claim","type":"bool"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "revertWithdraw",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "claimReward",
+			"inputs": [
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "finishWithdraw",
 			"inputs": [
 				{"name":"user","type":"address"},
@@ -110,9 +103,7 @@
 				{"name":"claim","type":"bool"},
 				{"name":"boosted_bal_old","type":"uint128"},
 				{"name":"boosted_bal_new","type":"uint128"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -125,9 +116,7 @@
 				{"name":"extra_reward","type":"uint128[]"},
 				{"name":"boosted_bal_old","type":"uint128"},
 				{"name":"boosted_bal_new","type":"uint128"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -146,9 +135,7 @@
 			"inputs": [
 				{"name":"ids","type":"uint128[]"},
 				{"name":"to","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -249,8 +236,7 @@
 		{
 			"name": "requestUpdateGaugeAccountCode",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -260,8 +246,7 @@
 			"inputs": [
 				{"name":"new_code","type":"cell"},
 				{"name":"new_version","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -269,8 +254,7 @@
 		{
 			"name": "requestUpgradeGauge",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -279,8 +263,7 @@
 			"name": "forceUpgradeGaugeAccount",
 			"inputs": [
 				{"name":"user","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -288,9 +271,7 @@
 		{
 			"name": "upgradeGaugeAccount",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -301,9 +282,7 @@
 				{"name":"user","type":"address"},
 				{"name":"old_version","type":"uint32"},
 				{"name":"new_version","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -648,7 +627,7 @@
 		{"name":"extraVestingRatios","type":"uint32[]"},
 		{"name":"extraRewardEnded","type":"bool[]"},
 		{"name":"deposit_nonce","type":"uint32"},
-		{"components":[{"name":"user","type":"address"},{"name":"amount","type":"uint128"},{"name":"boosted_amount","type":"uint128"},{"name":"lock_time","type":"uint32"},{"name":"claim","type":"bool"},{"name":"send_gas_to","type":"address"},{"name":"nonce","type":"uint32"},{"name":"call_id","type":"uint32"}],"name":"deposits","type":"map(uint64,tuple)"},
+		{"components":[{"name":"user","type":"address"},{"name":"amount","type":"uint128"},{"name":"boosted_amount","type":"uint128"},{"name":"lock_time","type":"uint32"},{"name":"claim","type":"bool"},{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}],"name":"deposits","type":"map(uint64,tuple)"},
 		{"name":"platformCode","type":"cell"},
 		{"name":"gaugeAccountCode","type":"cell"},
 		{"name":"factory","type":"address"},

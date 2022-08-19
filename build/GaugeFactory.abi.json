@@ -19,7 +19,7 @@
 			"name": "upgrade",
 			"inputs": [
 				{"name":"new_code","type":"cell"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -28,7 +28,7 @@
 			"name": "transferOwnership",
 			"inputs": [
 				{"name":"new_owner","type":"address"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -36,7 +36,7 @@
 		{
 			"name": "acceptOwnership",
 			"inputs": [
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -46,8 +46,7 @@
 			"inputs": [
 				{"name":"_vesting_period","type":"uint32"},
 				{"name":"_vesting_ratio","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -99,7 +98,7 @@
 			"name": "installNewGaugeCode",
 			"inputs": [
 				{"name":"gauge_code","type":"cell"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -108,7 +107,7 @@
 			"name": "installNewGaugeAccountCode",
 			"inputs": [
 				{"name":"gauge_account_code","type":"cell"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -117,8 +116,7 @@
 			"name": "upgradeGauges",
 			"inputs": [
 				{"name":"gauges","type":"address[]"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -127,8 +125,7 @@
 			"name": "updateGaugeAccountsCode",
 			"inputs": [
 				{"name":"gauges","type":"address[]"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -138,8 +135,7 @@
 			"inputs": [
 				{"name":"gauge","type":"address"},
 				{"name":"users","type":"address[]"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -147,8 +143,7 @@
 		{
 			"name": "processUpgradeGaugeRequest",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -156,8 +151,7 @@
 		{
 			"name": "processUpdateGaugeAccountCodeRequest",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -181,6 +175,7 @@
 		{
 			"name": "GaugeCodeUpdate",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"prev_version","type":"uint32"},
 				{"name":"new_version","type":"uint32"}
 			],
@@ -190,6 +185,7 @@
 		{
 			"name": "GaugeAccountCodeUpdate",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"prev_version","type":"uint32"},
 				{"name":"new_version","type":"uint32"}
 			],
@@ -199,6 +195,7 @@
 		{
 			"name": "FactoryUpdate",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"prev_version","type":"uint32"},
 				{"name":"new_version","type":"uint32"}
 			],
@@ -208,6 +205,7 @@
 		{
 			"name": "NewOwner",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"prev_owner","type":"address"},
 				{"name":"new_owner","type":"address"}
 			],
@@ -217,6 +215,7 @@
 		{
 			"name": "NewPendingOwner",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"pending_owner","type":"address"}
 			],
 			"outputs": [

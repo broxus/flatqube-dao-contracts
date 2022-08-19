@@ -4,6 +4,7 @@ pragma ever-solidity ^0.62.0;
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "./interfaces/IGauge.sol";
 import "./interfaces/IGaugeAccount.sol";
+import "../libraries/Callback.sol";
 import "../vote_escrow/interfaces/IVoteEscrow.sol";
 import "./base/gauge_account/GaugeAccountBase.sol";
 
@@ -12,10 +13,10 @@ contract GaugeAccount is GaugeAccountBase {
     // Cant be deployed directly
     constructor() public { revert(); }
 
-    function upgrade(TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to) external override onlyGauge {
+    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external override onlyGauge {
         if (new_version == current_version) {
             tvm.rawReserve(_reserve(), 0);
-            send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+            meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
             return;
         }
 
@@ -23,7 +24,7 @@ contract GaugeAccount is GaugeAccountBase {
         TvmBuilder main_builder;
         main_builder.store(gauge); // address 267
         main_builder.store(_tmp); // 8
-        main_builder.store(send_gas_to); // address 267
+        main_builder.store(meta.send_gas_to); // address 267
 
         TvmCell empty;
         main_builder.storeRef(empty); // ref
@@ -40,8 +41,8 @@ contract GaugeAccount is GaugeAccountBase {
         main_builder.storeRef(params); // ref3
 
         TvmCell data = abi.encode(
-            call_id,
-            nonce,
+            meta.call_id,
+            meta.nonce,
             balance,
             lockBoostedBalance,
             veBoostedBalance,
