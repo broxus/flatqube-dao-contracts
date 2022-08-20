@@ -18,7 +18,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
     }
 
     function processVoteEpoch(
-        uint32 voteEpoch, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
+        uint32 voteEpoch, mapping (address => uint128) votes, Callback.CallMeta meta
     ) external override onlyVoteEscrowOrSelf {
         require (lastEpochVoted < voteEpoch, Errors.ALREADY_VOTED);
 
@@ -26,14 +26,14 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
 
         // check gas only at beginning
         if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
-            IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
+            IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, meta);
             return;
         }
 
         bool update_finished = _syncDeposits(now);
         if (!update_finished) {
             IVoteEscrowAccount(address(this)).processVoteEpoch{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                voteEpoch, votes, call_id, nonce, send_gas_to
+                voteEpoch, votes, meta
             );
             return;
         }
@@ -44,29 +44,27 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         }
         if (veQubeBalance < totalVotes) {
             // soft fail, because ve qubes could be burned while syncing and we want to return gas to user and notify him
-            IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
+            IVoteEscrow(voteEscrow).revertVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, meta);
             return;
         }
 
         lastEpochVoted = voteEpoch;
-        IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, call_id, nonce, send_gas_to);
+        IVoteEscrow(voteEscrow).finishVote{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, votes, meta);
     }
 
-    function processWithdraw(uint32 call_id, uint32 nonce, address send_gas_to) external override onlyVoteEscrowOrSelf {
+    function processWithdraw(Callback.CallMeta meta) external override onlyVoteEscrowOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
         // check gas only at beginning
         if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
-            IVoteEscrow(msg.sender).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, call_id, nonce, send_gas_to);
+            IVoteEscrow(msg.sender).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, meta);
             return;
         }
 
         bool update_finished = _syncDeposits(now);
         // continue update in next message with same parameters
         if (!update_finished) {
-            IVoteEscrowAccount(address(this)).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                call_id, nonce, send_gas_to
-            );
+            IVoteEscrowAccount(address(this)).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(meta);
             return;
         }
 
@@ -74,7 +72,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         uint128 _withdraw_qubes = unlockedQubes;
         unlockedQubes = 0;
 
-        IVoteEscrow(voteEscrow).finishWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _withdraw_qubes, call_id, nonce, send_gas_to);
+        IVoteEscrow(voteEscrow).finishWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _withdraw_qubes, meta);
     }
 
     function processDeposit(
@@ -82,8 +80,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         uint128 qube_amount,
         uint128 ve_amount,
         uint32 lock_time,
-        uint32 nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external override onlyVoteEscrowOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
@@ -97,7 +94,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         // continue update in next message with same parameters
         if (!update_finished) {
             IVoteEscrowAccount(address(this)).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                deposit_nonce, qube_amount, ve_amount, lock_time, nonce, send_gas_to
+                deposit_nonce, qube_amount, ve_amount, lock_time, meta
             );
             return;
         }

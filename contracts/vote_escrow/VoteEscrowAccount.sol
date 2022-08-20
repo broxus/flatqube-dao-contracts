@@ -9,11 +9,11 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
     constructor() public { revert(); }
 
     function upgrade(
-        TvmCell new_code, uint32 new_version, uint32 call_id, uint32 nonce, address send_gas_to
+        TvmCell new_code, uint32 new_version, Callback.CallMeta meta
     ) external override onlyVoteEscrowOrSelf {
         if (new_version == current_version) {
             tvm.rawReserve(_reserve(), 0);
-            send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+            meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
             return;
         }
 
@@ -21,7 +21,7 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         TvmBuilder main_builder;
         main_builder.store(voteEscrow); // address 267
         main_builder.store(_tmp); // 8
-        main_builder.store(send_gas_to); // address 267
+        main_builder.store(meta.send_gas_to); // address 267
 
         TvmCell empty;
         main_builder.storeRef(empty); // ref
@@ -49,7 +49,7 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
             activeDeposits,
             deposits
         );
-        TvmCell data = abi.encode(call_id, nonce, storage_data);
+        TvmCell data = abi.encode(meta.call_id, meta.nonce, storage_data);
 
         main_builder.storeRef(data); // ref3
 
@@ -73,8 +73,10 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
         user = initialData.decode(address);
 
         TvmSlice params = s.loadRefAsSlice();
-        (current_version, ,dao_root) = params.decode(uint32, uint32, address);
+        (current_version,,dao_root) = params.decode(uint32, uint32, address);
 
-        IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
+        IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            user, Callback.CallMeta(0, 0, send_gas_to)
+        );
     }
 }

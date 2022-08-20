@@ -38,7 +38,7 @@ abstract contract GaugeRewards is GaugeDeploy {
     }
 
     // @dev accRewardPerShare and endTime params in new_rounds are ignored
-    function addRewardRounds(uint256[] ids, RewardRound[] new_rounds, uint32 call_id, address send_gas_to) external onlyOwner {
+    function addRewardRounds(uint256[] ids, RewardRound[] new_rounds, Callback.CallMeta meta) external onlyOwner {
         require (ids.length == new_rounds.length, Errors.BAD_REWARD_ROUNDS_INPUT);
 
         for (uint i = 0; i < ids.length; i++) {
@@ -57,15 +57,15 @@ abstract contract GaugeRewards is GaugeDeploy {
             _cur_rounds.push(new_rounds[i]);
 
             extraRewardRounds[ids[i]] = _cur_rounds;
-            emit RewardRoundAdded(call_id, ids[i], new_rounds[i], _cur_rounds);
+            emit RewardRoundAdded(meta.call_id, ids[i], new_rounds[i], _cur_rounds);
         }
 
         tvm.rawReserve(_reserve(), 0);
 
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setExtraFarmEndTime(uint256[] ids, uint32[] farm_end_times, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setExtraFarmEndTime(uint256[] ids, uint32[] farm_end_times, Callback.CallMeta meta) external onlyOwner {
         require (ids.length == farm_end_times.length, Errors.BAD_FARM_END_TIME);
 
         for (uint i = 0; i < ids.length; i++) {
@@ -86,8 +86,8 @@ abstract contract GaugeRewards is GaugeDeploy {
 
         tvm.rawReserve(_reserve(), 0);
 
-        emit ExtraFarmEndSet(call_id, ids, farm_end_times);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        emit ExtraFarmEndSet(meta.call_id, ids, farm_end_times);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function _getUpdatedRewardRounds(

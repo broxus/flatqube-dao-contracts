@@ -26,7 +26,7 @@
 			"name": "transferOwnership",
 			"inputs": [
 				{"name":"new_owner","type":"address"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -34,7 +34,7 @@
 		{
 			"name": "acceptOwnership",
 			"inputs": [
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -82,9 +82,7 @@
 		{
 			"name": "withdraw",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -93,9 +91,7 @@
 			"name": "revertWithdraw",
 			"inputs": [
 				{"name":"user","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -105,9 +101,7 @@
 			"inputs": [
 				{"name":"user","type":"address"},
 				{"name":"unlockedQubes","type":"uint128"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -127,8 +121,7 @@
 			"inputs": [
 				{"name":"new_min","type":"uint32"},
 				{"name":"new_max","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -137,8 +130,7 @@
 			"name": "setPause",
 			"inputs": [
 				{"name":"new_state","type":"bool"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -147,8 +139,7 @@
 			"name": "setEmergency",
 			"inputs": [
 				{"name":"new_state","type":"bool"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -157,8 +148,7 @@
 			"name": "setWhitelistPrice",
 			"inputs": [
 				{"name":"new_price","type":"uint128"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -167,8 +157,7 @@
 			"name": "addToWhitelist",
 			"inputs": [
 				{"name":"gauge","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -177,8 +166,7 @@
 			"name": "removeFromWhitelist",
 			"inputs": [
 				{"name":"gauge","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -206,7 +194,7 @@
 			"name": "initialize",
 			"inputs": [
 				{"name":"start_offset","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -221,8 +209,7 @@
 				{"name":"_gauge_max_votes_ratio","type":"uint32"},
 				{"name":"_gauge_max_downtime","type":"uint8"},
 				{"name":"_max_gauges_per_vote","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -231,8 +218,7 @@
 			"name": "setDistributionScheme",
 			"inputs": [
 				{"name":"_new_scheme","type":"uint32[]"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -241,8 +227,7 @@
 			"name": "setDistribution",
 			"inputs": [
 				{"name":"_new_distribution","type":"uint128[]"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -250,8 +235,7 @@
 		{
 			"name": "startVoting",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -260,9 +244,7 @@
 			"name": "voteEpoch",
 			"inputs": [
 				{"name":"votes","type":"map(address,uint128)"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -272,9 +254,7 @@
 			"inputs": [
 				{"name":"user","type":"address"},
 				{"name":"votes","type":"map(address,uint128)"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -283,9 +263,7 @@
 			"name": "revertVote",
 			"inputs": [
 				{"name":"user","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -301,8 +279,7 @@
 		{
 			"name": "endVoting",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -313,8 +290,7 @@
 				{"name":"start_addr","type":"address"},
 				{"name":"exceeded_votes","type":"uint128"},
 				{"name":"valid_votes","type":"uint128"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -326,8 +302,7 @@
 				{"name":"treasury_votes","type":"uint128"},
 				{"name":"exceeded_votes","type":"uint128"},
 				{"name":"valid_votes","type":"uint128"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -338,8 +313,7 @@
 				{"name":"start_addr","type":"address"},
 				{"name":"bonus_treasury_votes","type":"uint128"},
 				{"name":"distributed","type":"map(address,uint128)"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -349,8 +323,7 @@
 			"inputs": [
 				{"name":"amount","type":"uint128"},
 				{"name":"receiver","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -360,8 +333,7 @@
 			"inputs": [
 				{"name":"amount","type":"uint128"},
 				{"name":"receiver","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -371,8 +343,7 @@
 			"inputs": [
 				{"name":"amount","type":"uint128"},
 				{"name":"receiver","type":"address"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -416,7 +387,7 @@
 			"name": "installPlatformCode",
 			"inputs": [
 				{"name":"code","type":"cell"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -425,7 +396,7 @@
 			"name": "installOrUpdateVeAccountCode",
 			"inputs": [
 				{"name":"code","type":"cell"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -433,9 +404,7 @@
 		{
 			"name": "upgradeVeAccount",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -444,7 +413,7 @@
 			"name": "forceUpgradeVeAccounts",
 			"inputs": [
 				{"name":"users","type":"address[]"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -455,9 +424,7 @@
 				{"name":"user","type":"address"},
 				{"name":"old_version","type":"uint32"},
 				{"name":"new_version","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -466,7 +433,7 @@
 			"name": "onVoteEscrowAccountDeploy",
 			"inputs": [
 				{"name":"user","type":"address"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -716,6 +683,7 @@
 		{
 			"name": "NewOwner",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"prev_owner","type":"address"},
 				{"name":"new_owner","type":"address"}
 			],
@@ -725,6 +693,7 @@
 		{
 			"name": "NewPendingOwner",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"pending_owner","type":"address"}
 			],
 			"outputs": [
@@ -1003,6 +972,7 @@
 		{
 			"name": "PlatformCodeInstall",
 			"inputs": [
+				{"name":"call_id","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -1010,6 +980,7 @@
 		{
 			"name": "VeAccountCodeUpdate",
 			"inputs": [
+				{"name":"call_id","type":"uint32"},
 				{"name":"old_version","type":"uint32"},
 				{"name":"new_version","type":"uint32"}
 			],
@@ -1077,6 +1048,6 @@
 		{"name":"gaugeWhitelistPrice","type":"uint128"},
 		{"name":"whitelistPayments","type":"uint128"},
 		{"name":"deposit_nonce","type":"uint32"},
-		{"components":[{"name":"user","type":"address"},{"name":"amount","type":"uint128"},{"name":"ve_amount","type":"uint128"},{"name":"lock_time","type":"uint32"},{"name":"send_gas_to","type":"address"},{"name":"nonce","type":"uint32"},{"name":"call_id","type":"uint32"}],"name":"pending_deposits","type":"map(uint32,tuple)"}
+		{"components":[{"name":"user","type":"address"},{"name":"amount","type":"uint128"},{"name":"ve_amount","type":"uint128"},{"name":"lock_time","type":"uint32"},{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}],"name":"pending_deposits","type":"map(uint32,tuple)"}
 	]
 }

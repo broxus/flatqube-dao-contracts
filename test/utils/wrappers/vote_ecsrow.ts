@@ -128,7 +128,7 @@ export class VoteEscrow {
                 contract: this.contract,
                 value: locklift.utils.toNano(5),
             },
-            (ve) => ve.methods.acceptOwnership({send_gas_to: owner.address})
+            (ve) => ve.methods.acceptOwnership({meta: {call_id: 0, nonce: 0, send_gas_to: owner.address}})
         );
     }
 
@@ -138,7 +138,9 @@ export class VoteEscrow {
                 contract: this.contract,
                 value: toNano(5)
             },
-            (ve) => ve.methods.installOrUpdateVeAccountCode({code: code, send_gas_to: this._owner.address})
+            (ve) => ve.methods.installOrUpdateVeAccountCode(
+                {code: code, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}
+            )
         );
     }
 
@@ -149,8 +151,7 @@ export class VoteEscrow {
                 value: toNano(5)
             },
             (ve) => ve.methods.startVoting({
-                call_id: call_id,
-                send_gas_to: this._owner.address
+                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
             })
         ));
     }
@@ -165,8 +166,7 @@ export class VoteEscrow {
                 value: gas
             },
             (ve) => ve.methods.endVoting({
-                call_id: call_id,
-                send_gas_to: this._owner.address
+                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
             })
         ));
     }
@@ -179,9 +179,7 @@ export class VoteEscrow {
             },
             (ve) => ve.methods.voteEpoch({
                 votes: votes,
-                call_id: call_id,
-                nonce: 0,
-                send_gas_to: voter.address
+                meta: {call_id: call_id, nonce: 0, send_gas_to: voter.address}
             })
         ));
     }
@@ -194,7 +192,7 @@ export class VoteEscrow {
                 value: toNano(5)
             },
             (ve) => ve.methods.setDistributionScheme({
-                _new_scheme: scheme, call_id: call_id, send_gas_to: this._owner.address
+                _new_scheme: scheme, meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }
@@ -206,7 +204,7 @@ export class VoteEscrow {
                 value: toNano(5)
             },
             (ve) => ve.methods.setDistribution({
-                _new_distribution: distribution, call_id: call_id, send_gas_to: this._owner.address
+                _new_distribution: distribution, meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }
@@ -234,8 +232,7 @@ export class VoteEscrow {
                 _gauge_max_votes_ratio: gauge_max_votes_ratio,
                 _gauge_max_downtime: gauge_max_downtime,
                 _max_gauges_per_vote: max_gauges_per_vote,
-                call_id: call_id,
-                send_gas_to: this._owner.address
+                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }
@@ -248,8 +245,7 @@ export class VoteEscrow {
             },
             (ve) => ve.methods.setWhitelistPrice({
                 new_price: new_price,
-                call_id: call_id,
-                send_gas_to: this._owner.address
+                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }
@@ -263,8 +259,7 @@ export class VoteEscrow {
             (ve) => ve.methods.setQubeLockTimeLimits({
                 new_min: new_min,
                 new_max: new_max,
-                call_id: 0,
-                send_gas_to: this._owner.address
+                meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }
@@ -277,7 +272,7 @@ export class VoteEscrow {
             },
             (ve) => ve.methods.initialize({
                 start_offset: start_offset,
-                send_gas_to: this._owner.address
+                meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }
@@ -329,9 +324,7 @@ export class VoteEscrow {
                 value: gas
             },
             (ve) => ve.methods.withdraw({
-                nonce: 0,
-                call_id: call_id,
-                send_gas_to: user.address
+                meta: {call_id: call_id, nonce: 0, send_gas_to: user.address}
             })
         );
     }
@@ -374,7 +367,9 @@ export class VoteEscrow {
                 contract: this.contract,
                 value: toNano(5)
             },
-            (ve) => ve.methods.upgradeVeAccount({nonce: 0, call_id: call_id, send_gas_to: user.address})
+            (ve) => ve.methods.upgradeVeAccount(
+                {meta: {call_id: call_id, nonce: 0, send_gas_to: user.address}}
+            )
         );
     }
 
@@ -385,7 +380,7 @@ export class VoteEscrow {
                 value: toNano(5 * users.length)
             },
             (ve) => ve.methods.forceUpgradeVeAccounts({
-                users: users, send_gas_to: this._owner.address
+                users: users, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
             })
         );
     }

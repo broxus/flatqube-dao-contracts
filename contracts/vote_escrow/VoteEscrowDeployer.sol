@@ -67,18 +67,19 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
             flag: MsgFlag.SENDER_PAYS_FEES
         }(address(this), qube, dao);
 
-        IVoteEscrow(ve).installPlatformCode{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(PlatformCode, ve);
-        IVoteEscrow(ve).installOrUpdateVeAccountCode{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(veAccountCode, ve);
+        Callback.CallMeta meta = Callback.CallMeta(0, 0, ve);
+        IVoteEscrow(ve).installPlatformCode{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(PlatformCode, meta);
+        IVoteEscrow(ve).installOrUpdateVeAccountCode{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(veAccountCode, meta);
         IVoteEscrow(ve).setVotingParams{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(
             epoch_time, time_before_voting, voting_time, gauge_min_votes_ratio,
-            gauge_max_votes_ratio, gauge_max_downtime, max_gauges_per_vote, 0, ve
+            gauge_max_votes_ratio, gauge_max_downtime, max_gauges_per_vote, meta
         );
-        IVoteEscrow(ve).setDistributionScheme{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution_scheme, 0, ve);
-        IVoteEscrow(ve).setDistribution{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution, 0, ve);
-        IVoteEscrow(ve).setQubeLockTimeLimits{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(min_lock, max_lock, 0, ve);
-        IVoteEscrow(ve).setWhitelistPrice{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(whitelist_price, 0, ve);
-        IVoteEscrow(ve).initialize{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(start_offset, ve);
-        IVoteEscrow(ve).transferOwnership{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(owner, ve);
+        IVoteEscrow(ve).setDistributionScheme{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution_scheme, meta);
+        IVoteEscrow(ve).setDistribution{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution, meta);
+        IVoteEscrow(ve).setQubeLockTimeLimits{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(min_lock, max_lock, meta);
+        IVoteEscrow(ve).setWhitelistPrice{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(whitelist_price, meta);
+        IVoteEscrow(ve).initialize{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(start_offset, meta);
+        IVoteEscrow(ve).transferOwnership{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(owner, meta);
         return ve;
     }
 }

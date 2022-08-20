@@ -6,28 +6,29 @@ import "broxus-token-contracts/contracts/interfaces/ITokenWalletUpgradeable.sol"
 import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "../../../libraries/Errors.sol";
+import "../../../libraries/Callback.sol";
 import "../../../gauge/interfaces/IGaugeAccount.sol";
 import "./VoteEscrowEpochVoting.sol";
 import "locklift/src/console.sol";
 
 
 abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
-    function transferOwnership(address new_owner, address send_gas_to) external override onlyOwner {
+    function transferOwnership(address new_owner, Callback.CallMeta meta) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        emit NewPendingOwner(new_owner);
+        emit NewPendingOwner(meta.call_id, new_owner);
         pendingOwner = new_owner;
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function acceptOwnership(address send_gas_to) external {
+    function acceptOwnership(Callback.CallMeta meta) external {
         require (msg.sender == pendingOwner, Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
 
-        emit NewOwner(owner, pendingOwner);
+        emit NewOwner(meta.call_id, owner, pendingOwner);
         owner = pendingOwner;
         pendingOwner = address.makeAddrNone();
-        send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+        meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
     function receiveTokenWalletAddress(address wallet) external override {
@@ -67,11 +68,13 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
                 // deposit logic
                 uint128 ve_minted = calculateVeMint(amount, lock_time);
                 deposit_nonce += 1;
-                pending_deposits[deposit_nonce] = PendingDeposit(deposit_owner, amount, ve_minted, lock_time, remainingGasTo, nonce, call_id);
+                pending_deposits[deposit_nonce] = PendingDeposit(
+                    deposit_owner, amount, ve_minted, lock_time, Callback.CallMeta(call_id, nonce, remainingGasTo)
+                );
 
                 address ve_account_addr = getVoteEscrowAccountAddress(deposit_owner);
                 IVoteEscrowAccount(ve_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                    deposit_nonce, amount, ve_minted, lock_time, nonce, remainingGasTo
+                    deposit_nonce, amount, ve_minted, lock_time, Callback.CallMeta(call_id, nonce, remainingGasTo)
                 );
                 return;
             }
@@ -110,9 +113,9 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         PendingDeposit deposit = pending_deposits[deposit_nonce];
         delete pending_deposits[deposit_nonce];
 
-        emit DepositRevert(deposit.call_id, deposit.user, deposit.amount);
+        emit DepositRevert(deposit.meta.call_id, deposit.user, deposit.amount);
         _transferQubes(
-            deposit.amount, deposit.user, _makeCell(deposit.nonce), deposit.send_gas_to, MsgFlag.ALL_NOT_RESERVED
+            deposit.amount, deposit.user, _makeCell(deposit.meta.nonce), deposit.meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED
         );
     }
 
@@ -121,41 +124,37 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         PendingDeposit deposit = pending_deposits[deposit_nonce];
         delete pending_deposits[deposit_nonce];
 
-        emit Deposit(deposit.call_id, deposit.user, deposit.amount, deposit.ve_amount, deposit.lock_time, deposit_key);
+        emit Deposit(deposit.meta.call_id, deposit.user, deposit.amount, deposit.ve_amount, deposit.lock_time, deposit_key);
         updateAverage();
         qubeBalance += deposit.amount;
         veQubeBalance += deposit.ve_amount;
 
-        _sendCallbackOrGas(user, deposit.nonce, true, deposit.send_gas_to);
+        _sendCallbackOrGas(user, deposit.meta.nonce, true, deposit.meta.send_gas_to);
     }
 
-    function withdraw(uint32 call_id, uint32 nonce, address send_gas_to) external view onlyActive {
+    function withdraw(Callback.CallMeta meta) external view onlyActive {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         address ve_acc_addr = getVoteEscrowAccountAddress(msg.sender);
-        IVoteEscrowAccount(ve_acc_addr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(call_id, nonce, send_gas_to);
+        IVoteEscrowAccount(ve_acc_addr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(meta);
     }
 
-    function revertWithdraw(
-        address user, uint32 call_id, uint32 nonce, address send_gas_to
-    ) external override onlyVoteEscrowAccount(user) {
+    function revertWithdraw(address user, Callback.CallMeta meta) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
-        emit WithdrawRevert(call_id, user);
-        _sendCallbackOrGas(user, nonce, false, send_gas_to);
+        emit WithdrawRevert(meta.call_id, user);
+        _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
     }
 
-    function finishWithdraw(
-        address user, uint128 unlockedQubes, uint32 call_id, uint32 nonce, address send_gas_to
-    ) external override onlyVoteEscrowAccount(user) {
+    function finishWithdraw(address user, uint128 unlockedQubes, Callback.CallMeta meta) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         updateAverage();
-        emit Withdraw(call_id, user, unlockedQubes);
+        emit Withdraw(meta.call_id, user, unlockedQubes);
 
         qubeBalance -= unlockedQubes;
-        _transferQubes(unlockedQubes, user, _makeCell(nonce), send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(unlockedQubes, user, _makeCell(meta.nonce), meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function burnVeQubes(address user, uint128 expiredVeQubes, uint64[] expiredDeposits) external override onlyVoteEscrowAccount(user) {
@@ -168,59 +167,59 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         user.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external override onlyOwner {
+    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, Callback.CallMeta meta) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         qubeMinLockTime = new_min;
         qubeMaxLockTime = new_max;
 
-        emit NewQubeLockLimits(call_id, new_min, new_max);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        emit NewQubeLockLimits(meta.call_id, new_min, new_max);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setPause(bool new_state, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setPause(bool new_state, Callback.CallMeta meta) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         paused = new_state;
-        emit Pause(call_id, new_state);
+        emit Pause(meta.call_id, new_state);
 
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setEmergency(bool new_state, uint32 call_id, address send_gas_to) external onlyOwner {
+    function setEmergency(bool new_state, Callback.CallMeta meta) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         emergency = new_state;
-        emit Emergency(call_id, new_state);
+        emit Emergency(meta.call_id, new_state);
 
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setWhitelistPrice(uint128 new_price, uint32 call_id, address send_gas_to) external override onlyOwner {
+    function setWhitelistPrice(uint128 new_price, Callback.CallMeta meta) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
         gaugeWhitelistPrice = new_price;
 
-        emit WhitelistPriceUpdate(call_id, new_price);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        emit WhitelistPriceUpdate(meta.call_id, new_price);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function addToWhitelist(address gauge, uint32 call_id, address send_gas_to) external onlyOwner {
+    function addToWhitelist(address gauge, Callback.CallMeta meta) external onlyOwner {
         // cant add gauge to whitelist during voting
         require (currentVotingStartTime == 0, Errors.BAD_INPUT);
         tvm.rawReserve(_reserve(), 0);
 
-        _addToWhitelist(gauge, call_id);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        _addToWhitelist(gauge, meta.call_id);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function removeFromWhitelist(address gauge, uint32 call_id, address send_gas_to) external onlyOwner {
+    function removeFromWhitelist(address gauge, Callback.CallMeta meta) external onlyOwner {
         // cant remove gauge from whitelist during voting
         require (currentVotingStartTime == 0, Errors.BAD_INPUT);
         tvm.rawReserve(_reserve(), 0);
 
-        _removeFromWhitelist(gauge, call_id);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        _removeFromWhitelist(gauge, meta.call_id);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function getVeAverage(uint32 nonce) external override {
@@ -265,7 +264,7 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
             address gauge_account_addr = deployVoteEscrowAccount(deposit.user);
 
             IVoteEscrowAccount(gauge_account_addr).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                _deposit_nonce, deposit.amount, deposit.ve_amount, deposit.lock_time, deposit.nonce, deposit.send_gas_to
+                _deposit_nonce, deposit.amount, deposit.ve_amount, deposit.lock_time, deposit.meta
             );
         }
     }

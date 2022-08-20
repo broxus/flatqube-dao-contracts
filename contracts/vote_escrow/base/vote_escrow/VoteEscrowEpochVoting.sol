@@ -7,7 +7,7 @@ import "./VoteEscrowDAO.sol";
 
 
 abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
-    function initialize(uint32 start_offset, address send_gas_to) external override onlyOwner {
+    function initialize(uint32 start_offset, Callback.CallMeta meta) external override onlyOwner {
         // codes installed
         require (!platformCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
         require (!veAccountCode.toSlice().empty(), Errors.CANT_BE_INITIALIZED);
@@ -30,7 +30,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         initialized = true;
 
         emit Initialize(now, start_time, currentEpochEndTime);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function setVotingParams(
@@ -41,8 +41,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         uint32 _gauge_max_votes_ratio,
         uint8 _gauge_max_downtime,
         uint32 _max_gauges_per_vote,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external override onlyOwner {
         require (_gauge_min_votes_ratio < _gauge_max_votes_ratio, Errors.BAD_INPUT);
         require (_gauge_max_votes_ratio <= MAX_VOTES_RATIO, Errors.BAD_INPUT);
@@ -62,7 +61,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         maxGaugesPerVote = _max_gauges_per_vote;
 
         emit NewVotingParams(
-            call_id,
+            meta.call_id,
             epochTime,
             timeBeforeVoting,
             votingTime,
@@ -71,35 +70,35 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             gaugeMaxDowntime,
             maxGaugesPerVote
         );
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setDistributionScheme(uint32[] _new_scheme, uint32 call_id, address send_gas_to) external override onlyOwner {
+    function setDistributionScheme(uint32[] _new_scheme, Callback.CallMeta meta) external override onlyOwner {
         require (_new_scheme.length == 3, Errors.BAD_INPUT);
         require (_new_scheme[0] + _new_scheme[1] + _new_scheme[2] == DISTRIBUTION_SCHEME_TOTAL, Errors.BAD_INPUT);
 
         tvm.rawReserve(_reserve(), 0);
         distributionScheme = _new_scheme;
 
-        emit DistributionSchemeUpdate(call_id, _new_scheme);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        emit DistributionSchemeUpdate(meta.call_id, _new_scheme);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function setDistribution(uint128[] _new_distribution, uint32 call_id, address send_gas_to) external override onlyOwner {
+    function setDistribution(uint128[] _new_distribution, Callback.CallMeta meta) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
         distributionSchedule = _new_distribution;
 
-        emit DistributionScheduleUpdate(call_id, _new_distribution);
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        emit DistributionScheduleUpdate(meta.call_id, _new_distribution);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function startVoting(uint32 call_id, address send_gas_to) external onlyActive {
+    function startVoting(Callback.CallMeta meta) external onlyActive {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
         tvm.rawReserve(_reserve(), 0);
-        _tryStartVoting(call_id);
+        _tryStartVoting(meta.call_id);
 
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function _tryStartVoting(uint32 call_id) internal {
@@ -124,11 +123,11 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
     // @param call_id - id helper for front/indexing
     // @param nonce - nonce for callback, ignored if == 0
     // @param send_gas_to - address to send unspent gas
-    function voteEpoch(mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external onlyActive {
+    function voteEpoch(mapping (address => uint128) votes, Callback.CallMeta meta) external onlyActive {
         require (msg.value >= Gas.MIN_MSG_VALUE + maxGaugesPerVote * Gas.PER_GAUGE_VOTE_GAS, Errors.LOW_MSG_VALUE);
 
         if (currentVotingStartTime == 0) {
-            _tryStartVoting(call_id);
+            _tryStartVoting(meta.call_id);
         }
         // minimum check for gas dependant on gauges count
         require (currentVotingStartTime > 0, Errors.VOTING_NOT_STARTED);
@@ -145,19 +144,19 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
         address ve_acc_addr = getVoteEscrowAccountAddress(msg.sender);
         IVoteEscrowAccount(ve_acc_addr).processVoteEpoch{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            currentEpoch, votes, call_id, nonce, send_gas_to
+            currentEpoch, votes, meta
         );
     }
 
     function finishVote(
-        address user, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to
+        address user, mapping (address => uint128) votes, Callback.CallMeta meta
     ) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         // this is possible if vote(...) was called right before voting end and data race happen
         if (currentVotingStartTime == 0 || now > currentVotingEndTime) {
-            emit VoteRevert(call_id, user);
-            _sendCallbackOrGas(user, nonce, false, send_gas_to);
+            emit VoteRevert(meta.call_id, user);
+            _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
             return;
         }
 
@@ -166,15 +165,15 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             currentVotingTotalVotes += vote_value;
         }
 
-        emit Vote(call_id, user, votes);
-        _sendCallbackOrGas(user, nonce, true, send_gas_to);
+        emit Vote(meta.call_id, user, votes);
+        _sendCallbackOrGas(user, meta.nonce, true, meta.send_gas_to);
     }
 
-    function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external override onlyVoteEscrowAccount(user) {
+    function revertVote(address user, Callback.CallMeta meta) external override onlyVoteEscrowAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
-        emit VoteRevert(call_id, user);
-        _sendCallbackOrGas(user, nonce, false, send_gas_to);
+        emit VoteRevert(meta.call_id, user);
+        _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
     }
 
     function calculateGasForEndVoting() public view returns (uint128 min_gas) {
@@ -182,7 +181,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         min_gas += Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
     }
 
-    function endVoting(uint32 call_id, address send_gas_to) external onlyActive {
+    function endVoting(Callback.CallMeta meta) external onlyActive {
         // make sure we have enough admin deposit to pay for this epoch
         require (distributionSupply >= distributionSchedule[currentEpoch - 1], Errors.LOW_DISTRIBUTION_BALANCE);
 
@@ -192,8 +191,8 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         // soft fail, because this function could be called simultaneously by several users
         // we dont want require here, because we need to return gas to users which could be really big here
         if (msg.value < min_gas || currentVotingStartTime == 0 || now < currentVotingEndTime) {
-            emit VotingEndRevert(call_id);
-            send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+            emit VotingEndRevert(meta.call_id);
+            meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
             return;
         }
 
@@ -205,17 +204,14 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         currentEpochEndTime = currentEpochStartTime + epochTime;
 
         address start_addr = address.makeAddrStd(address(this).wid, 0);
-        IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            start_addr, 0, 0, call_id, send_gas_to
-        );
+        IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(start_addr, 0, 0, meta);
     }
 
     function countVotesStep(
         address start_addr,
         uint128 exceeded_votes,
         uint128 valid_votes,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external override {
         require (msg.sender == address(this), Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
@@ -245,7 +241,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
                 delete currentVotingVotes[gauge];
                 gaugeDowntimes[gauge] += 1;
                 if (gaugeDowntimes[gauge] >= gaugeMaxDowntime) {
-                    _removeFromWhitelist(gauge, call_id);
+                    _removeFromWhitelist(gauge, meta.call_id);
                 }
             } else if (gauge_votes > max_votes) {
                 currentVotingVotes[gauge] = max_votes;
@@ -263,14 +259,14 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         if (!finished) {
             (address gauge,) = pointer.get();
             IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                gauge, exceeded_votes, valid_votes, call_id, send_gas_to
+                gauge, exceeded_votes, valid_votes, meta
             );
             return;
         }
 
         start_addr = address.makeAddrStd(address(this).wid, 0);
         IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            start_addr, 0, exceeded_votes, valid_votes, call_id, send_gas_to
+            start_addr, 0, exceeded_votes, valid_votes, meta
         );
     }
 
@@ -279,8 +275,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         uint128 treasury_votes,
         uint128 exceeded_votes,
         uint128 valid_votes,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external override {
         require (msg.sender == address(this), Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
@@ -318,14 +313,14 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             if (!finished) {
                 (address gauge,) = pointer.get();
                 IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                    gauge, treasury_votes, exceeded_votes, valid_votes, call_id, send_gas_to
+                    gauge, treasury_votes, exceeded_votes, valid_votes, meta
                 );
                 return;
             }
         }
 
         emit VotingEnd(
-            call_id,
+            meta.call_id,
             currentVotingVotes,
             currentVotingTotalVotes,
             treasury_votes,
@@ -337,7 +332,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         start_addr = address.makeAddrStd(address(this).wid, 0);
         mapping (address => uint128) distributed;
         IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            start_addr, treasury_votes, distributed, call_id, send_gas_to
+            start_addr, treasury_votes, distributed, meta
         );
     }
 
@@ -345,8 +340,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         address start_addr,
         uint128 bonus_treasury_votes,
         mapping (address => uint128) distributed,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external override {
         require (msg.sender == address(this), Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
@@ -382,7 +376,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             distributed[gauge] = qube_amount;
 
             qubeBalance -= qube_amount;
-            _transferQubes(qube_amount, gauge, payload, send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+            _transferQubes(qube_amount, gauge, payload, meta.send_gas_to, MsgFlag.SENDER_PAYS_FEES);
 
             counter += 1;
             pointer = currentVotingVotes.next(gauge);
@@ -391,7 +385,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         if (!finished) {
             (address gauge,) = pointer.get();
             IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                gauge, bonus_treasury_votes, distributed, call_id, send_gas_to
+                gauge, bonus_treasury_votes, distributed, meta
             );
             return;
         }
@@ -408,49 +402,49 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         delete currentVotingVotes;
 
         emit EpochDistribution(
-            call_id,
+            meta.call_id,
             currentEpoch,
             distributed,
             to_distribute_team,
             to_distribute_treasury
         );
 
-        send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function withdrawTreasuryTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
+    function withdrawTreasuryTokens(uint128 amount, address receiver, Callback.CallMeta meta) external onlyOwner {
         require (amount <= treasuryTokens, Errors.BAD_INPUT);
 
         tvm.rawReserve(_reserve(), 0);
         treasuryTokens -= amount;
 
-        emit TreasuryWithdraw(call_id, receiver, amount);
+        emit TreasuryWithdraw(meta.call_id, receiver, amount);
         TvmCell empty;
         qubeBalance -= amount;
-        _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(amount, receiver, empty, meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function withdrawTeamTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
+    function withdrawTeamTokens(uint128 amount, address receiver, Callback.CallMeta meta) external onlyOwner {
         require (amount <= teamTokens, Errors.BAD_INPUT);
 
         tvm.rawReserve(_reserve(), 0);
         teamTokens -= amount;
 
-        emit TeamWithdraw(call_id, receiver, amount);
+        emit TeamWithdraw(meta.call_id, receiver, amount);
         TvmCell empty;
         qubeBalance -= amount;
-        _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(amount, receiver, empty, meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function withdrawPaymentTokens(uint128 amount, address receiver, uint32 call_id, address send_gas_to) external onlyOwner {
+    function withdrawPaymentTokens(uint128 amount, address receiver, Callback.CallMeta meta) external onlyOwner {
         require (amount <= whitelistPayments, Errors.BAD_INPUT);
 
         tvm.rawReserve(_reserve(), 0);
         whitelistPayments -= amount;
 
-        emit PaymentWithdraw(call_id, receiver, amount);
+        emit PaymentWithdraw(meta.call_id, receiver, amount);
         TvmCell empty;
         qubeBalance -= amount;
-        _transferQubes(amount, receiver, empty, send_gas_to, MsgFlag.ALL_NOT_RESERVED);
+        _transferQubes(amount, receiver, empty, meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED);
     }
 }

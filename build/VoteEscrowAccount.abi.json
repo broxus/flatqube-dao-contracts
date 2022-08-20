@@ -15,9 +15,7 @@
 			"inputs": [
 				{"name":"new_code","type":"cell"},
 				{"name":"new_version","type":"uint32"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -38,9 +36,7 @@
 			"inputs": [
 				{"name":"voteEpoch","type":"uint32"},
 				{"name":"votes","type":"map(address,uint128)"},
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -48,9 +44,7 @@
 		{
 			"name": "processWithdraw",
 			"inputs": [
-				{"name":"call_id","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]
@@ -62,8 +56,7 @@
 				{"name":"qube_amount","type":"uint128"},
 				{"name":"ve_amount","type":"uint128"},
 				{"name":"lock_time","type":"uint32"},
-				{"name":"nonce","type":"uint32"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]

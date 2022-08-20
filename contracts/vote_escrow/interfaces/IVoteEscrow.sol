@@ -2,11 +2,12 @@ pragma ever-solidity ^0.62.0;
 
 
 import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
+import "../../libraries/Callback.sol";
 
 
 interface IVoteEscrow is IAcceptTokensTransferCallback {
-    event NewOwner(address prev_owner, address new_owner);
-    event NewPendingOwner(address pending_owner);
+    event NewOwner(uint32 call_id, address prev_owner, address new_owner);
+    event NewPendingOwner(uint32 call_id, address pending_owner);
     event Deposit(uint32 call_id, address user, uint128 amount, uint128 ve_amount, uint32 lock_time, uint64 key);
     event DepositRevert(uint32 call_id, address user, uint128 amount);
     event GaugeWhitelist(uint32 call_id, address gauge);
@@ -69,8 +70,8 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     );
     event Pause(uint32 call_id, bool new_state);
     event Emergency(uint32 call_id, bool new_state);
-    event PlatformCodeInstall();
-    event VeAccountCodeUpdate(uint32 old_version, uint32 new_version);
+    event PlatformCodeInstall(uint32 call_id);
+    event VeAccountCodeUpdate(uint32 call_id, uint32 old_version, uint32 new_version);
     event VoteEscrowAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
 
     struct PendingDeposit {
@@ -78,9 +79,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         uint128 amount;
         uint128 ve_amount;
         uint32 lock_time;
-        address send_gas_to;
-        uint32 nonce;
-        uint32 call_id;
+        Callback.CallMeta meta;
     }
 
     enum DepositType { userDeposit, whitelist, adminDeposit }
@@ -88,17 +87,17 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     function getVeAverage(uint32 nonce) external;
     function finishDeposit(address user, uint64 deposit_key, uint32 deposit_nonce) external;
     function revertDeposit(address user, uint32 deposit_nonce) external;
-    function revertWithdraw(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
-    function finishWithdraw(address user, uint128 unlockedQubes, uint32 call_id, uint32 nonce, address send_gas_to) external;
+    function revertWithdraw(address user, Callback.CallMeta meta) external;
+    function finishWithdraw(address user, uint128 unlockedQubes, Callback.CallMeta meta) external;
     function burnVeQubes(address user, uint128 expiredVeQubes, uint64[] expiredDeposits) external;
-    function finishVote(address user, mapping (address => uint128) votes, uint32 call_id, uint32 nonce, address send_gas_to) external;
-    function revertVote(address user, uint32 call_id, uint32 nonce, address send_gas_to) external;
+    function finishVote(address user, mapping (address => uint128) votes, Callback.CallMeta meta) external;
+    function revertVote(address user, Callback.CallMeta meta) external;
     function receiveTokenWalletAddress(address wallet) external;
     function getVoteEscrowAccountAddress(address user) external view responsible returns (address);
-    function onVoteEscrowAccountDeploy(address user, address send_gas_to) external;
+    function onVoteEscrowAccountDeploy(address user, Callback.CallMeta meta) external;
     function deployVoteEscrowAccount(address user) external view returns (address);
-    function installPlatformCode(TvmCell code, address send_gas_to) external;
-    function installOrUpdateVeAccountCode(TvmCell code, address send_gas_to) external;
+    function installPlatformCode(TvmCell code, Callback.CallMeta meta) external;
+    function installOrUpdateVeAccountCode(TvmCell code, Callback.CallMeta meta) external;
     function setVotingParams(
         uint32 epoch_time,
         uint32 time_before_voting,
@@ -107,44 +106,38 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         uint32 gauge_max_votes_ratio,
         uint8 gauge_max_downtime,
         uint32 max_gauges_per_vote,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
-    function setDistributionScheme(uint32[] scheme, uint32 call_id, address send_gas_to) external;
-    function setDistribution(uint128[] distribution, uint32 call_id, address send_gas_to) external;
-    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, uint32 call_id, address send_gas_to) external;
-    function setWhitelistPrice(uint128 whitelist_price, uint32 call_id, address send_gas_to) external;
-    function initialize(uint32 start_time, address send_gas_to) external;
-    function transferOwnership(address new_owner, address send_gas_to) external;
+    function setDistributionScheme(uint32[] scheme, Callback.CallMeta meta) external;
+    function setDistribution(uint128[] distribution, Callback.CallMeta meta) external;
+    function setQubeLockTimeLimits(uint32 new_min, uint32 new_max, Callback.CallMeta meta) external;
+    function setWhitelistPrice(uint128 whitelist_price, Callback.CallMeta meta) external;
+    function initialize(uint32 start_time, Callback.CallMeta meta) external;
+    function transferOwnership(address new_owner, Callback.CallMeta meta) external;
     function onVeAccountUpgrade(
         address user,
         uint32 old_version,
         uint32 new_version,
-        uint32 call_id,
-        uint32 nonce,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external view;
     function countVotesStep(
         address start_addr,
         uint128 exceeded_votes,
         uint128 valid_votes,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
     function normalizeVotesStep(
         address start_addr,
         uint128 treasury_votes,
         uint128 exceeded_votes,
         uint128 valid_votes,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
     function distributeEpochQubesStep(
         address start_addr,
         uint128 bonus_treasury_votes,
         mapping (address => uint128) distributed,
-        uint32 call_id,
-        address send_gas_to
+        Callback.CallMeta meta
     ) external;
 
     // DAO
