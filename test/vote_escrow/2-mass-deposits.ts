@@ -1,26 +1,22 @@
-import {Contract} from "locklift";
+import {Account} from "everscale-standalone-client/nodejs";
 
-const logger = require('mocha-logger');
-const { expect } = require('chai');
-var should = require('chai').should();
-
-const BigNumber = require('bignumber.js');
-
-import {AccountType, deployUser, setupTokenRoot, setupVoteEscrow, sleep, runTargets} from "../utils/common";
-import {VoteEscrowAccountAbi} from "../../build/factorySource";
+import {deployUser, runTargets, setupTokenRoot, setupVoteEscrow} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
 import {toNano} from "locklift/build/utils";
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
-const {Dimensions} = require("locklift");
+
+const logger = require('mocha-logger');
+const { expect } = require('chai');
+var should = require('chai').should();
 
 
 describe("Vote Escrow mass deposits scenario", async function() {
     this.timeout(3000000);
 
-    let user: AccountType;
-    let owner: AccountType;
+    let user: Account;
+    let owner: Account;
 
     let current_epoch = 1;
     const count = 250;

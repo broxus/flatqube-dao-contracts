@@ -15,11 +15,11 @@ interface IGauge {
     event WithdrawUnclaimed(uint32 call_id, address to, uint128[] extra_amounts);
 
     event RewardDeposit(uint32 call_id, uint256 reward_id, uint128 amount);
-    event ExtraFarmEndSet(uint32 call_id, uint256[] ids, uint32[] farm_end_times);
+    event ExtraFarmEndSet(uint32 call_id, uint256 id, uint32 farm_end_time);
     event GaugeAccountCodeUpdated(uint32 call_id, uint32 prev_version, uint32 new_version);
     event GaugeAccountCodeUpdateRejected(uint32 call_id);
     event GaugeUpdated(uint32 prev_version, uint32 new_version);
-    event RewardRoundAdded(uint32 call_id, uint256 ids, RewardRound new_reward_round, RewardRound[] updated_reward_rounds);
+    event RewardRoundAdded(uint32 call_id, uint256 id, RewardRound new_reward_round);
     event QubeRewardRoundAdded(RewardRound new_qube_round, RewardRound[] updated_qube_rounds);
 
     event GaugeAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);

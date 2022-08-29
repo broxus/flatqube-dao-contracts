@@ -55,13 +55,16 @@ abstract contract GaugeBase is GaugeRewards {
                 boosted_amount,
                 lock_time,
                 claim,
-                syncData(),
+                _syncData(),
                 Callback.CallMeta(call_id, nonce, remainingGasTo)
             );
         } else if (msg.sender == qubeTokenData.tokenWallet && sender == voteEscrow) {
             TvmSlice slice = payload.toSlice();
             uint32 round_start = slice.decode(uint32);
             uint32 round_len = slice.decode(uint32);
+
+            qubeTokenData.tokenBalance += amount;
+
             _addQubeRewardRound(amount, round_start, round_len);
             remainingGasTo.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
         } else {
@@ -145,7 +148,7 @@ abstract contract GaugeBase is GaugeRewards {
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
         IGaugeAccount(gaugeAccountAddr).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            amount, claim, syncData(), meta
+            amount, claim, _syncData(), meta
         );
     }
 
@@ -164,7 +167,7 @@ abstract contract GaugeBase is GaugeRewards {
 
         address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
         // we cant check if user has any balance here, delegate it to GaugeAccount
-        IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(syncData(), meta);
+        IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_syncData(), meta);
     }
 
     function finishWithdraw(
@@ -312,7 +315,7 @@ abstract contract GaugeBase is GaugeRewards {
                 deposit.boosted_amount,
                 deposit.lock_time,
                 deposit.claim,
-                syncData(),
+                _syncData(),
                 deposit.meta
             );
         }

@@ -57,7 +57,7 @@ abstract contract GaugeRewards is GaugeDeploy {
             _cur_rounds.push(new_rounds[i]);
 
             extraRewardRounds[ids[i]] = _cur_rounds;
-            emit RewardRoundAdded(meta.call_id, ids[i], new_rounds[i], _cur_rounds);
+            emit RewardRoundAdded(meta.call_id, ids[i], new_rounds[i]);
         }
 
         tvm.rawReserve(_reserve(), 0);
@@ -82,30 +82,31 @@ abstract contract GaugeRewards is GaugeDeploy {
 
             extraRewardEnded[ids[i]] = true;
             extraRewardRounds[ids[i]] = _cur_rounds;
+
+            emit ExtraFarmEndSet(meta.call_id, ids[i], farm_end_times[i]);
         }
 
         tvm.rawReserve(_reserve(), 0);
 
-        emit ExtraFarmEndSet(meta.call_id, ids, farm_end_times);
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
     function _getUpdatedRewardRounds(
-        RewardRound[] rewardRounds, uint256 start_sync_idx, uint128 working_supply
+        RewardRound[] rewardRounds, uint256 start_sync_idx, uint128 workingSupply
     ) internal view returns (RewardRound[], uint256) {
         if (rewardRounds.length == 0) {
             return (rewardRounds, start_sync_idx);
         }
         uint32 _lastRewardTime = lastRewardTime;
-        uint32 first_round_start = rewardRounds[0].startTime;
+        uint32 firstRoundStart = rewardRounds[0].startTime;
 
         // reward rounds still not started/update already occurred this block/no deposit balance => nothing to calculate
-        if (now <= first_round_start || now == _lastRewardTime || working_supply == 0) {
+        if (now <= firstRoundStart || now == _lastRewardTime || workingSupply == 0) {
             return (rewardRounds, start_sync_idx);
         }
 
         // for case when last update was before 1st round start
-        _lastRewardTime = math.max(_lastRewardTime, first_round_start);
+        _lastRewardTime = math.max(_lastRewardTime, firstRoundStart);
 
         uint256 _new_sync_idx;
         for (uint j = start_sync_idx; j < rewardRounds.length; j++) {
@@ -113,6 +114,7 @@ abstract contract GaugeRewards is GaugeDeploy {
             uint32 _roundEndTime = round.endTime > 0 ? round.endTime : now;
             _roundEndTime = math.min(_roundEndTime, now);
             _lastRewardTime = math.min(_lastRewardTime, _roundEndTime);
+            _lastRewardTime = math.max(_lastRewardTime, round.startTime);
 
             // get multiplier bounded by this reward round
             uint32 multiplier = _roundEndTime - _lastRewardTime;
@@ -121,7 +123,7 @@ abstract contract GaugeRewards is GaugeDeploy {
             if (round.accRewardPerShare == 0 && j > 0) {
                 round.accRewardPerShare = rewardRounds[j - 1].accRewardPerShare;
             }
-            round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, working_supply);
+            round.accRewardPerShare += math.muldiv(new_reward, SCALING_FACTOR, workingSupply);
             rewardRounds[j] = round;
             // no need for further steps
             _new_sync_idx = j;
@@ -203,5 +205,18 @@ abstract contract GaugeRewards is GaugeDeploy {
         ) = calculateRewardData();
 
         updateSupplyAverage();
+    }
+
+    function calcSyncData() external view returns (GaugeSyncData) {
+        (,,uint128 _supplyAverage, uint32 _supplyAveragePeriod,) = calculateSupplyAverage();
+        (uint32 _lastRewardTime, RewardRound[][] _extraRewardRounds,, RewardRound[] _qubeRewardRounds,) = calculateRewardData();
+        return GaugeSyncData(
+            depositTokenData.tokenBalance,
+            _supplyAverage,
+            _supplyAveragePeriod,
+            _extraRewardRounds,
+            _qubeRewardRounds,
+            _lastRewardTime
+        );
     }
 }

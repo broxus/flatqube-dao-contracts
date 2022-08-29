@@ -1,22 +1,24 @@
 import {expect} from "chai";
-import {AccountType, deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime} from "../utils/common";
+import {deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime,sendAllEvers} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
+import {Account} from "everscale-standalone-client/nodejs";
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
+import {Address} from "locklift";
 
 var should = require('chai').should();
 const {getRandomNonce} = locklift.utils;
 
 
 describe("Main Vote Escrow scenarios", async function () {
-    let user: AccountType;
-    let owner: AccountType;
+    let user: Account;
+    let owner: Account;
 
     let current_epoch = 1;
 
     // just simple wallets here
-    let gauges: AccountType[] = [];
+    let gauges: Account[] = [];
     let gauge_wallets = {};
 
     let vote_escrow: VoteEscrow;
@@ -39,7 +41,7 @@ describe("Main Vote Escrow scenarios", async function () {
         });
 
         it('Deploy token', async function () {
-            qube_root = await setupTokenRoot('QUBE', 'QUBE', owner);
+            qube_root = await setupTokenRoot('QUBE_test', 'QUBE_test', owner);
         });
 
         it('Deploy token wallets + mint', async function () {
@@ -69,6 +71,7 @@ describe("Main Vote Escrow scenarios", async function () {
         describe('Making deposits & whitelisting gauges & send distribution QUBEs', async function () {
             it('Making 1st deposit', async function () {
                 const lock_time = 10000;
+
                 const tx = vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, false);
                 await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
 
@@ -575,6 +578,18 @@ describe("Main Vote Escrow scenarios", async function () {
 
                 expect(new_supply).to.be.eq(expected_supply.toString());
             });
-        })
+        });
+
+        describe('Cleanup', async function() {
+           it('Return gas to giver', async function() {
+               const giver = new Address(locklift.context.network.config.giver.address);
+
+               await sendAllEvers(user, giver);
+               await sendAllEvers(owner, giver);
+               for (const gauge of gauges) {
+                   await sendAllEvers(gauge, giver);
+               }
+           });
+        });
     });
 });

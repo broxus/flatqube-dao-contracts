@@ -43,6 +43,30 @@
 			]
 		},
 		{
+			"name": "deployTestVoteEscrow",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"qube","type":"address"},
+				{"name":"dao","type":"address"},
+				{"name":"start_offset","type":"uint32"},
+				{"name":"min_lock","type":"uint32"},
+				{"name":"max_lock","type":"uint32"},
+				{"name":"distribution_scheme","type":"uint32[]"},
+				{"name":"distribution","type":"uint128[]"},
+				{"name":"epoch_time","type":"uint32"},
+				{"name":"time_before_voting","type":"uint32"},
+				{"name":"voting_time","type":"uint32"},
+				{"name":"gauge_min_votes_ratio","type":"uint32"},
+				{"name":"gauge_max_votes_ratio","type":"uint32"},
+				{"name":"gauge_max_downtime","type":"uint8"},
+				{"name":"max_gauges_per_vote","type":"uint32"},
+				{"name":"whitelist_price","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"_vote_escrow","type":"address"}
+			]
+		},
+		{
 			"name": "transferOwnership",
 			"inputs": [
 				{"name":"newOwner","type":"uint256"}

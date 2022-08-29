@@ -10,10 +10,10 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 19
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 20
 GETGLOB 2
 THROWIFNOT 1003
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 20
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 21
 GETGLOB 2
 GETGLOB 5
 DUP
@@ -25,9 +25,9 @@ PUSHCONT {
 IF
 EQUAL
 THROWIFNOT 1003
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 21
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 22
 ACCEPT
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 23
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 24
 GETGLOB 5
 DUP
 ISNULL
@@ -54,7 +54,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 26
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 27
 LDREF
 ENDS
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
@@ -80,9 +80,9 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 27
-ACCEPT
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 28
+ACCEPT
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 29
 SETGLOB 14
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
 
@@ -95,7 +95,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 31
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 32
 OVER
 PUSHCONT {
 	LDREF
@@ -185,24 +185,24 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 49
-ACCEPT
 .loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 50
+ACCEPT
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 51
 GETGLOB 14
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 51
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 52
 GETGLOB 12
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 52
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 53
 GETGLOB 13
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 54
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 55
 GETGLOB 2
 NEWC
 STU 256
@@ -228,7 +228,7 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 63
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 64
 BLKSWAP 2, 14
 SWAP
 MYADDR
@@ -292,11 +292,11 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 70
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 71
 PUSHINT 0
 PUSH2 S0, S1
 TRIPLE
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 71
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 72
 DUP
 GETGLOB 12
 PUSH S3
@@ -319,7 +319,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 72
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 73
 DUP
 GETGLOB 13
 PUSH S3
@@ -342,7 +342,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 73
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 74
 DUP
 BLKSWAP 7, 4
 REVERSE 7, 0
@@ -372,7 +372,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 77
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 78
 DUP
 ROLL 5
 PUSH S3
@@ -399,7 +399,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 78
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 79
 DUP
 ROLL 4
 PUSH S3
@@ -426,7 +426,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 79
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 80
 DUP
 BLKSWAP 2, 4
 XCPU S1, S4
@@ -450,7 +450,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 80
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 81
 DUP
 ROLL 3
 PUSH S3
@@ -473,7 +473,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 81
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 82
 DUP
 ROLL 3
 PUSH S3
@@ -496,7 +496,444 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 82
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 83
+ROT
+PUSH S2
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x4aa7ce0d
+STSLICE
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+SWAP
+NEWC
+STSLICE
+STBREFR
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+
+.macro deployTestVoteEscrow
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 87
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDU 32
+LDU 32
+LDU 32
+LDU 32
+LDDICT
+ROTREV
+PAIR
+SWAP
+LDU 32
+LDDICT
+ROTREV
+PAIR
+SWAP
+LDU 32
+LDU 32
+LDU 32
+LDU 32
+LDU 32
+LDU 8
+LDU 32
+LDREF
+ENDS
+CTOS
+LDU 128
+ENDS
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+CALLREF {
+	CALL $deployTestVoteEscrow_35be1908_internal_macro$
+}
+OVER
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 1
+	STUR 98
+	SWAP
+	NEWC
+	STSLICECONST xff8041be
+	STSLICE
+	STBREFR
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	DROP
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro deployTestVoteEscrow_35be1908_internal_macro
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
+GETGLOB 5
+DUP
+ISNULL
+PUSHCONT {
+	DROP
+	PUSHINT 0
+}
+IF
+GETGLOB 11
+EQUAL
+THROWIFNOT 1101
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 105
+ACCEPT
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 106
+GETGLOB 14
+CTOS
+SEMPTY
+THROWIF 1000
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 107
+GETGLOB 12
+CTOS
+SEMPTY
+THROWIF 1000
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 108
+GETGLOB 13
+CTOS
+SEMPTY
+THROWIF 1000
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 110
+GETGLOB 2
+NEWC
+STU 256
+PUSHINT 0
+NEWDICT
+PUSHINT 64
+DICTUSETB
+GETGLOB 10
+UFITS 32
+NEWC
+STU 32
+PUSHINT 1
+ROT
+PUSHINT 64
+DICTUSETB
+NEWC
+STDICT
+ENDC
+GETGLOB 14
+NEWC
+STSLICECONST x2_
+STOPTREF
+STOPTREF
+STZERO
+ENDC
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 119
+BLKSWAP 2, 14
+SWAP
+MYADDR
+ROLL 3
+DUP
+HASHCU
+MYADDR
+PARSEMSGADDR
+THIRD
+NEWC
+STSLICECONST x9_
+STI 8
+STU 256
+ENDC
+CTOS
+ROLLREV 4
+PUSH S4
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2949852426645541256083542794369173188247555
+STUR 143
+OVER
+CALLREF {
+	CTOS
+	LDI 1
+	SWAP
+	PUSHCONT {
+		LDI 5
+		NIP
+	}
+	IF
+	LDI 1
+	SWAP
+	PUSHCONT {
+		LDI 2
+		NIP
+	}
+	IF
+	LDOPTREF
+	LDOPTREF
+	LDDICT
+	ENDS
+	BLKDROP 3
+}
+STREF
+STSLICECONST 1
+ROLLREV 3
+NEWC
+STSLICECONST x6cc0a239
+STSLICE
+ROTREV
+NEWC
+STSLICE
+SWAP
+NEWC
+STSLICE
+STBREFR
+STBREFR
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 126
+PUSHINT 0
+PUSH2 S0, S1
+TRIPLE
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 127
+DUP
+GETGLOB 12
+PUSH S3
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x727d5ff3
+STREF
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 128
+DUP
+GETGLOB 13
+PUSH S3
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x643d350b
+STREF
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 129
+DUP
+BLKSWAP 7, 4
+REVERSE 7, 0
+PUSH S9
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROLLREV 8
+NEWC
+STSLICECONST x13b71764
+STU 32
+STU 32
+STU 32
+STU 32
+STU 32
+STU 8
+STU 32
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 133
+DUP
+ROLL 5
+PUSH S3
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x4bc36e7f
+SWAP
+UNPAIR
+XCHG S2
+STU 32
+STDICT
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 134
+DUP
+ROLL 4
+PUSH S3
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x46ab1ecf
+SWAP
+UNPAIR
+XCHG S2
+STU 32
+STDICT
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 135
+DUP
+BLKSWAP 2, 4
+XCPU S1, S4
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROLLREV 3
+NEWC
+STSLICECONST x75d8f5e5
+STU 32
+STU 32
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 136
+DUP
+ROLL 3
+PUSH S3
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x631ffe21
+STU 128
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 137
+DUP
+ROLL 3
+PUSH S3
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 2868722788230934574387753789225109188247553
+STUR 143
+ROTREV
+NEWC
+STSLICECONST x7abac4d8
+STU 32
+SWAP
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
+STSLICE
+STBREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 138
 ROT
 PUSH S2
 NEWC
@@ -870,7 +1307,7 @@ IFJMPREF {
 	}
 }
 DUP
-PUSHINT 1879193866
+PUSHINT 2139111870
 LEQ
 IFJMPREF {
 	DUP
@@ -884,6 +1321,12 @@ IFJMPREF {
 	EQUAL
 	IFJMPREF {
 		CALL $deployVoteEscrow$
+	}
+	DUP
+	PUSHINT 2139111870
+	EQUAL
+	IFJMPREF {
+		CALL $deployTestVoteEscrow$
 	}
 }
 

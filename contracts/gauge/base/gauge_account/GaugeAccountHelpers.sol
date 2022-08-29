@@ -163,9 +163,7 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         return _series_to < _series_from ? 0 : ((_series_to - _series_from) / time_delta);
     }
 
-    function calculateIntervalBalances(
-        Averages _curAverageState
-    ) public view returns (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) {
+    function calculateIntervalBalances(Averages _curAverageState) public view returns (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) {
         // calculate new veBoostedBalance
         uint32 time_delta = _curAverageState.lockBoostedBalanceAveragePeriod - lastAverageState.lockBoostedBalanceAveragePeriod;
         // not time delta, calculate using current averages
@@ -202,6 +200,7 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
 
             uint128 avg_tboosted_bal = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
             // make sure average balance is lower than balance that we used for reward reserving in gauge
+//            console.log(format('Balance {}, lock_bonus {}, ve_bonus {}', balance, lock_bonus, ve_bonus));
             intervalTBoostedBalance = math.min(avg_tboosted_bal, totalBoostedBalance);
             intervalLockBalance = lock_boosted_bal_avg;
         }
@@ -248,7 +247,6 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
                             up_to = pool_last_reward_time;
                         }
 
-                        // qube
                         (
                             uint128 updated_locked,
                             uint128 new_unlocked,
@@ -265,6 +263,8 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
                             vesting_data.vestingRatio,
                             vesting_data.vestingTime
                         );
+
+//                        console.log(format('i - {}, j - {}, Updated locked {}, new unlocked {}, cur {}, new {}', i, j, updated_locked, new_unlocked, reward_data.accRewardPerShare, round.accRewardPerShare));
 
                         reward_data.lockedReward = updated_locked;
                         reward_data.unlockedReward += new_unlocked;

@@ -1,18 +1,14 @@
 import {Token} from "./wrappers/token";
 import {VoteEscrow} from "./wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "./wrappers/ve_account";
-import {Account} from "locklift/build/factory";
-import {FactorySource} from "../../build/factorySource";
-import {Address, Contract, zeroAddress} from "locklift";
-
+import {FactorySource, GaugeFactoryAbi} from "../../build/factorySource";
+import {Address, Contract, zeroAddress, getRandomNonce, toNano} from "locklift";
+import {Gauge} from "./wrappers/gauge";
+import {WalletTypes} from "locklift/build/types";
+import {Account} from "everscale-standalone-client/nodejs";
 const logger = require("mocha-logger");
 const {expect} = require("chai");
 
-const {getRandomNonce} = require("locklift/build/utils");
-const {toNano} = locklift.utils;
-
-
-export declare type AccountType = Account<FactorySource["TestWallet"]>;
 
 
 export async function sleep(ms = 1000) {
@@ -30,9 +26,22 @@ export async function tryIncreaseTime(seconds: number) {
 }
 
 
+export const sendAllEvers = async function(from: Account, to: Address) {
+    const walletContract = await locklift.factory.getDeployedContract("TestWallet", from.address);
+    return await locklift.tracing.trace(walletContract.methods.sendTransaction({
+        dest: to,
+        value: 0,
+        bounce: false,
+        flags: 128,
+        payload: '',
+        // @ts-ignore
+    }).sendExternal({publicKey: from.publicKey}));
+}
+
+
 // allow sending N internal messages via batch method
 export const runTargets = async function (
-    wallet: AccountType,
+    wallet: Account,
     targets: Contract<any>[],
     methods: string[],
     params_list: Object[],
@@ -45,12 +54,15 @@ export const runTargets = async function (
         return await target.methods[method](params).encodeInternal();
     }));
 
-    return await locklift.tracing.trace(wallet.accountContract.methods.sendTransactions({
+    const walletContract = await locklift.factory.getDeployedContract("TestWallet", wallet.address);
+
+    return await locklift.tracing.trace(walletContract.methods.sendTransactions({
         dest: targets.map((contract) => contract.address),
         value: values,
         bounce: new Array(targets.length).fill(true),
         flags: new Array(targets.length).fill(0),
         payload: bodies,
+    // @ts-ignore
     }).sendExternal({publicKey: wallet.publicKey}));
 }
 
@@ -92,44 +104,39 @@ export const deployUsers = async function (count: number, initial_balance: numbe
 
     // await sleep(1000);
     const {wallets} = await factory.methods.wallets({}).call();
-    const wallets_map: { [id: string]: Address } = wallets.reduce((map, elem) => {
-        const pubkey = elem[0];
-        // @ts-ignore
-        map[signers_map[pubkey].publicKey] = elem[1];
-        return map;
-    }, {});
-
-    let accountsFactory = locklift.factory.getAccountsFactory('TestWallet');
-    return await Promise.all(Object.entries(wallets_map).map(async function ([pubkey, addr]) {
-        return accountsFactory.getAccount(addr, pubkey);
+    return await Promise.all(wallets.map(async (wallet) => {
+        return await locklift.factory.accounts.addExistingAccount({
+            publicKey: wallet[0],
+            type: WalletTypes.Custom,
+            address: wallet[1],
+        });
     }));
 }
 
 
-export const deployUser = async function (initial_balance = 100) {
+export const deployUser = async function (initial_balance = 100): Promise<Account> {
     const signer = await locklift.keystore.getSigner('0');
-    let accountsFactory = locklift.factory.getAccountsFactory('TestWallet');
 
-    const {account: _user, tx} = await locklift.tracing.trace(accountsFactory.deployNewAccount({
+    const {account: _user, tx} = await locklift.factory.accounts.addNewAccount({
+        type: WalletTypes.Custom,
+        contract: "TestWallet",
+        //Value which will send to the new account from a giver
+        value: toNano(initial_balance),
         publicKey: signer?.publicKey as string,
-        value: locklift.utils.toNano(initial_balance).toString(),
         initParams: {
-            _randomNonce: locklift.utils.getRandomNonce(),
+            _randomNonce: getRandomNonce()
         },
         constructorParams: {
             owner_pubkey: `0x${signer?.publicKey}`
-        },
-    }));
-
-    const userBalance = await locklift.provider.getBalance(_user.address);
-    expect(Number(userBalance)).to.be.above(0, 'Bad user balance');
+        }
+    });
 
     logger.log(`User address: ${_user.address.toString()}`);
     return _user;
 }
 
 
-export const setupTokenRoot = async function (token_name: string, token_symbol: string, owner: AccountType) {
+export const setupTokenRoot = async function (token_name: string, token_symbol: string, owner: Account) {
     const signer = await locklift.keystore.getSigner('0');
     const TokenPlatform = await locklift.factory.getContractArtifacts('TokenWalletPlatform');
 
@@ -172,7 +179,7 @@ export const setupGaugeFactory = async function({
     _voteEscrow,
     _qubeVestingRatio=0,
     _qubeVestingPeriod=0
-}: {_owner: AccountType, _qube: Token, _voteEscrow: VoteEscrow, _qubeVestingRatio: number, _qubeVestingPeriod: number}
+}: {_owner: Account, _qube: Token, _voteEscrow: VoteEscrow, _qubeVestingRatio: number, _qubeVestingPeriod: number}
 ): Promise<Contract<FactorySource["GaugeFactory"]>> {
     const Gauge = await locklift.factory.getContractArtifacts('Gauge');
     const GaugeAccount = await locklift.factory.getContractArtifacts('GaugeAccount');
@@ -195,26 +202,66 @@ export const setupGaugeFactory = async function({
         },
         value: locklift.utils.toNano(5),
     });
-    logger.log('Deployed gauge factory');
+    logger.log(`Deployed gauge factory: ${factory.address}`);
 
-    await locklift.tracing.trace(_owner.runTarget(
-        {contract: factory},
-        (factory) => factory.methods.installNewGaugeCode({
-            gauge_code: Gauge.code, meta: {call_id: 0, nonce: 0, send_gas_to: _owner.address}
-        })
-    ));
+    await locklift.tracing.trace(factory.methods.installNewGaugeCode({
+        gauge_code: Gauge.code, meta: {call_id: 0, nonce: 0, send_gas_to: _owner.address}
+    }).send({
+        amount: toNano(2),
+        from: _owner.address
+    }));
     logger.log('Installed gauge code');
 
-    await locklift.tracing.trace(_owner.runTarget(
-        {
-            contract: factory
-        },
-        (factory) => factory.methods.installNewGaugeAccountCode({
-            gauge_account_code: GaugeAccount.code, meta: {call_id: 0, nonce: 0, send_gas_to: _owner.address}
-        })
-    ));
+    await locklift.tracing.trace(factory.methods.installNewGaugeAccountCode({
+        gauge_account_code: GaugeAccount.code, meta: {call_id: 0, nonce: 0, send_gas_to: _owner.address}
+    }).send({
+        amount: toNano(2),
+        from: _owner.address
+    }));
     logger.log('Installed gauge account code');
     return factory;
+}
+
+
+export const setupGauge = async function ({
+    owner,
+    gauge_factory,
+    deposit_root,
+    reward_roots=[],
+    vesting_periods=[],
+    vesting_ratios=[],
+    withdraw_lock_period=0,
+    call_id=0
+}: {
+    owner: Account,
+    gauge_factory: Contract<GaugeFactoryAbi>,
+    deposit_root: Token,
+    reward_roots: Token[],
+    vesting_periods: number[],
+    vesting_ratios: number[],
+    withdraw_lock_period: number,
+    call_id: number
+}): Promise<Gauge> {
+    // @ts-ignore
+    await locklift.tracing.trace(gauge_factory.methods.deployGauge({
+        gauge_owner: owner.address,
+        depositTokenRoot: deposit_root.address,
+        maxBoost: 2000,
+        maxLockTime: 100,
+        rewardTokenRoots: reward_roots.map(i => i.address),
+        vestingPeriods: vesting_periods,
+        vestingRatios: vesting_ratios,
+        withdrawAllLockPeriod: withdraw_lock_period,
+        call_id: call_id
+    }).send({
+        // @ts-ignore
+        amount: toNano(10),
+        from: owner.address
+    }));
+
+    const event = (await gauge_factory.getPastEvents({filter: (event) => event.event === 'NewGauge'})).events[0].data;
+    // @ts-ignore
+    return await Gauge.from_addr(event.gauge as Address, owner);
 }
 
 
@@ -238,7 +285,7 @@ export const setupVoteEscrow = async function ({
     max_gauges_per_vote = 15,
     whitelist_price = 1000000
 }) {
-    const VoteEscrowContract = await locklift.factory.getContractArtifacts('VoteEscrow');
+    const VoteEscrowContract = await locklift.factory.getContractArtifacts('TestVoteEscrow');
     const Platform = await locklift.factory.getContractArtifacts('Platform');
     const VoteEscrowAccount = await locklift.factory.getContractArtifacts('VoteEscrowAccount');
 
@@ -255,11 +302,11 @@ export const setupVoteEscrow = async function ({
         value: locklift.utils.toNano(6.5),
     });
 
-    logger.log(`Deployed Vote Escrow deployer`);
+    logger.log(`Deployed Test Vote Escrow deployer`);
     await locklift.tracing.trace(deployer.methods.installVoteEscrowCode({code: VoteEscrowContract.code}).sendExternal({publicKey: signer?.publicKey as string}));
 
-    logger.log(`Set Vote Escrow code`);
-    const tx2 = await locklift.tracing.trace(deployer.methods.deployVoteEscrow({
+    logger.log(`Set Test Vote Escrow code`);
+    const tx2 = await locklift.tracing.trace(deployer.methods.deployTestVoteEscrow({
         owner: owner.address,
         qube: qube.address,
         dao,

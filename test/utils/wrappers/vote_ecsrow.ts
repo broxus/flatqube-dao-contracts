@@ -1,34 +1,34 @@
+import {use} from "chai";
+
 const {
     toNano
 } = locklift.utils;
 const {expect} = require('chai');
+import {Account} from "everscale-standalone-client/nodejs";
 
 const Bignumber = require("bignumber.js");
 import {FactorySource} from "../../../build/factorySource";
 import {Address, Contract} from "locklift";
 import {TokenWallet} from "./token_wallet";
-import {Account} from "locklift/build/factory";
 import {VoteEscrowAccount} from "./ve_account";
 
 
-declare type AccountType = Account<FactorySource["TestWallet"]>;
-
 
 export class VoteEscrow {
-    public contract: Contract<FactorySource["VoteEscrow"]>;
-    public _owner: AccountType;
+    public contract: Contract<FactorySource["TestVoteEscrow"]>;
+    public _owner: Account;
     public address: Address;
     public token_wallet: TokenWallet | null;
 
-    constructor(ve_contract: Contract<FactorySource["VoteEscrow"]>, ve_owner: AccountType) {
+    constructor(ve_contract: Contract<FactorySource["TestVoteEscrow"]>, ve_owner: Account) {
         this.contract = ve_contract;
         this._owner = ve_owner;
         this.address = this.contract.address;
         this.token_wallet = null;
     }
 
-    static async from_addr(addr: Address, owner: AccountType) {
-        const ve = await locklift.factory.getDeployedContract('VoteEscrow', addr);
+    static async from_addr(addr: Address, owner: Account) {
+        const ve = await locklift.factory.getDeployedContract('TestVoteEscrow', addr);
         return new VoteEscrow(ve, owner);
     }
 
@@ -52,6 +52,15 @@ export class VoteEscrow {
 
     async getCurrentEpochDetails() {
         return await this.contract.methods.getCurrentEpochDetails().call();
+    }
+
+    async sendQubesToGauge(gauge: Address, amount: number, round_len: number, round_start: number) {
+        return await this.contract.methods.sendQubesToGauge({
+            gauge: gauge, qube_amount: amount, round_len: round_len, round_start: round_start
+        }).send({
+            amount: toNano(1),
+            from: this._owner.address
+        });
     }
 
     async checkQubeBalance(expected_balance: number) {
@@ -122,169 +131,58 @@ export class VoteEscrow {
         }).call()).ve_amount;
     }
 
-    async acceptOwnership(owner: AccountType) {
-        return await owner.runTarget(
-            {
-                contract: this.contract,
-                value: locklift.utils.toNano(5),
-            },
-            (ve) => ve.methods.acceptOwnership({meta: {call_id: 0, nonce: 0, send_gas_to: owner.address}})
-        );
+    async acceptOwnership(owner: Account) {
+        return this.contract.methods.acceptOwnership({meta: {call_id: 0, nonce: 0, send_gas_to: owner.address}}).send({
+            amount: toNano(5),
+            from: owner.address
+        });
     }
 
     async installOrUpdateVeAccountCode(code: string) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.installOrUpdateVeAccountCode(
-                {code: code, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}
-            )
-        );
+        return await this.contract.methods.installPlatformCode(
+            {code: code, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}
+        ).send({
+            from: this._owner.address,
+            amount: toNano(5)
+        });
     }
 
     async startVoting(call_id = 0) {
-        return await locklift.tracing.trace(this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.startVoting({
-                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
-            })
-        ));
+        return await locklift.tracing.trace(this.contract.methods.startVoting({
+            meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
+        }).send({
+            amount: toNano(5),
+            from: this._owner.address
+        }));
     }
 
     async endVoting(call_id = 0) {
         let gas = new Bignumber((await this.contract.methods.calculateGasForEndVoting({}).call()).min_gas);
         gas = gas.plus(new Bignumber(10 ** 9)).toFixed(0)
 
-        return await locklift.tracing.trace(this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: gas
-            },
-            (ve) => ve.methods.endVoting({
-                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
-            })
-        ));
+        return await locklift.tracing.trace(this.contract.methods.endVoting({
+            meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
+        }).send({
+            amount: gas,
+            from: this._owner.address
+        }));
     }
 
-    async voteEpoch(voter: AccountType, votes: any, call_id = 0) {
-        return await locklift.tracing.trace(voter.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.voteEpoch({
-                votes: votes,
-                meta: {call_id: call_id, nonce: 0, send_gas_to: voter.address}
-            })
-        ));
-    }
-
-    // farming, treasury, team
-    async setDistributionScheme(scheme: any, call_id = 0) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.setDistributionScheme({
-                _new_scheme: scheme, meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
-    }
-
-    async setDistribution(distribution: any, call_id = 0) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.setDistribution({
-                _new_distribution: distribution, meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
-    }
-
-    async setVotingParams(
-        epoch_time: number,
-        time_before_voting: number,
-        voting_time: number,
-        gauge_min_votes_ratio: number,
-        gauge_max_votes_ratio: number,
-        gauge_max_downtime: number,
-        max_gauges_per_vote: number,
-        call_id = 0
-    ) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.setVotingParams({
-                _epoch_time: epoch_time,
-                _time_before_voting: time_before_voting,
-                _voting_time: voting_time,
-                _gauge_min_votes_ratio: gauge_min_votes_ratio,
-                _gauge_max_votes_ratio: gauge_max_votes_ratio,
-                _gauge_max_downtime: gauge_max_downtime,
-                _max_gauges_per_vote: max_gauges_per_vote,
-                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
-    }
-
-    async setWhitelistPrice(new_price: number, call_id = 0) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.setWhitelistPrice({
-                new_price: new_price,
-                meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
-    }
-
-    async setQubeLockTimeLimits(new_min: number, new_max: number) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.setQubeLockTimeLimits({
-                new_min: new_min,
-                new_max: new_max,
-                meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
-    }
-
-    async initialize(start_offset: number) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.initialize({
-                start_offset: start_offset,
-                meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
+    async voteEpoch(voter: Account, votes: any, call_id = 0) {
+        return await locklift.tracing.trace(this.contract.methods.voteEpoch({
+            votes: votes,
+            meta: {call_id: call_id, nonce: 0, send_gas_to: voter.address}
+        }).send({
+            amount: toNano(5),
+            from: voter.address
+        }));
     }
 
     async deployVeAccount(user: Address) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.deployVoteEscrowAccount({user: user})
-        );
+        return this.contract.methods.deployVoteEscrowAccount({user: user}).send({
+            amount: toNano(5),
+            from: this._owner.address
+        });
     }
 
     async depositPayload(deposit_owner: Address, lock_time: number, call_id = 0) {
@@ -311,22 +209,19 @@ export class VoteEscrow {
         }).call()).payload;
     }
 
-    async withdraw(user: AccountType, call_id = 0) {
+    async withdraw(user: Account, call_id = 0) {
         const ve_acc = await this.voteEscrowAccount(user.address);
         let gas;
         gas = (await ve_acc.contract.methods.calculateMinGas({answerId: 0}).call()).min_gas;
         gas = new Bignumber(gas);
         gas = gas.plus(new Bignumber(3 * 10 ** 9)).toFixed(0);
 
-        return await user.runTarget(
-            {
-                contract: this.contract,
-                value: gas
-            },
-            (ve) => ve.methods.withdraw({
-                meta: {call_id: call_id, nonce: 0, send_gas_to: user.address}
-            })
-        );
+        return await this.contract.methods.withdraw({
+            meta: {call_id: call_id, nonce: 0, send_gas_to: user.address}
+        }).send({
+            amount: gas,
+            from: user.address
+        });
     }
 
     async deposit(from_wallet: TokenWallet, amount: number, lock_time: number, call_id = 0, calc_min_gas = true) {
@@ -352,36 +247,27 @@ export class VoteEscrow {
     }
 
     async upgrade(new_code: string) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.upgrade({code: new_code, send_gas_to: this._owner.address})
-        );
+        return await this.contract.methods.upgrade({code: new_code, send_gas_to: this._owner.address}).send({
+           amount: toNano(5),
+           from: this._owner.address
+        });
     }
 
-    async upgradeVeAccount(user: AccountType, call_id = 0) {
-        return await user.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5)
-            },
-            (ve) => ve.methods.upgradeVeAccount(
-                {meta: {call_id: call_id, nonce: 0, send_gas_to: user.address}}
-            )
-        );
+    async upgradeVeAccount(user: Account, call_id = 0) {
+        return await this.contract.methods.upgradeVeAccount({
+            meta: {call_id: call_id, nonce: 0, send_gas_to: user.address}
+        }).send({
+            amount: toNano(5),
+            from: user.address
+        });
     }
 
     async forceUpgradeVeAccounts(users: Address[]) {
-        return await this._owner.runTarget(
-            {
-                contract: this.contract,
-                value: toNano(5 * users.length)
-            },
-            (ve) => ve.methods.forceUpgradeVeAccounts({
-                users: users, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
-            })
-        );
+        return await this.contract.methods.forceUpgradeVeAccounts({
+            users: users, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
+        }).send({
+            amount: toNano(5 + users.length),
+            from: this._owner.address
+        });
     }
 }

@@ -185,6 +185,14 @@
 			]
 		},
 		{
+			"name": "calcSyncData",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"depositSupply","type":"uint128"},{"name":"depositSupplyAverage","type":"uint128"},{"name":"depositSupplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"value0","type":"tuple"}
+			]
+		},
+		{
 			"name": "setupTokens",
 			"inputs": [
 				{"name":"_depositTokenRoot","type":"address"},
@@ -346,14 +354,6 @@
 				{"name":"_gaugeAccountCode","type":"cell"},
 				{"name":"_gaugeAccountVersion","type":"uint32"},
 				{"name":"_gaugeVersion","type":"uint32"}
-			]
-		},
-		{
-			"name": "syncData",
-			"inputs": [
-			],
-			"outputs": [
-				{"components":[{"name":"depositSupply","type":"uint128"},{"name":"depositSupplyAverage","type":"uint128"},{"name":"depositSupplyAveragePeriod","type":"uint32"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},{"name":"poolLastRewardTime","type":"uint32"}],"name":"value0","type":"tuple"}
 			]
 		},
 		{
@@ -520,8 +520,8 @@
 			"name": "ExtraFarmEndSet",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
-				{"name":"ids","type":"uint256[]"},
-				{"name":"farm_end_times","type":"uint32[]"}
+				{"name":"id","type":"uint256"},
+				{"name":"farm_end_time","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -557,9 +557,8 @@
 			"name": "RewardRoundAdded",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
-				{"name":"ids","type":"uint256"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"new_reward_round","type":"tuple"},
-				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"updated_reward_rounds","type":"tuple[]"}
+				{"name":"id","type":"uint256"},
+				{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"new_reward_round","type":"tuple"}
 			],
 			"outputs": [
 			]

@@ -224,8 +224,6 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
             _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
-//        console.log(format('veBoosted - {}, tboosted - {}', veBoostedBalance, totalBoostedBalance));
-
         delete _actions[nonce];
         delete _deposits[nonce];
         delete _sync_data[nonce];

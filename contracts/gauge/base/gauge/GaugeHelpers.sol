@@ -80,17 +80,6 @@ abstract contract GaugeHelpers is GaugeStorage {
         _gaugeVersion = gauge_version;
     }
 
-    function syncData() public view returns (GaugeSyncData) {
-        return GaugeSyncData(
-            depositTokenData.tokenBalance,
-            supplyAverage,
-            supplyAveragePeriod,
-            extraRewardRounds,
-            qubeRewardRounds,
-            lastRewardTime
-        );
-    }
-
     function calculateBoostedBalance(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {
         if (maxLockTime == 0) {
             return amount;
@@ -147,6 +136,17 @@ abstract contract GaugeHelpers is GaugeStorage {
             nonce = slice.decode(uint32);
             correct = true;
         }
+    }
+
+    function _syncData() internal view returns (GaugeSyncData) {
+        return GaugeSyncData(
+            depositTokenData.tokenBalance,
+            supplyAverage,
+            supplyAveragePeriod,
+            extraRewardRounds,
+            qubeRewardRounds,
+            lastRewardTime
+        );
     }
 
     function _makeCell(uint32 nonce) internal pure returns (TvmCell) {
