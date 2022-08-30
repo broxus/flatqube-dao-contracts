@@ -1,6 +1,6 @@
 import {Account} from "everscale-standalone-client/nodejs";
 
-import {deployUser, runTargets, setupTokenRoot, setupVoteEscrow} from "../utils/common";
+import {deployUser, runTargets, setupTokenRoot, setupVoteEscrow, tryIncreaseTime} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
@@ -78,7 +78,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
             for (const i of Array.from(Array(packs_num).keys())) {
                 logger.log(`Sending pack #${i + 1} with ${count} deposits`)
                 const from = Date.now();
-                await locklift.tracing.trace(runTargets(
+                await locklift.transactions.waitFinalized(runTargets(
                     user,
                     Array(count).fill(user_qube_wallet.contract),
                     Array(count).fill('transfer'),
@@ -111,7 +111,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
 
         it('Making 1 more deposit, unlocking old ones', async function() {
             logger.log(`Sleeping until all deposits are unlocked...`)
-            await locklift.testing.increaseTime(1000);
+            await tryIncreaseTime(1000);
 
             await vote_escrow.deposit(user_qube_wallet, deposit_amount, 100, 2);
             const ve_expected = await vote_escrow.calculateVeMint(deposit_amount, 100);

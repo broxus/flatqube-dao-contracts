@@ -168,8 +168,13 @@ describe("Main Vote Escrow scenarios", async function () {
                 for (const [addr, val] of Object.entries(votes)) {
                     votes_flat.push([addr.toString(), val]);
                 }
+
+                const cur_time = Math.floor(await locklift.testing.getCurrentTime() / 1000);
+                const epoch0 = await vote_escrow.getCurrentEpochDetails();
+                const time_to_sleep = Number(epoch0._currentEpochStartTime) + 4 - cur_time;
+
                 // sleep a bit so that voting time starts
-                await tryIncreaseTime(4);
+                await tryIncreaseTime(time_to_sleep);
                 await vote_escrow.voteEpoch(user, votes_flat, 1);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -259,7 +264,11 @@ describe("Main Vote Escrow scenarios", async function () {
                     votes_flat.push([addr.toString(), val]);
                 }
 
-                await tryIncreaseTime(4);
+                const cur_time = Math.floor(await locklift.testing.getCurrentTime() / 1000);
+                const epoch0 = await vote_escrow.getCurrentEpochDetails();
+                const time_to_sleep = Number(epoch0._currentEpochStartTime) + 4 - cur_time;
+
+                await tryIncreaseTime(time_to_sleep);
                 await vote_escrow.voteEpoch(user, votes_flat, 2);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -356,8 +365,13 @@ describe("Main Vote Escrow scenarios", async function () {
                 }
 
                 total_votes = Object.values(votes).reduce((prev, next) => prev + next, 0);
+
+                const cur_time = Math.floor(await locklift.testing.getCurrentTime() / 1000);
+                const epoch0 = await vote_escrow.getCurrentEpochDetails();
+                const time_to_sleep = Number(epoch0._currentEpochStartTime) + 4 - cur_time;
+
                 // sleep a bit so that voting time starts
-                await tryIncreaseTime(4);
+                await tryIncreaseTime(time_to_sleep);
                 await vote_escrow.voteEpoch(user, votes_flat, 3);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -459,8 +473,13 @@ describe("Main Vote Escrow scenarios", async function () {
                 for (const [addr, val] of Object.entries(votes)) {
                     votes_flat.push([addr.toString(), val]);
                 }
+
+                const cur_time = Math.floor(await locklift.testing.getCurrentTime() / 1000);
+                const epoch0 = await vote_escrow.getCurrentEpochDetails();
+                const time_to_sleep = Number(epoch0._currentEpochStartTime) + 4 - cur_time;
+
                 // sleep a bit so that voting time starts
-                await tryIncreaseTime(4);
+                await tryIncreaseTime(time_to_sleep);
                 await vote_escrow.voteEpoch(user, votes_flat, 4);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;
@@ -536,8 +555,12 @@ describe("Main Vote Escrow scenarios", async function () {
 
         describe('Case #5 - no one voted', async function () {
             it('Start voting', async function () {
+                const cur_time = Math.floor(await locklift.testing.getCurrentTime() / 1000);
+                const epoch0 = await vote_escrow.getCurrentEpochDetails();
+                const time_to_sleep = Number(epoch0._currentEpochStartTime) + 4 - cur_time;
+
                 // sleep a bit so that voting time starts
-                await tryIncreaseTime(4);
+                await tryIncreaseTime(time_to_sleep);
                 await vote_escrow.startVoting(5);
 
                 const start_event = await vote_escrow.getEvent('VotingStart') as any;

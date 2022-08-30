@@ -2,13 +2,11 @@ import {Token} from "./wrappers/token";
 import {VoteEscrow} from "./wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "./wrappers/ve_account";
 import {FactorySource, GaugeFactoryAbi} from "../../build/factorySource";
-import {Address, Contract, zeroAddress, getRandomNonce, toNano} from "locklift";
+import {Address, Contract, zeroAddress, getRandomNonce, toNano, WalletTypes} from "locklift";
 import {Gauge} from "./wrappers/gauge";
-import {WalletTypes} from "locklift/build/types";
 import {Account} from "everscale-standalone-client/nodejs";
 const logger = require("mocha-logger");
 const {expect} = require("chai");
-
 
 
 export async function sleep(ms = 1000) {
@@ -227,39 +225,49 @@ export const setupGauge = async function ({
     owner,
     gauge_factory,
     deposit_root,
+    max_lock_time=100,
     reward_roots=[],
     vesting_periods=[],
     vesting_ratios=[],
     withdraw_lock_period=0,
+    qube_vesting_ratio=0,
+    qube_vesting_period=0,
     call_id=0
 }: {
     owner: Account,
     gauge_factory: Contract<GaugeFactoryAbi>,
     deposit_root: Token,
     reward_roots: Token[],
+    max_lock_time: number,
     vesting_periods: number[],
     vesting_ratios: number[],
     withdraw_lock_period: number,
+    qube_vesting_ratio: number,
+    qube_vesting_period: number,
     call_id: number
 }): Promise<Gauge> {
     // @ts-ignore
-    await locklift.tracing.trace(gauge_factory.methods.deployGauge({
+    await locklift.tracing.trace(gauge_factory.methods.deployGaugeByOwner({
         gauge_owner: owner.address,
         depositTokenRoot: deposit_root.address,
         maxBoost: 2000,
-        maxLockTime: 100,
+        maxLockTime: max_lock_time,
         rewardTokenRoots: reward_roots.map(i => i.address),
         vestingPeriods: vesting_periods,
         vestingRatios: vesting_ratios,
         withdrawAllLockPeriod: withdraw_lock_period,
+        qubeVestingPeriod: qube_vesting_period,
+        qubeVestingRatio: qube_vesting_ratio,
         call_id: call_id
     }).send({
         // @ts-ignore
-        amount: toNano(10),
+        amount: toNano(8),
         from: owner.address
     }));
 
-    const event = (await gauge_factory.getPastEvents({filter: (event) => event.event === 'NewGauge'})).events[0].data;
+    const event = (await gauge_factory.getPastEvents({
+        filter: (event) => event.event === 'NewGauge' && event.data.call_id === call_id.toString()
+    })).events[0].data;
     // @ts-ignore
     return await Gauge.from_addr(event.gauge as Address, owner);
 }

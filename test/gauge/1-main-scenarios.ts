@@ -1,13 +1,19 @@
 import {expect} from "chai";
-import {deployUser, setupGauge, setupGaugeFactory, setupTokenRoot, setupVoteEscrow} from "../utils/common";
+import {
+    deployUser,
+    setupGauge,
+    setupGaugeFactory,
+    setupTokenRoot,
+    setupVoteEscrow,
+    tryIncreaseTime
+} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
-import {Contract, toNano} from "locklift";
+import {Contract, getRandomNonce, toNano} from "locklift";
 import {GaugeFactoryAbi} from "../../build/factorySource";
 import {Gauge} from "../utils/wrappers/gauge";
 import {Account} from "everscale-standalone-client/nodejs";
-import {tryIncreaseTime} from "../utils/common";
 
 var should = require('chai').should();
 
@@ -43,9 +49,9 @@ describe("Gauge main scenarios", async function() {
 
     describe('Setup contracts', async function () {
         it('Deploy users', async function () {
-            user1 = await deployUser(20);
-            user2 = await deployUser(20);
-            owner = await deployUser(40);
+            user1 = await deployUser(25);
+            user2 = await deployUser(25);
+            owner = await deployUser(50);
         });
 
         it('Deploy tokens', async function () {
@@ -95,11 +101,14 @@ describe("Gauge main scenarios", async function() {
                         owner,
                         gauge_factory,
                         deposit_root,
+                        max_lock_time: 100,
                         reward_roots: [],
                         vesting_periods: [],
                         vesting_ratios: [],
                         withdraw_lock_period: 0,
-                        call_id: 0
+                        qube_vesting_ratio: 0,
+                        qube_vesting_period: 0,
+                        call_id: getRandomNonce()
                     });
                     gauge_inited = true;
                 }
@@ -119,6 +128,7 @@ describe("Gauge main scenarios", async function() {
                     expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
                     expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
 
+                    await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
 
@@ -166,6 +176,7 @@ describe("Gauge main scenarios", async function() {
                     expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 3.5).toString());
                     expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
 
+                    await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
 
@@ -175,7 +186,7 @@ describe("Gauge main scenarios", async function() {
                 });
 
                 it('Withdraw', async function() {
-                    await locklift.testing.increaseTime(100);
+                    await tryIncreaseTime(100);
                     await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount, false));
 
                     const details = await gauge.getDetails();
@@ -208,6 +219,7 @@ describe("Gauge main scenarios", async function() {
                     expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 2).toString());
                     expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
 
+                    await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage({}).call();
 
@@ -217,7 +229,7 @@ describe("Gauge main scenarios", async function() {
                 });
 
                 it('Withdraw', async function() {
-                    await locklift.testing.increaseTime(100);
+                    await tryIncreaseTime(100);
                     await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount, false));
 
                     const details = await gauge.getDetails();
@@ -250,6 +262,7 @@ describe("Gauge main scenarios", async function() {
                     expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
                     expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
 
+                    await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
 
@@ -268,12 +281,12 @@ describe("Gauge main scenarios", async function() {
                     expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 3).toString());
                     expect(token_details._depositTokenData.tokenBalance).to.be.eq((deposit_amount * 2).toString());
 
+                    await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage({}).call();
 
                     expect(averages._lockedBalance).to.be.eq(deposit_amount.toString());
                     expect(averages._lockBoostedBalance).to.be.eq((deposit_amount * 3).toString());
-                    expect(averages._lockBoostedBalanceAverage).to.be.eq((deposit_amount * 2).toString());
                 });
 
                 it('Ve deposit', async function() {
@@ -290,6 +303,7 @@ describe("Gauge main scenarios", async function() {
                     expect(details._totalBoostedSupply).to.be.eq(total_boosted.toString());
                     expect(token_details._depositTokenData.tokenBalance).to.be.eq(total_deposit.toString());
 
+                    await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
 
@@ -298,7 +312,7 @@ describe("Gauge main scenarios", async function() {
                 });
 
                 it('Withdraw', async function() {
-                    await locklift.testing.increaseTime(100);
+                    await tryIncreaseTime(100);
                     await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount * 3, false));
 
                     const details = await gauge.getDetails();
@@ -326,11 +340,14 @@ describe("Gauge main scenarios", async function() {
                     owner,
                     gauge_factory,
                     deposit_root,
+                    max_lock_time: 100,
                     reward_roots: [],
                     vesting_periods: [],
                     vesting_ratios: [],
                     withdraw_lock_period: 0,
-                    call_id: 1
+                    qube_vesting_ratio: 0,
+                    qube_vesting_period: 0,
+                    call_id: getRandomNonce()
                 });
             });
 
@@ -367,7 +384,7 @@ describe("Gauge main scenarios", async function() {
 
             it('Users claim reward', async function() {
                 // make sure reward round passed
-                await locklift.testing.increaseTime(25);
+                await tryIncreaseTime(25);
                 await locklift.tracing.trace(gauge.claimReward(user1, 1));
 
                 const claim1 = await gauge.getEvent('Claim') as any;
@@ -398,13 +415,13 @@ describe("Gauge main scenarios", async function() {
 
             it('Add multiple qube reward rounds', async function() {
                 const time = Math.floor(locklift.testing.getCurrentTime() / 1000);
-                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 100, time + 100));
-                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 100, time + 200));
-                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward * 2, 100, time + 300));
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 10, time + 20));
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 10, time + 30));
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward * 2, 10, time + 40));
             });
 
             it('Users withdraw with claim=true', async function() {
-                await locklift.testing.increaseTime(410);
+                await tryIncreaseTime(100);
 
                 const sync_data = (await gauge.contract.methods.calcSyncData().call()).value0;
                 const acc1 = await gauge.gaugeAccount(user1.address);
@@ -486,11 +503,14 @@ describe("Gauge main scenarios", async function() {
                     owner,
                     gauge_factory,
                     deposit_root,
+                    max_lock_time: 100,
                     reward_roots: [reward_root],
                     vesting_periods: [0],
                     vesting_ratios: [0],
-                    withdraw_lock_period: 1000,
-                    call_id: 1
+                    withdraw_lock_period: 200,
+                    qube_vesting_ratio: 0,
+                    qube_vesting_period: 0,
+                    call_id: getRandomNonce()
                 });
             });
 
@@ -545,7 +565,7 @@ describe("Gauge main scenarios", async function() {
             it('Users claim reward', async function() {
                 const expected_reward = 1000 * 5;
                 // make sure reward round passed
-                await locklift.testing.increaseTime(25);
+                await tryIncreaseTime(25);
                 await locklift.tracing.trace(gauge.claimReward(user1, 1));
 
                 const claim1 = await gauge.getEvent('Claim') as any;
@@ -601,7 +621,7 @@ describe("Gauge main scenarios", async function() {
             });
 
             it('Users withdraw with claim=true', async function() {
-                await locklift.testing.increaseTime(100);
+                await tryIncreaseTime(100);
 
                 const sync_data = (await gauge.contract.methods.calcSyncData().call()).value0;
                 const acc1 = await gauge.gaugeAccount(user1.address);
@@ -650,7 +670,7 @@ describe("Gauge main scenarios", async function() {
             });
 
             it('Withdraw remaining reward from gauge', async function() {
-                await tryIncreaseTime(1000);
+                await tryIncreaseTime(150);
                 await locklift.tracing.trace(gauge.withdrawUnclaimed([0], owner.address));
 
                 const token_details = await gauge.getTokenDetails();
@@ -668,11 +688,14 @@ describe("Gauge main scenarios", async function() {
                     owner,
                     gauge_factory,
                     deposit_root,
+                    max_lock_time: 100,
                     reward_roots: [reward_root, reward2_root, reward3_root],
                     vesting_periods: [0, 0, 0],
                     vesting_ratios: [0, 0, 0],
                     withdraw_lock_period: 1000,
-                    call_id: 1
+                    qube_vesting_ratio: 0,
+                    qube_vesting_period: 0,
+                    call_id: getRandomNonce()
                 });
             });
 
@@ -719,5 +742,103 @@ describe("Gauge main scenarios", async function() {
                 await locklift.tracing.trace(gauge.claimReward(user2, 2));
             });
         })
+
+        describe('Testing vesting mechanic', async function() {
+            const deposit_amount = 1000;
+            const qube_reward = 1000000;
+
+            it('Deploy gauge', async function() {
+                gauge = await setupGauge({
+                    owner,
+                    gauge_factory,
+                    deposit_root,
+                    max_lock_time: 100,
+                    reward_roots: [reward_root],
+                    vesting_periods: [50],
+                    vesting_ratios: [1000],
+                    withdraw_lock_period: 0,
+                    qube_vesting_ratio: 1000,
+                    qube_vesting_period: 50,
+                    call_id: getRandomNonce()
+                });
+            });
+
+            it('User deposit', async function() {
+                await locklift.tracing.trace(
+                    gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
+                    {allowedCodes: {compute: [null]}}
+                );
+
+                const details = await gauge.getDetails();
+                const token_details = await gauge.getTokenDetails();
+
+                expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
+                expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
+                expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+
+                await tryIncreaseTime(1);
+                const acc = await gauge.gaugeAccount(user1.address);
+                const averages = await acc.methods.calculateLockBalanceAverage().call();
+
+                expect(averages._lockedBalance).to.be.eq('0');
+                expect(averages._lockBoostedBalance).to.be.eq(deposit_amount.toString());
+                expect(averages._lockBoostedBalanceAverage).to.be.eq(deposit_amount.toString());
+            });
+
+            it('Add reward rounds', async function() {
+                const time = Math.floor(locklift.testing.getCurrentTime() / 1000);
+                await locklift.tracing.trace(gauge.addRewardRounds(
+                    [0, 0],
+                    [{rewardPerSecond: 1000, startTime: time + 5}, {rewardPerSecond: 1000, startTime: time + 10}]
+                    )
+                );
+                // test case when end time is set   
+                await locklift.tracing.trace(gauge.setExtraFarmEndTime([0], [time + 15]));
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 10, time + 10));
+                await locklift.tracing.trace(gauge.rewardDeposit(owner_reward_wallet, 10000, 1));
+            });
+
+            it('Claim reward', async function() {
+                const acc = await gauge.gaugeAccount(user1.address);
+                // vesting should pass
+                await tryIncreaseTime(20 + 50);
+
+                const sync_data2 = (await gauge.contract.methods.calcSyncData().call()).value0;
+                const pending2 = await acc.methods.pendingReward({
+                    _veAccQubeAverage: 0,
+                    _veAccQubeAveragePeriod: 0,
+                    _veQubeAverage: 0,
+                    _veQubeAveragePeriod: 0,
+                    gauge_sync_data: sync_data2
+                }).call();
+
+                // we can claim all reward
+                expect(pending2._extraReward[0].lockedReward).to.be.eq('0');
+                expect(pending2._qubeReward.lockedReward).to.be.eq('0');
+                expect(pending2._qubeReward.unlockedReward).to.be.eq('1000000');
+                expect(pending2._extraReward[0].unlockedReward).to.be.eq('10000');
+
+                await locklift.tracing.trace(gauge.claimReward(user1));
+
+                const event = await gauge.getEvent('Claim') as any;
+                expect(event.qube_reward).to.be.eq('1000000');
+                expect(event.extra_reward[0]).to.be.eq('10000');
+
+                const sync_data3 = (await gauge.contract.methods.calcSyncData().call()).value0;
+                const pending3 = await acc.methods.pendingReward({
+                    _veAccQubeAverage: 0,
+                    _veAccQubeAveragePeriod: 0,
+                    _veQubeAverage: 0,
+                    _veQubeAveragePeriod: 0,
+                    gauge_sync_data: sync_data3
+                }).call();
+
+                expect(pending3._extraReward[0].lockedReward).to.be.eq('0');
+                expect(pending3._qubeReward.lockedReward).to.be.eq('0');
+                expect(pending3._qubeReward.unlockedReward).to.be.eq('0');
+                expect(pending3._extraReward[0].unlockedReward).to.be.eq('0');
+            });
+
+        });
     });
 });
