@@ -139,7 +139,7 @@ export class VoteEscrow {
     }
 
     async installOrUpdateVeAccountCode(code: string) {
-        return await this.contract.methods.installPlatformCode(
+        return await this.contract.methods.installOrUpdateVeAccountCode(
             {code: code, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}
         ).send({
             from: this._owner.address,

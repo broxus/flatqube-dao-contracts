@@ -104,7 +104,7 @@ export const deployUsers = async function (count: number, initial_balance: numbe
     const {wallets} = await factory.methods.wallets({}).call();
     return await Promise.all(wallets.map(async (wallet) => {
         return await locklift.factory.accounts.addExistingAccount({
-            publicKey: wallet[0],
+            publicKey: wallet[0].slice(2),
             type: WalletTypes.Custom,
             address: wallet[1],
         });
