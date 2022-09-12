@@ -221,7 +221,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
 
         uint128 totalBoostedOld = totalBoostedBalance;
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
-            _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
+            lockBoostedBalance, _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
         delete _actions[nonce];
@@ -256,7 +256,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
 
         uint128 totalBoostedOld = totalBoostedBalance;
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
-            _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
+            lockBoostedBalance, _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
         delete _actions[nonce];
@@ -283,7 +283,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
 
         uint128 totalBoostedOld = totalBoostedBalance;
         (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
-            _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
+            lockBoostedBalance, _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
         delete _actions[nonce];

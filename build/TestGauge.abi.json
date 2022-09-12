@@ -435,6 +435,15 @@
 	],
 	"events": [
 		{
+			"name": "Upgrade",
+			"inputs": [
+				{"name":"old_version","type":"uint32"},
+				{"name":"new_version","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "Deposit",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},

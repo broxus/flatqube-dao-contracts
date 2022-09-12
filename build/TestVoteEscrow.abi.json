@@ -25,10 +25,39 @@
 			]
 		},
 		{
+			"name": "startVotingTest",
+			"inputs": [
+				{"name":"start_time","type":"uint32"},
+				{"name":"end_time","type":"uint32"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "endVotingTest",
+			"inputs": [
+				{"name":"epoch_time","type":"uint32"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "emitVotesTest",
+			"inputs": [
+				{"name":"user","type":"address"},
+				{"name":"votes","type":"map(address,uint128)"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "upgrade",
 			"inputs": [
 				{"name":"code","type":"cell"},
-				{"name":"send_gas_to","type":"address"}
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
 			]

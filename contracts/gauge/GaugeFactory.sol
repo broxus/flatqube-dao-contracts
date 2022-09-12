@@ -30,8 +30,7 @@ contract GaugeFactory is GaugeFactoryBase {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
         TvmCell data = abi.encode(
-            meta.send_gas_to,
-            meta.call_id,
+            meta,
             factory_version,
             gauge_version,
             gauge_account_version,
@@ -42,6 +41,7 @@ contract GaugeFactory is GaugeFactoryBase {
             default_qube_vesting_period,
             default_qube_vesting_ratio,
             qube,
+            voteEscrow,
             GaugeAccountCode,
             GaugeCode,
             PlatformCode,

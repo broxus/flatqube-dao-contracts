@@ -121,7 +121,7 @@ abstract contract GaugeBase is GaugeRewards {
 
         totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
 
-        emit Deposit(deposit.meta.call_id, deposit.user, deposit.amount, deposit.lock_time);
+        emit Deposit(deposit.meta.call_id, deposit.user, deposit.amount, deposit.boosted_amount, deposit.lock_time);
         delete deposits[_deposit_nonce];
 
         if (claim) {
@@ -228,7 +228,7 @@ abstract contract GaugeBase is GaugeRewards {
         _sendCallbackOrGas(user, meta.nonce, true, meta.send_gas_to);
     }
 
-    function burnBoostedBalance(address user, uint128 expired_boosted) external override onlyGaugeAccount(user) {
+    function burnLockBoostedBalance(address user, uint128 expired_boosted) external override onlyGaugeAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         updateSupplyAverage();

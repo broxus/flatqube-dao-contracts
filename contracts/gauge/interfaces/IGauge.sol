@@ -6,7 +6,7 @@ import "../../libraries/Callback.sol";
 
 interface IGauge {
     // Events
-    event Deposit(uint32 call_id, address user, uint128 amount, uint32 lock_time);
+    event Deposit(uint32 call_id, address user, uint128 amount, uint128 boosted_amount, uint32 lock_time);
     event DepositRevert(uint32 call_id, address user, uint128 amount);
     event Withdraw(uint32 call_id, address user, uint128 amount);
     event WithdrawRevert(uint32 call_id, address user);
@@ -20,7 +20,7 @@ interface IGauge {
     event GaugeAccountCodeUpdateRejected(uint32 call_id);
     event GaugeUpdated(uint32 prev_version, uint32 new_version);
     event RewardRoundAdded(uint32 call_id, uint256 id, RewardRound new_reward_round);
-    event QubeRewardRoundAdded(RewardRound new_qube_round, RewardRound[] updated_qube_rounds);
+    event QubeRewardRoundAdded(RewardRound new_qube_round);
 
     event GaugeAccountUpgrade(uint32 call_id, address user, uint32 old_version, uint32 new_version);
     event GaugeAccountDeploy(address user);
@@ -84,7 +84,7 @@ interface IGauge {
     ) external;
     function revertWithdraw(address user, Callback.CallMeta meta) external;
     function revertDeposit(address user, uint32 _deposit_nonce) external;
-    function burnBoostedBalance(address user, uint128 expired_boosted) external;
+    function burnLockBoostedBalance(address user, uint128 expired_boosted) external;
     function forceUpgradeGaugeAccount(address user, Callback.CallMeta meta) external view;
     function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;

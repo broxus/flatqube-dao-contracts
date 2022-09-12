@@ -12,46 +12,53 @@ contract Gauge is GaugeBase {
         voteEscrow = _voteEscrow;
     }
 
-    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external override {
-        require (msg.sender == factory, Errors.NOT_FACTORY);
-
+    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external override onlyFactory {
         if (new_version == gauge_version) {
             tvm.rawReserve(_reserve(), 0);
             meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
             return;
         }
 
-        // TODO: sync
         // should be unpacked in the same order!
-        //        TvmCell data = abi.encode(
-        //            new_version, // 32
-        //            send_gas_to, // 267
-        //            withdrawAllLockPeriod, // 32
-        //            lastRewardTime, // 32
-        //            farmEndTime, // 32
-        //            vestingPeriod, // 32
-        //            vestingRatio,// 32
-        //            tokenRoot, // 267
-        //            tokenWallet, // 267
-        //            tokenBalance, // 128
-        //            rewardRounds, // 33 + ref
-        //            accRewardPerShare, // 33 + ref
-        //            rewardTokenRoot, // 33 + ref
-        //            rewardTokenWallet, // 33 + ref
-        //            rewardTokenBalance, // 33 + ref
-        //            rewardTokenBalanceCumulative, // 33 + ref
-        //            unclaimedReward, // 33 + ref
-        //            owner, // 267
-        //            deposit_nonce, // 64
-        //            deposits, // 33 + ref
-        //            platformCode, // 33 + ref
-        //            userDataCode, // 33 + ref
-        //            factory, // 267
-        //            deploy_nonce, // 64
-        //            user_data_version, // 32
-        //            gauge_version // 32
-        //        );
-        TvmCell data;
+        TvmCell data = abi.encode(
+            new_version, // 32
+            meta, // 267
+            withdrawAllLockPeriod,
+            lastRewardTime,
+            lastExtraRewardRoundIdx,
+            lastQubeRewardRoundIdx,
+            lastAverageUpdateTime,
+            lockBoostedSupply,
+            lockBoostedSupplyAverage,
+            lockBoostedSupplyAveragePeriod,
+            supplyAverage,
+            supplyAveragePeriod,
+            totalBoostedSupply,
+            owner,
+            voteEscrow,
+            maxBoost,
+            maxLockTime,
+            init_mask,
+            initialized,
+            depositTokenData,
+            qubeTokenData,
+            qubeRewardRounds,
+            qubeVestingPeriod,
+            qubeVestingRatio,
+            extraTokenData,
+            extraRewardRounds,
+            extraVestingPeriods,
+            extraVestingRatios,
+            extraRewardEnded,
+            deposit_nonce,
+            deposits,
+            platformCode,
+            gaugeAccountCode,
+            factory,
+            deploy_nonce,
+            gauge_account_version,
+            gauge_version
+        );
 
         // set code after complete this method
         tvm.setcode(new_code);

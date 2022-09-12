@@ -34,7 +34,7 @@ abstract contract GaugeRewards is GaugeDeploy {
         }
 
         qubeRewardRounds = cur_rounds;
-        emit QubeRewardRoundAdded(new_qube_round, cur_rounds);
+        emit QubeRewardRoundAdded(new_qube_round);
     }
 
     // @dev accRewardPerShare and endTime params in new_rounds are ignored

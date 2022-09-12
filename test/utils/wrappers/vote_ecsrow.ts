@@ -178,6 +178,15 @@ export class VoteEscrow {
         }));
     }
 
+    async addToWhitelist(gauge: Address) {
+        return await locklift.tracing.trace(this.contract.methods.addToWhitelist({
+            gauge: gauge, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
+        }).send({
+            from: this._owner.address,
+            amount: toNano(1)
+        }));
+    }
+
     async deployVeAccount(user: Address) {
         return this.contract.methods.deployVoteEscrowAccount({user: user}).send({
             amount: toNano(5),
@@ -247,7 +256,9 @@ export class VoteEscrow {
     }
 
     async upgrade(new_code: string) {
-        return await this.contract.methods.upgrade({code: new_code, send_gas_to: this._owner.address}).send({
+        return await this.contract.methods.upgrade({
+            code: new_code, meta: {call_id: 0, send_gas_to: this._owner.address, nonce: 0}
+        }).send({
            amount: toNano(5),
            from: this._owner.address
         });

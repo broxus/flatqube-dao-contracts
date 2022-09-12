@@ -46,6 +46,7 @@ contract GaugeAccount is GaugeAccountBase {
             balance,
             lockBoostedBalance,
             veBoostedBalance,
+            totalBoostedBalance,
             lockedBalance,
             lastAverageState,
             curAverageState,

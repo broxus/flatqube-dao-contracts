@@ -33,7 +33,7 @@ export const sendAllEvers = async function(from: Account, to: Address) {
         flags: 128,
         payload: '',
         // @ts-ignore
-    }).sendExternal({publicKey: from.publicKey}));
+    }).sendExternal({publicKey: from.publicKey}), {allowedCodes: {compute: [null]}});
 }
 
 
@@ -105,7 +105,7 @@ export const deployUsers = async function (count: number, initial_balance: numbe
     return await Promise.all(wallets.map(async (wallet) => {
         return await locklift.factory.accounts.addExistingAccount({
             publicKey: wallet[0].slice(2),
-            type: WalletTypes.Custom,
+            type: WalletTypes.MsigAccount,
             address: wallet[1],
         });
     }));
@@ -116,7 +116,7 @@ export const deployUser = async function (initial_balance = 100): Promise<Accoun
     const signer = await locklift.keystore.getSigner('0');
 
     const {account: _user, tx} = await locklift.factory.accounts.addNewAccount({
-        type: WalletTypes.Custom,
+        type: WalletTypes.MsigAccount,
         contract: "TestWallet",
         //Value which will send to the new account from a giver
         value: toNano(initial_balance),
@@ -292,7 +292,7 @@ export const setupVoteEscrow = async function ({
     gauge_max_downtime = 2,
     max_gauges_per_vote = 15,
     whitelist_price = 1000000
-}) {
+}): Promise<VoteEscrow> {
     const VoteEscrowContract = await locklift.factory.getContractArtifacts('TestVoteEscrow');
     const Platform = await locklift.factory.getContractArtifacts('Platform');
     const VoteEscrowAccount = await locklift.factory.getContractArtifacts('VoteEscrowAccount');

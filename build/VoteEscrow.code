@@ -63,19 +63,26 @@ IFREF {
 OVER
 PUSHCONT {
 	LDREF
+	LDU 32
+	LDU 32
 	LDREF
 	ENDS
 	CTOS
 }
 PUSHCONT {
 	LDREF
+	LDU 32
+	LDU 32
 }
 IFELSE
 LDMSGADDR
+ROLLREV 3
+TRIPLE
+SWAP
 ENDS
 .loc ../contracts/vote_escrow/VoteEscrow.sol, 0
 CALLREF {
-	CALL $upgrade_09b97e7c_internal_macro$
+	CALL $upgrade_663c7430_internal_macro$
 }
 DROP
 CALLREF {
@@ -83,7 +90,7 @@ CALLREF {
 }
 THROW 0
 
-.macro upgrade_09b97e7c_internal_macro
+.macro upgrade_663c7430_internal_macro
 .loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowHelpers.sol, 299
 GETGLOB 9
 GETGLOB 15
@@ -167,9 +174,13 @@ GETGLOB 13
 GETGLOB 12
 GETGLOB 11
 GETGLOB 10
-PUSHINT 46
-ROLLX
 NEWC
+PUSHINT 47
+ROLLX
+UNTRIPLE
+REVERSE 4, 0
+STU 32
+STU 32
 STSLICE
 STU 32
 STREF
@@ -7876,15 +7887,9 @@ IFJMPREF {
 			}
 		}
 		DUP
-		PUSHINT 441741061
+		PUSHINT 443550169
 		LEQ
 		IFJMPREF {
-			DUP
-			PUSHINT 273997743
-			EQUAL
-			IFJMPREF {
-				CALL $upgrade$
-			}
 			DUP
 			PUSHINT 330766180
 			EQUAL
@@ -7903,22 +7908,28 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $setEmergency$
 			}
-		}
-		DUP
-		PUSHINT 584709831
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 443550169
 			EQUAL
 			IFJMPREF {
 				CALL $addToWhitelist$
 			}
+		}
+		DUP
+		PUSHINT 584709831
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 460177870
 			EQUAL
 			IFJMPREF {
 				CALL $revertDeposit$
+			}
+			DUP
+			PUSHINT 568382654
+			EQUAL
+			IFJMPREF {
+				CALL $upgrade$
 			}
 			DUP
 			PUSHINT 575364640

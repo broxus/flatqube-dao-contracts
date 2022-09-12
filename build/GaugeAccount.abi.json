@@ -221,6 +221,7 @@
 		{
 			"name": "calculateTotalBoostedBalance",
 			"inputs": [
+				{"name":"_lockBoostedBalance","type":"uint128"},
 				{"name":"_gaugeDepositSupply","type":"uint128"},
 				{"name":"_veAccBalance","type":"uint128"},
 				{"name":"_veSupply","type":"uint128"}

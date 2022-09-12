@@ -17,11 +17,11 @@ contract VoteEscrow is VoteEscrowBase {
         _setupTokenWallet();
     }
 
-    function upgrade(TvmCell code, address send_gas_to) external onlyOwner {
+    function upgrade(TvmCell code,  Callback.CallMeta meta) external onlyOwner {
         require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
 
         TvmCell data = abi.encode(
-            send_gas_to,
+            meta,
             deploy_nonce,
             platformCode,
             veAccountCode,

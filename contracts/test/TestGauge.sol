@@ -1,0 +1,161 @@
+pragma ever-solidity ^0.62.0;
+
+
+import "../gauge/base/gauge/GaugeBase.sol";
+import "../libraries/Errors.sol";
+import "../libraries/Callback.sol";
+
+
+contract TestGauge is GaugeBase {
+    constructor(address _owner, address _voteEscrow) public onlyFactory {
+        owner = _owner;
+        voteEscrow = _voteEscrow;
+    }
+
+    function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external override onlyFactory {
+        if (new_version == gauge_version) {
+            tvm.rawReserve(_reserve(), 0);
+            meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
+            return;
+        }
+
+        // should be unpacked in the same order!
+        TvmCell data = abi.encode(
+            new_version, // 32
+            meta, // 267
+            withdrawAllLockPeriod,
+            lastRewardTime,
+            lastExtraRewardRoundIdx,
+            lastQubeRewardRoundIdx,
+            lastAverageUpdateTime,
+            lockBoostedSupply,
+            lockBoostedSupplyAverage,
+            lockBoostedSupplyAveragePeriod,
+            supplyAverage,
+            supplyAveragePeriod,
+            totalBoostedSupply,
+            owner,
+            voteEscrow,
+            maxBoost,
+            maxLockTime,
+            init_mask,
+            initialized,
+            depositTokenData,
+            qubeTokenData,
+            qubeRewardRounds,
+            qubeVestingPeriod,
+            qubeVestingRatio,
+            extraTokenData,
+            extraRewardRounds,
+            extraVestingPeriods,
+            extraVestingRatios,
+            extraRewardEnded,
+            deposit_nonce,
+            deposits,
+            platformCode,
+            gaugeAccountCode,
+            factory,
+            deploy_nonce,
+            gauge_account_version,
+            gauge_version
+        );
+
+        // set code after complete this method
+        tvm.setcode(new_code);
+        // run onCodeUpgrade from new code
+        tvm.setCurrentCode(new_code);
+
+        onCodeUpgrade(data);
+    }
+
+    event Upgrade(uint32 old_version, uint32 new_version);
+
+    function onCodeUpgrade(TvmCell upgrade_data) private {
+        tvm.resetStorage();
+        tvm.rawReserve(_reserve(), 0);
+
+        Callback.CallMeta meta;
+        (
+            gauge_version, // 32
+            meta, // 267
+            withdrawAllLockPeriod,
+            lastRewardTime,
+            lastExtraRewardRoundIdx,
+            lastQubeRewardRoundIdx,
+            lastAverageUpdateTime,
+            lockBoostedSupply,
+            lockBoostedSupplyAverage,
+            lockBoostedSupplyAveragePeriod,
+            supplyAverage,
+            supplyAveragePeriod,
+            totalBoostedSupply,
+            owner,
+            voteEscrow,
+            maxBoost,
+            maxLockTime,
+            init_mask,
+            initialized,
+            depositTokenData,
+            qubeTokenData,
+            qubeRewardRounds,
+            qubeVestingPeriod,
+            qubeVestingRatio,
+            extraTokenData,
+            extraRewardRounds,
+            extraVestingPeriods,
+            extraVestingRatios,
+            extraRewardEnded,
+            deposit_nonce,
+            deposits,
+            platformCode,
+            gaugeAccountCode,
+            factory,
+            deploy_nonce,
+            gauge_account_version,
+            gauge_version
+        ) = abi.decode(
+            upgrade_data,
+            (
+                uint32,
+                Callback.CallMeta,
+                uint32,
+                uint32,
+                uint256[],
+                uint256,
+                uint32,
+                uint128,
+                uint128,
+                uint32,
+                uint128,
+                uint32,
+                uint128,
+                address,
+                address,
+                uint32,
+                uint32,
+                uint8,
+                bool,
+                TokenData,
+                TokenData,
+                RewardRound[],
+                uint32,
+                uint32,
+                TokenData[],
+                RewardRound[][],
+                uint32[],
+                uint32[],
+                bool[],
+                uint32,
+                mapping (uint64 => PendingDeposit),
+                TvmCell,
+                TvmCell,
+                address,
+                uint32,
+                uint32,
+                uint32
+            )
+        );
+
+        emit Upgrade(gauge_version - 1, gauge_version);
+    }
+}

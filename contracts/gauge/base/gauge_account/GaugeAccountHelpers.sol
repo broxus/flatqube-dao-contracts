@@ -143,6 +143,7 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
     }
 
     function calculateTotalBoostedBalance(
+        uint128 _lockBoostedBalance,
         uint128 _gaugeDepositSupply,
         uint128 _veAccBalance,
         uint128 _veSupply
@@ -151,7 +152,7 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
             return (_veBoostedBalance, _totalBoostedBalance);
         }
 
-        uint256 lock_bonus = math.muldiv(lockBoostedBalance, SCALING_FACTOR, balance);
+        uint256 lock_bonus = math.muldiv(_lockBoostedBalance, SCALING_FACTOR, balance);
         _veBoostedBalance = _veBoost(balance, _gaugeDepositSupply, _veAccBalance, _veSupply);
         // ve takes 0.4 of balance as base and boost it to 1.0
         uint256 ve_bonus = math.muldiv(_veBoostedBalance, SCALING_FACTOR, (balance * 4) / 10);
@@ -421,7 +422,7 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         if (finished) {
             _updateBalanceAverage(sync_time);
             if (expiredLockBoostedBalance > 0) {
-                IGauge(gauge).burnBoostedBalance{value: 0.1 ever}(user, expiredLockBoostedBalance);
+                IGauge(gauge).burnLockBoostedBalance{value: 0.1 ever}(user, expiredLockBoostedBalance);
             }
         }
         return finished;

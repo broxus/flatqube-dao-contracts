@@ -5,10 +5,9 @@ import {Account} from "everscale-standalone-client/nodejs";
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
-import {Address} from "locklift";
+import {Address, getRandomNonce} from "locklift";
 
 var should = require('chai').should();
-const {getRandomNonce} = locklift.utils;
 
 
 describe("Main Vote Escrow scenarios", async function () {
