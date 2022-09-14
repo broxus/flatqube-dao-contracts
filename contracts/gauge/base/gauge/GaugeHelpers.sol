@@ -140,7 +140,7 @@ abstract contract GaugeHelpers is GaugeStorage {
 
     function _syncData() internal view returns (GaugeSyncData) {
         return GaugeSyncData(
-            depositTokenData.tokenBalance,
+            depositTokenData.balance,
             supplyAverage,
             supplyAveragePeriod,
             extraRewardRounds,
@@ -200,15 +200,15 @@ abstract contract GaugeHelpers is GaugeStorage {
         bool have_debt;
         // check if we have enough special rewards, emit debt otherwise
         for (uint i = 0; i < extra_amounts.length; i++) {
-            if (extraTokenData[i].tokenBalance < extra_amounts[i]) {
-                _extra_debt[i] = extra_amounts[i] - extraTokenData[i].tokenBalance;
+            if (extraTokenData[i].balance < extra_amounts[i]) {
+                _extra_debt[i] = extra_amounts[i] - extraTokenData[i].balance;
                 _extra_amount[i] -= _extra_debt[i];
                 have_debt = true;
             }
         }
         // check if we have enough qube, emit debt otherwise
-        if (qubeTokenData.tokenBalance < qube_amount) {
-            _qube_debt = qube_amount - qubeTokenData.tokenBalance;
+        if (qubeTokenData.balance < qube_amount) {
+            _qube_debt = qube_amount - qubeTokenData.balance;
             _qube_amount -= _qube_debt;
             have_debt = true;
         }
@@ -224,14 +224,14 @@ abstract contract GaugeHelpers is GaugeStorage {
         // pay extra rewards
         for (uint i = 0; i < _extra_amount.length; i++) {
             if (_extra_amount[i] > 0) {
-                _transferTokens(extraTokenData[i].tokenWallet, _extra_amount[i], receiver_addr, _makeCell(nonce), send_gas_to, 0);
-                extraTokenData[i].tokenBalance -= _extra_amount[i];
+                _transferTokens(extraTokenData[i].wallet, _extra_amount[i], receiver_addr, _makeCell(nonce), send_gas_to, 0);
+                extraTokenData[i].balance -= _extra_amount[i];
             }
         }
         // pay qube rewards
         if (_qube_amount > 0) {
-            _transferTokens(qubeTokenData.tokenWallet, _qube_amount, receiver_addr, _makeCell(nonce), send_gas_to, 0);
-            qubeTokenData.tokenBalance -= _qube_amount;
+            _transferTokens(qubeTokenData.wallet, _qube_amount, receiver_addr, _makeCell(nonce), send_gas_to, 0);
+            qubeTokenData.balance -= _qube_amount;
         }
         return (_qube_amount, _extra_amount, _qube_debt, _extra_debt);
     }

@@ -10,12 +10,27 @@ import {
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
-import {Contract, getRandomNonce, toNano} from "locklift";
+import {Address, Contract, getRandomNonce, toNano} from "locklift";
 import {GaugeFactoryAbi} from "../../build/factorySource";
 import {Gauge} from "../utils/wrappers/gauge";
-import {Account} from "everscale-standalone-client/nodejs";
-
+import {Account} from 'locklift/everscale-standalone-client'
 var should = require('chai').should();
+
+
+// @ts-ignore
+const mint_to_addr = async function(token, owner, addr, amount) {
+    await locklift.tracing.trace(token.methods.mint({
+        amount: amount,
+        recipient: addr,
+        deployWalletValue: locklift.utils.toNano(1),
+        remainingGasTo: owner.address,
+        notify: false,
+        payload: ''
+    }).send({
+        amount: toNano(5),
+        from: owner.address
+    }));
+}
 
 
 describe("Gauge main scenarios", async function() {
@@ -51,7 +66,7 @@ describe("Gauge main scenarios", async function() {
         it('Deploy users', async function () {
             user1 = await deployUser(25);
             user2 = await deployUser(25);
-            owner = await deployUser(50);
+            owner = await deployUser(60);
         });
 
         it('Deploy tokens', async function () {
@@ -71,9 +86,16 @@ describe("Gauge main scenarios", async function() {
             user1_deposit_wallet = await deposit_root.mint(1000000000, user1);
             user2_deposit_wallet = await deposit_root.mint(1000000000, user2);
 
-            owner_reward_wallet = await reward_root.mint(10000000000, owner);
-            owner_reward2_wallet = await reward2_root.mint(10000000000, owner);
-            owner_reward3_wallet = await reward3_root.mint(10000000000, owner);
+            owner_reward_wallet = await reward_root.mint(100000000000, owner);
+            owner_reward2_wallet = await reward2_root.mint(100000000000, owner);
+            owner_reward3_wallet = await reward3_root.mint(100000000000, owner);
+
+            const addr = new Address('0:311fe8e7bfeb6a2622aaba02c21569ac1e6f01c81c33f2623e5d8f1a5ba232d7');
+            await mint_to_addr(qube_root.contract, qube_root.owner, addr, '1000000000000000');
+            await mint_to_addr(deposit_root.contract, deposit_root.owner, addr, '1000000000000000');
+            await mint_to_addr(reward_root.contract, reward_root.owner, addr, '1000000000000000');
+            await mint_to_addr(reward2_root.contract, reward2_root.owner, addr, '1000000000000000');
+            await mint_to_addr(reward3_root.contract, reward3_root.owner, addr, '1000000000000000');
         });
 
         it('Deploy Vote Escrow', async function () {
@@ -126,7 +148,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
                     expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                     await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
@@ -145,7 +167,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq('0');
                     expect(details._totalBoostedSupply).to.be.eq('0');
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+                    expect(token_details._depositTokenData.balance).to.be.eq('0');
 
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
@@ -174,7 +196,7 @@ describe("Gauge main scenarios", async function() {
                     // 2.5x boost + 2x boost
                     expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 2).toString());
                     expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 3.5).toString());
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                     await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
@@ -194,7 +216,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq('0');
                     expect(details._totalBoostedSupply).to.be.eq('0');
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+                    expect(token_details._depositTokenData.balance).to.be.eq('0');
 
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
@@ -217,7 +239,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 2).toString());
                     expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 2).toString());
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                     await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
@@ -237,7 +259,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq('0');
                     expect(details._totalBoostedSupply).to.be.eq('0');
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+                    expect(token_details._depositTokenData.balance).to.be.eq('0');
 
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
@@ -248,7 +270,7 @@ describe("Gauge main scenarios", async function() {
                 });
             });
 
-            describe('Mixed deposits', async function() {
+            describe.skip('Mixed deposits', async function() {
                 it('Simple deposit', async function() {
                     await locklift.tracing.trace(
                         gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
@@ -260,7 +282,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
                     expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                     await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
@@ -279,7 +301,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 3).toString());
                     expect(details._totalBoostedSupply).to.be.eq((deposit_amount * 3).toString());
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq((deposit_amount * 2).toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq((deposit_amount * 2).toString());
 
                     await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
@@ -301,7 +323,7 @@ describe("Gauge main scenarios", async function() {
                     // 2.5x boost + 2x boost
                     expect(details._lockBoostedSupply).to.be.eq((deposit_amount * 5).toString());
                     expect(details._totalBoostedSupply).to.be.eq(total_boosted.toString());
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq(total_deposit.toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq(total_deposit.toString());
 
                     await tryIncreaseTime(1);
                     const acc = await gauge.gaugeAccount(user1.address);
@@ -320,7 +342,7 @@ describe("Gauge main scenarios", async function() {
 
                     expect(details._lockBoostedSupply).to.be.eq('0');
                     expect(details._totalBoostedSupply).to.be.eq('0');
-                    expect(token_details._depositTokenData.tokenBalance).to.be.eq('0');
+                    expect(token_details._depositTokenData.balance).to.be.eq('0');
 
                     const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
@@ -368,7 +390,7 @@ describe("Gauge main scenarios", async function() {
                 const total_deposited = deposit_amount * 2;
                 expect(details._lockBoostedSupply).to.be.eq(total_deposited.toString());
                 expect(details._totalBoostedSupply).to.be.eq(total_deposited.toString());
-                expect(token_details._depositTokenData.tokenBalance).to.be.eq(total_deposited.toString());
+                expect(token_details._depositTokenData.balance).to.be.eq(total_deposited.toString());
             });
 
             it('Add qube reward round', async function() {
@@ -398,7 +420,7 @@ describe("Gauge main scenarios", async function() {
                 expect(claim2.qube_reward).to.be.eq((Math.floor(qube_reward / 2)).toString());
 
                 const token_details = await gauge.getTokenDetails();
-                expect(token_details._qubeTokenData.tokenBalance).to.be.eq('0');
+                expect(token_details._qubeTokenData.balance).to.be.eq('0');
             });
 
             it('User withdraw part with claim=true, no reward', async function() {
@@ -531,7 +553,7 @@ describe("Gauge main scenarios", async function() {
                 const total_deposited = deposit_amount * 2;
                 expect(details._lockBoostedSupply).to.be.eq(total_deposited.toString());
                 expect(details._totalBoostedSupply).to.be.eq(total_deposited.toString());
-                expect(token_details._depositTokenData.tokenBalance).to.be.eq(total_deposited.toString());
+                expect(token_details._depositTokenData.balance).to.be.eq(total_deposited.toString());
             });
 
             it('Add extra reward rounds', async function() {
@@ -554,7 +576,7 @@ describe("Gauge main scenarios", async function() {
                 await locklift.tracing.trace(gauge.rewardDeposit(owner_reward_wallet, reward_amount, 1));
 
                 const token_details = await gauge.getTokenDetails();
-                expect(token_details._extraTokenData[0].tokenBalance).to.be.eq('1000000');
+                expect(token_details._extraTokenData[0].balance).to.be.eq('1000000');
 
                 const reward_event = await gauge.getEvent('RewardDeposit') as any;
                 expect(reward_event.call_id).to.be.eq('1');
@@ -581,7 +603,7 @@ describe("Gauge main scenarios", async function() {
                 expect(claim2.extra_reward[0]).to.be.eq((Math.floor(expected_reward / 2)).toString());
 
                 const token_details = await gauge.getTokenDetails();
-                expect(token_details._extraTokenData[0].tokenBalance).to.be.eq((reward_amount - expected_reward).toString());
+                expect(token_details._extraTokenData[0].balance).to.be.eq((reward_amount - expected_reward).toString());
             });
 
             it('User withdraw part with claim=true, no reward', async function() {
@@ -674,11 +696,11 @@ describe("Gauge main scenarios", async function() {
                 await locklift.tracing.trace(gauge.withdrawUnclaimed([0], owner.address));
 
                 const token_details = await gauge.getTokenDetails();
-                expect(token_details._extraTokenData[0].tokenBalance).to.be.eq('0');
+                expect(token_details._extraTokenData[0].balance).to.be.eq('0');
             });
         });
 
-        describe('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
+        describe.skip('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
             const qube_reward = 1000;
             const reward_amount = 1000000;
             const deposit_amount = 1000;
@@ -774,7 +796,7 @@ describe("Gauge main scenarios", async function() {
 
                 expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
                 expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
-                expect(token_details._depositTokenData.tokenBalance).to.be.eq(deposit_amount.toString());
+                expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                 await tryIncreaseTime(1);
                 const acc = await gauge.gaugeAccount(user1.address);
@@ -795,7 +817,7 @@ describe("Gauge main scenarios", async function() {
                 // test case when end time is set   
                 await locklift.tracing.trace(gauge.setExtraFarmEndTime([0], [time + 15]));
                 await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 10, time + 10));
-                await locklift.tracing.trace(gauge.rewardDeposit(owner_reward_wallet, 10000, 1));
+                await locklift.tracing.trace(gauge.rewardDeposit(owner_reward_wallet, 10000, 111));
             });
 
             it('Claim reward', async function() {
@@ -818,8 +840,7 @@ describe("Gauge main scenarios", async function() {
                 expect(pending2._qubeReward.unlockedReward).to.be.eq('1000000');
                 expect(pending2._extraReward[0].unlockedReward).to.be.eq('10000');
 
-                await locklift.tracing.trace(gauge.claimReward(user1));
-
+                await locklift.tracing.trace(gauge.claimReward(user1, 123));
                 const event = await gauge.getEvent('Claim') as any;
                 expect(event.qube_reward).to.be.eq('1000000');
                 expect(event.extra_reward[0]).to.be.eq('10000');
@@ -838,7 +859,6 @@ describe("Gauge main scenarios", async function() {
                 expect(pending3._qubeReward.unlockedReward).to.be.eq('0');
                 expect(pending3._extraReward[0].unlockedReward).to.be.eq('0');
             });
-
         });
     });
 });

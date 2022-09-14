@@ -25,7 +25,7 @@ abstract contract GaugeBase is GaugeRewards {
     ) external override {
         tvm.rawReserve(_reserve(), 0);
 
-        if (msg.sender == depositTokenData.tokenWallet) {
+        if (msg.sender == depositTokenData.wallet) {
             // check if payload assembled correctly
             (address deposit_owner, uint32 lock_time, bool claim, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
 
@@ -33,14 +33,14 @@ abstract contract GaugeBase is GaugeRewards {
                 // too low deposit value or too low msg.value or incorrect deposit payload
                 // for incorrect deposit payload send tokens back to sender
                 emit DepositRevert(call_id, deposit_owner, amount);
-                _transferTokens(depositTokenData.tokenWallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
+                _transferTokens(depositTokenData.wallet, amount, sender, payload, remainingGasTo, MsgFlag.ALL_NOT_RESERVED);
                 return;
             }
 
             updateRewardData();
 
             uint128 boosted_amount = calculateBoostedBalance(amount, lock_time);
-            depositTokenData.tokenBalance += amount;
+            depositTokenData.balance += amount;
             lockBoostedSupply += boosted_amount;
 
             deposit_nonce += 1;
@@ -58,18 +58,19 @@ abstract contract GaugeBase is GaugeRewards {
                 _syncData(),
                 Callback.CallMeta(call_id, nonce, remainingGasTo)
             );
-        } else if (msg.sender == qubeTokenData.tokenWallet && sender == voteEscrow) {
+        } else if (msg.sender == qubeTokenData.wallet && sender == voteEscrow) {
             TvmSlice slice = payload.toSlice();
             uint32 round_start = slice.decode(uint32);
             uint32 round_len = slice.decode(uint32);
 
-            qubeTokenData.tokenBalance += amount;
+            qubeTokenData.balance += amount;
+            qubeTokenData.cumulativeBalance += amount;
 
             _addQubeRewardRound(amount, round_start, round_len);
             remainingGasTo.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
         } else {
             for (uint i = 0; i < extraTokenData.length; i++) {
-                if (msg.sender == extraTokenData[i].tokenWallet) {
+                if (msg.sender == extraTokenData[i].wallet) {
                     (uint32 call_id, uint32 nonce, bool correct) = decodeRewardDepositPayload(payload);
                     if (!correct) {
                         emit DepositRevert(call_id, sender, amount);
@@ -77,8 +78,9 @@ abstract contract GaugeBase is GaugeRewards {
                         return;
                     }
 
-                    extraTokenData[i].tokenBalance += amount;
-                    emit RewardDeposit(call_id, i, amount);
+                    extraTokenData[i].balance += amount;
+                    extraTokenData[i].cumulativeBalance += amount;
+                    emit RewardDeposit(call_id, sender, i, amount);
 
                     _sendCallbackOrGas(sender, nonce, true, remainingGasTo);
                     return;
@@ -91,14 +93,14 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         PendingDeposit deposit = deposits[_deposit_nonce];
-        depositTokenData.tokenBalance -= deposit.amount;
+        depositTokenData.balance -= deposit.amount;
         lockBoostedSupply -= deposit.boosted_amount;
 
         emit DepositRevert(deposit.meta.call_id, deposit.user, deposit.amount);
         delete deposits[_deposit_nonce];
 
         _transferTokens(
-            depositTokenData.tokenWallet,
+            depositTokenData.wallet,
             deposit.amount,
             deposit.user,
             _makeCell(deposit.meta.nonce),
@@ -183,7 +185,7 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
-        depositTokenData.tokenBalance -= amount;
+        depositTokenData.balance -= amount;
         lockBoostedSupply -= amount;
 
         emit Withdraw(meta.call_id, user, amount);
@@ -201,7 +203,7 @@ abstract contract GaugeBase is GaugeRewards {
 
         // we dont need additional callback, we always send tokens as last action
         _transferTokens(
-            depositTokenData.tokenWallet, amount, user, _makeCell(meta.nonce), meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED
+            depositTokenData.wallet, amount, user, _makeCell(meta.nonce), meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED
         );
     }
 
@@ -252,8 +254,8 @@ abstract contract GaugeBase is GaugeRewards {
             require (extraRewardEnded[ids[i]], Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
             require (now >= lock_time, Errors.CANT_WITHDRAW_UNCLAIMED_ALL);
 
-            extra_amounts[ids[i]] = extraTokenData[ids[i]].tokenBalance;
-            extraTokenData[ids[i]].tokenBalance = 0;
+            extra_amounts[ids[i]] = extraTokenData[ids[i]].balance;
+            extraTokenData[ids[i]].balance = 0;
         }
         tvm.rawReserve(_reserve(), 0);
 
@@ -298,12 +300,12 @@ abstract contract GaugeBase is GaugeRewards {
             // deploy Gauge account
             address gauge_account_addr = deployGaugeAccount(deposit.user);
             // deploy qube and other wallets
-            ITokenRoot(qubeTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
+            ITokenRoot(qubeTokenData.root).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
                 deposit.user,
                 Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
             );
             for (uint i = 0; i < extraTokenData.length; i++) {
-                ITokenRoot(extraTokenData[i].tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
+                ITokenRoot(extraTokenData[i].root).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: GaugeBase.dummy}(
                     deposit.user,
                     Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
                 );

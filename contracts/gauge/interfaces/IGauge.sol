@@ -14,7 +14,7 @@ interface IGauge {
     event LockBoostedBurn(address user, uint128 lock_boosted_burned);
     event WithdrawUnclaimed(uint32 call_id, address to, uint128[] extra_amounts);
 
-    event RewardDeposit(uint32 call_id, uint256 reward_id, uint128 amount);
+    event RewardDeposit(uint32 call_id, address sender, uint256 reward_id, uint128 amount);
     event ExtraFarmEndSet(uint32 call_id, uint256 id, uint32 farm_end_time);
     event GaugeAccountCodeUpdated(uint32 call_id, uint32 prev_version, uint32 new_version);
     event GaugeAccountCodeUpdateRejected(uint32 call_id);
@@ -42,9 +42,10 @@ interface IGauge {
     }
 
     struct TokenData {
-        address tokenRoot;
-        address tokenWallet;
-        uint128 tokenBalance;
+        address root;
+        address wallet;
+        uint128 balance;
+        uint128 cumulativeBalance;
     }
 
     struct PendingDeposit {

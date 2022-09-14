@@ -3,8 +3,9 @@ import {VoteEscrow} from "./wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "./wrappers/ve_account";
 import {FactorySource, GaugeFactoryAbi} from "../../build/factorySource";
 import {Address, Contract, zeroAddress, getRandomNonce, toNano, WalletTypes} from "locklift";
+import {Account} from 'locklift/everscale-standalone-client';
 import {Gauge} from "./wrappers/gauge";
-import {Account} from "everscale-standalone-client/nodejs";
+import {sign} from "crypto";
 const logger = require("mocha-logger");
 const {expect} = require("chai");
 
@@ -67,7 +68,7 @@ export const runTargets = async function (
 
 export const deployUsers = async function (count: number, initial_balance: number) {
     // @ts-ignore
-    let signers = await Promise.all([...Array(count).keys()].map(async (i) => await locklift.keystore.getSigner(i.toString())));
+    let signers = await Promise.all(Array.from(Array(count).keys()).map(async (i) => await locklift.keystore.getSigner(i.toString())));
     signers = signers.slice(0, count);
 
     let signers_map = {};

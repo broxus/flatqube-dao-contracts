@@ -1,7 +1,7 @@
 import {Address, Contract, toNano} from "locklift";
 import {TokenWallet} from "./token_wallet";
 import {FactorySource} from "../../../build/factorySource";
-import {Account} from "everscale-standalone-client/nodejs";
+import {Account} from 'locklift/everscale-standalone-client'
 
 const logger = require("mocha-logger");
 

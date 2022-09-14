@@ -340,9 +340,9 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"_depositTokenData","type":"tuple"},
-				{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"_qubeTokenData","type":"tuple"},
-				{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"_extraTokenData","type":"tuple[]"}
+				{"components":[{"name":"root","type":"address"},{"name":"wallet","type":"address"},{"name":"balance","type":"uint128"},{"name":"cumulativeBalance","type":"uint128"}],"name":"_depositTokenData","type":"tuple"},
+				{"components":[{"name":"root","type":"address"},{"name":"wallet","type":"address"},{"name":"balance","type":"uint128"},{"name":"cumulativeBalance","type":"uint128"}],"name":"_qubeTokenData","type":"tuple"},
+				{"components":[{"name":"root","type":"address"},{"name":"wallet","type":"address"},{"name":"balance","type":"uint128"},{"name":"cumulativeBalance","type":"uint128"}],"name":"_extraTokenData","type":"tuple[]"}
 			]
 		},
 		{
@@ -520,6 +520,7 @@
 			"name": "RewardDeposit",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
+				{"name":"sender","type":"address"},
 				{"name":"reward_id","type":"uint256"},
 				{"name":"amount","type":"uint128"}
 			],
@@ -622,12 +623,12 @@
 		{"name":"maxLockTime","type":"uint32"},
 		{"name":"init_mask","type":"uint8"},
 		{"name":"initialized","type":"bool"},
-		{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"depositTokenData","type":"tuple"},
-		{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"qubeTokenData","type":"tuple"},
+		{"components":[{"name":"root","type":"address"},{"name":"wallet","type":"address"},{"name":"balance","type":"uint128"},{"name":"cumulativeBalance","type":"uint128"}],"name":"depositTokenData","type":"tuple"},
+		{"components":[{"name":"root","type":"address"},{"name":"wallet","type":"address"},{"name":"balance","type":"uint128"},{"name":"cumulativeBalance","type":"uint128"}],"name":"qubeTokenData","type":"tuple"},
 		{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"qubeRewardRounds","type":"tuple[]"},
 		{"name":"qubeVestingPeriod","type":"uint32"},
 		{"name":"qubeVestingRatio","type":"uint32"},
-		{"components":[{"name":"tokenRoot","type":"address"},{"name":"tokenWallet","type":"address"},{"name":"tokenBalance","type":"uint128"}],"name":"extraTokenData","type":"tuple[]"},
+		{"components":[{"name":"root","type":"address"},{"name":"wallet","type":"address"},{"name":"balance","type":"uint128"},{"name":"cumulativeBalance","type":"uint128"}],"name":"extraTokenData","type":"tuple[]"},
 		{"components":[{"name":"startTime","type":"uint32"},{"name":"endTime","type":"uint32"},{"name":"rewardPerSecond","type":"uint128"},{"name":"accRewardPerShare","type":"uint256"}],"name":"extraRewardRounds","type":"tuple[][]"},
 		{"name":"extraVestingPeriods","type":"uint32[]"},
 		{"name":"extraVestingRatios","type":"uint32[]"},

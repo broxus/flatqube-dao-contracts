@@ -1,5 +1,5 @@
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
-import {Account} from "everscale-standalone-client/nodejs";
+import {Account} from 'locklift/everscale-standalone-client';
 import {Token} from "../utils/wrappers/token";
 
 const { expect } = require('chai');

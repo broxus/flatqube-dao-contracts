@@ -1,7 +1,6 @@
 import {Address, Contract} from "locklift";
 import {FactorySource} from "../../../build/factorySource";
-import {Account} from "everscale-standalone-client/nodejs";
-
+import {Account} from 'locklift/everscale-standalone-client'
 const {toNano} = locklift.utils;
 
 

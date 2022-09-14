@@ -4,8 +4,7 @@ const {
     toNano
 } = locklift.utils;
 const {expect} = require('chai');
-import {Account} from "everscale-standalone-client/nodejs";
-
+import {Account} from 'locklift/everscale-standalone-client'
 const Bignumber = require("bignumber.js");
 import {FactorySource} from "../../../build/factorySource";
 import {Address, Contract} from "locklift";

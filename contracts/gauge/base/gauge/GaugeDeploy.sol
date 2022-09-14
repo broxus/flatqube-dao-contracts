@@ -17,13 +17,13 @@ abstract contract GaugeDeploy is GaugeUpgradable {
             require (_extraRewardTokenRoot[i] != _qubeTokenRoot, Errors.BAD_REWARD_TOKENS_INPUT);
         }
 
-        depositTokenData.tokenRoot = _depositTokenRoot;
-        qubeTokenData.tokenRoot = _qubeTokenRoot;
+        depositTokenData.root = _depositTokenRoot;
+        qubeTokenData.root = _qubeTokenRoot;
         extraRewardEnded = new bool[](_extraRewardTokenRoot.length);
         extraRewardRounds = new RewardRound[][](_extraRewardTokenRoot.length);
         lastExtraRewardRoundIdx = new uint256[](_extraRewardTokenRoot.length);
         for (uint i = 0; i < _extraRewardTokenRoot.length; i++) {
-            extraTokenData.push(TokenData(_extraRewardTokenRoot[i], address.makeAddrNone(), 0));
+            extraTokenData.push(TokenData(_extraRewardTokenRoot[i], address.makeAddrNone(), 0, 0));
         }
 
         init_mask <<= 1;
@@ -87,19 +87,19 @@ abstract contract GaugeDeploy is GaugeUpgradable {
     */
     function _setupTokenWallets() internal view {
         // Deploy vault's token wallet
-        ITokenRoot(depositTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
+        ITokenRoot(depositTokenData.root).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
             address(this), // owner
             Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
         );
 
         // deploy qube wallet
-        ITokenRoot(qubeTokenData.tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
+        ITokenRoot(qubeTokenData.root).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress }(
             address(this), // owner
             Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
         );
 
         for (uint i = 0; i < extraTokenData.length; i++) {
-            ITokenRoot(extraTokenData[i].tokenRoot).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress}(
+            ITokenRoot(extraTokenData[i].root).deployWallet{value: Gas.TOKEN_WALLET_DEPLOY_VALUE, callback: IGauge.receiveTokenWalletAddress}(
                 address(this), // owner address
                 Gas.TOKEN_WALLET_DEPLOY_VALUE / 2 // deploy grams
             );
@@ -112,14 +112,14 @@ abstract contract GaugeDeploy is GaugeUpgradable {
         @param wallet Gauge's token wallet
     */
     function receiveTokenWalletAddress(address wallet) external override {
-        if (msg.sender == depositTokenData.tokenRoot) {
-            depositTokenData.tokenWallet = wallet;
-        } else if (msg.sender == qubeTokenData.tokenRoot) {
-            qubeTokenData.tokenWallet = wallet;
+        if (msg.sender == depositTokenData.root) {
+            depositTokenData.wallet = wallet;
+        } else if (msg.sender == qubeTokenData.root) {
+            qubeTokenData.wallet = wallet;
         } else {
             for (uint i = 0; i < extraTokenData.length; i++) {
-                if (msg.sender == extraTokenData[i].tokenRoot) {
-                    extraTokenData[i].tokenWallet = wallet;
+                if (msg.sender == extraTokenData[i].root) {
+                    extraTokenData[i].wallet = wallet;
                 }
             }
         }

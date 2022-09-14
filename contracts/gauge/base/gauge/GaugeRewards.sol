@@ -179,7 +179,7 @@ abstract contract GaugeRewards is GaugeDeploy {
             uint32 last_period = now - _lastAverageUpdateTime;
             _lockBoostedSupplyAverage = (_lockBoostedSupplyAverage * _lockBoostedSupplyAveragePeriod + lockBoostedSupply * last_period) / (_lockBoostedSupplyAveragePeriod + last_period);
             _lockBoostedSupplyAveragePeriod += last_period;
-            _supplyAverage = (_supplyAverage * _supplyAveragePeriod + depositTokenData.tokenBalance * last_period) / (_supplyAveragePeriod + last_period);
+            _supplyAverage = (_supplyAverage * _supplyAveragePeriod + depositTokenData.balance * last_period) / (_supplyAveragePeriod + last_period);
             _supplyAveragePeriod += last_period;
             _lastAverageUpdateTime = now;
         }
@@ -211,7 +211,7 @@ abstract contract GaugeRewards is GaugeDeploy {
         (,,uint128 _supplyAverage, uint32 _supplyAveragePeriod,) = calculateSupplyAverage();
         (uint32 _lastRewardTime, RewardRound[][] _extraRewardRounds,, RewardRound[] _qubeRewardRounds,) = calculateRewardData();
         return GaugeSyncData(
-            depositTokenData.tokenBalance,
+            depositTokenData.balance,
             _supplyAverage,
             _supplyAveragePeriod,
             _extraRewardRounds,

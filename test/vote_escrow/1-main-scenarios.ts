@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime,sendAllEvers} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
-import {Account} from "everscale-standalone-client/nodejs";
+import {Account} from 'locklift/everscale-standalone-client';
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";

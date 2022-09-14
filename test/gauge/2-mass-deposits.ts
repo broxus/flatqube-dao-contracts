@@ -14,7 +14,7 @@ import {TokenWallet} from "../utils/wrappers/token_wallet";
 import {Contract, getRandomNonce, toNano} from "locklift";
 import {GaugeFactoryAbi} from "../../build/factorySource";
 import {Gauge} from "../utils/wrappers/gauge";
-import {Account} from "everscale-standalone-client/nodejs";
+import {Account} from 'locklift/everscale-standalone-client';
 
 const logger = require('mocha-logger');
 
