@@ -6,6 +6,44 @@ import "../../Gauge.sol";
 
 
 abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
+    function getDetails() external view returns (
+        uint32 _gauges_count,
+        address _owner,
+        address _pending_owner,
+        uint32 _default_qube_vesting_period,
+        uint32 _default_qube_vesting_ratio,
+        address _qube,
+        address _voteEscrow
+    ) {
+        return (
+            gauges_count,
+            owner,
+            pending_owner,
+            default_qube_vesting_period,
+            default_qube_vesting_ratio,
+            qube,
+            voteEscrow
+        );
+    }
+
+    function getCodes() external view returns (
+        uint32 factory_version,
+        uint32 gauge_version,
+        uint32 gauge_account_version,
+        TvmCell GaugeAccountCode,
+        TvmCell GaugeCode,
+        TvmCell PlatformCode
+    ) {
+        return (
+            factory_version,
+            gauge_version,
+            gauge_account_version,
+            GaugeAccountCode,
+            GaugeCode,
+            PlatformCode
+        );
+    }
+
     function transferOwnership(address new_owner, Callback.CallMeta meta) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 

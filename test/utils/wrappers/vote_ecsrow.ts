@@ -130,6 +130,15 @@ export class VoteEscrow {
         }).call()).ve_amount;
     }
 
+    async transferOwnership(new_owner: { address: Address }) {
+        return this.contract.methods.transferOwnership({
+            new_owner: new_owner.address, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}
+        }).send({
+            amount: toNano(5),
+            from: this._owner.address
+        });
+    }
+
     async acceptOwnership(owner: Account) {
         return this.contract.methods.acceptOwnership({meta: {call_id: 0, nonce: 0, send_gas_to: owner.address}}).send({
             amount: toNano(5),

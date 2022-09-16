@@ -25,6 +25,33 @@
 			]
 		},
 		{
+			"name": "getDetails",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_gauges_count","type":"uint32"},
+				{"name":"_owner","type":"address"},
+				{"name":"_pending_owner","type":"address"},
+				{"name":"_default_qube_vesting_period","type":"uint32"},
+				{"name":"_default_qube_vesting_ratio","type":"uint32"},
+				{"name":"_qube","type":"address"},
+				{"name":"_voteEscrow","type":"address"}
+			]
+		},
+		{
+			"name": "getCodes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"factory_version","type":"uint32"},
+				{"name":"gauge_version","type":"uint32"},
+				{"name":"gauge_account_version","type":"uint32"},
+				{"name":"GaugeAccountCode","type":"cell"},
+				{"name":"GaugeCode","type":"cell"},
+				{"name":"PlatformCode","type":"cell"}
+			]
+		},
+		{
 			"name": "transferOwnership",
 			"inputs": [
 				{"name":"new_owner","type":"address"},

@@ -209,7 +209,7 @@ CALLREF {
 COMMIT
 THROW 0
 
-.macro transferOwnership
+.macro getDetails
 DROP
 GETGLOB 6
 THROWIFNOT 76
@@ -219,6 +219,136 @@ IFREF {
 	CALL $c4_to_c7$
 }
 .loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 9
+ENDS
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 0
+CALLREF {
+	CALL $getDetails_fbbf93a0_internal_macro$
+}
+PUSH S7
+PUSHCONT {
+	PUSH S9
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 1
+	STUR 98
+	REVERSE 8, 0
+	NEWC
+	STSLICECONST xd38e9fbf
+	STU 32
+	STSLICE
+	ROLLREV 5
+	NEWC
+	STSLICE
+	STU 32
+	STU 32
+	ROTREV
+	NEWC
+	STSLICE
+	SWAP
+	NEWC
+	STSLICE
+	STBREFR
+	STBREFR
+	STBREFR
+	STBREFR
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	BLKDROP 7
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro getDetails_fbbf93a0_internal_macro
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 18
+GETGLOB 13
+GETGLOB 14
+GETGLOB 15
+GETGLOB 16
+GETGLOB 17
+GETGLOB 18
+GETGLOB 19
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 0
+
+.macro getCodes
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 29
+ENDS
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 0
+CALLREF {
+	CALL $getCodes_c29fb0f1_internal_macro$
+}
+PUSH S6
+PUSHCONT {
+	PUSH S8
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 98
+	STZEROES
+	REVERSE 6, 1
+	STSLICECONST xefe78801
+	STU 32
+	STU 32
+	STU 32
+	STREF
+	STREF
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	BLKDROP 6
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro getCodes_c29fb0f1_internal_macro
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 37
+PUSHINT 0
+BLKPUSH 2, 0
+PUSHREF {
+}
+BLKPUSH 2, 0
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 0
+
+.macro transferOwnership
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 47
 OVER
 PUSHCONT {
 	LDREF
@@ -253,13 +383,13 @@ GETGLOB 9
 GETGLOB 14
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 10
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 48
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 12
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 50
 DUP2
 FIRST
 PUSHSLICE xc00000000000000000000000003a200b63
@@ -270,10 +400,10 @@ STSLICE
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 13
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 51
 SWAP
 SETGLOB 15
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 14
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 52
 THIRD
 NEWC
 STSLICECONST x42_
@@ -294,7 +424,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 17
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 55
 OVER
 PUSHCONT {
 	LDU 32
@@ -324,18 +454,18 @@ CALLREF {
 THROW 0
 
 .macro acceptOwnership_15c4637c_internal_macro
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 18
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 56
 GETGLOB 9
 GETGLOB 15
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 19
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 57
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 21
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 59
 GETGLOB 15
 GETGLOB 14
 PUSH S2
@@ -356,13 +486,13 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 22
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 60
 GETGLOB 15
 SETGLOB 14
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 23
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 61
 PUSHSLICE x2_
 SETGLOB 15
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 24
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 62
 THIRD
 NEWC
 STSLICECONST x42_
@@ -383,7 +513,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 27
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 65
 OVER
 PUSHCONT {
 	LDU 32
@@ -422,19 +552,19 @@ GETGLOB 9
 GETGLOB 14
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 28
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 66
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 30
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 68
 ROT
 SETGLOB 16
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 31
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 69
 XCPU S1, S0
 SETGLOB 17
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 33
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 71
 GETGLOB 16
 PUSH S2
 FIRST
@@ -447,7 +577,7 @@ STU 32
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 34
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 72
 THIRD
 NEWC
 STSLICECONST x42_
@@ -468,7 +598,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 37
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 75
 OVER
 PUSHCONT {
 	LDREF
@@ -512,7 +642,7 @@ CALLREF {
 THROW 0
 
 .macro deployGauge_1d5ef235_internal_macro
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 48
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 86
 ROLL 4
 BLKSWAP 3, 5
 XCHG S3, S8
@@ -533,7 +663,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 63
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 101
 OVER
 PUSHCONT {
 	LDREF
@@ -584,7 +714,7 @@ GETGLOB 9
 GETGLOB 14
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 76
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 114
 CALLREF {
 	CALL $_deployGauge_89ebd3c5_internal_macro$
 }
@@ -595,20 +725,20 @@ CALLREF {
 CALL $_deployGauge_89ebd3c5_internal_macro$
 
 .macro _deployGauge_89ebd3c5_internal_macro
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 104
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 142
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 105
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 143
 PUSH S4
 FIRST
 UFITS 128
 PUSHINT 500000000
 MUL
 UFITS 128
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 106
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 144
 DEPTH
 ADDCONST -2
 PICK
@@ -618,7 +748,7 @@ ADD
 UFITS 128
 GEQ
 THROWIFNOT 1004
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 108
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 146
 GETGLOB 2
 NEWC
 STU 256
@@ -672,12 +802,12 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 121
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 159
 GETGLOB 13
 INC
 UFITS 32
 SETGLOB 13
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 123
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 161
 GETGLOB 19
 ROLL 13
 ROT
@@ -745,7 +875,7 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 128
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 166
 ROLL 5
 GETGLOB 18
 ROLL 11
@@ -772,7 +902,7 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 129
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 167
 BLKSWAP 5, 2
 REVERSE 5, 0
 PUSH S5
@@ -797,7 +927,7 @@ STU 32
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 132
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 170
 SWAP2
 XCPU S1, S2
 NEWC
@@ -810,7 +940,7 @@ STU 32
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 133
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 171
 NEWC
 STSLICECONST x62_
 STSLICE
@@ -820,7 +950,7 @@ STU 32
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 134
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 172
 GETGLOB 9
 NEWC
 STSLICECONST x42_
@@ -841,7 +971,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 137
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 175
 LDU 32
 LDU 32
 ENDS
@@ -856,7 +986,7 @@ CALLREF {
 THROW 0
 
 .macro onGaugeDeploy_4635d47d_internal_macro
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 138
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 176
 GETGLOB 2
 NEWC
 STU 256
@@ -910,20 +1040,20 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 151
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 189
 HASHCU
 NEWC
 STSLICECONST x801_
 STU 256
 ENDC
 CTOS
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 152
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 190
 PUSHINT 5000
 GETGLOB 9
 PUSH S2
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 154
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 192
 SWAP
 PUSHSLICE xc000000000000000000000000058dc20e9
 NEWC
@@ -1932,113 +2062,130 @@ THROW 60
 
 .macro public_function_selector
 DUP
-PUSHINT 568382654
-LEQ
-IFJMPREF {
-	DUP
-	PUSHINT 36415670
-	EQUAL
-	IFJMPREF {
-		CALL $upgradeGauges$
-	}
-	DUP
-	PUSHINT 36979651
-	EQUAL
-	IFJMPREF {
-		CALL $constructor$
-	}
-	DUP
-	PUSHINT 533933841
-	EQUAL
-	IFJMPREF {
-		CALL $deployGaugeByOwner$
-	}
-	DUP
-	PUSHINT 568382654
-	EQUAL
-	IFJMPREF {
-		CALL $upgrade$
-	}
-}
-DUP
-PUSHINT 1225401401
-LEQ
-IFJMPREF {
-	DUP
-	PUSHINT 741241715
-	EQUAL
-	IFJMPREF {
-		CALL $installNewGaugeCode$
-	}
-	DUP
-	PUSHINT 974778545
-	EQUAL
-	IFJMPREF {
-		CALL $setDefaultQubeVestingParams$
-	}
-	DUP
-	PUSHINT 993887332
-	EQUAL
-	IFJMPREF {
-		CALL $acceptOwnership$
-	}
-	DUP
-	PUSHINT 1225401401
-	EQUAL
-	IFJMPREF {
-		CALL $processUpgradeGaugeRequest$
-	}
-}
-DUP
-PUSHINT 1291649025
-LEQ
-IFJMPREF {
-	DUP
-	PUSHINT 1238372284
-	EQUAL
-	IFJMPREF {
-		CALL $processUpdateGaugeAccountCodeRequest$
-	}
-	DUP
-	PUSHINT 1252511245
-	EQUAL
-	IFJMPREF {
-		CALL $transferOwnership$
-	}
-	DUP
-	PUSHINT 1281413418
-	EQUAL
-	IFJMPREF {
-		CALL $onGaugeDeploy$
-	}
-	DUP
-	PUSHINT 1291649025
-	EQUAL
-	IFJMPREF {
-		CALL $installNewGaugeAccountCode$
-	}
-}
-DUP
 PUSHINT 1761260491
 LEQ
 IFJMPREF {
 	DUP
-	PUSHINT 1397963450
-	EQUAL
+	PUSHINT 568382654
+	LEQ
 	IFJMPREF {
-		CALL $forceUpgradeGaugeAccounts$
+		DUP
+		PUSHINT 36415670
+		EQUAL
+		IFJMPREF {
+			CALL $upgradeGauges$
+		}
+		DUP
+		PUSHINT 36979651
+		EQUAL
+		IFJMPREF {
+			CALL $constructor$
+		}
+		DUP
+		PUSHINT 533933841
+		EQUAL
+		IFJMPREF {
+			CALL $deployGaugeByOwner$
+		}
+		DUP
+		PUSHINT 568382654
+		EQUAL
+		IFJMPREF {
+			CALL $upgrade$
+		}
 	}
 	DUP
-	PUSHINT 1539976856
-	EQUAL
+	PUSHINT 1225401401
+	LEQ
 	IFJMPREF {
-		CALL $deployGauge$
+		DUP
+		PUSHINT 741241715
+		EQUAL
+		IFJMPREF {
+			CALL $installNewGaugeCode$
+		}
+		DUP
+		PUSHINT 974778545
+		EQUAL
+		IFJMPREF {
+			CALL $setDefaultQubeVestingParams$
+		}
+		DUP
+		PUSHINT 993887332
+		EQUAL
+		IFJMPREF {
+			CALL $acceptOwnership$
+		}
+		DUP
+		PUSHINT 1225401401
+		EQUAL
+		IFJMPREF {
+			CALL $processUpgradeGaugeRequest$
+		}
+	}
+	DUP
+	PUSHINT 1291649025
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 1238372284
+		EQUAL
+		IFJMPREF {
+			CALL $processUpdateGaugeAccountCodeRequest$
+		}
+		DUP
+		PUSHINT 1252511245
+		EQUAL
+		IFJMPREF {
+			CALL $transferOwnership$
+		}
+		DUP
+		PUSHINT 1281413418
+		EQUAL
+		IFJMPREF {
+			CALL $onGaugeDeploy$
+		}
+		DUP
+		PUSHINT 1291649025
+		EQUAL
+		IFJMPREF {
+			CALL $installNewGaugeAccountCode$
+		}
 	}
 	DUP
 	PUSHINT 1761260491
-	EQUAL
+	LEQ
 	IFJMPREF {
-		CALL $updateGaugeAccountsCode$
+		DUP
+		PUSHINT 1397963450
+		EQUAL
+		IFJMPREF {
+			CALL $forceUpgradeGaugeAccounts$
+		}
+		DUP
+		PUSHINT 1401855935
+		EQUAL
+		IFJMPREF {
+			CALL $getDetails$
+		}
+		DUP
+		PUSHINT 1539976856
+		EQUAL
+		IFJMPREF {
+			CALL $deployGauge$
+		}
+		DUP
+		PUSHINT 1761260491
+		EQUAL
+		IFJMPREF {
+			CALL $updateGaugeAccountsCode$
+		}
 	}
+}
+DUP
+PUSHINT 1877444609
+EQUAL
+IFJMPREF {
+	CALL $getCodes$
 }
 

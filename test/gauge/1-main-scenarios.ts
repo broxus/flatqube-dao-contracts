@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {
-    deployUser,
+    deployUser, sendAllEvers,
     setupGauge,
     setupGaugeFactory,
     setupTokenRoot,
@@ -859,6 +859,16 @@ describe("Gauge main scenarios", async function() {
                 expect(pending3._qubeReward.unlockedReward).to.be.eq('0');
                 expect(pending3._extraReward[0].unlockedReward).to.be.eq('0');
             });
+        });
+
+        describe('Cleanup', async function() {
+           it('Clean', async function() {
+               const giver = new Address(locklift.context.network.config.giver.address);
+
+               await sendAllEvers(user1, giver);
+               await sendAllEvers(user2, giver);
+               await sendAllEvers(owner, giver);
+           });
         });
     });
 });
