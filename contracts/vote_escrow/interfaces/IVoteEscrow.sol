@@ -41,7 +41,8 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         uint32 epoch_num,
         mapping (address => uint128) farming_distribution,
         uint128 team_tokens,
-        uint128 treasury_tokens
+        uint128 treasury_tokens,
+        uint128 total_distributed
     );
     event TreasuryWithdraw(
         uint32 call_id,

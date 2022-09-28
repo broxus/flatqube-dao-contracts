@@ -80,7 +80,7 @@ abstract contract GaugeHelpers is GaugeStorage {
         _gaugeVersion = gauge_version;
     }
 
-    function calculateBoostedBalance(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {
+    function calculateBoostedAmount(uint128 amount, uint32 lock_time) public view returns (uint128 boosted_amount) {
         if (maxLockTime == 0) {
             return amount;
         }
@@ -258,22 +258,32 @@ abstract contract GaugeHelpers is GaugeStorage {
         _;
     }
 
-    function getGaugeAccountAddress(address user) public virtual view responsible returns (address) {
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(tvm.hash(_buildInitData(_buildGaugeAccountParams(user))));
+    function getVoteEscrowAccountAddress(address user) public view responsible returns (address) {
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(tvm.hash(_buildInitData(_buildVoteEscrowAccountParams(user), PlatformTypes.VoteEscrowAccount)));
     }
 
-    function _buildGaugeAccountParams(address user) internal virtual pure returns (TvmCell) {
+    function getGaugeAccountAddress(address user) public view responsible returns (address) {
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(tvm.hash(_buildInitData(_buildGaugeAccountParams(user), PlatformTypes.GaugeAccount)));
+    }
+
+    function _buildGaugeAccountParams(address user) internal pure returns (TvmCell) {
         TvmBuilder builder;
         builder.store(user);
         return builder.toCell();
     }
 
-    function _buildInitData(TvmCell _initialData) internal virtual view returns (TvmCell) {
+    function _buildVoteEscrowAccountParams(address user) internal pure returns (TvmCell) {
+        TvmBuilder builder;
+        builder.store(user);
+        return builder.toCell();
+    }
+
+    function _buildInitData(TvmCell _initialData, uint8 _platformType) internal view returns (TvmCell) {
         return tvm.buildStateInit({
             contr: Platform,
             varInit: {
                 root: address(this),
-                platformType: PlatformTypes.GaugeAccount,
+                platformType: _platformType,
                 initialData: _initialData,
                 platformCode: platformCode
             },
@@ -292,7 +302,7 @@ abstract contract GaugeHelpers is GaugeStorage {
         _;
     }
 
-    function _reserve() internal virtual pure returns (uint128) {
+    function _reserve() internal pure returns (uint128) {
         return math.max(address(this).balance - msg.value, CONTRACT_MIN_BALANCE);
     }
 }

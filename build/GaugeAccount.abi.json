@@ -153,14 +153,6 @@
 			]
 		},
 		{
-			"name": "receiveVeAccAddress",
-			"inputs": [
-				{"name":"ve_acc_addr","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "getDetails",
 			"inputs": [
 				{"name":"answerId","type":"uint32"}
@@ -228,7 +220,10 @@
 			],
 			"outputs": [
 				{"name":"_veBoostedBalance","type":"uint128"},
-				{"name":"_totalBoostedBalance","type":"uint128"}
+				{"name":"_totalBoostedBalance","type":"uint128"},
+				{"name":"_veBoostMultiplier","type":"uint256"},
+				{"name":"_lockBoostMultiplier","type":"uint256"},
+				{"name":"_totalBoostMultiplier","type":"uint256"}
 			]
 		},
 		{

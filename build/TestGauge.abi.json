@@ -357,7 +357,7 @@
 			]
 		},
 		{
-			"name": "calculateBoostedBalance",
+			"name": "calculateBoostedAmount",
 			"inputs": [
 				{"name":"amount","type":"uint128"},
 				{"name":"lock_time","type":"uint32"}
@@ -415,6 +415,16 @@
 			]
 		},
 		{
+			"name": "getVoteEscrowAccountAddress",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"user","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
 			"name": "getGaugeAccountAddress",
 			"inputs": [
 				{"name":"answerId","type":"uint32"},
@@ -450,7 +460,9 @@
 				{"name":"user","type":"address"},
 				{"name":"amount","type":"uint128"},
 				{"name":"boosted_amount","type":"uint128"},
-				{"name":"lock_time","type":"uint32"}
+				{"name":"lock_time","type":"uint32"},
+				{"name":"totalBoostedSupply","type":"uint128"},
+				{"name":"lockBoostedSupply","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -470,7 +482,9 @@
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
 				{"name":"user","type":"address"},
-				{"name":"amount","type":"uint128"}
+				{"name":"amount","type":"uint128"},
+				{"name":"totalBoostedSupply","type":"uint128"},
+				{"name":"lockBoostedSupply","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -492,7 +506,9 @@
 				{"name":"qube_reward","type":"uint128"},
 				{"name":"extra_reward","type":"uint128[]"},
 				{"name":"qube_debt","type":"uint128"},
-				{"name":"extra_debt","type":"uint128[]"}
+				{"name":"extra_debt","type":"uint128[]"},
+				{"name":"totalBoostedSupply","type":"uint128"},
+				{"name":"lockBoostedSupply","type":"uint128"}
 			],
 			"outputs": [
 			]

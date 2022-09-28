@@ -93,7 +93,7 @@ contract GaugeAccount is GaugeAccountBase {
         TvmSlice params = s.loadRefAsSlice();
         uint32 prev_version;
         (current_version, prev_version) = params.decode(uint32, uint32);
-        (voteEscrow) = params.decode(address);
+        (voteEscrow, veAccount) = params.decode(address, address);
         // initialization from platform
         (qubeVesting.vestingPeriod, qubeVesting.vestingRatio) = params.decode(uint32, uint32);
         (uint32[] extraVestingPeriods, uint32[] extraVestingRatios) = params.decode(uint32[], uint32[]);
@@ -106,7 +106,6 @@ contract GaugeAccount is GaugeAccountBase {
             extraVesting[i].vestingRatio = extraVestingRatios[i];
         }
 
-        IVoteEscrow(voteEscrow).getVoteEscrowAccountAddress{value: 0.1 ever, callback: IGaugeAccount.receiveVeAccAddress}(user);
         IGauge(gauge).onGaugeAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, send_gas_to);
     }
 }

@@ -220,7 +220,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         _saveDeposit(_deposit.amount, _deposit.boostedAmount, _deposit.lockTime);
 
         uint128 totalBoostedOld = totalBoostedBalance;
-        (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
+        (veBoostedBalance, totalBoostedBalance,,,) = calculateTotalBoostedBalance(
             lockBoostedBalance, _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
@@ -255,7 +255,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         lockBoostedBalance -= _withdraw.amount;
 
         uint128 totalBoostedOld = totalBoostedBalance;
-        (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
+        (veBoostedBalance, totalBoostedBalance,,,) = calculateTotalBoostedBalance(
             lockBoostedBalance, _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 
@@ -282,7 +282,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         PendingClaim _claim = _claims[nonce];
 
         uint128 totalBoostedOld = totalBoostedBalance;
-        (veBoostedBalance, totalBoostedBalance) = calculateTotalBoostedBalance(
+        (veBoostedBalance, totalBoostedBalance,,,) = calculateTotalBoostedBalance(
             lockBoostedBalance, _data.gaugeDepositSupply, _data.veAccBalance, _data.veSupply
         );
 

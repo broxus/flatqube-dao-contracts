@@ -39,7 +39,7 @@ abstract contract GaugeBase is GaugeRewards {
 
             updateRewardData();
 
-            uint128 boosted_amount = calculateBoostedBalance(amount, lock_time);
+            uint128 boosted_amount = calculateBoostedAmount(amount, lock_time);
             depositTokenData.balance += amount;
             lockBoostedSupply += boosted_amount;
 
@@ -123,7 +123,9 @@ abstract contract GaugeBase is GaugeRewards {
 
         totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
 
-        emit Deposit(deposit.meta.call_id, deposit.user, deposit.amount, deposit.boosted_amount, deposit.lock_time);
+        emit Deposit(
+            deposit.meta.call_id, deposit.user, deposit.amount, deposit.boosted_amount, deposit.lock_time, totalBoostedSupply, lockBoostedSupply
+        );
         delete deposits[_deposit_nonce];
 
         if (claim) {
@@ -134,7 +136,9 @@ abstract contract GaugeBase is GaugeRewards {
             uint128[] _extra_debt
             ) = _transferReward(msg.sender, user, qube_reward, extra_reward, deposit.meta.send_gas_to, deposit.meta.nonce);
 
-            emit Claim(deposit.meta.call_id, deposit.user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
+            emit Claim(
+                deposit.meta.call_id, deposit.user, _qube_amount, _extra_amount, _qube_debt, _extra_debt, totalBoostedSupply, lockBoostedSupply
+            );
         }
 
         _sendCallbackOrGas(deposit.user, deposit.meta.nonce, true, deposit.meta.send_gas_to);
@@ -188,7 +192,7 @@ abstract contract GaugeBase is GaugeRewards {
         depositTokenData.balance -= amount;
         lockBoostedSupply -= amount;
 
-        emit Withdraw(meta.call_id, user, amount);
+        emit Withdraw(meta.call_id, user, amount, totalBoostedSupply, lockBoostedSupply);
 
         if (claim) {
             (
@@ -198,7 +202,7 @@ abstract contract GaugeBase is GaugeRewards {
                 uint128[] _extra_debt
             ) = _transferReward(msg.sender, user, qube_reward, extra_reward, meta.send_gas_to, meta.nonce);
 
-            emit Claim(meta.call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
+            emit Claim(meta.call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt, totalBoostedSupply, lockBoostedSupply);
         }
 
         // we dont need additional callback, we always send tokens as last action
@@ -225,7 +229,7 @@ abstract contract GaugeBase is GaugeRewards {
             uint128[] _extra_debt
         ) = _transferReward(msg.sender, user, qube_reward, extra_reward, meta.send_gas_to, meta.nonce);
 
-        emit Claim(meta.call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt);
+        emit Claim(meta.call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt, totalBoostedSupply, lockBoostedSupply);
 
         _sendCallbackOrGas(user, meta.nonce, true, meta.send_gas_to);
     }
@@ -272,6 +276,7 @@ abstract contract GaugeBase is GaugeRewards {
         constructor_params.store(gauge_account_version); // 32
 
         constructor_params.store(voteEscrow);
+        constructor_params.store(getVoteEscrowAccountAddress(gauge_account_owner));
 
         constructor_params.store(qubeVestingPeriod); // 32
         constructor_params.store(qubeVestingRatio); // 32
@@ -280,7 +285,7 @@ abstract contract GaugeBase is GaugeRewards {
         constructor_params.store(extraVestingRatios); // 32 + ref
 
         return new Platform{
-            stateInit: _buildInitData(_buildGaugeAccountParams(gauge_account_owner)),
+            stateInit: _buildInitData(_buildGaugeAccountParams(gauge_account_owner), PlatformTypes.GaugeAccount),
             value: Gas.GAUGE_ACCOUNT_DEPLOY_VALUE
         }(gaugeAccountCode, constructor_params.toCell(), gauge_account_owner);
     }

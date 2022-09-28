@@ -43,12 +43,12 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"factory_version","type":"uint32"},
-				{"name":"gauge_version","type":"uint32"},
-				{"name":"gauge_account_version","type":"uint32"},
-				{"name":"GaugeAccountCode","type":"cell"},
-				{"name":"GaugeCode","type":"cell"},
-				{"name":"PlatformCode","type":"cell"}
+				{"name":"_factory_version","type":"uint32"},
+				{"name":"_gauge_version","type":"uint32"},
+				{"name":"_gauge_account_version","type":"uint32"},
+				{"name":"_GaugeAccountCode","type":"cell"},
+				{"name":"_GaugeCode","type":"cell"},
+				{"name":"_PlatformCode","type":"cell"}
 			]
 		},
 		{

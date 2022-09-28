@@ -332,11 +332,12 @@ THROW 0
 
 .macro getCodes_c29fb0f1_internal_macro
 .loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 37
-PUSHINT 0
-BLKPUSH 2, 0
-PUSHREF {
-}
-BLKPUSH 2, 0
+GETGLOB 10
+GETGLOB 11
+GETGLOB 12
+GETGLOB 20
+GETGLOB 21
+GETGLOB 22
 .loc ../contracts/gauge/base/gauge_factory/GaugeFactoryBase.sol, 0
 
 .macro transferOwnership

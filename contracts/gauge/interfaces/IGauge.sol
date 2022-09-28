@@ -6,11 +6,17 @@ import "../../libraries/Callback.sol";
 
 interface IGauge {
     // Events
-    event Deposit(uint32 call_id, address user, uint128 amount, uint128 boosted_amount, uint32 lock_time);
+    event Deposit(
+        uint32 call_id, address user, uint128 amount, uint128 boosted_amount,
+        uint32 lock_time, uint128 totalBoostedSupply, uint128 lockBoostedSupply
+    );
     event DepositRevert(uint32 call_id, address user, uint128 amount);
-    event Withdraw(uint32 call_id, address user, uint128 amount);
+    event Withdraw(uint32 call_id, address user, uint128 amount, uint128 totalBoostedSupply, uint128 lockBoostedSupply);
     event WithdrawRevert(uint32 call_id, address user);
-    event Claim(uint32 call_id, address user, uint128 qube_reward, uint128[] extra_reward, uint128 qube_debt, uint128[] extra_debt);
+    event Claim(
+        uint32 call_id, address user, uint128 qube_reward, uint128[] extra_reward,
+        uint128 qube_debt, uint128[] extra_debt, uint128 totalBoostedSupply, uint128 lockBoostedSupply
+    );
     event LockBoostedBurn(address user, uint128 lock_boosted_burned);
     event WithdrawUnclaimed(uint32 call_id, address to, uint128[] extra_amounts);
 

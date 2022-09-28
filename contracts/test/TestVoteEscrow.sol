@@ -50,6 +50,10 @@ contract TestVoteEscrow is VoteEscrowBase {
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
+    function setOwner(address new_owner) external {
+        owner = new_owner;
+    }
+
     function endVotingTest(uint32 epoch_time, Callback.CallMeta meta) external {
         // make sure we have enough admin deposit to pay for this epoch
         require (distributionSupply >= distributionSchedule[currentEpoch - 1], Errors.LOW_DISTRIBUTION_BALANCE);
@@ -82,7 +86,7 @@ contract TestVoteEscrow is VoteEscrowBase {
         tvm.rawReserve(_reserve(), 0);
 
         // this is possible if vote(...) was called right before voting end and data race happen
-        if (currentVotingStartTime == 0 || now > currentVotingEndTime) {
+        if (currentVotingStartTime == 0) {
             emit VoteRevert(meta.call_id, user);
             _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
             return;

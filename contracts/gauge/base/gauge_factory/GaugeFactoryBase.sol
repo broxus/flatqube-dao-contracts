@@ -27,12 +27,12 @@ abstract contract GaugeFactoryBase is GaugeFactoryUpgradable {
     }
 
     function getCodes() external view returns (
-        uint32 factory_version,
-        uint32 gauge_version,
-        uint32 gauge_account_version,
-        TvmCell GaugeAccountCode,
-        TvmCell GaugeCode,
-        TvmCell PlatformCode
+        uint32 _factory_version,
+        uint32 _gauge_version,
+        uint32 _gauge_account_version,
+        TvmCell _GaugeAccountCode,
+        TvmCell _GaugeCode,
+        TvmCell _PlatformCode
     ) {
         return (
             factory_version,

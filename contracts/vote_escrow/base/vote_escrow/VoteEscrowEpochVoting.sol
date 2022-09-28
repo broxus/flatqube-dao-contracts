@@ -403,10 +403,11 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
         emit EpochDistribution(
             meta.call_id,
-            currentEpoch,
+            currentEpoch - 1,
             distributed,
             to_distribute_team,
-            to_distribute_treasury
+            to_distribute_treasury,
+            to_distribute_total
         );
 
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);

@@ -1,4 +1,5 @@
 pragma ever-solidity ^0.62.0;
+pragma AbiHeader expire;
 
 
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";

@@ -11,10 +11,6 @@ import "locklift/src/console.sol";
 
 
 abstract contract GaugeAccountHelpers is GaugeAccountVesting {
-    function receiveVeAccAddress(address ve_acc_addr) external override onlyVoteEscrow {
-        veAccount = ve_acc_addr;
-    }
-
     modifier onlyGauge() {
         require(msg.sender == gauge, Errors.NOT_GAUGE);
         _;
@@ -147,16 +143,23 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         uint128 _gaugeDepositSupply,
         uint128 _veAccBalance,
         uint128 _veSupply
-    ) public view returns (uint128 _veBoostedBalance, uint128 _totalBoostedBalance) {
+    ) public view returns (
+        uint128 _veBoostedBalance,
+        uint128 _totalBoostedBalance,
+        uint256 _veBoostMultiplier,
+        uint256 _lockBoostMultiplier,
+        uint256 _totalBoostMultiplier
+    ) {
         if (balance == 0) {
-            return (_veBoostedBalance, _totalBoostedBalance);
+            return (0, 0, 0, 0, 0);
         }
 
-        uint256 lock_bonus = math.muldiv(_lockBoostedBalance, SCALING_FACTOR, balance);
+        _lockBoostMultiplier = math.muldiv(_lockBoostedBalance, SCALING_FACTOR, balance);
         _veBoostedBalance = _veBoost(balance, _gaugeDepositSupply, _veAccBalance, _veSupply);
         // ve takes 0.4 of balance as base and boost it to 1.0
-        uint256 ve_bonus = math.muldiv(_veBoostedBalance, SCALING_FACTOR, (balance * 4) / 10);
-        _totalBoostedBalance = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
+        _veBoostMultiplier = math.muldiv(_veBoostedBalance, SCALING_FACTOR, (balance * 4) / 10);
+        _totalBoostMultiplier = _lockBoostMultiplier + _veBoostMultiplier - SCALING_FACTOR;
+        _totalBoostedBalance = uint128(math.muldiv(balance, _totalBoostMultiplier, SCALING_FACTOR));
     }
 
     function _seriesAvg(uint128 _series_from, uint128 _series_to, uint32 time_delta) internal pure returns (uint128) {
@@ -165,9 +168,13 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
     }
 
     function calculateIntervalBalances(Averages _curAverageState) public view returns (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) {
+        // 0 balance during last interval, interval balance == 0 too
+        if (balance == 0) {
+            return (intervalTBoostedBalance, intervalLockBalance);
+        }
         // calculate new veBoostedBalance
         uint32 time_delta = _curAverageState.lockBoostedBalanceAveragePeriod - lastAverageState.lockBoostedBalanceAveragePeriod;
-        // not time delta, calculate using current averages
+        // no time delta, calculate using current averages
         // we check only 1 delta, because they all gathered together at the same time
         if (time_delta == 0) {
             intervalLockBalance = lockBoostedBalance;
@@ -201,7 +208,6 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
 
             uint128 avg_tboosted_bal = uint128(math.muldiv(balance, lock_bonus + ve_bonus - SCALING_FACTOR, SCALING_FACTOR));
             // make sure average balance is lower than balance that we used for reward reserving in gauge
-//            console.log(format('Balance {}, lock_bonus {}, ve_bonus {}', balance, lock_bonus, ve_bonus));
             intervalTBoostedBalance = math.min(avg_tboosted_bal, totalBoostedBalance);
             intervalLockBalance = lock_boosted_bal_avg;
         }
@@ -264,8 +270,6 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
                             vesting_data.vestingRatio,
                             vesting_data.vestingTime
                         );
-
-//                        console.log(format('i - {}, j - {}, Updated locked {}, new unlocked {}, cur {}, new {}', i, j, updated_locked, new_unlocked, reward_data.accRewardPerShare, round.accRewardPerShare));
 
                         reward_data.lockedReward = updated_locked;
                         reward_data.unlockedReward += new_unlocked;
