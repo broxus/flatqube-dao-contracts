@@ -89,13 +89,6 @@ describe("Gauge main scenarios", async function() {
             owner_reward_wallet = await reward_root.mint(100000000000, owner);
             owner_reward2_wallet = await reward2_root.mint(100000000000, owner);
             owner_reward3_wallet = await reward3_root.mint(100000000000, owner);
-
-            const addr = new Address('0:311fe8e7bfeb6a2622aaba02c21569ac1e6f01c81c33f2623e5d8f1a5ba232d7');
-            await mint_to_addr(qube_root.contract, qube_root.owner, addr, '1000000000000000');
-            await mint_to_addr(deposit_root.contract, deposit_root.owner, addr, '1000000000000000');
-            await mint_to_addr(reward_root.contract, reward_root.owner, addr, '1000000000000000');
-            await mint_to_addr(reward2_root.contract, reward2_root.owner, addr, '1000000000000000');
-            await mint_to_addr(reward3_root.contract, reward3_root.owner, addr, '1000000000000000');
         });
 
         it('Deploy Vote Escrow', async function () {
@@ -113,7 +106,7 @@ describe("Gauge main scenarios", async function() {
     });
 
     describe('Running scenarios', async function() {
-        describe('Testing deposit/withdraw, 1 user, no reward', async function() {
+        describe.skip('Testing deposit/withdraw, 1 user, no reward', async function() {
             const deposit_amount = 1000;
             let gauge_inited = false;
 
@@ -366,7 +359,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe('Testing qube reward, multiple users, multiple rounds', async function() {
+        describe.skip('Testing qube reward, multiple users, multiple rounds', async function() {
             const deposit_amount = 1000;
             const qube_reward = 100000;
 
@@ -529,7 +522,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe('Testing extra reward, multiple users, multiple rounds', async function() {
+        describe.skip('Testing extra reward, multiple users, multiple rounds', async function() {
             const deposit_amount = 1000;
             const reward_amount = 1000000;
 
@@ -713,7 +706,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
+        describe.skip('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
             const qube_reward = 1000;
             const reward_amount = 1000000;
             const deposit_amount = 1000;
@@ -782,7 +775,7 @@ describe("Gauge main scenarios", async function() {
             });
         })
 
-        describe('Testing vesting mechanic', async function() {
+        describe.skip('Testing vesting mechanic', async function() {
             const deposit_amount = 1000;
             const qube_reward = 1000000;
 
