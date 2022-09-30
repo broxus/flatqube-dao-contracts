@@ -94,9 +94,9 @@ abstract contract GaugeAccountVesting is GaugeAccountStorage {
                 // only unlocking old reward, dont change vesting time
                 updated_vesting_time = _vestingTime;
             } else {
-                // "old" reward and, perhaps, "new" reward are pending - the weighted average applied
+                // "old" reward and, perhaps, "new" reward are pending - the weighted average applied (x2 weight for new reward)
                 uint32 passed_2 = _vestingTime - _poolLastRewardTime;
-                uint32 period = uint32(((remaining_locked_reward * passed_2) + (new_locked_reward * _vestingPeriod)) / pending);
+                uint32 period = uint32(((remaining_locked_reward * passed_2) + (new_locked_reward * _vestingPeriod * 2)) / pending);
                 updated_vesting_time = _poolLastRewardTime + math.min(period, _vestingPeriod);
             }
 
