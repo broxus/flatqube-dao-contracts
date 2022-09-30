@@ -67,9 +67,12 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         );
     }
 
-    // min gas amount required to update this account based on number of stored deposits
+    // @dev min gas required to finalize processing of action, includes:
+    // 1. min gas amount required to update this account based on number of stored deposits
+    // 2. min gas amount required to send all tokens rewards
     function calculateMinGas() public view responsible returns (uint128 min_gas) {
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } Gas.MIN_MSG_VALUE + lockedDepositsNum * Gas.GAS_PER_DEPOSIT;
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false }
+            Gas.MIN_MSG_VALUE + lockedDepositsNum * Gas.GAS_PER_DEPOSIT + uint128(extraReward.length) * Gas.TOKEN_TRANSFER_VALUE;
     }
 
     function getAverages() external view responsible returns (Averages _lastAverageState, Averages _curAverageState) {
