@@ -138,9 +138,11 @@ describe("Gauge main scenarios", async function() {
 
             describe('Common deposit', async function() {
                 it('Deposit', async function() {
+                    const acc = await gauge.gaugeAccount(user1.address);
+
                     await locklift.tracing.trace(
                         gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
-                        {allowedCodes: {compute: [null]}}
+                        {allowedCodes: {contracts: {[acc.address.toString()]: {compute: [null]}}}}
                     );
 
                     const details = await gauge.getDetails();
@@ -151,7 +153,6 @@ describe("Gauge main scenarios", async function() {
                     expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                     await tryIncreaseTime(1);
-                    const acc = await gauge.gaugeAccount(user1.address);
                     const averages = await acc.methods.calculateLockBalanceAverage().call();
 
                     expect(averages._lockedBalance).to.be.eq('0');
@@ -174,6 +175,18 @@ describe("Gauge main scenarios", async function() {
 
                     expect(averages._lockedBalance).to.be.eq('0');
                     expect(averages._lockBoostedBalance).to.be.eq('0');
+                });
+
+                it('Deposit again', async function() {
+                    await tryIncreaseTime(1);
+                    await locklift.tracing.trace(gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 22));
+
+                    const details = await gauge.getDetails();
+                    const token_details = await gauge.getTokenDetails();
+
+                    expect(details._lockBoostedSupply).to.be.eq(deposit_amount.toString());
+                    expect(details._totalBoostedSupply).to.be.eq(deposit_amount.toString());
+                    expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
                     gauge_inited = false;
                 });
             });
@@ -270,7 +283,7 @@ describe("Gauge main scenarios", async function() {
                 });
             });
 
-            describe.skip('Mixed deposits', async function() {
+            describe('Mixed deposits', async function() {
                 it('Simple deposit', async function() {
                     await locklift.tracing.trace(
                         gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
@@ -700,7 +713,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe.skip('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
+        describe('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
             const qube_reward = 1000;
             const reward_amount = 1000000;
             const deposit_amount = 1000;
