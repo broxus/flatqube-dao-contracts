@@ -88,7 +88,7 @@ const config: LockliftConfig = {
             },
         },
         main: {
-            connection: "mainnet",
+            connection: "mainnetJrpc",
             giver: {
                 // Mainnet giver has the same abi as testnet one
                 giverFactory: (ever, keyPair, address) => new TestnetGiver(ever, keyPair, address),

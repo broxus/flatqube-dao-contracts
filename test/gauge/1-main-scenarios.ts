@@ -64,8 +64,8 @@ describe("Gauge main scenarios", async function() {
 
     describe('Setup contracts', async function () {
         it('Deploy users', async function () {
-            user1 = await deployUser(25);
-            user2 = await deployUser(25);
+            user1 = await deployUser(30);
+            user2 = await deployUser(30);
             owner = await deployUser(60);
         });
 
@@ -735,9 +735,11 @@ describe("Gauge main scenarios", async function() {
             });
 
             it('User deposit', async function() {
+                const acc1 = await gauge.gaugeAccount(user1.address);
+
                 await locklift.tracing.trace(
                     gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
-                    {allowedCodes: {compute: [null]}}
+                    {allowedCodes: {contracts: {[acc1.address.toString()]: {compute: [null]}}}}
                 );
             });
 
@@ -765,9 +767,11 @@ describe("Gauge main scenarios", async function() {
 
             it('New user deposit', async function() {
                 await tryIncreaseTime(200);
+                const acc2 = await gauge.gaugeAccount(user2.address);
+
                 await locklift.tracing.trace(
-                    gauge.deposit(user2_deposit_wallet, deposit_amount, 0, false, 10, toNano(10)),
-                    {allowedCodes: {compute: [null]}}
+                    gauge.deposit(user2_deposit_wallet, deposit_amount, 0, false, 10, toNano(20)),
+                    {allowedCodes: {contracts: {[acc2.address.toString()]: {compute: [null]}}}}
                 );
             });
 
@@ -799,9 +803,11 @@ describe("Gauge main scenarios", async function() {
             });
 
             it('User deposit', async function() {
+                const acc = await gauge.gaugeAccount(user1.address);
+
                 await locklift.tracing.trace(
                     gauge.deposit(user1_deposit_wallet, deposit_amount, 0, false, 0),
-                    {allowedCodes: {compute: [null]}}
+                    {allowedCodes: {contracts: {[acc.address.toString()]: {compute: [null]}}}}
                 );
 
                 const details = await gauge.getDetails();
@@ -812,7 +818,6 @@ describe("Gauge main scenarios", async function() {
                 expect(token_details._depositTokenData.balance).to.be.eq(deposit_amount.toString());
 
                 await tryIncreaseTime(1);
-                const acc = await gauge.gaugeAccount(user1.address);
                 const averages = await acc.methods.calculateLockBalanceAverage().call();
 
                 expect(averages._lockedBalance).to.be.eq('0');

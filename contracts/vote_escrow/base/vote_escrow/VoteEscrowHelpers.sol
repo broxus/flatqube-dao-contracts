@@ -286,7 +286,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     }
 
     modifier onlyActive() {
-        require (!paused && !emergency || msg.sender == owner, Errors.NOT_ACTIVE);
+        require ((!paused && !emergency) || msg.sender == owner, Errors.NOT_ACTIVE);
         _;
     }
 

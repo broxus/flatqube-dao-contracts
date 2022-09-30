@@ -204,7 +204,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         currentEpochEndTime = currentEpochStartTime + epochTime;
 
         address start_addr = address.makeAddrStd(address(this).wid, 0);
-        IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(start_addr, 0, 0, meta);
+        this.countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(start_addr, 0, 0, meta);
     }
 
     function countVotesStep(
@@ -258,14 +258,14 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
         if (!finished) {
             (address gauge,) = pointer.get();
-            IVoteEscrow(address(this)).countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            this.countVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 gauge, exceeded_votes, valid_votes, meta
             );
             return;
         }
 
         start_addr = address.makeAddrStd(address(this).wid, 0);
-        IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        this.normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             start_addr, 0, exceeded_votes, valid_votes, meta
         );
     }
@@ -312,7 +312,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
             if (!finished) {
                 (address gauge,) = pointer.get();
-                IVoteEscrow(address(this)).normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                this.normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                     gauge, treasury_votes, exceeded_votes, valid_votes, meta
                 );
                 return;
@@ -331,7 +331,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
         start_addr = address.makeAddrStd(address(this).wid, 0);
         mapping (address => uint128) distributed;
-        IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        this.distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             start_addr, treasury_votes, distributed, meta
         );
     }
@@ -384,7 +384,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
         if (!finished) {
             (address gauge,) = pointer.get();
-            IVoteEscrow(address(this)).distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            this.distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 gauge, bonus_treasury_votes, distributed, meta
             );
             return;

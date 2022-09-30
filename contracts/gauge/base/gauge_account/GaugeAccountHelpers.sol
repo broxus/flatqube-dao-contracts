@@ -6,6 +6,7 @@ import "../../interfaces/IGauge.sol";
 import "../../../vote_escrow/interfaces/IVoteEscrow.sol";
 import "../../../vote_escrow/interfaces/IVoteEscrowAccount.sol";
 import "../../../libraries/Errors.sol";
+import "../../../libraries/Gas.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
 import "locklift/src/console.sol";
 
@@ -64,6 +65,11 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
             lastUpdateTime,
             lockedDepositsNum
         );
+    }
+
+    // min gas amount required to update this account based on number of stored deposits
+    function calculateMinGas() public view responsible returns (uint128 min_gas) {
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } Gas.MIN_MSG_VALUE + lockedDepositsNum * Gas.GAS_PER_DEPOSIT;
     }
 
     function getAverages() external view responsible returns (Averages _lastAverageState, Averages _curAverageState) {
@@ -391,7 +397,6 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         uint128 expiredLockBoostedBalance = 0;
 
         uint32 counter;
-        // TODO: check how many deposits can be processed in 1 txn
         // get deposit with lowest unlock time
         optional(uint64, DepositData) pointer = lockedDeposits.next(-1);
         uint64 cur_key;

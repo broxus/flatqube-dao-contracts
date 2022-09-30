@@ -55,14 +55,14 @@ export const runTargets = async function (
 
     const walletContract = await locklift.factory.getDeployedContract("TestWallet", wallet.address);
 
-    return await locklift.tracing.trace(walletContract.methods.sendTransactions({
+    return await walletContract.methods.sendTransactions({
         dest: targets.map((contract) => contract.address),
         value: values,
         bounce: new Array(targets.length).fill(true),
         flags: new Array(targets.length).fill(0),
         payload: bodies,
     // @ts-ignore
-    }).sendExternal({publicKey: wallet.publicKey}));
+    }).sendExternal({publicKey: wallet.publicKey});
 }
 
 

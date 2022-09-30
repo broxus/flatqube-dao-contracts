@@ -38,7 +38,6 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
             IGauge(gauge).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, meta);
             return;
         }
-        // TODO: min gas?
         _nonce += 1;
         _withdraws[_nonce] = PendingWithdraw(amount, claim, meta);
         _sync_data[_nonce] = AccountSyncData(
@@ -59,7 +58,6 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     }
 
     function processClaim(IGauge.GaugeSyncData gauge_sync_data, Callback.CallMeta meta) external override onlyGauge {
-        // TODO: min gas?
         _nonce += 1;
         _claims[_nonce] = PendingClaim(meta);
         _sync_data[_nonce] = AccountSyncData(
@@ -88,7 +86,6 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         IGauge.GaugeSyncData gauge_sync_data,
         Callback.CallMeta meta
     ) external override onlyGauge {
-        // TODO: min gas?
         _nonce += 1;
         _deposits[_nonce] = PendingDeposit(deposit_nonce, amount, boostedAmount, lockTime, claim, meta);
         _sync_data[_nonce] = AccountSyncData(
@@ -122,35 +119,60 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         );
     }
 
+    function revertAction(uint32 nonce) external override onlyVoteEscrowAccountOrSelf {
+        tvm.rawReserve(_reserve(), 0);
+
+        ActionType _type = _actions[nonce];
+        delete _actions[nonce];
+        delete _sync_data[nonce];
+
+        if (_type == ActionType.Deposit) {
+            PendingDeposit _deposit = _deposits[nonce];
+            delete _deposits[nonce];
+            IGauge(gauge).revertDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _deposit.deposit_nonce);
+        } else if (_type == ActionType.Withdraw) {
+            PendingWithdraw _withdraw = _withdraws[nonce];
+            delete _withdraws[nonce];
+            IGauge(gauge).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _withdraw.meta);
+        } else {
+            PendingClaim _claim = _claims[nonce];
+            delete _claims[nonce];
+            IGauge(gauge).revertClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, _claim.meta);
+        }
+    }
+
     function receiveVeAccAverage(
         uint32 nonce, uint128 veAccQube, uint128 veAccQubeAverage, uint32 veAccQubeAveragePeriod
     ) external override onlyVoteEscrowAccountOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
+        // not enough gas to update all our entities!
+        if (msg.value < calculateMinGas()) {
+            this.revertAction{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+            return;
+        }
+
         _sync_data[nonce].veAccBalance = veAccQube;
         curAverageState.veAccQubeAverage = veAccQubeAverage;
         curAverageState.veAccQubeAveragePeriod = veAccQubeAveragePeriod;
 
-        syncDepositsRecursive(nonce, _sync_data[_nonce].poolLastRewardTime, false);
+        this.syncDepositsRecursive{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce, _sync_data[_nonce].poolLastRewardTime);
     }
 
-    function syncDepositsRecursive(uint32 nonce, uint32 syncTime, bool reserve) public override onlyVoteEscrowAccountOrSelf {
-        if (reserve) {
-            tvm.rawReserve(_reserve(), 0);
-        }
-        // TODO: check gas here?
+    function syncDepositsRecursive(uint32 nonce, uint32 syncTime) external override onlyVoteEscrowAccountOrSelf {
+        tvm.rawReserve(_reserve(), 0);
 
         bool update_finished = _syncDeposits(syncTime);
         // continue update in next message with same parameters
         if (!update_finished) {
-            IGaugeAccount(address(this)).syncDepositsRecursive{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce, syncTime, true);
+            this.syncDepositsRecursive{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce, syncTime);
             return;
         }
 
         (uint128 intervalTBoostedBalance, uint128 intervalLockBalance) = calculateIntervalBalances(curAverageState);
         lastAverageState = curAverageState;
 
-        IGaugeAccount(address(this)).updateQubeReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+        this.updateQubeReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
             nonce, intervalTBoostedBalance, intervalLockBalance
         );
     }
@@ -168,7 +190,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         ) = calculateRewards(_data.qubeRewardRounds, qubeReward, qubeVesting, intervalTBoostedBalance, _data.poolLastRewardTime);
 
         if (extraReward.length > 0) {
-            IGaugeAccount(address(this)).updateExtraReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            this.updateExtraReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 nonce, intervalTBoostedBalance, intervalLockBalance, uint256(0)
             );
             return;
@@ -192,7 +214,7 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
         );
 
         if (extraReward.length - 1 > idx) {
-            IGaugeAccount(address(this)).updateExtraReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            this.updateExtraReward{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 nonce, intervalTBoostedBalance, intervalLockBalance, idx + 1
             );
             return;
@@ -203,11 +225,11 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
 
     function _finalizeAction(uint32 nonce) internal view {
         if (_actions[nonce] == ActionType.Deposit) {
-            IGaugeAccount(address(this)).processDeposit_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+            this.processDeposit_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
         } else if (_actions[nonce] == ActionType.Withdraw) {
-            IGaugeAccount(address(this)).processWithdraw_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+            this.processWithdraw_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
         } else if (_actions[nonce] == ActionType.Claim) {
-            IGaugeAccount(address(this)).processClaim_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+            this.processClaim_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
         }
     }
 

@@ -17,6 +17,7 @@ interface IGauge {
         uint32 call_id, address user, uint128 qube_reward, uint128[] extra_reward,
         uint128 qube_debt, uint128[] extra_debt, uint128 totalBoostedSupply, uint128 lockBoostedSupply
     );
+    event ClaimRevert(uint32 call_id, address user);
     event LockBoostedBurn(address user, uint128 lock_boosted_burned);
     event WithdrawUnclaimed(uint32 call_id, address to, uint128[] extra_amounts);
 
@@ -91,6 +92,7 @@ interface IGauge {
     ) external;
     function revertWithdraw(address user, Callback.CallMeta meta) external;
     function revertDeposit(address user, uint32 _deposit_nonce) external;
+    function revertClaim(address user, Callback.CallMeta meta) external;
     function burnLockBoostedBalance(address user, uint128 expired_boosted) external;
     function forceUpgradeGaugeAccount(address user, Callback.CallMeta meta) external view;
     function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;

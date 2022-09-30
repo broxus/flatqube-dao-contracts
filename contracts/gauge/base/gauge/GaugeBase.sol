@@ -29,7 +29,7 @@ abstract contract GaugeBase is GaugeRewards {
             // check if payload assembled correctly
             (address deposit_owner, uint32 lock_time, bool claim, uint32 call_id, uint32 nonce, bool correct) = decodeDepositPayload(payload);
 
-            if (!correct || msg.value < Gas.MIN_MSG_VALUE || lock_time > maxLockTime) {
+            if (!correct || msg.value < _minGas() || lock_time > maxLockTime) {
                 // too low deposit value or too low msg.value or incorrect deposit payload
                 // for incorrect deposit payload send tokens back to sender
                 emit DepositRevert(call_id, deposit_owner, amount);
@@ -144,9 +144,8 @@ abstract contract GaugeBase is GaugeRewards {
         _sendCallbackOrGas(deposit.user, deposit.meta.nonce, true, deposit.meta.send_gas_to);
     }
 
-    function withdraw(uint128 amount, bool claim, Callback.CallMeta meta) external {
+    function withdraw(uint128 amount, bool claim, Callback.CallMeta meta) external minGas {
         require (amount > 0, Errors.BAD_INPUT);
-        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         updateRewardData();
@@ -163,17 +162,6 @@ abstract contract GaugeBase is GaugeRewards {
 
         emit WithdrawRevert(meta.call_id, user);
         _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
-    }
-
-    function claimReward(Callback.CallMeta meta) external {
-        require (msg.value >= Gas.MIN_MSG_VALUE, Errors.LOW_MSG_VALUE);
-        tvm.rawReserve(_reserve(), 0);
-
-        updateRewardData();
-
-        address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
-        // we cant check if user has any balance here, delegate it to GaugeAccount
-        IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_syncData(), meta);
     }
 
     function finishWithdraw(
@@ -209,6 +197,22 @@ abstract contract GaugeBase is GaugeRewards {
         _transferTokens(
             depositTokenData.wallet, amount, user, _makeCell(meta.nonce), meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED
         );
+    }
+
+    function claimReward(Callback.CallMeta meta) external minGas {
+        tvm.rawReserve(_reserve(), 0);
+
+        updateRewardData();
+
+        address gaugeAccountAddr = getGaugeAccountAddress(msg.sender);
+        IGaugeAccount(gaugeAccountAddr).processClaim{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(_syncData(), meta);
+    }
+
+    function revertClaim(address user, Callback.CallMeta meta) external override onlyGaugeAccount(user) {
+        tvm.rawReserve(_reserve(), 0);
+
+        emit ClaimRevert(meta.call_id, user);
+        _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
     }
 
     function finishClaim(
@@ -285,7 +289,7 @@ abstract contract GaugeBase is GaugeRewards {
         constructor_params.store(extraVestingRatios); // 32 + ref
 
         return new Platform{
-            stateInit: _buildInitData(_buildGaugeAccountParams(gauge_account_owner), PlatformTypes.GaugeAccount),
+            stateInit: _buildInitData(_buildGaugeAccountParams(gauge_account_owner), address(this), PlatformTypes.GaugeAccount),
             value: Gas.GAUGE_ACCOUNT_DEPLOY_VALUE
         }(gaugeAccountCode, constructor_params.toCell(), gauge_account_owner);
     }

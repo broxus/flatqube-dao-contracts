@@ -104,10 +104,11 @@ interface IGaugeAccount {
         uint128 veQubeAverage,
         uint32 veQubeAveragePeriod
     ) external;
-    function syncDepositsRecursive(uint32 nonce, uint32 sync_time, bool reserve) external;
+    function syncDepositsRecursive(uint32 nonce, uint32 sync_time) external;
     function updateQubeReward(uint32 nonce, uint128 interval_ve_balance, uint128 interval_lock_balance) external;
     function updateExtraReward(uint32 nonce, uint128 interval_ve_balance, uint128 interval_lock_balance, uint256 idx) external;
     function processDeposit_final(uint32 nonce) external;
+    function revertAction(uint32 nonce) external;
     function processWithdraw_final(uint32 nonce) external;
     function processClaim_final(uint32 nonce) external;
     function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;

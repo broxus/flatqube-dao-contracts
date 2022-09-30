@@ -105,7 +105,7 @@ export class Gauge {
             claim: claim,
             meta: {nonce: 0, call_id: call_id, send_gas_to: user.address}
         }).send({
-            amount: toNano(2),
+            amount: toNano(10),
             from: user.address
         });
     }
@@ -114,7 +114,7 @@ export class Gauge {
         return await this.contract.methods.claimReward({
             meta: {nonce: 0, call_id: call_id, send_gas_to: user.address}
         }).send({
-            amount: toNano(5),
+            amount: toNano(10),
             from: user.address
         });
     }
@@ -128,7 +128,7 @@ export class Gauge {
         });
     }
 
-    async deposit(from_wallet: TokenWallet, amount: number, lock_time: number, claim: boolean, call_id = 0, value=toNano(5)) {
+    async deposit(from_wallet: TokenWallet, amount: number, lock_time: number, claim: boolean, call_id = 0, value=toNano(10)) {
         const payload = await this.depositPayload(from_wallet._owner?.address as Address, lock_time, claim, call_id);
         return await from_wallet.transfer(amount, this.contract.address, payload, value);
     }

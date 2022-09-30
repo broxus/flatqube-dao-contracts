@@ -87,6 +87,14 @@
 			]
 		},
 		{
+			"name": "revertAction",
+			"inputs": [
+				{"name":"nonce","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "receiveVeAccAverage",
 			"inputs": [
 				{"name":"nonce","type":"uint32"},
@@ -101,8 +109,7 @@
 			"name": "syncDepositsRecursive",
 			"inputs": [
 				{"name":"nonce","type":"uint32"},
-				{"name":"syncTime","type":"uint32"},
-				{"name":"reserve","type":"bool"}
+				{"name":"syncTime","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -170,6 +177,15 @@
 				{"name":"_lockedBalance","type":"uint128"},
 				{"name":"_lastUpdateTime","type":"uint32"},
 				{"name":"_lockedDepositsNum","type":"uint32"}
+			]
+		},
+		{
+			"name": "calculateMinGas",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"min_gas","type":"uint128"}
 			]
 		},
 		{

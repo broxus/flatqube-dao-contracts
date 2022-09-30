@@ -259,11 +259,15 @@ abstract contract GaugeHelpers is GaugeStorage {
     }
 
     function getVoteEscrowAccountAddress(address user) public view responsible returns (address) {
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(tvm.hash(_buildInitData(_buildVoteEscrowAccountParams(user), PlatformTypes.VoteEscrowAccount)));
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(
+            tvm.hash(_buildInitData(_buildVoteEscrowAccountParams(user), voteEscrow, PlatformTypes.VoteEscrowAccount))
+        );
     }
 
     function getGaugeAccountAddress(address user) public view responsible returns (address) {
-        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(tvm.hash(_buildInitData(_buildGaugeAccountParams(user), PlatformTypes.GaugeAccount)));
+        return { value: 0, flag: MsgFlag.REMAINING_GAS, bounce: false } address(
+            tvm.hash(_buildInitData(_buildGaugeAccountParams(user), address(this), PlatformTypes.GaugeAccount))
+        );
     }
 
     function _buildGaugeAccountParams(address user) internal pure returns (TvmCell) {
@@ -278,11 +282,11 @@ abstract contract GaugeHelpers is GaugeStorage {
         return builder.toCell();
     }
 
-    function _buildInitData(TvmCell _initialData, uint8 _platformType) internal view returns (TvmCell) {
+    function _buildInitData(TvmCell _initialData, address _root, uint8 _platformType) internal view returns (TvmCell) {
         return tvm.buildStateInit({
             contr: Platform,
             varInit: {
-                root: address(this),
+                root: _root,
                 platformType: _platformType,
                 initialData: _initialData,
                 platformCode: platformCode
@@ -290,6 +294,17 @@ abstract contract GaugeHelpers is GaugeStorage {
             pubkey: 0,
             code: platformCode
         });
+    }
+
+    function _minGas() internal view returns (uint128) {
+        // 4 for every contract used in msg tree + for every possible token transfer
+        return Gas.MIN_MSG_VALUE * 4 + Gas.TOKEN_TRANSFER_VALUE * uint128(extraTokenData.length);
+    }
+
+    // min amount of gas gauge might need for deposit/claim/withdraw
+    modifier minGas() {
+        require (msg.value >= _minGas(), Errors.LOW_MSG_VALUE);
+        _;
     }
 
     modifier onlyOwner() {

@@ -32,7 +32,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
 
         bool update_finished = _syncDeposits(now);
         if (!update_finished) {
-            IVoteEscrowAccount(address(this)).processVoteEpoch{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            this.processVoteEpoch{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 voteEpoch, votes, meta
             );
             return;
@@ -64,7 +64,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         bool update_finished = _syncDeposits(now);
         // continue update in next message with same parameters
         if (!update_finished) {
-            IVoteEscrowAccount(address(this)).processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(meta);
+            this.processWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(meta);
             return;
         }
 
@@ -93,7 +93,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         bool update_finished = _syncDeposits(now);
         // continue update in next message with same parameters
         if (!update_finished) {
-            IVoteEscrowAccount(address(this)).processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+            this.processDeposit{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
                 deposit_nonce, qube_amount, ve_amount, lock_time, meta
             );
             return;
@@ -104,13 +104,15 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
     }
 
     // Update averages up to current moment taking into account expired deposits
-    // @dev attach gas >= calculateMinGas(), otherwise call may fail with gas exception!
-    // Caller contract is responsible for attaching enough gas
-    // This call could be called by anyone, user will only benefit from this
     // @param callback_receiver - address that will receive callback
     // @param callback_nonce - nonce that will be sent with callback
     // @param sync_time - timestamp. Ve stats will be updated up to this moment
     function getVeAverage(address callback_receiver, uint32 callback_nonce, uint32 sync_time) external override {
+        // not enough gas to update all our entities!
+        if (msg.value < calculateMinGas() && msg.sender == callback_receiver) {
+            IGaugeAccount(msg.sender).revertAction{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(callback_nonce);
+            return;
+        }
         require (msg.sender == address(this) || msg.sender == callback_receiver, Errors.BAD_SENDER);
         tvm.rawReserve(_reserve(), 0);
 
@@ -118,9 +120,7 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
         bool update_finished = _syncDeposits(sync_time);
         // continue update in next message with same parameters
         if (!update_finished) {
-            IVoteEscrowAccount(address(this)).getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                callback_receiver, callback_nonce, sync_time
-            );
+            this.getVeAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(callback_receiver, callback_nonce, sync_time);
             return;
         }
         IGaugeAccount(callback_receiver).receiveVeAccAverage{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(

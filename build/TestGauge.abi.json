@@ -86,14 +86,6 @@
 			]
 		},
 		{
-			"name": "claimReward",
-			"inputs": [
-				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "finishWithdraw",
 			"inputs": [
 				{"name":"user","type":"address"},
@@ -103,6 +95,23 @@
 				{"name":"claim","type":"bool"},
 				{"name":"boosted_bal_old","type":"uint128"},
 				{"name":"boosted_bal_new","type":"uint128"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "claimReward",
+			"inputs": [
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "revertClaim",
+			"inputs": [
+				{"name":"user","type":"address"},
 				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [
@@ -509,6 +518,15 @@
 				{"name":"extra_debt","type":"uint128[]"},
 				{"name":"totalBoostedSupply","type":"uint128"},
 				{"name":"lockBoostedSupply","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ClaimRevert",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"user","type":"address"}
 			],
 			"outputs": [
 			]
