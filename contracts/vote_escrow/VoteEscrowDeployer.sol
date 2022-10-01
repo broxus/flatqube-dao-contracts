@@ -25,6 +25,8 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
     }
 
     function installVoteEscrowCode(TvmCell code) external onlyOwner {
+        require (VoteEscrowCode.toSlice().empty(), 1000);
+
         tvm.accept();
         VoteEscrowCode = code;
     }

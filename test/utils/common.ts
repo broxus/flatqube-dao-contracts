@@ -2,12 +2,20 @@ import {Token} from "./wrappers/token";
 import {VoteEscrow} from "./wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "./wrappers/ve_account";
 import {FactorySource, GaugeFactoryAbi} from "../../build/factorySource";
-import {Address, Contract, zeroAddress, getRandomNonce, toNano, WalletTypes} from "locklift";
+import {Address, Contract, getRandomNonce, toNano, WalletTypes, zeroAddress} from "locklift";
 import {Account} from 'locklift/everscale-standalone-client';
 import {Gauge} from "./wrappers/gauge";
-import {sign} from "crypto";
+
 const logger = require("mocha-logger");
 const {expect} = require("chai");
+
+
+export function isNumeric(value: string) {
+    return /\d+$/.test(value);
+}
+
+
+export const isValidTonAddress = (address: string) => /^(?:-1|0):[0-9a-fA-F]{64}$/.test(address);
 
 
 export async function sleep(ms = 1000) {

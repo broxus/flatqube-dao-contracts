@@ -3356,8 +3356,8 @@ PUSHINT 10000
 LEQ
 THROWIFNOT 1005
 .loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 48
-PUSH2 S6, S7
-LESS
+PUSH S5
+GTINT 0
 THROWIFNOT 1005
 .loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 49
 BLKPUSH 2, 6

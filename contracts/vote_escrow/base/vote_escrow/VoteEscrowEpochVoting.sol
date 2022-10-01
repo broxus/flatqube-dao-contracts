@@ -45,7 +45,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
     ) external override onlyOwner {
         require (_gauge_min_votes_ratio < _gauge_max_votes_ratio, Errors.BAD_INPUT);
         require (_gauge_max_votes_ratio <= MAX_VOTES_RATIO, Errors.BAD_INPUT);
-        require (_time_before_voting < _epoch_time, Errors.BAD_INPUT);
+        require (_voting_time > 0, Errors.BAD_INPUT);
         require (_time_before_voting + _voting_time < _epoch_time, Errors.BAD_INPUT);
         require (_epoch_time > 0, Errors.BAD_INPUT);
         require (_max_gauges_per_vote > 0, Errors.BAD_INPUT);

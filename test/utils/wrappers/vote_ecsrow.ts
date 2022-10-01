@@ -1,25 +1,23 @@
-import {use} from "chai";
+import {Account} from 'locklift/everscale-standalone-client'
+import {FactorySource, VoteEscrowAbi} from "../../../build/factorySource";
+import {Address, Contract} from "locklift";
+import {TokenWallet} from "./token_wallet";
+import {VoteEscrowAccount} from "./ve_account";
 
 const {
     toNano
 } = locklift.utils;
 const {expect} = require('chai');
-import {Account} from 'locklift/everscale-standalone-client'
 const Bignumber = require("bignumber.js");
-import {FactorySource} from "../../../build/factorySource";
-import {Address, Contract} from "locklift";
-import {TokenWallet} from "./token_wallet";
-import {VoteEscrowAccount} from "./ve_account";
-
 
 
 export class VoteEscrow {
-    public contract: Contract<FactorySource["TestVoteEscrow"]>;
+    public contract: Contract<FactorySource["TestVoteEscrow"]> | Contract<VoteEscrowAbi>;
     public _owner: Account;
     public address: Address;
     public token_wallet: TokenWallet | null;
 
-    constructor(ve_contract: Contract<FactorySource["TestVoteEscrow"]>, ve_owner: Account) {
+    constructor(ve_contract: Contract<FactorySource["TestVoteEscrow"]> | Contract<VoteEscrowAbi>, ve_owner: Account) {
         this.contract = ve_contract;
         this._owner = ve_owner;
         this.address = this.contract.address;
@@ -54,6 +52,7 @@ export class VoteEscrow {
     }
 
     async sendQubesToGauge(gauge: Address, amount: number, round_len: number, round_start: number) {
+        // @ts-ignore
         return await this.contract.methods.sendQubesToGauge({
             gauge: gauge, qube_amount: amount, round_len: round_len, round_start: round_start
         }).send({
@@ -113,6 +112,7 @@ export class VoteEscrow {
     }
 
     async getEvents(event_name: string) {
+        // @ts-ignore
         return (await this.contract.getPastEvents({filter: (event) => event.event === event_name})).events;
     }
 
