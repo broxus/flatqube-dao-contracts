@@ -96,7 +96,7 @@ const config: LockliftConfig = {
                 key: process.env.MAIN_GIVER_KEY ?? ""
             },
             tracing: {
-                endpoint: 'https://main.ton.dev/graphql'
+                endpoint: process.env.MAIN_GQL_ENDOPINT ?? ""
             },
             keys: {
                 phrase: process.env.MAIN_PHRASE ?? "",
