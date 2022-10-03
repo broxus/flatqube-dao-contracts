@@ -99,6 +99,7 @@ const config: LockliftConfig = {
                 endpoint: 'https://main.ton.dev/graphql'
             },
             keys: {
+                phrase: process.env.MAIN_PHRASE ?? "",
                 amount: 500
             }
         }
