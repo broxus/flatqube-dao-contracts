@@ -4,10 +4,9 @@ import {Token} from "../utils/wrappers/token";
 
 const { expect } = require('chai');
 const { setupTokenRoot, setupVoteEscrow, deployUser, deployUsers } = require("../utils/common");
-const {Address} = require("locklift");
 
 
-describe("Main Vote Escrow scenarios", async function() {
+describe("Upgrade Vote Escrow scenarios", async function() {
     this.timeout(3000000);
 
     let user1: Account;
@@ -27,12 +26,6 @@ describe("Main Vote Escrow scenarios", async function() {
 
         it('Deploy token', async function() {
             qube_root = await setupTokenRoot('QUBE', 'QUBE', owner);
-        });
-
-        it('Deploy token wallets + mint', async function() {
-            await qube_root.mint(1000000, user1);
-            await qube_root.mint(1000000, user2);
-            await qube_root.mint(1000000, user3);
         });
 
         it('Deploy Vote Escrow', async function() {

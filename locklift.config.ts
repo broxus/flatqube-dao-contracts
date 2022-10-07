@@ -96,10 +96,10 @@ const config: LockliftConfig = {
                 key: process.env.MAIN_GIVER_KEY ?? ""
             },
             tracing: {
-                endpoint: process.env.MAIN_GQL_ENDOPINT ?? ""
+                endpoint: process.env.MAIN_GQL_ENDPOINT ?? ""
             },
             keys: {
-                phrase: process.env.MAIN_PHRASE ?? "",
+                phrase: process.env.MAIN_SEED_PHRASE ?? "",
                 amount: 500
             }
         }

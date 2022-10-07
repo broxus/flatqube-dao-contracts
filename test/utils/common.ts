@@ -186,7 +186,7 @@ export const setupGaugeFactory = async function({
     _voteEscrow,
     _qubeVestingRatio=0,
     _qubeVestingPeriod=0
-}: {_owner: any, _qube: Token, _voteEscrow: VoteEscrow, _qubeVestingRatio: number, _qubeVestingPeriod: number}
+}: {_owner: any, _qube: Token, _voteEscrow: VoteEscrow | {address: Address}, _qubeVestingRatio: number, _qubeVestingPeriod: number}
 ): Promise<Contract<FactorySource["GaugeFactory"]>> {
     const Gauge = await locklift.factory.getContractArtifacts('Gauge');
     const GaugeAccount = await locklift.factory.getContractArtifacts('GaugeAccount');

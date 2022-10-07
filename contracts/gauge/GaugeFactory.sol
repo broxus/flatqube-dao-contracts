@@ -54,5 +54,5 @@ contract GaugeFactory is GaugeFactoryBase {
         onCodeUpgrade(data);
     }
 
-    function onCodeUpgrade(TvmCell data) internal {}
+    function onCodeUpgrade(TvmCell data) private {}
 }
