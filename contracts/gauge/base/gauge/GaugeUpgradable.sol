@@ -68,7 +68,7 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         uint32 old_version,
         uint32 new_version,
         Callback.CallMeta meta
-    ) external view onlyGaugeAccount(user) {
+    ) external override view onlyGaugeAccount(user) {
         tvm.rawReserve(_reserve(), 0);
 
         emit GaugeAccountUpgrade(meta.call_id, user, old_version, new_version);

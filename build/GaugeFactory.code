@@ -1607,8 +1607,8 @@ PUSHCONT {
 	NEWC
 	STSLICECONST x62_
 	STSLICE
-	PUSHINT 1
-	STUR 111
+	PUSHINT 3030982065060147937779331799513237188247553
+	STUR 143
 	ROTREV
 	NEWC
 	STSLICECONST x6e1624e9
@@ -1632,7 +1632,7 @@ PUSHCONT {
 }
 WHILE
 DROP
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 73
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 75
 THIRD
 NEWC
 STSLICECONST x42_
@@ -1654,7 +1654,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 76
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 78
 OVER
 PUSHCONT {
 	LDU 32
@@ -1683,20 +1683,20 @@ IFREF {
 THROW 0
 
 .macro processUpgradeGaugeRequest_643ccf93_internal_macro
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 77
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 79
 DEPTH
 ADDCONST -2
 PICK
 PUSHINT 1500000000
 GEQ
 THROWIFNOT 1004
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 78
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 80
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 80
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 82
 GETGLOB 11
 GETGLOB 21
 GETGLOB 9
@@ -1731,7 +1731,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 83
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 85
 OVER
 PUSHCONT {
 	LDU 32
@@ -1760,20 +1760,20 @@ IFREF {
 THROW 0
 
 .macro processUpdateGaugeAccountCodeRequest_f6130736_internal_macro
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 84
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 86
 DEPTH
 ADDCONST -2
 PICK
 PUSHINT 1500000000
 GEQ
 THROWIFNOT 1004
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 85
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 87
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 87
+.loc ../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.sol, 89
 GETGLOB 12
 GETGLOB 20
 GETGLOB 9

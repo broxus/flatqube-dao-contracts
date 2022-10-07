@@ -95,6 +95,12 @@ interface IGauge {
     function revertClaim(address user, Callback.CallMeta meta) external;
     function burnLockBoostedBalance(address user, uint128 expired_boosted) external;
     function forceUpgradeGaugeAccount(address user, Callback.CallMeta meta) external view;
+    function onGaugeAccountUpgrade(
+        address user,
+        uint32 old_version,
+        uint32 new_version,
+        Callback.CallMeta meta
+    ) external view;
     function upgrade(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;
     function updateGaugeAccountCode(TvmCell new_code, uint32 new_version, Callback.CallMeta meta) external;
     function onGaugeAccountDeploy(address user, address send_gas_to) external;

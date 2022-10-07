@@ -63,11 +63,13 @@ abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {
     }
 
     function forceUpgradeGaugeAccounts(address gauge, address[] users, Callback.CallMeta meta) external view onlyOwner {
-        require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_UPGRADE_VALUE * users.length, Errors.LOW_MSG_VALUE);
+        require (msg.value >= Gas.MIN_MSG_VALUE + Gas.GAUGE_ACCOUNT_UPGRADE_VALUE * users.length, Errors.LOW_MSG_VALUE);
         tvm.rawReserve(_reserve(), 0);
 
         for (uint i = 0; i < users.length; i++) {
-            IGauge(gauge).forceUpgradeGaugeAccount{value: 0, flag: MsgFlag.SENDER_PAYS_FEES}(users[i], meta);
+            IGauge(gauge).forceUpgradeGaugeAccount{value: Gas.GAUGE_ACCOUNT_UPGRADE_VALUE, flag: MsgFlag.SENDER_PAYS_FEES}(
+                users[i], meta
+            );
         }
 
         meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });

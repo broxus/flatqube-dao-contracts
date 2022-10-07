@@ -94,8 +94,9 @@ contract GaugeAccount is GaugeAccountBase {
         uint32 prev_version;
         (current_version, prev_version) = params.decode(uint32, uint32);
 
-        TvmSlice data = s.loadRefAsSlice();
         if (current_version > prev_version) {
+            TvmCell data = s.loadRef();
+
             Callback.CallMeta meta;
             (
                 meta.call_id,

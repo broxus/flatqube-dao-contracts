@@ -370,191 +370,358 @@ LDMSGADDR
 DROP
 SETGLOB 21
 .loc ../contracts/test/TestGaugeAccount.sol, 93
-SWAP
+OVER
 LDREFRTOS
-NIP
+SWAP
+POP S3
 .loc ../contracts/test/TestGaugeAccount.sol, 95
 DUP
 LDU 32
 LDU 32
 POP S3
-DROP
+XCPU S1, S0
 SETGLOB 10
-.loc ../contracts/test/TestGaugeAccount.sol, 96
-DUP
-LDMSGADDR
-LDMSGADDR
-POP S3
-SWAP
-SETGLOB 22
-SETGLOB 23
-.loc ../contracts/test/TestGaugeAccount.sol, 98
-DUP
-LDU 32
-LDU 32
-POP S3
-GETGLOB 27
-ROT
-SETINDEX 1
-DUP
-SETGLOB 27
-SWAP
-SETINDEX 2
-SETGLOB 27
-.loc ../contracts/test/TestGaugeAccount.sol, 99
-LDU 32
-LDDICT
-ROTREV
-PAIR
-SWAP
-LDU 32
-PLDDICT
-PAIR
-.loc ../contracts/test/TestGaugeAccount.sol, 101
+.loc ../contracts/test/TestGaugeAccount.sol, 97
 OVER
-FIRST
-PUSHREFSLICE
-.compute $default_tuple_builder_t_uint256_t_uint128_t_uint128_t_uint32$
-PUSHINT 0
-NEWDICT
-PUSH S3
+GREATER
 PUSHCONT {
-	BLKPUSH 2, 2
-	INC
-	XCHG S3
-	ROT
-	PUSHINT 32
-	DICTUSET
-}
-REPEAT
-BLKDROP2 2, 1
-PAIR
-SETGLOB 26
-.loc ../contracts/test/TestGaugeAccount.sol, 102
-OVER
-FIRST
-PUSHREFSLICE
-.compute $default_tuple_builder_t_uint32_t_uint32_t_uint32$
-PUSHINT 0
-NEWDICT
-PUSH S3
-PUSHCONT {
-	BLKPUSH 2, 2
-	INC
-	XCHG S3
-	ROT
-	PUSHINT 32
-	DICTUSET
-}
-REPEAT
-BLKDROP2 2, 1
-PAIR
-SETGLOB 28
-.loc ../contracts/test/TestGaugeAccount.sol, 104
-PUSHINT 0
-PUSHCONT {
+	.loc ../contracts/test/TestGaugeAccount.sol, 98
+	PUSH S3
+	LDREF
+	POP S5
+	.loc ../contracts/test/TestGaugeAccount.sol, 100
+	PUSHINT 0
 	DUP
-	GETGLOB 28
-	FIRST
-	LESS
+	PUSHREFSLICE {
+		.blob x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	TRIPLE
+	.loc ../contracts/test/TestGaugeAccount.sol, 101
+	SWAP
+	CTOS
+	LDU 32
+	LDU 32
+	LDU 128
+	LDU 128
+	LDU 128
+	LDU 128
+	LDU 128
+	LDU 128
+	LDU 32
+	LDU 128
+	LDREF
+	ENDS
+	CTOS
+	LDU 32
+	LDU 128
+	LDU 32
+	LDU 128
+	LDU 32
+	ROLLREV 8
+	TUPLE 8
+	SWAP
+	LDU 128
+	LDU 32
+	LDU 128
+	LDU 32
+	LDU 128
+	LDU 32
+	LDU 128
+	LDU 32
+	ROLLREV 8
+	TUPLE 8
+	SWAP
+	LDREF
+	ENDS
+	CTOS
+	LDU 32
+	LDU 32
+	LDMSGADDR
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+	LDDICT
+	LDU 256
+	LDU 128
+	LDREF
+	ENDS
+	CTOS
+	LDU 128
+	LDU 32
+	ROLLREV 4
+	TUPLE 4
+	SWAP
+	LDU 32
+	LDDICT
+	ROTREV
+	PAIR
+	SWAP
+	LDU 32
+	LDU 32
+	LDU 32
+	ROLLREV 3
+	TRIPLE
+	SWAP
+	LDU 32
+	LDDICT
+	ROTREV
+	PAIR
+	SWAP
+	LDU 32
+	LDDICT
+	LDREF
+	ENDS
+	CTOS
+	LDDICT
+	LDDICT
+	LDDICT
+	LDDICT
+	ENDS
+	PUSHINT 24
+	PUSHINT 0
+	REVX
+	PUSH S24
+	SWAP
+	SETINDEX 0
+	POP S24
+	PUSH S23
+	SWAP
+	SETINDEX 1
+	POP S23
+	SETGLOB 11
+	SETGLOB 12
+	SETGLOB 13
+	SETGLOB 14
+	SETGLOB 15
+	SETGLOB 16
+	SETGLOB 17
+	SETGLOB 18
+	SETGLOB 19
+	SETGLOB 22
+	SETGLOB 23
+	SETGLOB 24
+	SETGLOB 25
+	SETGLOB 26
+	SETGLOB 27
+	SETGLOB 28
+	SETGLOB 29
+	SETGLOB 30
+	SETGLOB 31
+	PUSHINT 32
+	SETGLOBVAR
+	PUSHINT 33
+	SETGLOBVAR
+	PUSHINT 34
+	SETGLOBVAR
+	.loc ../contracts/test/TestGaugeAccount.sol, 155
+	GETGLOB 21
+	SETINDEX 2
+	.loc ../contracts/test/TestGaugeAccount.sol, 156
+	GETGLOB 10
+	PUSH S2
+	GETGLOB 21
+	GETGLOB 20
+	NEWC
+	STSLICECONST x62_
+	STSLICE
+	PUSHINT 1
+	STUR 111
+	ROLLREV 4
+	NEWC
+	STSLICECONST x666c96b1
+	STSLICE
+	STU 32
+	STU 32
+	SWAP
+	UNTRIPLE
+	REVERSE 4, 0
+	STU 32
+	STU 32
 }
 PUSHCONT {
-	.loc ../contracts/test/TestGaugeAccount.sol, 105
-	PUSH2 S0, S2
-	SECOND
-	PUSHINT 32
-	DICTUGET
-	THROWIFNOT 50
-	PLDU 32
-	GETGLOB 28
-	UNPAIR
-	PUXC S3, S-1
-	PUSH2 S1, S2
-	LESS
-	THROWIFNOT 50
-	DUP2
-	PUSHINT 32
-	DICTUGET
-	THROWIFNOT 50
-	CALLREF {
-		LDU 32
-		LDU 32
-		LDU 32
-		ENDS
-		TRIPLE
-	}
-	ROLL 4
+	.loc ../contracts/test/TestGaugeAccount.sol, 160
+	OVER
+	LDMSGADDR
+	LDMSGADDR
+	POP S4
+	SWAP
+	SETGLOB 22
+	SETGLOB 23
+	.loc ../contracts/test/TestGaugeAccount.sol, 162
+	OVER
+	LDU 32
+	LDU 32
+	POP S4
+	GETGLOB 27
+	ROT
 	SETINDEX 1
-	CALLREF {
-		UNTRIPLE
-		XCHG S2
-		NEWC
-		STU 32
-		STU 32
-		STU 32
-	}
-	ROTREV
-	PUSHINT 32
-	DICTUSETB
-	PAIR
-	SETGLOB 28
-	.loc ../contracts/test/TestGaugeAccount.sol, 106
-	PUSH2 S0, S1
-	SECOND
-	PUSHINT 32
-	DICTUGET
-	THROWIFNOT 50
-	PLDU 32
-	GETGLOB 28
-	UNPAIR
-	PUXC S3, S-1
-	PUSH2 S1, S2
-	LESS
-	THROWIFNOT 50
-	DUP2
-	PUSHINT 32
-	DICTUGET
-	THROWIFNOT 50
-	CALLREF {
-		LDU 32
-		LDU 32
-		LDU 32
-		ENDS
-		TRIPLE
-	}
-	ROLL 4
+	DUP
+	SETGLOB 27
+	SWAP
 	SETINDEX 2
-	CALLREF {
-		UNTRIPLE
-		XCHG S2
-		NEWC
-		STU 32
-		STU 32
-		STU 32
-	}
+	SETGLOB 27
+	.loc ../contracts/test/TestGaugeAccount.sol, 163
+	OVER
+	LDU 32
+	LDDICT
 	ROTREV
-	PUSHINT 32
-	DICTUSETB
+	PAIR
+	SWAP
+	LDU 32
+	LDDICT
+	ROTREV
+	PAIR
+	SWAP
+	POP S4
+	.loc ../contracts/test/TestGaugeAccount.sol, 165
+	OVER
+	FIRST
+	PUSHREFSLICE
+	.compute $default_tuple_builder_t_uint256_t_uint128_t_uint128_t_uint32$
+	PUSHINT 0
+	NEWDICT
+	PUSH S3
+	PUSHCONT {
+		BLKPUSH 2, 2
+		INC
+		XCHG S3
+		ROT
+		PUSHINT 32
+		DICTUSET
+	}
+	REPEAT
+	BLKDROP2 2, 1
+	PAIR
+	SETGLOB 26
+	.loc ../contracts/test/TestGaugeAccount.sol, 166
+	OVER
+	FIRST
+	PUSHREFSLICE
+	.compute $default_tuple_builder_t_uint32_t_uint32_t_uint32$
+	PUSHINT 0
+	NEWDICT
+	PUSH S3
+	PUSHCONT {
+		BLKPUSH 2, 2
+		INC
+		XCHG S3
+		ROT
+		PUSHINT 32
+		DICTUSET
+	}
+	REPEAT
+	BLKDROP2 2, 1
 	PAIR
 	SETGLOB 28
-	.loc ../contracts/test/TestGaugeAccount.sol, 104
-	INC
-	.loc ../contracts/test/TestGaugeAccount.sol, 0
+	.loc ../contracts/test/TestGaugeAccount.sol, 168
+	PUSHINT 0
+	PUSHCONT {
+		DUP
+		GETGLOB 28
+		FIRST
+		LESS
+	}
+	PUSHCONT {
+		.loc ../contracts/test/TestGaugeAccount.sol, 169
+		PUSH2 S0, S2
+		SECOND
+		PUSHINT 32
+		DICTUGET
+		THROWIFNOT 50
+		PLDU 32
+		GETGLOB 28
+		UNPAIR
+		PUXC S3, S-1
+		PUSH2 S1, S2
+		LESS
+		THROWIFNOT 50
+		DUP2
+		PUSHINT 32
+		DICTUGET
+		THROWIFNOT 50
+		CALLREF {
+			LDU 32
+			LDU 32
+			LDU 32
+			ENDS
+			TRIPLE
+		}
+		ROLL 4
+		SETINDEX 1
+		CALLREF {
+			UNTRIPLE
+			XCHG S2
+			NEWC
+			STU 32
+			STU 32
+			STU 32
+		}
+		ROTREV
+		PUSHINT 32
+		DICTUSETB
+		PAIR
+		SETGLOB 28
+		.loc ../contracts/test/TestGaugeAccount.sol, 170
+		PUSH2 S0, S1
+		SECOND
+		PUSHINT 32
+		DICTUGET
+		THROWIFNOT 50
+		PLDU 32
+		GETGLOB 28
+		UNPAIR
+		PUXC S3, S-1
+		PUSH2 S1, S2
+		LESS
+		THROWIFNOT 50
+		DUP2
+		PUSHINT 32
+		DICTUGET
+		THROWIFNOT 50
+		CALLREF {
+			LDU 32
+			LDU 32
+			LDU 32
+			ENDS
+			TRIPLE
+		}
+		ROLL 4
+		SETINDEX 2
+		CALLREF {
+			UNTRIPLE
+			XCHG S2
+			NEWC
+			STU 32
+			STU 32
+			STU 32
+		}
+		ROTREV
+		PUSHINT 32
+		DICTUSETB
+		PAIR
+		SETGLOB 28
+		.loc ../contracts/test/TestGaugeAccount.sol, 168
+		INC
+		.loc ../contracts/test/TestGaugeAccount.sol, 0
+	}
+	WHILE
+	BLKDROP 3
+	.loc ../contracts/test/TestGaugeAccount.sol, 173
+	PUSH S2
+	GETGLOB 21
+	GETGLOB 20
+	NEWC
+	STSLICECONST x62_
+	STSLICE
+	PUSHINT 1
+	STUR 111
+	ROTREV
+	NEWC
+	STSLICECONST x1d8e7db9
+	STSLICE
 }
-WHILE
-BLKDROP 3
-.loc ../contracts/test/TestGaugeAccount.sol, 109
-GETGLOB 21
-GETGLOB 20
-NEWC
-STSLICECONST x62_
-STSLICE
-PUSHINT 1
-STUR 111
-ROTREV
-NEWC
-STSLICECONST x1d8e7db9
-STSLICE
+IFELSE
 SWAP
 NEWC
 STSLICE
@@ -564,6 +731,7 @@ ENDC
 PUSHPOW2 7
 SENDRAWMSG
 .loc ../contracts/test/TestGaugeAccount.sol, 0
+BLKDROP 4
 CALLREF {
 	CALL $c7_to_c4$
 }
