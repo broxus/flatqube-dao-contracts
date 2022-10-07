@@ -4077,66 +4077,9 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 113
-	PUSH2 S0, S8
-	SECOND
-	PUSHINT 32
-	DICTUGET
-	THROWIFNOT 50
-	CALLREF {
-		LDU 32
-		LDU 32
-		LDU 128
-		LDU 256
-		ENDS
-		TUPLE 4
-	}
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 114
-	DUP
-	SECOND
-	GTINT 0
 	PUSHCONT {
-		DUP
-		SECOND
-	}
-	PUSHCONT {
-		NOW
-	}
-	IFELSE
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 115
-	NOW
-	MIN
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 116
-	PUSH2 S5, S0
-	MIN
-	POP S6
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 117
-	PUSH2 S5, S1
-	FIRST
-	MAX
-	POP S6
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 120
-	PUSH2 S0, S5
-	SUB
-	UFITS 32
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 121
-	PUSH S2
-	THIRD
-	MUL
-	UFITS 128
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 123
-	PUSH S2
-	INDEX 3
-	EQINT 0
-	PUSH S4
-	GTINT 0
-	AND
-	PUSHCONT {
-		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 124
-		PUSH S3
-		DEC
-		UFITS 256
-		PUSH S12
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 113
+		PUSH2 S0, S8
 		SECOND
 		PUSHINT 32
 		DICTUGET
@@ -4149,69 +4092,142 @@ PUSHCONT {
 			ENDS
 			TUPLE 4
 		}
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 114
+		NOW
+		OVER
+		FIRST
+		LEQ
+		PUSHCONT {
+			DROP
+			RETALT
+		}
+		IFJMP
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 115
+		DUP
+		SECOND
+		GTINT 0
+		PUSHCONT {
+			DUP
+			SECOND
+			NOW
+			MIN
+		}
+		PUSHCONT {
+			NOW
+		}
+		IFELSE
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 117
+		PUSH2 S5, S0
+		GEQ
+		PUSHCONT {
+			DROP2
+		}
+		IFJMP
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 119
+		PUSH2 S5, S1
+		FIRST
+		MAX
+		POP S6
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 121
+		PUSH2 S0, S5
+		SUB
+		UFITS 32
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 122
+		PUSH S2
+		THIRD
+		MUL
+		UFITS 128
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 124
+		PUSH S2
 		INDEX 3
-		PUXC S3, S-1
+		EQINT 0
+		PUSH S4
+		GTINT 0
+		AND
+		PUSHCONT {
+			.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 125
+			PUSH S3
+			DEC
+			UFITS 256
+			PUSH S12
+			SECOND
+			PUSHINT 32
+			DICTUGET
+			THROWIFNOT 50
+			CALLREF {
+				LDU 32
+				LDU 32
+				LDU 128
+				LDU 256
+				ENDS
+				TUPLE 4
+			}
+			INDEX 3
+			PUXC S3, S-1
+			SETINDEX 3
+			POP S3
+			.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
+		}
+		IF
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 127
+		PUSHINT 1000000000000000000
+		PUSH S10
+		MULDIV
+		UFITS 128
+		PUSH2 S2, S2
+		INDEX 3
+		ROT
+		ADD
 		SETINDEX 3
+		POP S2
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 128
+		XCPU S1, S10
+		UNPAIR
+		PUXC S4, S-1
+		PUSH2 S1, S2
+		LESS
+		THROWIFNOT 50
+		ROLL 3
+		CALLREF {
+			UNTUPLE 4
+			REVERSE 4, 0
+			NEWC
+			STU 32
+			STU 32
+			STU 128
+			STU 256
+		}
+		ROTREV
+		PUSHINT 32
+		DICTUSETB
+		PAIR
+		POP S10
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 130
+		OVER
 		POP S3
-		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
-	}
-	IF
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 126
-	PUSHINT 1000000000000000000
-	PUSH S10
-	MULDIV
-	UFITS 128
-	PUSH2 S2, S2
-	INDEX 3
-	ROT
-	ADD
-	SETINDEX 3
-	POP S2
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 127
-	XCPU S1, S10
-	UNPAIR
-	PUXC S4, S-1
-	PUSH2 S1, S2
-	LESS
-	THROWIFNOT 50
-	ROLL 3
-	CALLREF {
-		UNTUPLE 4
-		REVERSE 4, 0
-		NEWC
-		STU 32
-		STU 32
-		STU 128
-		STU 256
-	}
-	ROTREV
-	PUSHINT 32
-	DICTUSETB
-	PAIR
-	POP S10
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 129
-	OVER
-	POP S3
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 130
-	NOW
-	OVER
-	LEQ
-	PUSHCONT {
 		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 131
-		DROP
-		RETALT
+		NOW
+		OVER
+		LEQ
+		PUSHCONT {
+			.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 132
+			DROP
+			RETALT
+			.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
+		}
+		IFJMP
+		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 136
+		POP S4
 		.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
 	}
-	IFJMP
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 135
-	POP S4
+	CALLX
 	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 112
 	INC
 	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
 }
 WHILEBRK
 DROP
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 138
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 139
 ROLL 7
 SWAP
 BLKDROP2 6, 2
@@ -4222,17 +4238,17 @@ BLKDROP2 6, 2
 CALL $_getUpdatedExtraRewardRounds_75e7cd12_internal_macro$
 
 .macro _getUpdatedExtraRewardRounds_75e7cd12_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 141
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 142
 PUSHINT 0
 NEWDICT
 PAIR
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 142
-GETGLOB 12
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 143
+GETGLOB 12
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 144
 PUSHINT 33
 GETGLOBVAR
 POP S2
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 145
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 146
 PUSHINT 0
 PUSHCONT {
 	DUP
@@ -4242,7 +4258,7 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 146
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 147
 	PUSH2 S0, S2
 	SECOND
 	PUSHINT 32
@@ -4292,7 +4308,7 @@ PUSHCONT {
 	DICTUSETB
 	PAIR
 	POP S2
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 145
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 146
 	INC
 	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
 }
@@ -4309,7 +4325,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 150
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 151
 ENDS
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
 CALLREF {
@@ -4367,25 +4383,25 @@ THROW 0
 CALL $calculateRewardData_137458f2_internal_macro$
 
 .macro calculateRewardData_137458f2_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 150
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 151
 PUSHINT 0
 DUP
 NEWDICT
 PAIR
 DUP
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 157
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 158
 CALLREF {
 	CALL $_getUpdatedExtraRewardRounds_75e7cd12_internal_macro$
 }
 BLKDROP2 2, 2
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 158
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 159
 GETGLOB 29
 GETGLOB 13
 GETGLOB 20
 CALLREF {
 	CALL $_getUpdatedRewardRounds_6080e5a9_internal_macro$
 }
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 159
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 160
 NOW
 POP S5
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
@@ -4399,7 +4415,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 162
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 163
 ENDS
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
 CALLREF {
@@ -4445,17 +4461,17 @@ THROW 0
 CALL $calculateSupplyAverage_ba66d48b_internal_macro$
 
 .macro calculateSupplyAverage_ba66d48b_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 169
-GETGLOB 16
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 170
-GETGLOB 17
+GETGLOB 16
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 171
-GETGLOB 18
+GETGLOB 17
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 172
-GETGLOB 19
+GETGLOB 18
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 173
+GETGLOB 19
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 174
 GETGLOB 14
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 175
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 176
 NOW
 OVER
 LEQ
@@ -4463,15 +4479,15 @@ OVER
 EQINT 0
 OR
 PUSHCONT {
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 177
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 178
 	DROP
 }
 PUSHCONT {
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 179
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 180
 	NOW
 	SUBR
 	UFITS 32
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 180
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 181
 	BLKPUSH 2, 4
 	MUL
 	UFITS 128
@@ -4486,12 +4502,12 @@ PUSHCONT {
 	UFITS 32
 	DIV
 	POP S5
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 181
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 182
 	PUSH2 S3, S0
 	ADD
 	UFITS 32
 	POP S4
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 182
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 183
 	BLKPUSH 2, 2
 	MUL
 	UFITS 128
@@ -4507,10 +4523,10 @@ PUSHCONT {
 	UFITS 32
 	DIV
 	POP S3
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 183
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 184
 	ADD
 	UFITS 32
-	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 184
+	.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 185
 }
 IFELSE
 NOW
@@ -4521,7 +4537,7 @@ NOW
 CALL $updateSupplyAverage_58654860_internal_macro$
 
 .macro updateSupplyAverage_58654860_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 189
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 190
 CALLREF {
 	CALL $calculateSupplyAverage_ba66d48b_internal_macro$
 }
@@ -4538,7 +4554,7 @@ SETGLOB 14
 CALL $updateRewardData_e984de7c_internal_macro$
 
 .macro updateRewardData_e984de7c_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 199
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 200
 CALLREF {
 	CALL $calculateRewardData_137458f2_internal_macro$
 }
@@ -4549,7 +4565,7 @@ SETGLOBVAR
 SETGLOB 12
 SETGLOB 29
 SETGLOB 13
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 207
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 208
 CALLREF {
 	CALL $updateSupplyAverage_58654860_internal_macro$
 }
@@ -4564,7 +4580,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 210
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 211
 ENDS
 .loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 0
 CALLREF {
@@ -4618,19 +4634,19 @@ IFREF {
 THROW 0
 
 .macro calcSyncData_47797041_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 211
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 212
 CALLREF {
 	CALL $calculateSupplyAverage_ba66d48b_internal_macro$
 }
 DROP
 BLKDROP2 2, 2
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 212
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 213
 CALLREF {
 	CALL $calculateRewardData_137458f2_internal_macro$
 }
 DROP
 NIP
-.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 213
+.loc ../contracts/gauge/base/gauge/GaugeRewards.sol, 214
 GETGLOB 27
 THIRD
 ROLLREV 5

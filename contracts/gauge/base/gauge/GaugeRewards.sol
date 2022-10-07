@@ -111,11 +111,12 @@ abstract contract GaugeRewards is GaugeDeploy {
         uint256 _new_sync_idx;
         for (uint j = start_sync_idx; j < rewardRounds.length; j++) {
             RewardRound round = rewardRounds[j];
-            uint32 _roundEndTime = round.endTime > 0 ? round.endTime : now;
-            _roundEndTime = math.min(_roundEndTime, now);
-            _lastRewardTime = math.min(_lastRewardTime, _roundEndTime);
-            _lastRewardTime = math.max(_lastRewardTime, round.startTime);
+            if (now <= round.startTime) break;
+            uint32 _roundEndTime = round.endTime > 0 ? math.min(round.endTime, now) : now;
+            // for cases when last update occurred in gap between rounds or we are still in gap
+            if (_lastRewardTime >= _roundEndTime) continue;
 
+            _lastRewardTime = math.max(_lastRewardTime, round.startTime);
             // get multiplier bounded by this reward round
             uint32 multiplier = _roundEndTime - _lastRewardTime;
             uint128 new_reward = round.rewardPerSecond * multiplier;

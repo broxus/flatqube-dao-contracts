@@ -195,6 +195,15 @@ export class VoteEscrow {
         }));
     }
 
+    async setDistribution(distribution: number[]) {
+        return await this.contract.methods.setDistribution({
+            _new_distribution: distribution, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}
+        ).send({
+            from: this._owner.address,
+            amount: toNano(1)
+        });
+    }
+
     async deployVeAccount(user: Address) {
         return this.contract.methods.deployVoteEscrowAccount({user: user}).send({
             amount: toNano(5),

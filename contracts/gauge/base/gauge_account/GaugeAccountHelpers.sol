@@ -229,9 +229,8 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
         uint128 interval_balance,
         uint32 pool_last_reward_time
     ) public pure returns (RewardData, VestingData) {
-        if (reward_rounds.length == 0) {
-            return (reward_data, vesting_data);
-        }
+        if (reward_rounds.length == 0) return (reward_data, vesting_data);
+
         uint32 first_round_start = reward_rounds[0].startTime;
 
         // nothing to calculate
@@ -242,26 +241,20 @@ abstract contract GaugeAccountHelpers is GaugeAccountVesting {
 
         // if we didnt update on this block
         if (reward_data.lastRewardTime < pool_last_reward_time) {
-            if (reward_data.lastRewardTime < first_round_start) {
-                reward_data.lastRewardTime = math.min(first_round_start, pool_last_reward_time);
-            }
+            reward_data.lastRewardTime = reward_data.lastRewardTime < first_round_start ? first_round_start : reward_data.lastRewardTime;
 
             uint32 farm_end_time = reward_rounds[reward_rounds.length - 1].endTime;
             for (uint i = reward_rounds.length - 1; i >= 0; i--) {
                 if (reward_data.lastRewardTime >= reward_rounds[i].startTime) {
                     for (uint j = i; j < reward_rounds.length; j++) {
                         IGauge.RewardRound round = reward_rounds[j];
-                        if (pool_last_reward_time <= round.startTime) {
-                            break;
-                        }
+                        if (pool_last_reward_time <= round.startTime) break;
 
-                        uint32 up_to = round.endTime == 0 ? pool_last_reward_time : round.endTime;
-                        up_to = math.min(pool_last_reward_time, round.endTime);
-
+                        uint32 up_to = round.endTime == 0 ? pool_last_reward_time : math.min(pool_last_reward_time, round.endTime);
                         // if this round is last, dont bound by round end
-                        if (up_to == farm_end_time) {
-                            up_to = pool_last_reward_time;
-                        }
+                        up_to = up_to == farm_end_time ? pool_last_reward_time : up_to;
+                        // possible if our last update occurred in a gap between rounds
+                        if (reward_data.lastRewardTime >= up_to) continue;
 
                         (
                             uint128 updated_locked,

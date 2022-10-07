@@ -224,11 +224,13 @@ abstract contract GaugeAccountBase is GaugeAccountHelpers {
     }
 
     function _finalizeAction(uint32 nonce) internal view {
-        if (_actions[nonce] == ActionType.Deposit) {
+        ActionType _type = _actions[nonce];
+
+        if (_type == ActionType.Deposit) {
             this.processDeposit_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
-        } else if (_actions[nonce] == ActionType.Withdraw) {
+        } else if (_type == ActionType.Withdraw) {
             this.processWithdraw_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
-        } else if (_actions[nonce] == ActionType.Claim) {
+        } else if (_type == ActionType.Claim) {
             this.processClaim_final{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
         }
     }
