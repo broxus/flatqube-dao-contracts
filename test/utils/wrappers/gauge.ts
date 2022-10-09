@@ -1,5 +1,5 @@
 import {Address, Contract} from "locklift";
-import {FactorySource} from "../../../build/factorySource";
+import {FactorySource, TestGaugeAbi} from "../../../build/factorySource";
 import {TokenWallet} from "./token_wallet";
 import {Account} from 'locklift/everscale-standalone-client';
 import {use} from "chai";
@@ -8,12 +8,12 @@ const {toNano} = locklift.utils;
 
 
 export class Gauge {
-    public contract: Contract<FactorySource["Gauge"]>;
+    public contract: Contract<FactorySource["Gauge"]> | Contract<TestGaugeAbi>;
     public _owner: Account;
     public address: Address;
     public name: string | undefined;
 
-    constructor(contract: Contract<FactorySource["Gauge"]>, owner: Account) {
+    constructor(contract: Contract<FactorySource["Gauge"]> | Contract<TestGaugeAbi>, owner: Account) {
         this.contract = contract;
         this._owner = owner;
         this.address = contract.address;
@@ -30,6 +30,7 @@ export class Gauge {
     }
 
     async getEvents(event_name: string) {
+        // @ts-ignore
         return (await this.contract.getPastEvents({filter: (event) => event.event === event_name})).events;
     }
 

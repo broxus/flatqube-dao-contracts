@@ -74,9 +74,10 @@ contract TestGauge is GaugeBase {
         tvm.resetStorage();
         tvm.rawReserve(_reserve(), 0);
 
+        uint32 new_version;
         Callback.CallMeta meta;
         (
-            gauge_version, // 32
+            new_version, // 32
             meta, // 267
             withdrawAllLockPeriod,
             lastRewardTime,
@@ -155,6 +156,7 @@ contract TestGauge is GaugeBase {
                 uint32
             )
         );
+        gauge_version = new_version;
 
         emit Upgrade(gauge_version - 1, gauge_version);
     }
