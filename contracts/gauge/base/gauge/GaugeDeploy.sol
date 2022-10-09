@@ -69,6 +69,8 @@ abstract contract GaugeDeploy is GaugeUpgradable {
         if (_maxLockTime > 0) {
             require (_maxBoost >= BOOST_BASE, Errors.BAD_LOCK_SETUP);
         }
+        // 10 years
+        require (_maxLockTime <= 10 * 365 days, Errors.BAD_LOCK_SETUP);
 
         maxBoost = _maxBoost;
         maxLockTime = _maxLockTime;

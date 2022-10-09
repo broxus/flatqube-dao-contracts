@@ -4779,11 +4779,17 @@ PUSHCONT {
 }
 IF
 .loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 73
+PUSHINT 4008
+OVER
+PUSHINT 315360000
+LEQ
+THROWANYIFNOT
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 75
 SWAP
 SETGLOB 23
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 74
-SETGLOB 24
 .loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 76
+SETGLOB 24
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 78
 GETGLOB 25
 LSHIFT 1
 UFITS 8
@@ -4799,7 +4805,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 79
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 81
 LDU 32
 ENDS
 .loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 0
@@ -4820,14 +4826,14 @@ PUSHINT 41
 GETGLOBVAR
 SDEQ
 THROWANYIFNOT
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 80
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 82
 GETGLOB 25
 EQINT 8
 THROWIFNOT 2001
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 81
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 83
 TRUE
 SETGLOB 26
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 82
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 84
 PUSHINT 42
 GETGLOBVAR
 PUSHINT 41
@@ -4849,7 +4855,7 @@ SENDRAWMSG
 CALL $_setupTokenWallets_32824a55_internal_macro$
 
 .macro _setupTokenWallets_32824a55_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 90
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 92
 PUSHINT 250000000
 MYADDR
 GETGLOB 27
@@ -4869,7 +4875,7 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 96
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 98
 PUSHINT 250000000
 MYADDR
 GETGLOB 28
@@ -4889,7 +4895,7 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 101
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 103
 PUSHINT 0
 PUSHCONT {
 	DUP
@@ -4899,7 +4905,7 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 102
+	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 104
 	PUSHINT 250000000
 	MYADDR
 	PUSH S2
@@ -4937,7 +4943,7 @@ PUSHCONT {
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
-	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 101
+	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 103
 	INC
 	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 0
 }
@@ -4954,7 +4960,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 114
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 116
 OVER
 PUSHCONT {
 	LDREF
@@ -4975,13 +4981,13 @@ CALLREF {
 THROW 0
 
 .macro receiveTokenWalletAddress_9b3a57ad_internal_macro
-.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 115
+.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 117
 GETGLOB 9
 GETGLOB 27
 FIRST
 SDEQ
 PUSHCONT {
-	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 116
+	.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 118
 	GETGLOB 27
 	OVER
 	SETINDEX 1
@@ -4993,14 +4999,14 @@ PUSHCONT {
 	FIRST
 	SDEQ
 	PUSHCONT {
-		.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 118
+		.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 120
 		GETGLOB 28
 		OVER
 		SETINDEX 1
 		SETGLOB 28
 	}
 	PUSHCONT {
-		.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 120
+		.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 122
 		PUSHINT 0
 		PUSHCONT {
 			DUP
@@ -5010,7 +5016,7 @@ PUSHCONT {
 			LESS
 		}
 		PUSHCONT {
-			.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 121
+			.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 123
 			GETGLOB 9
 			OVER
 			PUSHINT 32
@@ -5034,7 +5040,7 @@ PUSHCONT {
 			FIRST
 			SDEQ
 			PUSHCONT {
-				.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 122
+				.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 124
 				OVER
 				PUSHINT 32
 				GETGLOBVAR
@@ -5083,7 +5089,7 @@ PUSHCONT {
 				.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 0
 			}
 			IF
-			.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 120
+			.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 122
 			INC
 			.loc ../contracts/gauge/base/gauge/GaugeDeploy.sol, 0
 		}
