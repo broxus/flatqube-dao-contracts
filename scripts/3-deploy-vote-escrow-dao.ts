@@ -27,37 +27,37 @@ const main = async () => {
             type: 'number',
             name: 'votingDelay',
             message: 'Delay (in seconds) before opening proposal for voting',
-            initial: 0
+            initial: 2 * 24 * 3600
         },
         {
             type: 'number',
             name: 'votingPeriod',
             message: 'Duration (in seconds) how long proposal is open for voting',
-            initial: 0
+            initial: 3 * 24 * 3600
         },
         {
             type: 'number',
             name: 'quorumVotes',
             message: 'The minimum number (satoshi) of votes "for" to accept the proposal',
-            initial: 0
+            initial: 80000 * 10**9
         },
         {
             type: 'number',
             name: 'timeLock',
             message: 'Duration (in seconds) between queuing of the proposal and its execution',
-            initial: 0
+            initial: 2 * 24 * 3600
         },
         {
             type: 'number',
             name: 'threshold',
             message: 'Required amount of tokens (satoshi) in stake to create a proposal',
-            initial: 0
+            initial: 20000 * 10**9
         },
         {
             type: 'number',
             name: 'gracePeriod',
             message: 'Duration (in seconds) from start of proposal can be executed to its expire',
-            initial: 0
+            initial: 2 * 24 * 3600
         }
     ]);
     console.log('\x1b[1m', '\nSetup complete! ✔\n')

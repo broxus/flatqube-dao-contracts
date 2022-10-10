@@ -30,7 +30,7 @@ const main = async () => {
             type: 'number',
             name: 'start_offset',
             message: 'Time before origin epoch starts (seconds), starting from deploy moment',
-            initial: 24 * 3600
+            initial: 86400
         },
         {
             type: 'number',
@@ -48,7 +48,7 @@ const main = async () => {
             type: 'list',
             name: 'distribution_scheme',
             message: 'Distribution scheme (farming, treasury, team), numbers from 1 (0.01%) to 10000 (100%)',
-            initial: '8000, 1000, 1000',
+            initial: '7000, 2000, 1000',
             separator: ','
         },
         {
@@ -72,43 +72,43 @@ const main = async () => {
             type: 'number',
             name: 'time_before_voting',
             message: 'Offset between epoch start and voting start (seconds)',
-            initial: 6 * 24 * 3600
+            initial: 2 * 24 * 3600
         },
         {
             type: 'number',
             name: 'voting_time',
             message: 'Voting length (seconds)',
-            initial: 6 * 24 * 3600
+            initial: 11 * 24 * 3600
         },
         {
             type: 'number',
             name: 'gauge_min_votes_ratio',
             message: 'Min % gauge should get during voting, from 1 (0.01%) to 10000 (100%)',
-            initial: 300
+            initial: 100
         },
         {
             type: 'number',
             name: 'gauge_max_votes_ratio',
             message: 'Max % gauge can get during voting, from 1 (0.01%) to 10000 (100%)',
-            initial: 3000
+            initial: 2500
         },
         {
             type: 'number',
             name: 'gauge_max_downtime',
             message: 'If gauge not being elected than many times, it is removed from vote escrow whitelist',
-            initial: 3
+            initial: 4
         },
         {
             type: 'number',
             name: 'max_gauges_per_vote',
             message: 'Max number of gauges user can vote for during epoch',
-            initial: 15
+            initial: 10
         },
         {
             type: 'number',
             name: 'whitelist_price',
             message: 'Price for whitelisting gauge in vote escrow (in QUBEs)',
-            initial: 10000 * 10**9
+            initial: 1000 * 10**9
         }
     ]);
     console.log('\x1b[1m', '\nSetup complete! ✔');
