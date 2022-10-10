@@ -106,7 +106,7 @@ describe("Gauge main scenarios", async function() {
     });
 
     describe('Running scenarios', async function() {
-        describe.skip('Testing deposit/withdraw, 1 user, no reward', async function() {
+        describe('Testing deposit/withdraw, 1 user, no reward', async function() {
             const deposit_amount = 1000;
             let gauge_inited = false;
 
@@ -359,7 +359,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe.skip('Testing qube reward, multiple users, multiple rounds', async function() {
+        describe('Testing qube reward, multiple users, multiple rounds', async function() {
             const deposit_amount = 1000;
             const qube_reward = 100000;
 
@@ -522,7 +522,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe.skip('Testing extra reward, multiple users, multiple rounds', async function() {
+        describe('Testing extra reward, multiple users, multiple rounds', async function() {
             const deposit_amount = 1000;
             const reward_amount = 1000000;
 
@@ -706,7 +706,7 @@ describe("Gauge main scenarios", async function() {
             });
         });
 
-        describe.skip('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
+        describe('Testing big number of extra reward rounds + qube reward, multiple users', async function() {
             const qube_reward = 1000;
             const reward_amount = 1000000;
             const deposit_amount = 1000;
@@ -775,7 +775,7 @@ describe("Gauge main scenarios", async function() {
             });
         })
 
-        describe.skip('Testing vesting mechanic', async function() {
+        describe('Testing vesting mechanic', async function() {
             const deposit_amount = 1000;
             const qube_reward = 1000000;
 
@@ -869,6 +869,17 @@ describe("Gauge main scenarios", async function() {
                 expect(pending3._qubeReward.lockedReward).to.be.eq('0');
                 expect(pending3._qubeReward.unlockedReward).to.be.eq('0');
                 expect(pending3._extraReward[0].unlockedReward).to.be.eq('0');
+            });
+
+            it('Add multiple qube reward rounds', async function() {
+                const time = Math.floor(locklift.testing.getCurrentTime() / 1000);
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 10, time + 20));
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward, 10, time + 30));
+                await locklift.tracing.trace(vote_escrow.sendQubesToGauge(gauge.address, qube_reward * 2, 10, time + 40));
+            });
+
+            it('Claim again', async function() {
+                await locklift.tracing.trace(gauge.withdraw(user1, deposit_amount,true, 123));
             });
         });
 
