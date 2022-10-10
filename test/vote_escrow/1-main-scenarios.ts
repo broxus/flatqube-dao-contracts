@@ -218,7 +218,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 }
 
                 expect(epoch_distribution.call_id).to.be.eq('1');
-                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.epoch_num).to.be.eq((current_epoch - 1).toString());
 
                 const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
 
@@ -319,7 +319,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 expect(voting_end.treasury_votes).to.be.eq(treasury_votes.toString());
 
                 expect(epoch_distribution.call_id).to.be.eq('2');
-                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.epoch_num).to.be.eq((current_epoch - 1).toString());
 
                 const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
 
@@ -429,7 +429,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 expect(voting_end.treasury_votes).to.be.eq(treasury_votes.toString());
 
                 expect(epoch_distribution.call_id).to.be.eq('3');
-                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.epoch_num).to.be.eq((current_epoch - 1).toString());
 
                 const share = max_votes / total_votes;
                 const max_distribution = Math.floor(Math.floor(1000000 * 0.8) * share)
@@ -526,7 +526,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 expect(voting_end.treasury_votes).to.be.eq(exceeded_votes.toString());
 
                 expect(epoch_distribution.call_id).to.be.eq('4');
-                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.epoch_num).to.be.eq((current_epoch - 1).toString());
 
                 const share = max_votes / total_votes;
                 const max_distribution = Math.floor(Math.floor(1000000 * 0.8) * share);
@@ -586,7 +586,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 expect(voting_end.treasury_votes).to.be.eq('0');
 
                 expect(epoch_distribution.call_id).to.be.eq('5');
-                expect(epoch_distribution.epoch_num).to.be.eq(current_epoch.toString());
+                expect(epoch_distribution.epoch_num).to.be.eq((current_epoch - 1).toString());
 
                 const expected_team = 100000;
                 const expected_treasury = 100000 + treasury_bonus;

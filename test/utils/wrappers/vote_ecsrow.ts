@@ -166,7 +166,7 @@ export class VoteEscrow {
 
     async endVoting(call_id = 0) {
         let gas = new Bignumber((await this.contract.methods.calculateGasForEndVoting({}).call()).min_gas);
-        gas = gas.plus(new Bignumber(10 ** 9)).toFixed(0)
+        gas = gas.plus(new Bignumber(10 ** 9)).toFixed(0);
 
         return await locklift.tracing.trace(this.contract.methods.endVoting({
             meta: {call_id: call_id, nonce: 0, send_gas_to: this._owner.address}
