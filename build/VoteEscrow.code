@@ -4685,7 +4685,7 @@ SENDRAWMSG
 .loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
 DROP2
 
-.macro withdrawTreasuryTokens
+.macro getNormalizedVoting
 DROP
 GETGLOB 6
 THROWIFNOT 76
@@ -4695,6 +4695,403 @@ IFREF {
 	CALL $c4_to_c7$
 }
 .loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 416
+ENDS
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+CALLREF {
+	CALL $getNormalizedVoting_f8bb2120_internal_macro$
+}
+PUSH S6
+PUSHCONT {
+	PUSH S8
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 1
+	STUR 98
+	REVERSE 7, 0
+	NEWC
+	STSLICECONST xbf8d0aa1
+	STDICT
+	STDICT
+	STDICT
+	STU 128
+	STU 128
+	STU 128
+	STBREFR
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	BLKDROP 6
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro getNormalizedVoting_f8bb2120_internal_macro
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 416
+NEWDICT
+BLKPUSH 2, 0
+PUSHINT 0
+BLKPUSH 2, 0
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 424
+PUSHINT 50
+GETGLOBVAR
+POP S6
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 425
+PUSHINT 50
+GETGLOBVAR
+POP S5
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 426
+PUSHINT 40
+GETGLOBVAR
+PUSHINT 45
+GETGLOBVAR
+MUL
+UFITS 128
+PUSHINT 10000
+DIV
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 427
+PUSHINT 40
+GETGLOBVAR
+PUSHINT 44
+GETGLOBVAR
+MUL
+UFITS 128
+PUSHINT 10000
+DIV
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 429
+PUSHINT 0
+PUSH3 S0, S7, S7
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 432
+PUSHINT 267
+DICTMIN
+PUSHCONT {
+	DUP
+	ROT
+	PLDU 128
+}
+PUSHCONT {
+	NULL
+	BLKPUSH 2, 0
+}
+IFELSE
+PUSHCONT {
+	PUSH S2
+	ISNULL
+	NOT
+}
+PUSHCONT {
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 433
+	PUSH2 S0, S7
+	LESS
+	PUSHCONT {
+		.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 434
+		PUSH2 S5, S0
+		ADD
+		UFITS 128
+		POP S6
+		.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 435
+		PUSH2 S1, S12
+		PUSHINT 0
+		NEWC
+		STU 128
+		ROTREV
+		PUSHINT 267
+		DICTSETB
+		POP S13
+	}
+	PUSHCONT {
+		PUSH2 S0, S6
+		GREATER
+		PUSHCONT {
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 437
+			PUSH3 S1, S12, S6
+			NEWC
+			STU 128
+			ROTREV
+			PUSHINT 267
+			DICTSETB
+			POP S13
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 438
+			PUSH2 S0, S6
+			SUB
+			UFITS 128
+			PUSH S6
+			ADD
+			UFITS 128
+			POP S6
+		}
+		PUSHCONT {
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 440
+			PUSH2 S4, S0
+			ADD
+			UFITS 128
+			POP S5
+		}
+		IFELSE
+	}
+	IFELSE
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+	PUSH2 S2, S3
+	PUSHINT 267
+	DICTGETNEXT
+	PUSHCONT {
+		DUP
+		ROT
+		PLDU 128
+	}
+	PUSHCONT {
+		NULL
+		BLKPUSH 2, 0
+	}
+	IFELSE
+	BLKDROP2 3, 3
+}
+WHILE
+BLKDROP 4
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 443
+PUSHINT 0
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 445
+OVER
+EQINT 0
+PUSH S3
+EQINT 0
+OR
+PUSHCONT {
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 446
+	PUSH S2
+	NIP
+}
+PUSHCONT {
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 449
+	PUSH2 S9, S9
+	PUSHINT 267
+	DICTMIN
+	PUSHCONT {
+		DUP
+		ROT
+		PLDU 128
+	}
+	PUSHCONT {
+		NULL
+		BLKPUSH 2, 0
+	}
+	IFELSE
+	PUSHCONT {
+		PUSH S2
+		ISNULL
+		NOT
+	}
+	PUSHCONT {
+		.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 450
+		PUSH2 S0, S7
+		LESS
+		PUSHCONT {
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 451
+			PUSH3 S0, S6, S5
+			MULDIV
+			UFITS 128
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 452
+			ADD
+			UFITS 128
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 453
+			PUSH2 S0, S7
+			GREATER
+			PUSHCONT {
+				.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 454
+				PUSH2 S0, S7
+				SUB
+				UFITS 128
+				PUSH S5
+				ADD
+				UFITS 128
+				POP S5
+				.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+			}
+			IF
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 456
+			PUSH2 S0, S7
+			MIN
+			PUSH2 S2, S14
+			ROT
+			NEWC
+			STU 128
+			ROTREV
+			PUSHINT 267
+			DICTSETB
+			POP S14
+			.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+		}
+		IF
+		.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+		PUSH2 S2, S3
+		PUSHINT 267
+		DICTGETNEXT
+		PUSHCONT {
+			DUP
+			ROT
+			PLDU 128
+		}
+		PUSHCONT {
+			NULL
+			BLKPUSH 2, 0
+		}
+		IFELSE
+		BLKDROP2 3, 3
+	}
+	WHILE
+	BLKDROP 4
+}
+IFELSE
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 461
+PUSHINT 35
+GETGLOBVAR
+DEC
+UFITS 32
+GETGLOB 27
+SECOND
+PUSHINT 32
+DICTUGET
+THROWIFNOT 50
+PLDU 128
+POP S8
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 462
+PUSH S7
+PUSHINT 0
+GETGLOB 22
+SECOND
+PUSHINT 32
+DICTUGET
+THROWIFNOT 50
+PLDU 32
+PUSHINT 10000
+MULDIV
+UFITS 128
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 463
+PUSHINT 0
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 464
+PUSHINT 40
+GETGLOBVAR
+GTINT 0
+PUSHCONT {
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 465
+	PUSH2 S1, S2
+	PUSHINT 40
+	GETGLOBVAR
+	MULDIV
+	UFITS 128
+}
+PUSHCONT {
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 467
+	OVER
+}
+IFELSE
+NIP
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 470
+PUSH S9
+PUSHINT 1
+GETGLOB 22
+SECOND
+PUSHINT 32
+DICTUGET
+THROWIFNOT 50
+PLDU 32
+PUSHINT 10000
+MULDIV
+UFITS 128
+POP S8
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 471
+PUSH S9
+PUSHINT 2
+GETGLOB 22
+SECOND
+PUSHINT 32
+DICTUGET
+THROWIFNOT 50
+PLDU 32
+PUSHINT 10000
+MULDIV
+UFITS 128
+POP S9
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 472
+PUSH S7
+ADD
+UFITS 128
+POP S7
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 474
+PUSH2 S10, S10
+PUSHINT 267
+DICTMIN
+PUSHCONT {
+	DUP
+	ROT
+	PLDU 128
+}
+PUSHCONT {
+	NULL
+	BLKPUSH 2, 0
+}
+IFELSE
+PUSHCONT {
+	PUSH S2
+	ISNULL
+	NOT
+}
+PUSHCONT {
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 475
+	PUSH2 S4, S0
+	PUSHINT 40
+	GETGLOBVAR
+	MULDIV
+	UFITS 128
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 476
+	PUSH2 S2, S14
+	ROT
+	NEWC
+	STU 128
+	ROTREV
+	PUSHINT 267
+	DICTSETB
+	POP S14
+	.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+	PUSH2 S2, S3
+	PUSHINT 267
+	DICTGETNEXT
+	PUSHCONT {
+		DUP
+		ROT
+		PLDU 128
+	}
+	PUSHCONT {
+		NULL
+		BLKPUSH 2, 0
+	}
+	IFELSE
+	BLKDROP2 3, 3
+}
+WHILE
+BLKDROP 10
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 0
+
+.macro withdrawTreasuryTokens
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 480
 OVER
 PUSHCONT {
 	LDU 128
@@ -4733,24 +5130,24 @@ GETGLOB 9
 GETGLOB 15
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 417
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 481
 PUSH S2
 GETGLOB 20
 LEQ
 THROWIFNOT 1005
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 419
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 483
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 420
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 484
 GETGLOB 20
 PUSH S3
 SUB
 UFITS 128
 SETGLOB 20
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 422
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 486
 BLKPUSH 3, 2
 FIRST
 PUSHSLICE xc000000000000000000000000036f5a848
@@ -4762,13 +5159,13 @@ STU 128
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 424
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 488
 GETGLOB 23
 PUSH S3
 SUB
 UFITS 128
 SETGLOB 23
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 425
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 489
 ROTREV
 PUSHREF {
 }
@@ -4789,7 +5186,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 428
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 492
 OVER
 PUSHCONT {
 	LDU 128
@@ -4828,24 +5225,24 @@ GETGLOB 9
 GETGLOB 15
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 429
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 493
 PUSH S2
 GETGLOB 21
 LEQ
 THROWIFNOT 1005
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 431
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 495
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 432
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 496
 GETGLOB 21
 PUSH S3
 SUB
 UFITS 128
 SETGLOB 21
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 434
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 498
 BLKPUSH 3, 2
 FIRST
 PUSHSLICE xc00000000000000000000000007733eed6
@@ -4857,13 +5254,13 @@ STU 128
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 436
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 500
 GETGLOB 23
 PUSH S3
 SUB
 UFITS 128
 SETGLOB 23
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 437
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 501
 ROTREV
 PUSHREF {
 }
@@ -4884,7 +5281,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 440
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 504
 OVER
 PUSHCONT {
 	LDU 128
@@ -4923,19 +5320,19 @@ GETGLOB 9
 GETGLOB 15
 SDEQ
 THROWIFNOT 1000
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 441
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 505
 PUSH S2
 PUSHINT 53
 GETGLOBVAR
 LEQ
 THROWIFNOT 1005
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 443
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 507
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 444
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 508
 PUSHINT 53
 GETGLOBVAR
 PUSH S3
@@ -4943,7 +5340,7 @@ SUB
 UFITS 128
 PUSHINT 53
 SETGLOBVAR
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 446
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 510
 BLKPUSH 3, 2
 FIRST
 PUSHSLICE xc000000000000000000000000048b30d57
@@ -4955,13 +5352,13 @@ STU 128
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 448
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 512
 GETGLOB 23
 PUSH S3
 SUB
 UFITS 128
 SETGLOB 23
-.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 449
+.loc ../contracts/vote_escrow/base/vote_escrow/VoteEscrowEpochVoting.sol, 513
 ROTREV
 PUSHREF {
 }
@@ -7830,7 +8227,7 @@ THROW 0
 
 .macro public_function_selector
 DUP
-PUSHINT 1954959084
+PUSHINT 1948133249
 LEQ
 IFJMPREF {
 	DUP
@@ -7955,7 +8352,7 @@ IFJMPREF {
 		}
 	}
 	DUP
-	PUSHINT 1245538092
+	PUSHINT 1241839906
 	LEQ
 	IFJMPREF {
 		DUP
@@ -8017,7 +8414,7 @@ IFJMPREF {
 			}
 		}
 		DUP
-		PUSHINT 1185619663
+		PUSHINT 1066207905
 		LEQ
 		IFJMPREF {
 			DUP
@@ -8039,16 +8436,22 @@ IFJMPREF {
 				CALL $encodeTokenTransferPayload$
 			}
 			DUP
+			PUSHINT 1066207905
+			EQUAL
+			IFJMPREF {
+				CALL $getNormalizedVoting$
+			}
+		}
+		DUP
+		PUSHINT 1241839906
+		LEQ
+		IFJMPREF {
+			DUP
 			PUSHINT 1185619663
 			EQUAL
 			IFJMPREF {
 				CALL $setDistribution$
 			}
-		}
-		DUP
-		PUSHINT 1245538092
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1198858342
 			EQUAL
@@ -8067,22 +8470,22 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $forceUpgradeVeAccounts$
 			}
+		}
+	}
+	DUP
+	PUSHINT 1487462884
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 1277132600
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1245538092
 			EQUAL
 			IFJMPREF {
 				CALL $finishWithdraw$
 			}
-		}
-	}
-	DUP
-	PUSHINT 1549476069
-	LEQ
-	IFJMPREF {
-		DUP
-		PUSHINT 1282748056
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1252511245
 			EQUAL
@@ -8101,17 +8504,17 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $distributionScheme$
 			}
+		}
+		DUP
+		PUSHINT 1319694629
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1282748056
 			EQUAL
 			IFJMPREF {
 				CALL $withdrawTeamTokens$
 			}
-		}
-		DUP
-		PUSHINT 1344353094
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1290439027
 			EQUAL
@@ -8130,17 +8533,17 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $getCurrentEpochDetails$
 			}
+		}
+		DUP
+		PUSHINT 1400013410
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1344353094
 			EQUAL
 			IFJMPREF {
 				CALL $decodeDepositPayload$
 			}
-		}
-		DUP
-		PUSHINT 1441963965
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1354746527
 			EQUAL
@@ -8159,17 +8562,17 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $getDetails$
 			}
+		}
+		DUP
+		PUSHINT 1487462884
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1441963965
 			EQUAL
 			IFJMPREF {
 				CALL $withdrawPaymentTokens$
 			}
-		}
-		DUP
-		PUSHINT 1549476069
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1470915307
 			EQUAL
@@ -8188,22 +8591,22 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $calculateAverage$
 			}
+		}
+	}
+	DUP
+	PUSHINT 1948133249
+	LEQ
+	IFJMPREF {
+		DUP
+		PUSHINT 1681732875
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1549476069
 			EQUAL
 			IFJMPREF {
 				CALL $decodeTokenTransferPayload$
 			}
-		}
-	}
-	DUP
-	PUSHINT 1954959084
-	LEQ
-	IFJMPREF {
-		DUP
-		PUSHINT 1684959105
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1626398154
 			EQUAL
@@ -8222,17 +8625,17 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $installOrUpdateVeAccountCode$
 			}
+		}
+		DUP
+		PUSHINT 1749184247
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1684959105
 			EQUAL
 			IFJMPREF {
 				CALL $tryUnlockCastedVotes$
 			}
-		}
-		DUP
-		PUSHINT 1824563769
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1718953299
 			EQUAL
@@ -8251,17 +8654,17 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $getVeAverage$
 			}
+		}
+		DUP
+		PUSHINT 1849907086
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1824563769
 			EQUAL
 			IFJMPREF {
 				CALL $constructor$
 			}
-		}
-		DUP
-		PUSHINT 1893244873
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1835246016
 			EQUAL
@@ -8280,17 +8683,17 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $countVotesStep$
 			}
+		}
+		DUP
+		PUSHINT 1948133249
+		LEQ
+		IFJMPREF {
 			DUP
 			PUSHINT 1893244873
 			EQUAL
 			IFJMPREF {
 				CALL $onAcceptTokensTransfer$
 			}
-		}
-		DUP
-		PUSHINT 1954959084
-		LEQ
-		IFJMPREF {
 			DUP
 			PUSHINT 1920819187
 			EQUAL
@@ -8309,12 +8712,6 @@ IFJMPREF {
 			IFJMPREF {
 				CALL $castVoteWithReason$
 			}
-			DUP
-			PUSHINT 1954959084
-			EQUAL
-			IFJMPREF {
-				CALL $deployVoteEscrowAccount$
-			}
 		}
 	}
 }
@@ -8323,22 +8720,33 @@ PUSHINT 2139684769
 LEQ
 IFJMPREF {
 	DUP
-	PUSHINT 1977152997
-	EQUAL
-	IFJMPREF {
-		CALL $setQubeLockTimeLimits$
-	}
-	DUP
-	PUSHINT 2059060440
-	EQUAL
-	IFJMPREF {
-		CALL $initialize$
-	}
-	DUP
 	PUSHINT 2106955767
-	EQUAL
+	LEQ
 	IFJMPREF {
-		CALL $finishDeposit$
+		DUP
+		PUSHINT 1954959084
+		EQUAL
+		IFJMPREF {
+			CALL $deployVoteEscrowAccount$
+		}
+		DUP
+		PUSHINT 1977152997
+		EQUAL
+		IFJMPREF {
+			CALL $setQubeLockTimeLimits$
+		}
+		DUP
+		PUSHINT 2059060440
+		EQUAL
+		IFJMPREF {
+			CALL $initialize$
+		}
+		DUP
+		PUSHINT 2106955767
+		EQUAL
+		IFJMPREF {
+			CALL $finishDeposit$
+		}
 	}
 	DUP
 	PUSHINT 2139684769

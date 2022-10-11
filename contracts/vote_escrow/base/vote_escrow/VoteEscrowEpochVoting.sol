@@ -413,6 +413,70 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
+    function getNormalizedVoting() external view returns (
+        mapping (address => uint128) _votes,
+        mapping (address => uint128) _normalizedVotes,
+        mapping (address => uint128) _distribution,
+        uint128 to_distribute_total,
+        uint128 to_distribute_team,
+        uint128 to_distribute_treasury
+    ) {
+        _votes = currentVotingVotes;
+        _normalizedVotes = currentVotingVotes;
+        uint128 min_votes = currentVotingTotalVotes * gaugeMinVotesRatio / MAX_VOTES_RATIO;
+        uint128 max_votes = currentVotingTotalVotes * gaugeMaxVotesRatio / MAX_VOTES_RATIO;
+
+        uint128 exceeded_votes = 0;
+        uint128 valid_votes = 0;
+        // count step
+        for ((address gauge, uint128 vote) : _normalizedVotes) {
+            if (vote < min_votes) {
+                exceeded_votes += vote;
+                _normalizedVotes[gauge] = 0;
+            } else if (vote > max_votes) {
+                _normalizedVotes[gauge] = max_votes;
+                exceeded_votes += vote - max_votes;
+            } else {
+                valid_votes += vote;
+            }
+        }
+        uint128 treasury_votes = 0;
+        // no exceeded/valid votes, skip normalization
+        if (valid_votes == 0 || exceeded_votes == 0) {
+            treasury_votes = exceeded_votes;
+        } else {
+            // normalization step
+            for ((address gauge, uint128 vote) : _normalizedVotes) {
+                if (vote < max_votes) {
+                    uint128 bonus_votes = math.muldiv(vote, exceeded_votes, valid_votes);
+                    vote += bonus_votes;
+                    if (vote > max_votes) {
+                        treasury_votes += vote - max_votes;
+                    }
+                    _normalizedVotes[gauge] = math.min(vote, max_votes);
+                }
+            }
+        }
+        // distribution step
+        to_distribute_total = distributionSchedule[currentEpoch - 1];
+        uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
+        uint128 treasury_bonus;
+        if (currentVotingTotalVotes > 0) {
+            treasury_bonus = math.muldiv(to_distribute_farming, treasury_votes, currentVotingTotalVotes);
+        } else {
+            treasury_bonus = to_distribute_farming;
+        }
+
+        to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[1], DISTRIBUTION_SCHEME_TOTAL);
+        to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[2], DISTRIBUTION_SCHEME_TOTAL);
+        to_distribute_treasury += treasury_bonus;
+
+        for ((address gauge, uint128 vote) : _normalizedVotes) {
+            uint128 qube_amount = math.muldiv(to_distribute_farming, vote, currentVotingTotalVotes);
+            _distribution[gauge] = qube_amount;
+        }
+    }
+
     function withdrawTreasuryTokens(uint128 amount, address receiver, Callback.CallMeta meta) external onlyOwner {
         require (amount <= treasuryTokens, Errors.BAD_INPUT);
 

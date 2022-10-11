@@ -319,6 +319,19 @@
 			]
 		},
 		{
+			"name": "getNormalizedVoting",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_votes","type":"map(address,uint128)"},
+				{"name":"_normalizedVotes","type":"map(address,uint128)"},
+				{"name":"_distribution","type":"map(address,uint128)"},
+				{"name":"to_distribute_total","type":"uint128"},
+				{"name":"to_distribute_team","type":"uint128"},
+				{"name":"to_distribute_treasury","type":"uint128"}
+			]
+		},
+		{
 			"name": "withdrawTreasuryTokens",
 			"inputs": [
 				{"name":"amount","type":"uint128"},
