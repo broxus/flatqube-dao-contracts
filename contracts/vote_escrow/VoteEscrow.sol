@@ -189,6 +189,8 @@ contract VoteEscrow is VoteEscrowBase {
 
         // fix wrong gauges num, caused by lack of duplicate check on admin whitelist func
         gaugesNum = uint32(gaugeWhitelist.keys().length);
+        // migrate to new normalizing logic
+        votingNormalizing = VotingNormalizingType.overflowTreasury;
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 }
