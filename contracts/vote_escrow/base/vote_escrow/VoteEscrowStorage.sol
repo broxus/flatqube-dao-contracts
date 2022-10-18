@@ -23,6 +23,9 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint32 constant DISTRIBUTION_SCHEME_TOTAL = 10000;
     // should have 3 elems. 0 - farming, 1 - treasury, 2 - team
     uint32[] public distributionScheme;
+    uint constant FARMING_SCHEME = 0;
+    uint constant TREASURY_SCHEME = 1;
+    uint constant TEAM_SCHEME = 2;
 
     uint128 qubeBalance;
     uint128 veQubeBalance;
@@ -57,6 +60,8 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint32 gaugeMaxVotesRatio; // up to 10000 (100%). Gauge cant have more votes. All exceeded votes will be distributed among other gauges
     uint32 gaugeMinVotesRatio; // up to 10000 (100%). If gauge doesn't have min votes, it will not be elected in epoch
     uint8 gaugeMaxDowntime; // if gauge was not elected for N times in a row, it is deleted from whitelist
+    VotingNormalizingType votingNormalizing;
+    uint128 emissionDebt = 0;
 
     uint32 maxGaugesPerVote; // max number of gauges user can vote for
     uint32 gaugesNum; // current number of whitelisted gauges

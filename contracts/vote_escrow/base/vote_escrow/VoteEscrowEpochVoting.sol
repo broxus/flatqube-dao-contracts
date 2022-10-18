@@ -178,7 +178,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
     function calculateGasForEndVoting() public view returns (uint128 min_gas) {
         min_gas = Gas.MIN_MSG_VALUE + ((gaugesNum / MAX_ITERATIONS_PER_COUNT) + 1) * Gas.GAS_FOR_MAX_ITERATIONS;
-        min_gas += Gas.VOTING_TOKEN_TRANSFER_VALUE * gaugesNum;
+        min_gas += Gas.VOTING_TOKEN_TRANSFER_VALUE * math.min((MAX_VOTES_RATIO / gaugeMinVotesRatio) + 1, gaugesNum);
     }
 
     function endVoting(Callback.CallMeta meta) external onlyActive {
@@ -272,7 +272,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
     function normalizeVotesStep(
         address start_addr,
-        uint128 treasury_votes,
+        uint128 overflow_votes,
         uint128 exceeded_votes,
         uint128 valid_votes,
         Callback.CallMeta meta
@@ -280,10 +280,18 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         require (msg.sender == address(this), Errors.NOT_OWNER);
         tvm.rawReserve(_reserve(), 0);
 
+        // if all 'excess' votes should go to treasury/next epoch, set valid votes to 0, so that we wont distribute anything among pools
+        if (
+            votingNormalizing == VotingNormalizingType.overflowTreasury ||
+            votingNormalizing == VotingNormalizingType.overflowReserve
+        ) {
+            valid_votes = 0;
+        }
+
         // if no valid votes/exceeded_votes, we dont need normalization
         if (valid_votes == 0 || exceeded_votes == 0) {
             // if exceeded_votes > 0, set all for treasury
-            treasury_votes = exceeded_votes;
+            overflow_votes = exceeded_votes;
         } else {
             bool finished = false;
             uint32 counter = 0;
@@ -301,7 +309,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
                     uint128 bonus_votes = math.muldiv(gauge_votes, exceeded_votes, valid_votes);
                     gauge_votes += bonus_votes;
                     if (gauge_votes > max_votes) {
-                        treasury_votes += gauge_votes - max_votes;
+                        overflow_votes += gauge_votes - max_votes;
                     }
                     currentVotingVotes[gauge] = math.min(gauge_votes, max_votes);
                 }
@@ -313,7 +321,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             if (!finished) {
                 (address gauge,) = pointer.get();
                 this.normalizeVotesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                    gauge, treasury_votes, exceeded_votes, valid_votes, meta
+                    gauge, overflow_votes, exceeded_votes, valid_votes, meta
                 );
                 return;
             }
@@ -323,7 +331,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             meta.call_id,
             currentVotingVotes,
             currentVotingTotalVotes,
-            treasury_votes,
+            overflow_votes,
             currentEpoch,
             currentEpochStartTime,
             currentEpochEndTime
@@ -332,13 +340,13 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         start_addr = address.makeAddrStd(address(this).wid, 0);
         mapping (address => uint128) distributed;
         this.distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            start_addr, treasury_votes, distributed, meta
+            start_addr, overflow_votes, distributed, meta
         );
     }
 
     function distributeEpochQubesStep(
         address start_addr,
-        uint128 bonus_treasury_votes,
+        uint128 overflow_votes,
         mapping (address => uint128) distributed,
         Callback.CallMeta meta
     ) external override {
@@ -347,20 +355,21 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
 
         uint256 epoch_idx = currentEpoch - 2;
         uint128 to_distribute_total = distributionSchedule[epoch_idx];
-        uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
-        uint128 treasury_bonus;
-        if (currentVotingTotalVotes > 0) {
-            treasury_bonus = math.muldiv(to_distribute_farming, bonus_treasury_votes, currentVotingTotalVotes);
-        } else {
-            treasury_bonus = to_distribute_farming;
-        }
+        uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[FARMING_SCHEME], DISTRIBUTION_SCHEME_TOTAL) + emissionDebt;
+        emissionDebt = 0;
+
+        uint128 overflow_tokens = currentVotingTotalVotes > 0
+            ? math.muldiv(to_distribute_farming, overflow_votes, currentVotingTotalVotes)
+            : to_distribute_farming;
+
+        emissionDebt = votingNormalizing == VotingNormalizingType.overflowReserve ? overflow_tokens : 0;
+        uint128 treasury_bonus = votingNormalizing != VotingNormalizingType.overflowReserve ? overflow_tokens : 0;
 
         bool finished = false;
         uint32 counter = 0;
 
         TvmBuilder builder;
-        builder.store(currentEpochStartTime);
-        builder.store(epochTime);
+        builder.store(currentEpochStartTime, epochTime);
         TvmCell payload = builder.toCell();
 
         optional(address, uint128) pointer = currentVotingVotes.nextOrEq(start_addr);
@@ -385,13 +394,13 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         if (!finished) {
             (address gauge,) = pointer.get();
             this.distributeEpochQubesStep{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-                gauge, bonus_treasury_votes, distributed, meta
+                gauge, overflow_votes, distributed, meta
             );
             return;
         }
 
-        uint128 to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[1], DISTRIBUTION_SCHEME_TOTAL);
-        uint128 to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[2], DISTRIBUTION_SCHEME_TOTAL);
+        uint128 to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[TREASURY_SCHEME], DISTRIBUTION_SCHEME_TOTAL);
+        uint128 to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[TEAM_SCHEME], DISTRIBUTION_SCHEME_TOTAL);
         to_distribute_treasury += treasury_bonus;
 
         treasuryTokens += to_distribute_treasury;
@@ -407,7 +416,8 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
             distributed,
             to_distribute_team,
             to_distribute_treasury,
-            to_distribute_total
+            to_distribute_total,
+            emissionDebt
         );
 
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
@@ -419,7 +429,8 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         mapping (address => uint128) _distribution,
         uint128 to_distribute_total,
         uint128 to_distribute_team,
-        uint128 to_distribute_treasury
+        uint128 to_distribute_treasury,
+        uint128 _emissionDebt
     ) {
         _votes = currentVotingVotes;
         _normalizedVotes = currentVotingVotes;
@@ -440,10 +451,19 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
                 valid_votes += vote;
             }
         }
-        uint128 treasury_votes = 0;
+        uint128 overflow_votes = 0;
+
+        // if all 'excess' votes should go to treasury/next epoch, set valid votes to 0, so that we wont distribute anything among pools
+        if (
+            votingNormalizing == VotingNormalizingType.overflowTreasury ||
+            votingNormalizing == VotingNormalizingType.overflowReserve
+        ) {
+            valid_votes = 0;
+        }
+
         // no exceeded/valid votes, skip normalization
         if (valid_votes == 0 || exceeded_votes == 0) {
-            treasury_votes = exceeded_votes;
+            overflow_votes = exceeded_votes;
         } else {
             // normalization step
             for ((address gauge, uint128 vote) : _normalizedVotes) {
@@ -451,7 +471,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
                     uint128 bonus_votes = math.muldiv(vote, exceeded_votes, valid_votes);
                     vote += bonus_votes;
                     if (vote > max_votes) {
-                        treasury_votes += vote - max_votes;
+                        overflow_votes += vote - max_votes;
                     }
                     _normalizedVotes[gauge] = math.min(vote, max_votes);
                 }
@@ -459,16 +479,17 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         }
         // distribution step
         to_distribute_total = distributionSchedule[currentEpoch - 1];
-        uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[0], DISTRIBUTION_SCHEME_TOTAL);
-        uint128 treasury_bonus;
-        if (currentVotingTotalVotes > 0) {
-            treasury_bonus = math.muldiv(to_distribute_farming, treasury_votes, currentVotingTotalVotes);
-        } else {
-            treasury_bonus = to_distribute_farming;
-        }
+        uint128 to_distribute_farming = math.muldiv(to_distribute_total, distributionScheme[FARMING_SCHEME], DISTRIBUTION_SCHEME_TOTAL) + emissionDebt;
 
-        to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[1], DISTRIBUTION_SCHEME_TOTAL);
-        to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[2], DISTRIBUTION_SCHEME_TOTAL);
+        uint128 overflow_tokens = currentVotingTotalVotes > 0
+        ? math.muldiv(to_distribute_farming, overflow_votes, currentVotingTotalVotes)
+        : to_distribute_farming;
+
+        _emissionDebt = votingNormalizing == VotingNormalizingType.overflowReserve ? overflow_tokens : 0;
+        uint128 treasury_bonus = votingNormalizing != VotingNormalizingType.overflowReserve ? overflow_tokens : 0;
+
+        to_distribute_treasury = math.muldiv(to_distribute_total, distributionScheme[TREASURY_SCHEME], DISTRIBUTION_SCHEME_TOTAL);
+        to_distribute_team = math.muldiv(to_distribute_total, distributionScheme[TEAM_SCHEME], DISTRIBUTION_SCHEME_TOTAL);
         to_distribute_treasury += treasury_bonus;
 
         for ((address gauge, uint128 vote) : _normalizedVotes) {

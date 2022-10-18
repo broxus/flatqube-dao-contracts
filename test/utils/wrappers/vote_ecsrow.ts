@@ -211,6 +211,12 @@ export class VoteEscrow {
         });
     }
 
+    async setVotingNormalizingType(new_type: number) {
+        return this.contract.methods.setVotingNormalizingType(
+            {_new_type: new_type, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}
+        ).send({amount: toNano(2), from: this._owner.address});
+    }
+
     async depositPayload(deposit_owner: Address, lock_time: number, call_id = 0) {
         return (await this.contract.methods.encodeDepositPayload({
             deposit_owner: deposit_owner,

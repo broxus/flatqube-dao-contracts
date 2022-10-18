@@ -195,6 +195,15 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
+    function setVotingNormalizingType(VotingNormalizingType _new_type, Callback.CallMeta meta) external onlyOwner {
+        tvm.rawReserve(_reserve(), 0);
+
+        votingNormalizing = _new_type;
+        emit NormalizingTypeUpdate(meta.call_id, _new_type);
+
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
     function setWhitelistPrice(uint128 new_price, Callback.CallMeta meta) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 

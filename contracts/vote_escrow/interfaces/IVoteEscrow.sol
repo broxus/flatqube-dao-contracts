@@ -13,6 +13,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     event GaugeWhitelist(uint32 call_id, address gauge);
     event GaugeRemoveWhitelist(uint32 call_id, address gauge);
     event WhitelistPriceUpdate(uint32 call_id, uint128 amount);
+    event NormalizingTypeUpdate(uint32 call_id, VotingNormalizingType new_type);
     event DistributionSupplyIncrease(uint32 call_id, uint128 amount);
     event Withdraw(uint32 call_id, address user, uint128 amount);
     event WithdrawRevert(uint32 call_id, address user);
@@ -42,7 +43,8 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
         mapping (address => uint128) farming_distribution,
         uint128 team_tokens,
         uint128 treasury_tokens,
-        uint128 total_distributed
+        uint128 total_distributed,
+        uint128 emission_debt
     );
     event TreasuryWithdraw(
         uint32 call_id,
@@ -84,6 +86,7 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     }
 
     enum DepositType { userDeposit, whitelist, adminDeposit }
+    enum VotingNormalizingType { overflowDistribution, overflowTreasury, overflowReserve }
 
     function getVeAverage(uint32 nonce) external;
     function finishDeposit(address user, uint64 deposit_key, uint32 deposit_nonce) external;

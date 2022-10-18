@@ -30,6 +30,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         uint32 _qubeMaxLockTime,
         uint128 _gaugeWhitelistPrice,
         uint128 _whitelistPayments,
+        uint128 _emissionDebt,
         bool _initialized,
         bool _paused,
         bool _emergency
@@ -49,6 +50,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _qubeMaxLockTime = qubeMaxLockTime;
         _gaugeWhitelistPrice = gaugeWhitelistPrice;
         _whitelistPayments = whitelistPayments;
+        _emissionDebt = emissionDebt;
         _initialized = initialized;
         _paused = paused;
         _emergency = emergency;
@@ -89,6 +91,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         uint32 _gaugeMaxVotesRatio, // up to 10000 (100%). Gauge cant have more votes. All exceeded votes will be distributed among other gauges
         uint32 _gaugeMinVotesRatio, // up to 10000 (100%). If gauge doesn't have min votes, it will not be elected in epoch
         uint8 _gaugeMaxDowntime, // if gauge was not elected for N times in a row, it is deleted from whitelist
+        VotingNormalizingType _votingNormalizing, // define how vote overflow should be normalized on voting end
         uint32 _maxGaugesPerVote, // max number of gauges user can vote for
         uint32 _gaugesNum
     ) {
@@ -99,6 +102,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         _gaugeMinVotesRatio = gaugeMinVotesRatio;
         _gaugeMaxDowntime = gaugeMaxDowntime;
         _maxGaugesPerVote = maxGaugesPerVote;
+        _votingNormalizing = votingNormalizing;
         _gaugesNum = gaugesNum;
     }
 
@@ -192,12 +196,16 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     }
 
     function _addToWhitelist(address gauge, uint32 call_id) internal {
+        require (gaugeWhitelist.exists(gauge) == false, Errors.BAD_INPUT);
+
         gaugesNum += 1;
         gaugeWhitelist[gauge] = true;
         emit GaugeWhitelist(call_id, gauge);
     }
 
     function _removeFromWhitelist(address gauge, uint32 call_id) internal {
+        require (gaugeWhitelist.exists(gauge) == true, Errors.BAD_INPUT);
+
         gaugesNum -= 1;
         delete gaugeWhitelist[gauge];
         delete gaugeDowntimes[gauge];
