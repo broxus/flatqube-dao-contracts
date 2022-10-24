@@ -2,7 +2,7 @@ const BigNumber = require('bignumber.js');
 const logger = require('mocha-logger');
 const { expect } = require('chai');
 const { getRandomNonce, toNano } = locklift.utils;
-const {deployUser, setupTokenRoot, setupVoteEscrow} = require("../utils/common");
+const {deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime} = require("../utils/common");
 
 const stringToBytesArray = (dataString) => {
     return Buffer.from(dataString).toString('hex')
@@ -53,7 +53,7 @@ describe('Test DAO in VoteEscrow', async function () {
     before('Setup VoteEscrow', async function () {
         const signer = await locklift.keystore.getSigner('0');
         logger.log(`Deploying veOwner`);
-        veOwner = await deployUser(500);
+        veOwner = await deployUser(30);
         logger.log(`Deploying qubeToken`);
         qubeToken = await setupTokenRoot('Qube', 'QUBE', veOwner);
 
@@ -79,37 +79,24 @@ describe('Test DAO in VoteEscrow', async function () {
         });
         daoRoot = contract;
 
-        await veOwner.runTarget(
-            {
-                contract: daoRoot
-            },
-            (dao) => dao.methods.updateEthereumActionEventConfiguration({
-                newConfiguration: configAddr,
-                newDeployEventValue: toNano(2)
-            })
-        )
+        await locklift.tracing.trace(daoRoot.methods.updateEthereumActionEventConfiguration({
+            newConfiguration: configAddr,
+            newDeployEventValue: toNano(2)
+        }).send({from: veOwner.address, amount: toNano(2)}));
 
         logger.log(`DaoRoot address: ${daoRoot.address}`);
         logger.log(`Installing Proposal code`);
-        await locklift.tracing.trace(veOwner.runTarget(
-            {
-                contract: daoRoot,
-                value: CALL_VALUE
-            },
-            (dao) => dao.methods.updateProposalCode({code: Proposal.code})
-        ))
+        await locklift.tracing.trace(daoRoot.methods.updateProposalCode({
+            code: Proposal.code
+        }).send({from: veOwner.address, amount: toNano(2)}));
 
         voteEscrow = await setupVoteEscrow({
             owner: veOwner, qube: qubeToken, dao: daoRoot.address
         });
 
-        await locklift.tracing.trace(veOwner.runTarget(
-            {
-                contract: daoRoot,
-                value: CALL_VALUE
-            },
-            (dao) => dao.methods.setVoteEscrowRoot({newVoteEscrowRoot: voteEscrow.address})
-        ));
+        await locklift.tracing.trace(daoRoot.methods.setVoteEscrowRoot({
+            newVoteEscrowRoot: voteEscrow.address
+        }).send({from: veOwner.address, amount: toNano(2)}));
     })
 
     describe('DAO', async function () {
@@ -129,8 +116,8 @@ describe('Test DAO in VoteEscrow', async function () {
             const signer = await locklift.keystore.getSigner('0');
             const lock_time = 100;
 
-            userAccount0 = await deployUser(100)
-            userAccount1 = await deployUser(100);
+            userAccount0 = await deployUser(25)
+            userAccount1 = await deployUser(25);
 
             userTokenWallet0 = await qubeToken.mint(DEPOSIT_VALUE * 2, userAccount0);
             userTokenWallet1 = await qubeToken.mint(DEPOSIT_VALUE * 2, userAccount1);
@@ -192,18 +179,12 @@ describe('Test DAO in VoteEscrow', async function () {
                 locklift.tracing.setAllowedCodesForAddress(userAccount0.address.toString(), {compute: [60]});
                 locklift.tracing.setAllowedCodesForAddress(userAccount1.address.toString(), {compute: [60]});
 
-                await locklift.tracing.trace(userAccount0.runTarget(
-                    {
-                        contract: daoRoot,
-                        value: toNano(10 + 0.5 + 0.5 + 1 + 2 + 0.1),
-                    },
-                    (dao) => dao.methods.propose({
-                        answerId: 0,
-                        tonActions,
-                        ethActions,
-                        description
-                    }))
-                );
+                await locklift.tracing.trace(daoRoot.methods.propose({
+                    answerId: 0,
+                    tonActions,
+                    ethActions,
+                    description
+                }).send({from: userAccount0.address, amount: toNano(10 + 0.5 + 0.5 + 1 + 2 + 0.1)}))
 
                 const deployedProposals = (await veAccount0.methods.created_proposals({}).call()).created_proposals;
                 proposalId = deployedProposals[0][0];
@@ -305,14 +286,10 @@ describe('Test DAO in VoteEscrow', async function () {
                     logger.log(`Account0 Cast Vote for Proposal ${proposalId}, amount: ${votesToCast.toString()}, support: True`)
                     logger.log(`DaoAccount0 casted vote Before: ${castedVoteBefore}`)
 
-                    await wait(500); // make sure status is Active
-                    await locklift.tracing.trace(userAccount0.runTarget(
-                        {
-                            contract: voteEscrow.contract,
-                            value: CALL_VALUE
-                        },
-                        (ve) => ve.methods.castVote({proposal_id: proposalId, support: true})
-                    ));
+                    await tryIncreaseTime(1); // make sure status is Active
+                    await locklift.tracing.trace(voteEscrow.contract.methods.castVote({
+                        proposal_id: proposalId, support: true
+                    }).send({from: userAccount0.address, amount: toNano(3)}))
                 });
 
                 it('Check votes after', async function () {
@@ -350,13 +327,10 @@ describe('Test DAO in VoteEscrow', async function () {
                     castedVotesBefore = (arr_to_map(castedVotesBefore))[proposalId];
                     logger.log(`Account1 Cast Vote for Proposal ${proposalId}, amount: ${votesToCast.toString()}, support: False`);
                     logger.log(`DaoAccount1 castedVotes Before: ${castedVotesBefore}`);
-                    await locklift.tracing.trace(userAccount1.runTarget(
-                        {
-                            contract: voteEscrow.contract,
-                            value: CALL_VALUE
-                        },
-                        (ve) => ve.methods.castVote({proposal_id: proposalId, support: false})
-                    ));
+
+                    await locklift.tracing.trace(voteEscrow.contract.methods.castVote({
+                        proposal_id: proposalId, support: false
+                    }).send({from: userAccount1.address, amount: toNano(3)}))
                 });
                 it('Check votes after', async function () {
                     const forVotes = (await proposal.methods.forVotes({}).call()).forVotes;
@@ -387,7 +361,7 @@ describe('Test DAO in VoteEscrow', async function () {
                     const voteEndTime = (await proposal.methods.endTime({}).call()).endTime;
                     timeLeft = voteEndTime - Math.floor(Date.now() / 1000);
                     logger.log(`Time left to vote end: ${timeLeft}`);
-                    await wait((timeLeft + 5) * 1000);
+                    await tryIncreaseTime(timeLeft + 5);
                 });
                 it('Check status after vote end', async function () {
                     let state = (await proposal.methods.getState({answerId: 0}).call()).value0;
@@ -423,23 +397,14 @@ describe('Test DAO in VoteEscrow', async function () {
                         .to
                         .equal('Executed', 'Wrong state');
 
-                    await locklift.tracing.trace(userAccount1.runTarget(
-                        {
-                            contract: testTarget
-                        },
-                        (tt) => tt.methods.call({newParam})
-                    ));
+                    await locklift.tracing.trace(testTarget.methods.call({newParam}).send({from: userAccount1.address, amount: toNano(2)}));
                     await locklift.tracing.trace(
-                        userAccount1.runTarget(
-                            {
-                                contract: testTarget
-                            },
-                            (tt) => tt.methods.call({newParam: 0})
-                        ),
+                        testTarget.methods.call({newParam: 0}).send({from: userAccount1.address, amount: toNano(2)}),
                         {
-                            allowedCodes: {contracts: {[testTarget.address]: {compute: [1201]}}} // allowed to fail
+                            allowedCodes: {contracts: {[testTarget.address]: {compute: [1201]}}}
                         }
                     );
+
                     const targetExecuted = (await testTarget.methods.executed({}).call()).executed;
                     const targetParam = (await testTarget.methods.param({}).call()).param;
                     expect(targetExecuted)
@@ -469,13 +434,9 @@ describe('Test DAO in VoteEscrow', async function () {
                     castedVotesBefore = arr_to_map(castedVotesBefore_arr);
                     logger.log(`Casted votes before unlock: ${JSON.stringify(castedVotesBefore)}`);
 
-                    await locklift.tracing.trace(userAccount0.runTarget(
-                        {
-                            contract: voteEscrow.contract,
-                            value: CALL_VALUE
-                        },
-                        (ve) => ve.methods.tryUnlockCastedVotes({proposal_ids: Object.keys(castedVotesBefore)})
-                    ));
+                    await locklift.tracing.trace(voteEscrow.contract.methods.tryUnlockCastedVotes({
+                        proposal_ids: Object.keys(castedVotesBefore)
+                    }).send({from: userAccount0.address, amount: toNano(3)}));
                 });
 
                 it('Check casted votes after unlock', async function () {
@@ -496,12 +457,9 @@ describe('Test DAO in VoteEscrow', async function () {
             }
             let currentConfiguration;
             before('Update proposals configuration', async function () {
-                await veOwner.runTarget(
-                    {
-                        contract: daoRoot
-                    },
-                    (dao) => dao.methods.updateProposalConfiguration({newConfig: newConfiguration})
-                )
+                await locklift.tracing.trace(
+                    daoRoot.methods.updateProposalConfiguration({newConfig: newConfiguration}).send({from: veOwner.address, amount: toNano(2)})
+                );
 
                 currentConfiguration = (await daoRoot.methods.proposalConfiguration({}).call()).proposalConfiguration;
             })
@@ -531,14 +489,7 @@ describe('Test DAO in VoteEscrow', async function () {
             let newDaoRoot;
             before('Run update function', async function () {
                 TestUpgrade = await locklift.factory.getContractArtifacts('TestUpgrade');
-                await veOwner.runTarget(
-                    {
-                        contract: daoRoot,
-                        value: toNano(3)
-                    },
-                    (dao) => dao.methods.upgrade({code: TestUpgrade.code})
-                )
-
+                await locklift.tracing.trace(daoRoot.methods.upgrade({code: TestUpgrade.code}).send({from: veOwner.address, amount: toNano(3)}));
                 newDaoRoot = await locklift.factory.getDeployedContract('TestUpgrade', daoRoot.address);
             })
             it('Check new DAO Root contract', async function () {
