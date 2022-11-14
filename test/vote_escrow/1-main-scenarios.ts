@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime,sendAllEvers} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
-import {Account} from 'locklift/everscale-standalone-client';
+import {Account} from 'locklift/everscale-client';
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
@@ -197,6 +197,9 @@ describe("Main Vote Escrow scenarios", async function () {
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
 
+                const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
+                console.log(res);
+
                 await vote_escrow.endVoting(1);
                 current_epoch += 1;
 
@@ -204,6 +207,9 @@ describe("Main Vote Escrow scenarios", async function () {
 
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
+
+                console.log(voting_end.votes);
+                console.log(epoch_distribution.farming_distribution);
 
                 const votes_map = vote_escrow.arr_to_map(voting_end.votes);
 
@@ -291,6 +297,9 @@ describe("Main Vote Escrow scenarios", async function () {
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
 
+                const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
+                console.log(res);
+
                 await vote_escrow.endVoting(2);
                 current_epoch += 1;
 
@@ -299,6 +308,10 @@ describe("Main Vote Escrow scenarios", async function () {
 
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
+
+                console.log(voting_end.votes);
+                console.log(epoch_distribution.farming_distribution);
+
 
                 const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
                 let exceeded_votes = Math.floor(total_votes * 0.3); // 24% + 5% + 1%
@@ -394,6 +407,10 @@ describe("Main Vote Escrow scenarios", async function () {
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
 
+                const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
+                console.log(res);
+
+
                 await vote_escrow.endVoting(3);
                 current_epoch += 1;
 
@@ -406,6 +423,10 @@ describe("Main Vote Escrow scenarios", async function () {
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
                 const gauge_removal = await vote_escrow.getEvent('GaugeRemoveWhitelist') as any;
+
+
+                console.log(voting_end.votes);
+                console.log(epoch_distribution.farming_distribution);
 
                 expect(gauge_removal.call_id).to.be.eq('3');
                 expect(gauge_removal.gauge.toString()).to.be.eq(gauges[3].address.toString());
@@ -502,11 +523,20 @@ describe("Main Vote Escrow scenarios", async function () {
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
 
+
+                const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
+                console.log(res);
+
+
                 await vote_escrow.endVoting(4);
                 current_epoch += 1;
 
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
+
+
+                console.log(voting_end.votes);
+                console.log(epoch_distribution.farming_distribution);
 
                 const exceeded_votes = Math.floor(total_votes * 0.4);
                 const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
@@ -572,11 +602,19 @@ describe("Main Vote Escrow scenarios", async function () {
                 const details = await vote_escrow.details();
                 let supply = details._distributionSupply;
 
+
+                const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
+                console.log(res);
+
+
                 await vote_escrow.endVoting(5);
                 current_epoch += 1;
 
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
+
+                console.log(voting_end.votes);
+                console.log(epoch_distribution.farming_distribution);
 
                 let treasury_bonus = Math.floor(1000000 * 0.8);
 

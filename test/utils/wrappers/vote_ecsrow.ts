@@ -1,4 +1,4 @@
-import {Account} from 'locklift/everscale-standalone-client'
+import {Account} from 'locklift/everscale-client'
 import {FactorySource, VoteEscrowAbi} from "../../../build/factorySource";
 import {Address, Contract} from "locklift";
 import {TokenWallet} from "./token_wallet";

@@ -14,7 +14,7 @@ import {TokenWallet} from "../utils/wrappers/token_wallet";
 import {Contract, getRandomNonce, toNano} from "locklift";
 import {GaugeFactoryAbi} from "../../build/factorySource";
 import {Gauge} from "../utils/wrappers/gauge";
-import {Account} from 'locklift/everscale-standalone-client';
+import {Account} from 'locklift/everscale-client';
 
 const logger = require('mocha-logger');
 
@@ -47,8 +47,8 @@ describe("Gauge main scenarios", async function() {
 
     describe('Setup contracts', async function () {
         it('Deploy users', async function () {
-            user = await deployUser(10000000);
-            owner = await deployUser(10000000);
+            user = await deployUser(100000000);
+            owner = await deployUser(100000000);
         });
 
         it('Deploy tokens', async function () {
@@ -108,6 +108,9 @@ describe("Gauge main scenarios", async function() {
             };
 
             let time_passed = 0;
+            const acc = await gauge.gaugeAccount(user.address);
+
+            // await locklift.tracing.trace(gauge.deposit(user_deposit_wallet, deposit_amount, 1000, false, 1), {allowedCodes: {compute: [null]}});
 
             for (const i of Array.from(Array(packs_num).keys())) {
                 logger.log(`Sending pack #${i + 1} with ${count} deposits`)
@@ -117,18 +120,23 @@ describe("Gauge main scenarios", async function() {
                     Array(count).fill(user_deposit_wallet.contract),
                     Array(count).fill('transfer'),
                     Array(count).fill(params),
-                    Array(count).fill(toNano(50))
-                ));
+                    Array(count).fill(toNano(100))
+                ), {allowedCodes: {contracts: {[acc.address.toString()]: {compute: [null]}}}});
                 const to = Date.now();
                 logger.log(`Pack processed in ${Math.floor((to - from) / 1000)}`);
                 time_passed += Math.floor((to - from) / 1000);
+
+                const acc_details = await acc.methods.calculateLockBalanceAverage({}).call();
+                const details = await acc.methods.getDetails({answerId: 0}).call();
+
+                console.log(details);
+                console.log(acc_details);
             }
 
             logger.log(`${time_passed} seconds passed overall`);
 
             let bal_expected = deposit_amount * count * packs_num;
 
-            const acc = await gauge.gaugeAccount(user.address);
             const acc_details = await acc.methods.calculateLockBalanceAverage({}).call();
 
             expect(acc_details._balance).to.be.eq(bal_expected.toString());

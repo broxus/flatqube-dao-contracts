@@ -1,7 +1,7 @@
 import {Address, Contract} from "locklift";
 import {FactorySource, TestGaugeAbi} from "../../../build/factorySource";
 import {TokenWallet} from "./token_wallet";
-import {Account} from 'locklift/everscale-standalone-client';
+import {Account} from 'locklift/everscale-client';
 import {use} from "chai";
 
 const {toNano} = locklift.utils;

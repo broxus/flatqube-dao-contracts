@@ -1,4 +1,4 @@
-import {Account} from 'locklift/everscale-standalone-client';
+import {Account} from 'locklift/everscale-client';
 
 import {deployUser, runTargets, setupTokenRoot, setupVoteEscrow, tryIncreaseTime} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";

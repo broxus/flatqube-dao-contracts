@@ -1,5 +1,5 @@
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
-import {Account} from 'locklift/everscale-standalone-client';
+import {Account} from 'locklift/everscale-client';
 import {Token} from "../utils/wrappers/token";
 import {Gauge} from "../utils/wrappers/gauge";
 import {Contract, getRandomNonce, toNano, zeroAddress} from "locklift";

@@ -53,7 +53,7 @@ describe('Test DAO in VoteEscrow', async function () {
     before('Setup VoteEscrow', async function () {
         const signer = await locklift.keystore.getSigner('0');
         logger.log(`Deploying veOwner`);
-        veOwner = await deployUser(30);
+        veOwner = await deployUser(25);
         logger.log(`Deploying qubeToken`);
         qubeToken = await setupTokenRoot('Qube', 'QUBE', veOwner);
 
@@ -91,7 +91,7 @@ describe('Test DAO in VoteEscrow', async function () {
         }).send({from: veOwner.address, amount: toNano(2)}));
 
         voteEscrow = await setupVoteEscrow({
-            owner: veOwner, qube: qubeToken, dao: daoRoot.address
+            owner: veOwner, qube: qubeToken, dao: daoRoot.address, max_lock: 1000
         });
 
         await locklift.tracing.trace(daoRoot.methods.setVoteEscrowRoot({
@@ -114,10 +114,10 @@ describe('Test DAO in VoteEscrow', async function () {
         let testTarget;
         before('Setup test accounts', async function () {
             const signer = await locklift.keystore.getSigner('0');
-            const lock_time = 100;
+            const lock_time = 1000;
 
             userAccount0 = await deployUser(25)
-            userAccount1 = await deployUser(25);
+            userAccount1 = await deployUser(10);
 
             userTokenWallet0 = await qubeToken.mint(DEPOSIT_VALUE * 2, userAccount0);
             userTokenWallet1 = await qubeToken.mint(DEPOSIT_VALUE * 2, userAccount1);

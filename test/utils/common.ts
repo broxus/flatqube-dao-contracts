@@ -3,7 +3,7 @@ import {VoteEscrow} from "./wrappers/vote_ecsrow";
 import {VoteEscrowAccount} from "./wrappers/ve_account";
 import {FactorySource, GaugeFactoryAbi} from "../../build/factorySource";
 import {Address, Contract, getRandomNonce, toNano, WalletTypes, zeroAddress} from "locklift";
-import {Account} from 'locklift/everscale-standalone-client';
+import {Account} from 'locklift/everscale-client';
 import {Gauge} from "./wrappers/gauge";
 
 const logger = require("mocha-logger");
@@ -34,6 +34,7 @@ export async function tryIncreaseTime(seconds: number) {
 
 
 export const sendAllEvers = async function(from: Account, to: Address) {
+    console.log(to);
     const walletContract = await locklift.factory.getDeployedContract("TestWallet", from.address);
     return await locklift.tracing.trace(walletContract.methods.sendTransaction({
         dest: to,

@@ -13,7 +13,7 @@ import {TokenWallet} from "../utils/wrappers/token_wallet";
 import {Address, Contract, getRandomNonce, toNano} from "locklift";
 import {GaugeFactoryAbi} from "../../build/factorySource";
 import {Gauge} from "../utils/wrappers/gauge";
-import {Account} from 'locklift/everscale-standalone-client'
+import {Account} from 'locklift/everscale-client'
 var should = require('chai').should();
 
 
