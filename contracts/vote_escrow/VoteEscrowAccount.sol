@@ -2,7 +2,6 @@ pragma ever-solidity ^0.62.0;
 
 
 import "./base/ve_account/VoteEscrowAccountBase.sol";
-import "locklift/src/console.sol";
 
 
 contract VoteEscrowAccount is VoteEscrowAccountBase {

@@ -4,7 +4,6 @@ import {deployUser, runTargets, setupTokenRoot, setupVoteEscrow, tryIncreaseTime
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
-import {toNano} from "locklift/build/utils";
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 
 const logger = require('mocha-logger');
@@ -83,7 +82,7 @@ describe("Vote Escrow mass deposits scenario", async function() {
                     Array(count).fill(user_qube_wallet.contract),
                     Array(count).fill('transfer'),
                     Array(count).fill(params),
-                    Array(count).fill(toNano(50))
+                    Array(count).fill(locklift.utils.toNano(50))
                 ));
                 const to = Date.now();
                 logger.log(`Pack processed in ${Math.floor((to - from) / 1000)}`);

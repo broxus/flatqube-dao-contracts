@@ -8,7 +8,6 @@ import "../../../vote_escrow/interfaces/IVoteEscrowAccount.sol";
 import "../../../libraries/Errors.sol";
 import "../../../libraries/Gas.sol";
 import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "locklift/src/console.sol";
 
 
 abstract contract GaugeAccountHelpers is GaugeAccountVesting {

@@ -72,7 +72,8 @@ abstract contract GaugeUpgradable is GaugeHelpers {
         tvm.rawReserve(_reserve(), 0);
 
         emit GaugeAccountUpgrade(meta.call_id, user, old_version, new_version);
-        _sendCallbackOrGas(user, meta.nonce, true, meta.send_gas_to);
+        TvmCell empty;
+        _sendCallbackOrGas(user, meta.nonce, empty, true, meta.send_gas_to);
     }
 
     function onGaugeAccountDeploy(address user, address send_gas_to) external override onlyGaugeAccount(user) {

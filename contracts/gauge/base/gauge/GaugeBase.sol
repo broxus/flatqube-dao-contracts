@@ -82,7 +82,8 @@ abstract contract GaugeBase is GaugeRewards {
                     extraTokenData[i].cumulativeBalance += amount;
                     emit RewardDeposit(call_id, sender, i, amount);
 
-                    _sendCallbackOrGas(sender, nonce, true, remainingGasTo);
+                    TvmCell empty;
+                    _sendCallbackOrGas(sender, nonce, empty, true, remainingGasTo);
                     return;
                 }
             }
@@ -128,6 +129,7 @@ abstract contract GaugeBase is GaugeRewards {
         );
         delete deposits[_deposit_nonce];
 
+        TvmCell callback_payload;
         if (claim) {
             (
             uint128 _qube_amount,
@@ -135,13 +137,13 @@ abstract contract GaugeBase is GaugeRewards {
             uint128 _qube_debt,
             uint128[] _extra_debt
             ) = _transferReward(msg.sender, user, qube_reward, extra_reward, deposit.meta.send_gas_to, deposit.meta.nonce);
-
+            callback_payload = abi.encode(_qube_amount, _extra_amount);
             emit Claim(
                 deposit.meta.call_id, deposit.user, _qube_amount, _extra_amount, _qube_debt, _extra_debt, totalBoostedSupply, lockBoostedSupply
             );
         }
 
-        _sendCallbackOrGas(deposit.user, deposit.meta.nonce, true, deposit.meta.send_gas_to);
+        _sendCallbackOrGas(deposit.user, deposit.meta.nonce, callback_payload, true, deposit.meta.send_gas_to);
     }
 
     function withdraw(uint128 amount, bool claim, Callback.CallMeta meta) external minGas {
@@ -161,7 +163,8 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         emit WithdrawRevert(meta.call_id, user);
-        _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
+        TvmCell empty;
+        _sendCallbackOrGas(user, meta.nonce, empty, false, meta.send_gas_to);
     }
 
     function finishWithdraw(
@@ -181,7 +184,7 @@ abstract contract GaugeBase is GaugeRewards {
         lockBoostedSupply -= amount;
 
         emit Withdraw(meta.call_id, user, amount, totalBoostedSupply, lockBoostedSupply);
-
+        TvmCell callback_payload;
         if (claim) {
             (
                 uint128 _qube_amount,
@@ -189,14 +192,18 @@ abstract contract GaugeBase is GaugeRewards {
                 uint128 _qube_debt,
                 uint128[] _extra_debt
             ) = _transferReward(msg.sender, user, qube_reward, extra_reward, meta.send_gas_to, meta.nonce);
-
+            callback_payload = abi.encode(amount, _qube_amount, _extra_amount);
             emit Claim(meta.call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt, totalBoostedSupply, lockBoostedSupply);
         }
 
-        // we dont need additional callback, we always send tokens as last action
+        if (!claim) {
+            callback_payload = abi.encode(amount);
+        }
         _transferTokens(
-            depositTokenData.wallet, amount, user, _makeCell(meta.nonce), meta.send_gas_to, MsgFlag.ALL_NOT_RESERVED
+            depositTokenData.wallet, amount, user, _makeCell(meta.nonce), meta.send_gas_to, 0
         );
+
+        _sendCallbackOrGas(user, meta.nonce, callback_payload, true, meta.send_gas_to);
     }
 
     function claimReward(Callback.CallMeta meta) external minGas {
@@ -212,7 +219,8 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         emit ClaimRevert(meta.call_id, user);
-        _sendCallbackOrGas(user, meta.nonce, false, meta.send_gas_to);
+        TvmCell empty;
+        _sendCallbackOrGas(user, meta.nonce, empty, false, meta.send_gas_to);
     }
 
     function finishClaim(
@@ -226,16 +234,18 @@ abstract contract GaugeBase is GaugeRewards {
         tvm.rawReserve(_reserve(), 0);
 
         totalBoostedSupply = totalBoostedSupply + boosted_bal_new - boosted_bal_old;
-        (
+        TvmCell callback_payload;
+    (
             uint128 _qube_amount,
             uint128[] _extra_amount,
             uint128 _qube_debt,
             uint128[] _extra_debt
         ) = _transferReward(msg.sender, user, qube_reward, extra_reward, meta.send_gas_to, meta.nonce);
+        callback_payload = abi.encode(_qube_amount, _extra_amount);
 
         emit Claim(meta.call_id, user, _qube_amount, _extra_amount, _qube_debt, _extra_debt, totalBoostedSupply, lockBoostedSupply);
 
-        _sendCallbackOrGas(user, meta.nonce, true, meta.send_gas_to);
+        _sendCallbackOrGas(user, meta.nonce, callback_payload, true, meta.send_gas_to);
     }
 
     function burnLockBoostedBalance(address user, uint128 expired_boosted) external override onlyGaugeAccount(user) {

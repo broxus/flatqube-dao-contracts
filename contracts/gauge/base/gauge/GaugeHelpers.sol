@@ -149,6 +149,7 @@ abstract contract GaugeHelpers is GaugeStorage {
         );
     }
 
+
     function _makeCell(uint32 nonce) internal pure returns (TvmCell) {
         TvmBuilder builder;
         if (nonce > 0) {
@@ -236,16 +237,22 @@ abstract contract GaugeHelpers is GaugeStorage {
         return (_qube_amount, _extra_amount, _qube_debt, _extra_debt);
     }
 
-    function _sendCallbackOrGas(address callback_receiver, uint32 nonce, bool success, address send_gas_to) internal pure {
+    function _sendCallbackOrGas(
+        address callback_receiver,
+        uint32 nonce,
+        TvmCell payload,
+        bool success,
+        address send_gas_to
+    ) internal pure {
         if (nonce > 0) {
             if (success) {
                 ICallbackReceiver(
                     callback_receiver
-                ).acceptSuccessCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+                ).acceptSuccessCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce, payload);
             } else {
                 ICallbackReceiver(
                     callback_receiver
-                ).acceptFailCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce);
+                ).acceptFailCallback{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(nonce, payload);
             }
         } else {
             send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);

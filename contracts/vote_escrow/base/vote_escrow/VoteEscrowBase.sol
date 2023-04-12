@@ -9,7 +9,6 @@ import "../../../libraries/Errors.sol";
 import "../../../libraries/Callback.sol";
 import "../../../gauge/interfaces/IGaugeAccount.sol";
 import "./VoteEscrowEpochVoting.sol";
-import "locklift/src/console.sol";
 
 
 abstract contract VoteEscrowBase is VoteEscrowEpochVoting {

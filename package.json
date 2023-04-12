@@ -12,7 +12,7 @@
         "@types/node": "^18.0.4",
         "broxus-token-contracts": "github:broxus/ton-eth-bridge-token-contracts#d3c1cd920c0320ffaab03b54c878dd0e06fed3c7",
         "chai": "^4.3.6",
-        "locklift": "^2.4.4",
+        "locklift": "^2.5.2",
         "mocha-logger": "^1.0.7",
         "prettier": "^2.7.1",
         "ts-mocha": "^10.0.0",

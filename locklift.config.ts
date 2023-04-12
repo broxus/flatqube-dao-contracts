@@ -1,4 +1,4 @@
-import { LockliftConfig } from "locklift/config";
+import { LockliftConfig } from "locklift";
 import { FactorySource } from "./build/factorySource";
 import {GiverWallet, SimpleGiver, TestnetGiver} from "./giverSettings";
 import * as dotenv from "dotenv";
@@ -6,6 +6,18 @@ declare global {
     const locklift: import("locklift").Locklift<FactorySource>;
 }
 dotenv.config();
+
+
+const LOCAL_NETWORK_ENDPOINT = process.env.NETWORK_ENDPOINT || "http://localhost/graphql";
+const DEV_NET_NETWORK_ENDPOINT = process.env.DEV_NET_NETWORK_ENDPOINT || "https://devnet-sandbox.evercloud.dev/graphql";
+
+const VENOM_TESTNET_ENDPOINT = process.env.VENOM_TESTNET_ENDPOINT || "https://jrpc-testnet.venom.foundation/rpc";
+const VENOM_TESTNET_TRACE_ENDPOINT =
+    process.env.VENOM_TESTNET_TRACE_ENDPOINT || "https://gql-testnet.venom.foundation/graphql";
+
+// Create your own link on https://dashboard.evercloud.dev/
+const MAIN_NET_NETWORK_ENDPOINT = process.env.MAIN_NET_NETWORK_ENDPOINT || "https://mainnet.evercloud.dev/XXX/graphql";
+
 
 
 const config: LockliftConfig = {
@@ -18,11 +30,11 @@ const config: LockliftConfig = {
 
         // Specify config for external contracts as in example
         externalContracts: {
-          "node_modules/broxus-token-contracts/build": [
-              'TokenRootUpgradeable',
-              'TokenWalletUpgradeable',
-              'TokenWalletPlatform'
-          ]
+            "node_modules/broxus-token-contracts/build": [
+                'TokenRootUpgradeable',
+                'TokenWalletUpgradeable',
+                'TokenWalletPlatform'
+            ]
         }
     },
     linker: {
@@ -36,7 +48,7 @@ const config: LockliftConfig = {
     },
     networks: {
         local: {
-            // Specify connection settings for https://github.com/broxus/everscale-standalone-client/
+            // Specify connection settings for https://github.com/broxus/everscale-client/
             connection: {
                 group: "localnet",
                 // @ts-ignore
@@ -67,33 +79,45 @@ const config: LockliftConfig = {
             },
         },
         test: {
-            // Specify connection settings for https://github.com/broxus/everscale-standalone-client/
-            connection: "testnet",
-            // This giver is default local-node giverV2
+            connection: {
+                id: 1,
+                type: "graphql",
+                group: "dev",
+                data: {
+                    endpoints: [DEV_NET_NETWORK_ENDPOINT],
+                    latencyDetectionInterval: 1000,
+                    local: false,
+                },
+            },
             giver: {
-                // Check if you need provide custom giver
-                giverFactory: (ever, keyPair, address) => new TestnetGiver(ever, keyPair, address),
                 address: "0:a4053fd2e9798d0457c9e8f012cef203e49da863d76f36d52d5e2e62c326b217",
-                key: process.env.TESTNET_GIVER_KEY ?? "",
+                key: "secret key",
             },
             tracing: {
-                endpoint: 'https://net.ton.dev/graphql',
+                endpoint: DEV_NET_NETWORK_ENDPOINT,
             },
-
             keys: {
                 // Use everdev to generate your phrase
                 // !!! Never commit it in your repos !!!
                 // phrase: "action inject penalty envelope rabbit element slim tornado dinner pizza off blood",
-                amount: 500
+                amount: 20,
             },
         },
         main: {
-            connection: "mainnetJrpc",
+            connection: {
+                id: 1000,
+                group: "group",
+                type: "jrpc",
+                data: {
+                    endpoint: process.env.MAIN_RPC_ENDPOINT || ""
+                },
+            },
             giver: {
                 // Mainnet giver has the same abi as testnet one
                 giverFactory: (ever, keyPair, address) => new TestnetGiver(ever, keyPair, address),
-                address: "0:3bcef54ea5fe3e68ac31b17799cdea8b7cffd4da75b0b1a70b93a18b5c87f723",
-                key: process.env.MAIN_GIVER_KEY ?? ""
+                address: "0:73a868302a14a05ee6de24eed367bd42e7cd345406bb12e5fc6749de91a579ff",
+                phrase: process.env.MAIN_SEED_PHRASE ?? "",
+                accountId: 0
             },
             tracing: {
                 endpoint: process.env.MAIN_GQL_ENDPOINT ?? ""
