@@ -1,6 +1,6 @@
 pragma ever-solidity >= 0.39.0;
 
-import "./structures/ActionStructure.sol";
+import "./structures/ActionStructure.tsol";
 
 contract DaoCellEncoder {
     function encodeDaoEthereumActionData(

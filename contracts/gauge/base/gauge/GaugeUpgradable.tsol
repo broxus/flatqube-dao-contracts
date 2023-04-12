@@ -1,16 +1,16 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "../../../libraries/Errors.sol";
-import "../../../libraries/Gas.sol";
-import "../../../libraries/PlatformTypes.sol";
-import "../../../libraries/Callback.sol";
-import "../../interfaces/IGaugeAccount.sol";
-import "../../interfaces/IGaugeFactory.sol";
-import "../../GaugeAccount.sol";
-import "./GaugeHelpers.sol";
-import {RPlatform as Platform} from "../../../Platform.sol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import "../../../libraries/Errors.tsol";
+import "../../../libraries/Gas.tsol";
+import "../../../libraries/PlatformTypes.tsol";
+import "../../../libraries/Callback.tsol";
+import "../../interfaces/IGaugeAccount.tsol";
+import "../../interfaces/IGaugeFactory.tsol";
+import "../../GaugeAccount.tsol";
+import "./GaugeHelpers.tsol";
+import {RPlatform as Platform} from "../../../Platform.tsol";
 
 
 abstract contract GaugeUpgradable is GaugeHelpers {

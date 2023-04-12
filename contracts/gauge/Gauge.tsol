@@ -1,9 +1,9 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./base/gauge/GaugeBase.sol";
-import "../libraries/Errors.sol";
-import "../libraries/Callback.sol";
+import "./base/gauge/GaugeBase.tsol";
+import "../libraries/Errors.tsol";
+import "../libraries/Callback.tsol";
 
 
 contract Gauge is GaugeBase {

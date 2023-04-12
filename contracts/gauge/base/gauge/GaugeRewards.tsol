@@ -1,7 +1,7 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeDeploy.sol";
+import "./GaugeDeploy.tsol";
 
 
 abstract contract GaugeRewards is GaugeDeploy {

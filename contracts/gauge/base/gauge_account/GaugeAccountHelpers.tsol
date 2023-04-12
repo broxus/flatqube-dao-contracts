@@ -1,13 +1,13 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeAccountVesting.sol";
-import "../../interfaces/IGauge.sol";
-import "../../../vote_escrow/interfaces/IVoteEscrow.sol";
-import "../../../vote_escrow/interfaces/IVoteEscrowAccount.sol";
-import "../../../libraries/Errors.sol";
-import "../../../libraries/Gas.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import "./GaugeAccountVesting.tsol";
+import "../../interfaces/IGauge.tsol";
+import "../../../vote_escrow/interfaces/IVoteEscrow.tsol";
+import "../../../vote_escrow/interfaces/IVoteEscrowAccount.tsol";
+import "../../../libraries/Errors.tsol";
+import "../../../libraries/Gas.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 abstract contract GaugeAccountHelpers is GaugeAccountVesting {

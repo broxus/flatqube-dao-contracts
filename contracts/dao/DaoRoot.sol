@@ -1,22 +1,22 @@
 pragma ever-solidity >= 0.39.0;
 
-import "Proposal.sol";
+import "Proposal.tsol";
 
-import {PlatformTypes as VePlatformTypes} from "../libraries/PlatformTypes.sol";
+import {PlatformTypes as VePlatformTypes} from "../libraries/PlatformTypes.tsol";
 
-import "./libraries/Gas.sol";
-import "./libraries/DaoErrors.sol";
+import "./libraries/Gas.tsol";
+import "./libraries/DaoErrors.tsol";
 
-import "../vote_escrow/interfaces/IVoteEscrowAccount.sol";
-import "./interfaces/IDaoRoot.sol";
-import "./interfaces/IProposer.sol";
-import "./interfaces/IUpgradable.sol";
+import "../vote_escrow/interfaces/IVoteEscrowAccount.tsol";
+import "./interfaces/IDaoRoot.tsol";
+import "./interfaces/IProposer.tsol";
+import "./interfaces/IUpgradable.tsol";
 
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import {RPlatform as Platform} from "../Platform.sol";
-import "./Delegate.sol";
-import "./DaoCellEncoder.sol";
-import "./interfaces/IEverscaleEventConfiguration.sol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import {RPlatform as Platform} from "../Platform.tsol";
+import "./Delegate.tsol";
+import "./DaoCellEncoder.tsol";
+import "./interfaces/IEverscaleEventConfiguration.tsol";
 
 
 contract DaoRoot is DaoCellEncoder, IDaoRoot, IUpgradable, Delegate {

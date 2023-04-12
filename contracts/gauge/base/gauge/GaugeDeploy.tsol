@@ -1,8 +1,8 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeUpgradable.sol";
-import "../../../libraries/Errors.sol";
+import "./GaugeUpgradable.tsol";
+import "../../../libraries/Errors.tsol";
 
 
 abstract contract GaugeDeploy is GaugeUpgradable {

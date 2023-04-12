@@ -1,11 +1,11 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeFactoryStorage.sol";
-import "../../../libraries/Errors.sol";
-import "../../../libraries/Gas.sol";
-import "../../../libraries/Callback.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import "./GaugeFactoryStorage.tsol";
+import "../../../libraries/Errors.tsol";
+import "../../../libraries/Gas.tsol";
+import "../../../libraries/Callback.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 abstract contract GaugeFactoryUpgradable is GaugeFactoryStorage {

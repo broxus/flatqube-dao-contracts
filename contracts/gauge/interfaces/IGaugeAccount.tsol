@@ -1,7 +1,7 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./IGauge.sol";
+import "./IGauge.tsol";
 
 
 interface IGaugeAccount {

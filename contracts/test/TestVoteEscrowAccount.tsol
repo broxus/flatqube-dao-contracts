@@ -1,7 +1,7 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "../vote_escrow/base/ve_account/VoteEscrowAccountBase.sol";
+import "../vote_escrow/base/ve_account/VoteEscrowAccountBase.tsol";
 
 
 contract TestVoteEscrowAccount is VoteEscrowAccountBase {

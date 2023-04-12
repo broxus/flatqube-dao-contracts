@@ -1,6 +1,6 @@
 pragma ever-solidity >= 0.39.0;
 
-import "../Delegate.sol";
+import "../Delegate.tsol";
 
 
 contract TestTarget is Delegate {

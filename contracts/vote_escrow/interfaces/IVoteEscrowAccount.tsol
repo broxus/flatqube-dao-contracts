@@ -1,6 +1,6 @@
 pragma ever-solidity ^0.62.0;
 
-import "../../libraries/Callback.sol";
+import "../../libraries/Callback.tsol";
 
 
 interface IVoteEscrowAccount {

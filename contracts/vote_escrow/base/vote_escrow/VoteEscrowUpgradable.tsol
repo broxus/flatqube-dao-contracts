@@ -1,11 +1,11 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "../../interfaces/IVoteEscrowAccount.sol";
-import {RPlatform as Platform} from "../../../Platform.sol";
-import "./VoteEscrowHelpers.sol";
-import "../../../libraries/Errors.sol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import "../../interfaces/IVoteEscrowAccount.tsol";
+import {RPlatform as Platform} from "../../../Platform.tsol";
+import "./VoteEscrowHelpers.tsol";
+import "../../../libraries/Errors.tsol";
 
 
 abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {

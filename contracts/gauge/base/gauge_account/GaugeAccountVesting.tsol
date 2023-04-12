@@ -1,7 +1,7 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeAccountStorage.sol";
+import "./GaugeAccountStorage.tsol";
 
 
 abstract contract GaugeAccountVesting is GaugeAccountStorage {

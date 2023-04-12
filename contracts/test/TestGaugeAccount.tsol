@@ -1,12 +1,12 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "../gauge/interfaces/IGauge.sol";
-import "../gauge/interfaces/IGaugeAccount.sol";
-import "../libraries/Callback.sol";
-import "../vote_escrow/interfaces/IVoteEscrow.sol";
-import "../gauge/base/gauge_account/GaugeAccountBase.sol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import "../gauge/interfaces/IGauge.tsol";
+import "../gauge/interfaces/IGaugeAccount.tsol";
+import "../libraries/Callback.tsol";
+import "../vote_escrow/interfaces/IVoteEscrow.tsol";
+import "../gauge/base/gauge_account/GaugeAccountBase.tsol";
 
 
 contract GaugeAccount is GaugeAccountBase {

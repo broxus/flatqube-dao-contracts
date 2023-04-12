@@ -3,12 +3,12 @@ pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
 
-import "./VoteEscrow.sol";
-import "../test/TestVoteEscrow.sol";
-import "./interfaces/IVoteEscrow.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import '@broxus/contracts/contracts/utils/RandomNonce.sol';
-import '@broxus/contracts/contracts/access/ExternalOwner.sol';
+import "./VoteEscrow.tsol";
+import "../test/TestVoteEscrow.tsol";
+import "./interfaces/IVoteEscrow.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import '@broxus/contracts/contracts/utils/RandomNonce.tsol';
+import '@broxus/contracts/contracts/access/ExternalOwner.tsol';
 
 
 contract VoteEscrowDeployer is RandomNonce, ExternalOwner {

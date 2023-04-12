@@ -1,9 +1,9 @@
 pragma ever-solidity >= 0.39.0;
 
-import 'IDaoRoot.sol';
-import "../structures/ActionStructure.sol";
-import "../structures/ProposalConfigurationStructure.sol";
-import "../structures/ProposalSates.sol";
+import 'IDaoRoot.tsol';
+import "../structures/ActionStructure.tsol";
+import "../structures/ProposalConfigurationStructure.tsol";
+import "../structures/ProposalSates.tsol";
 
 interface IProposal is ActionStructure, ProposalConfigurationStructure, ProposalStates {
 

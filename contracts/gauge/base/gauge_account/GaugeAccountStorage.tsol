@@ -1,8 +1,8 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "../../interfaces/IGauge.sol";
-import "../../interfaces/IGaugeAccount.sol";
+import "../../interfaces/IGauge.tsol";
+import "../../interfaces/IGaugeAccount.tsol";
 
 
 abstract contract GaugeAccountStorage is IGaugeAccount {

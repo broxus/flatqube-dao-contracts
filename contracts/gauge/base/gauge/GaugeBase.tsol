@@ -1,14 +1,14 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "./GaugeRewards.sol";
-import "../../interfaces/IGaugeAccount.sol";
-import "../../../vote_escrow/interfaces/IVoteEscrow.sol";
-import "../../../libraries/PlatformTypes.sol";
-import "../../../libraries/Callback.sol";
-import "../../../libraries/Errors.sol";
-import {RPlatform as Platform} from "../../../Platform.sol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import "./GaugeRewards.tsol";
+import "../../interfaces/IGaugeAccount.tsol";
+import "../../../vote_escrow/interfaces/IVoteEscrow.tsol";
+import "../../../libraries/PlatformTypes.tsol";
+import "../../../libraries/Callback.tsol";
+import "../../../libraries/Errors.tsol";
+import {RPlatform as Platform} from "../../../Platform.tsol";
 
 
 abstract contract GaugeBase is GaugeRewards {

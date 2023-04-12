@@ -1,13 +1,13 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./VoteEscrowAccountHelpers.sol";
-import "../../../libraries/Errors.sol";
-import "../../../dao/interfaces/IProposer.sol";
-import "../../../dao/interfaces/IProposal.sol";
-import "../../../dao/interfaces/IDaoRoot.sol";
-import "../../../dao/interfaces/IVoter.sol";
-import {RPlatform as Platform} from "../../../Platform.sol";
+import "./VoteEscrowAccountHelpers.tsol";
+import "../../../libraries/Errors.tsol";
+import "../../../dao/interfaces/IProposer.tsol";
+import "../../../dao/interfaces/IProposal.tsol";
+import "../../../dao/interfaces/IDaoRoot.tsol";
+import "../../../dao/interfaces/IVoter.tsol";
+import {RPlatform as Platform} from "../../../Platform.tsol";
 
 
 abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {

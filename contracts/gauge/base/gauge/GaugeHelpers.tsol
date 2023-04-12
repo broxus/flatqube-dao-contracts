@@ -1,14 +1,14 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./GaugeStorage.sol";
-import "../../../libraries/Errors.sol";
-import "../../../libraries/Gas.sol";
-import "../../../libraries/PlatformTypes.sol";
-import {RPlatform as Platform} from "../../../Platform.sol";
-import "../../interfaces/IGaugeAccount.sol";
-import "../../interfaces/ICallbackReceiver.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import "./GaugeStorage.tsol";
+import "../../../libraries/Errors.tsol";
+import "../../../libraries/Gas.tsol";
+import "../../../libraries/PlatformTypes.tsol";
+import {RPlatform as Platform} from "../../../Platform.tsol";
+import "../../interfaces/IGaugeAccount.tsol";
+import "../../interfaces/ICallbackReceiver.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 abstract contract GaugeHelpers is GaugeStorage {

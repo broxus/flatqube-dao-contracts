@@ -1,14 +1,14 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "broxus-token-contracts/contracts/interfaces/ITokenRootUpgradeable.sol";
-import "broxus-token-contracts/contracts/interfaces/ITokenWalletUpgradeable.sol";
-import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallback.sol";
+import "broxus-token-contracts/contracts/interfaces/ITokenRootUpgradeable.tsol";
+import "broxus-token-contracts/contracts/interfaces/ITokenWalletUpgradeable.tsol";
+import "broxus-token-contracts/contracts/interfaces/IAcceptTokensTransferCallback.tsol";
 
-import "../../interfaces/IGaugeAccount.sol";
-import "../../interfaces/IGauge.sol";
-import "../../GaugeAccount.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import "../../interfaces/IGaugeAccount.tsol";
+import "../../interfaces/IGauge.tsol";
+import "../../GaugeAccount.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 abstract contract GaugeStorage is IGauge, IAcceptTokensTransferCallback {

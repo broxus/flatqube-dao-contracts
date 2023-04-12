@@ -1,9 +1,9 @@
 pragma ever-solidity >= 0.39.0;
 
-import "../structures/ActionStructure.sol";
-import "../structures/ProposalConfigurationStructure.sol";
-import "../structures/ProposalSates.sol";
-import "../structures/PlatformTypes.sol";
+import "../structures/ActionStructure.tsol";
+import "../structures/ProposalConfigurationStructure.tsol";
+import "../structures/ProposalSates.tsol";
+import "../structures/PlatformTypes.tsol";
 
 interface IDaoRoot is ActionStructure, ProposalConfigurationStructure, ProposalStates, DaoPlatformTypes {
     event EthActions(

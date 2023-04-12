@@ -1,6 +1,6 @@
 pragma ever-solidity >= 0.39.0;
 
-import "./IBasicEvent.sol";
+import "./IBasicEvent.tsol";
 
 
 interface IEverscaleEvent is IBasicEvent {

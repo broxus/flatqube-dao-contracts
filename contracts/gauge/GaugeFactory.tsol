@@ -1,9 +1,9 @@
 pragma ever-solidity ^0.62.0;
 
 
-import './interfaces/IGauge.sol';
-import "./base/gauge_factory/GaugeFactoryBase.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import './interfaces/IGauge.tsol';
+import "./base/gauge_factory/GaugeFactoryBase.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 contract GaugeFactory is GaugeFactoryBase {

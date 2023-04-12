@@ -1,8 +1,8 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "../../interfaces/IGaugeFactory.sol";
-import '../../interfaces/IGauge.sol';
+import "../../interfaces/IGaugeFactory.tsol";
+import '../../interfaces/IGauge.tsol';
 
 
 abstract contract GaugeFactoryStorage is IGaugeFactory {

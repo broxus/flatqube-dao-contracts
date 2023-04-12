@@ -1,8 +1,8 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "./TestWallet.sol";
-import '@broxus/contracts/contracts/utils/RandomNonce.sol';
+import "./TestWallet.tsol";
+import '@broxus/contracts/contracts/utils/RandomNonce.tsol';
 
 
 contract TestFactory is RandomNonce {

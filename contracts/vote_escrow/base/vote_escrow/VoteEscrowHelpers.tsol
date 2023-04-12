@@ -1,15 +1,15 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "broxus-token-contracts/contracts/interfaces/ITokenRoot.sol";
-import "broxus-token-contracts/contracts/interfaces/ITokenWallet.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "./VoteEscrowStorage.sol";
-import {RPlatform as Platform} from "../../../Platform.sol";
-import "../../interfaces/ICallbackReceiver.sol";
-import "../../../libraries/Gas.sol";
-import "../../../libraries/PlatformTypes.sol";
-import "../../../libraries/Errors.sol";
+import "broxus-token-contracts/contracts/interfaces/ITokenRoot.tsol";
+import "broxus-token-contracts/contracts/interfaces/ITokenWallet.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import "./VoteEscrowStorage.tsol";
+import {RPlatform as Platform} from "../../../Platform.tsol";
+import "../../interfaces/ICallbackReceiver.tsol";
+import "../../../libraries/Gas.tsol";
+import "../../../libraries/PlatformTypes.tsol";
+import "../../../libraries/Errors.tsol";
 
 
 

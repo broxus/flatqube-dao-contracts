@@ -1,7 +1,7 @@
 pragma ever-solidity >= 0.39.0;
 
-import "./IBasicEventConfiguration.sol";
-import "./IEverscaleEvent.sol";
+import "./IBasicEventConfiguration.tsol";
+import "./IEverscaleEvent.tsol";
 
 
 interface IEverscaleEventConfiguration is IBasicEventConfiguration {

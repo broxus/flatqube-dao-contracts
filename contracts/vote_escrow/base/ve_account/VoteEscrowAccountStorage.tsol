@@ -1,7 +1,7 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "../../interfaces/IVoteEscrowAccount.sol";
+import "../../interfaces/IVoteEscrowAccount.tsol";
 
 
 abstract contract VoteEscrowAccountStorage is IVoteEscrowAccount {

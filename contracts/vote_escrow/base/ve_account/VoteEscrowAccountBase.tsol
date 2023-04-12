@@ -1,14 +1,14 @@
 pragma ever-solidity ^0.62.0;
 
 
-import "../../../libraries/Gas.sol";
-import "../../../libraries/Errors.sol";
-import "../../interfaces/IVoteEscrow.sol";
-import "../../interfaces/IVoteEscrowAccount.sol";
-import "../../../gauge/interfaces/IGaugeAccount.sol";
+import "../../../libraries/Gas.tsol";
+import "../../../libraries/Errors.tsol";
+import "../../interfaces/IVoteEscrow.tsol";
+import "../../interfaces/IVoteEscrowAccount.tsol";
+import "../../../gauge/interfaces/IGaugeAccount.tsol";
 
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
-import "./VoteEscrowAccountDAO.sol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+import "./VoteEscrowAccountDAO.tsol";
 
 
 abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {

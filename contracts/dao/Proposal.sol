@@ -1,20 +1,20 @@
 pragma ever-solidity >= 0.39.0;
 
-import "./interfaces/IProposal.sol";
-import "./interfaces/IDaoRoot.sol";
-import "./interfaces/IUpgradableByRequest.sol";
+import "./interfaces/IProposal.tsol";
+import "./interfaces/IDaoRoot.tsol";
+import "./interfaces/IUpgradableByRequest.tsol";
 
-import "./libraries/DaoErrors.sol";
-import "./libraries/Gas.sol";
+import "./libraries/DaoErrors.tsol";
+import "./libraries/Gas.tsol";
 
-import "./structures/PlatformTypes.sol";
+import "./structures/PlatformTypes.tsol";
 
-import "../vote_escrow/interfaces/IVoteEscrowAccount.sol";
-import {PlatformTypes as VePlatformTypes} from "../libraries/PlatformTypes.sol";
+import "../vote_escrow/interfaces/IVoteEscrowAccount.tsol";
+import {PlatformTypes as VePlatformTypes} from "../libraries/PlatformTypes.tsol";
 
-import {RPlatform as Platform} from "../Platform.sol";
-import "@broxus/contracts/contracts/platform/PlatformBase.sol";
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import {RPlatform as Platform} from "../Platform.tsol";
+import "@broxus/contracts/contracts/platform/PlatformBase.tsol";
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 contract Proposal is IProposal, IUpgradableByRequest, PlatformBase, DaoPlatformTypes {

@@ -3,8 +3,8 @@ pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 
-import '@broxus/contracts/contracts/wallets/Account.sol';
-import "@broxus/contracts/contracts/libraries/MsgFlag.sol";
+import '@broxus/contracts/contracts/wallets/Account.tsol';
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
 
 
 
