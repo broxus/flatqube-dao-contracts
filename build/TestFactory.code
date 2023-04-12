@@ -10,9 +10,9 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ../contracts/test/TestFactory.sol, 13
+.loc ../contracts/test/TestFactory.tsol, 13
 ACCEPT
-.loc ../contracts/test/TestFactory.sol, 0
+.loc ../contracts/test/TestFactory.tsol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -27,7 +27,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/test/TestFactory.sol, 17
+.loc ../contracts/test/TestFactory.tsol, 17
 LDU 32
 LDDICT
 ROTREV
@@ -39,7 +39,7 @@ ROTREV
 PAIR
 SWAP
 ENDS
-.loc ../contracts/test/TestFactory.sol, 0
+.loc ../contracts/test/TestFactory.tsol, 0
 CALLREF {
 	CALL $deployUsers_d80a7c0e_internal_macro$
 }
@@ -50,14 +50,14 @@ CALLREF {
 THROW 0
 
 .macro deployUsers_d80a7c0e_internal_macro
-.loc ../contracts/test/TestFactory.sol, 18
+.loc ../contracts/test/TestFactory.tsol, 18
 OVER
 FIRST
 LESSINT 61
 THROWIFNOT 1000
-.loc ../contracts/test/TestFactory.sol, 19
+.loc ../contracts/test/TestFactory.tsol, 19
 ACCEPT
-.loc ../contracts/test/TestFactory.sol, 21
+.loc ../contracts/test/TestFactory.tsol, 21
 PUSHINT 0
 PUSHCONT {
 	PUSH2 S0, S2
@@ -65,7 +65,7 @@ PUSHCONT {
 	LESS
 }
 PUSHCONT {
-	.loc ../contracts/test/TestFactory.sol, 22
+	.loc ../contracts/test/TestFactory.tsol, 22
 	PUSHINT 0
 	NEWC
 	STU 256
@@ -90,7 +90,7 @@ PUSHCONT {
 	STOPTREF
 	STZERO
 	ENDC
-	.loc ../contracts/test/TestFactory.sol, 31
+	.loc ../contracts/test/TestFactory.tsol, 31
 	PUSH2 S1, S3
 	SECOND
 	PUSHINT 32
@@ -156,7 +156,7 @@ PUSHCONT {
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
-	.loc ../contracts/test/TestFactory.sol, 38
+	.loc ../contracts/test/TestFactory.tsol, 38
 	PUSH2 S1, S3
 	SECOND
 	PUSHINT 32
@@ -167,13 +167,13 @@ PUSHCONT {
 	PUSHPOW2 8
 	DICTUSET
 	SETGLOB 12
-	.loc ../contracts/test/TestFactory.sol, 21
+	.loc ../contracts/test/TestFactory.tsol, 21
 	INC
-	.loc ../contracts/test/TestFactory.sol, 0
+	.loc ../contracts/test/TestFactory.tsol, 0
 }
 WHILE
 BLKDROP 3
-.loc ../contracts/test/TestFactory.sol, 0
+.loc ../contracts/test/TestFactory.tsol, 0
 
 .macro c4_to_c7
 PUSHROOT

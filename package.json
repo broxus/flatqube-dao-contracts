@@ -6,11 +6,11 @@
     "author": "30mb1 <steam.30mb1@gmail.com>",
     "license": "ISC",
     "dependencies": {
-        "@broxus/contracts": "^1.1.0",
+        "@broxus/contracts": "^1.1.1",
         "@types/chai": "^4.3.1",
         "@types/mocha": "^9.1.1",
         "@types/node": "^18.0.4",
-        "broxus-token-contracts": "github:broxus/ton-eth-bridge-token-contracts#d3c1cd920c0320ffaab03b54c878dd0e06fed3c7",
+        "broxus-token-contracts": "github:broxus/tip3#480c1b4481d1dddb028b408b20ba8c19abd1a4a4",
         "chai": "^4.3.6",
         "locklift": "^2.5.2",
         "mocha-logger": "^1.0.7",

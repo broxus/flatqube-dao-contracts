@@ -10,10 +10,10 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 20
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 20
 GETGLOB 2
 THROWIFNOT 1003
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 21
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 21
 GETGLOB 2
 GETGLOB 5
 DUP
@@ -25,9 +25,9 @@ PUSHCONT {
 IF
 EQUAL
 THROWIFNOT 1003
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 22
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 22
 ACCEPT
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 24
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 24
 GETGLOB 5
 DUP
 ISNULL
@@ -39,7 +39,7 @@ IF
 CALLREF {
 	CALL $setOwnership_3e1af783_internal_macro$
 }
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -54,10 +54,10 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 27
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 27
 LDREF
 ENDS
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 CALLREF {
 	CALL $installVoteEscrowCode_99ce8c6e_internal_macro$
 }
@@ -68,7 +68,7 @@ CALLREF {
 THROW 0
 
 .macro installVoteEscrowCode_99ce8c6e_internal_macro
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 14
 GETGLOB 5
 DUP
 ISNULL
@@ -80,16 +80,16 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 28
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 28
 GETGLOB 14
 CTOS
 SEMPTY
 THROWIFNOT 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 30
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 30
 ACCEPT
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 31
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 31
 SETGLOB 14
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 
 .macro deployVoteEscrow
 DROP
@@ -100,7 +100,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 34
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 34
 OVER
 PUSHCONT {
 	LDREF
@@ -142,7 +142,7 @@ ENDS
 CTOS
 LDU 128
 ENDS
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 CALLREF {
 	CALL $deployVoteEscrow_dc0b072b_internal_macro$
 }
@@ -178,7 +178,7 @@ IFREF {
 THROW 0
 
 .macro deployVoteEscrow_dc0b072b_internal_macro
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 14
 GETGLOB 5
 DUP
 ISNULL
@@ -190,24 +190,24 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 52
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 52
 ACCEPT
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 53
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 53
 GETGLOB 14
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 54
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 54
 GETGLOB 12
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 55
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 55
 GETGLOB 13
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 57
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 57
 GETGLOB 2
 NEWC
 STU 256
@@ -233,7 +233,7 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 66
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 66
 BLKSWAP 2, 14
 SWAP
 MYADDR
@@ -297,11 +297,11 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 73
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 73
 PUSHINT 0
 PUSH2 S0, S1
 TRIPLE
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 74
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 74
 DUP
 GETGLOB 12
 PUSH S3
@@ -324,7 +324,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 75
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 75
 DUP
 GETGLOB 13
 PUSH S3
@@ -347,7 +347,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 76
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 76
 DUP
 BLKSWAP 7, 4
 REVERSE 7, 0
@@ -377,7 +377,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 80
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 80
 DUP
 ROLL 5
 PUSH S3
@@ -404,7 +404,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 81
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 81
 DUP
 ROLL 4
 PUSH S3
@@ -431,7 +431,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 82
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 82
 DUP
 BLKSWAP 2, 4
 XCPU S1, S4
@@ -455,7 +455,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 83
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 83
 DUP
 ROLL 3
 PUSH S3
@@ -478,7 +478,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 84
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 84
 DUP
 ROLL 3
 PUSH S3
@@ -501,7 +501,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 85
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 85
 ROT
 PUSH S2
 NEWC
@@ -526,7 +526,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 
 .macro deployTestVoteEscrow
 DROP
@@ -537,7 +537,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 89
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 89
 OVER
 PUSHCONT {
 	LDREF
@@ -579,7 +579,7 @@ ENDS
 CTOS
 LDU 128
 ENDS
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 CALLREF {
 	CALL $deployTestVoteEscrow_35be1908_internal_macro$
 }
@@ -615,7 +615,7 @@ IFREF {
 THROW 0
 
 .macro deployTestVoteEscrow_35be1908_internal_macro
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 14
 GETGLOB 5
 DUP
 ISNULL
@@ -627,24 +627,24 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 107
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 107
 ACCEPT
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 108
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 108
 GETGLOB 14
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 109
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 109
 GETGLOB 12
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 110
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 110
 GETGLOB 13
 CTOS
 SEMPTY
 THROWIF 1000
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 112
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 112
 GETGLOB 2
 NEWC
 STU 256
@@ -670,7 +670,7 @@ STOPTREF
 STOPTREF
 STZERO
 ENDC
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 121
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 121
 BLKSWAP 2, 14
 SWAP
 MYADDR
@@ -734,11 +734,11 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 128
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 128
 PUSHINT 0
 PUSH2 S0, S1
 TRIPLE
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 129
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 129
 DUP
 GETGLOB 12
 PUSH S3
@@ -761,7 +761,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 130
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 130
 DUP
 GETGLOB 13
 PUSH S3
@@ -784,7 +784,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 131
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 131
 DUP
 BLKSWAP 7, 4
 REVERSE 7, 0
@@ -814,7 +814,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 135
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 135
 DUP
 ROLL 5
 PUSH S3
@@ -841,7 +841,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 136
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 136
 DUP
 ROLL 4
 PUSH S3
@@ -868,7 +868,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 137
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 137
 DUP
 BLKSWAP 2, 4
 XCPU S1, S4
@@ -892,7 +892,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 138
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 138
 DUP
 ROLL 3
 PUSH S3
@@ -915,7 +915,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 139
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 139
 DUP
 ROLL 3
 PUSH S3
@@ -938,7 +938,7 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 140
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 140
 ROT
 PUSH S2
 NEWC
@@ -963,19 +963,19 @@ STBREFR
 ENDC
 PUSHINT 1
 SENDRAWMSG
-.loc ../contracts/vote_escrow/VoteEscrowDeployer.sol, 0
+.loc ../contracts/vote_escrow/VoteEscrowDeployer.tsol, 0
 
 .globl	setOwnership_3e1af783_internal
 .type	setOwnership_3e1af783_internal, @function
 CALL $setOwnership_3e1af783_internal_macro$
 
 .macro setOwnership_3e1af783_internal_macro
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 23
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 23
 GETGLOB 11
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 25
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 25
 OVER
 SETGLOB 11
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 27
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 27
 PUSHSLICE xc0000000000000000000000000536cd3f2
 NEWC
 STSLICE
@@ -984,7 +984,7 @@ STU 256
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 0
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 0
 
 .macro transferOwnership
 DROP
@@ -995,7 +995,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 33
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 33
 OVER
 PUSHCONT {
 	LDREF
@@ -1005,7 +1005,7 @@ PUSHCONT {
 IF
 LDU 256
 ENDS
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 0
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 0
 CALLREF {
 	CALL $transferOwnership_d23e8489_internal_macro$
 }
@@ -1016,7 +1016,7 @@ CALLREF {
 THROW 0
 
 .macro transferOwnership_d23e8489_internal_macro
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 14
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 14
 GETGLOB 5
 DUP
 ISNULL
@@ -1028,16 +1028,16 @@ IF
 GETGLOB 11
 EQUAL
 THROWIFNOT 1101
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 36
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 36
 DUP
 THROWIFNOT 1102
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 37
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 37
 ACCEPT
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 39
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 39
 CALLREF {
 	CALL $setOwnership_3e1af783_internal_macro$
 }
-.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.sol, 0
+.loc ../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol, 0
 
 .macro c4_to_c7
 PUSHROOT
