@@ -65,7 +65,10 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
 
     uint32 maxGaugesPerVote; // max number of gauges user can vote for
     uint32 gaugesNum; // current number of whitelisted gauges
+    // candidates that payed entrance fee
     mapping (address => bool) public gaugeWhitelist;
+    // candidates that payed entrance fee + dao approved them
+    mapping (address => bool) public gaugeDaoApproved;
     mapping (address => uint128) public currentVotingVotes;
     mapping (address => uint8) public gaugeDowntimes;
 

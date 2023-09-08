@@ -136,6 +136,7 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         uint32 counter = 0;
         for ((address gauge,) : votes) {
             require (gaugeWhitelist[gauge], Errors.GAUGE_NOT_WHITELISTED);
+            require (gaugeDaoApproved[gauge], Errors.GAUGE_NOT_WHITELISTED);
             counter += 1;
         }
         require (counter <= maxGaugesPerVote, Errors.MAX_GAUGES_PER_VOTE);

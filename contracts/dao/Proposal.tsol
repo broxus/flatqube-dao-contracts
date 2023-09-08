@@ -116,7 +116,7 @@ contract Proposal is IProposal, IUpgradableByRequest, PlatformBase, DaoPlatformT
     }
 
     function cancel() override public {
-        require(!executed, DaoErrors.PROPOSAL_IS_EXECUTED);
+        require(state() == ProposalState.Pending, DaoErrors.PROPOSAL_IS_NOT_PENDING);
         require(msg.sender == proposer, DaoErrors.NOT_OWNER);
         tvm.rawReserve(Gas.PROPOSAL_INITIAL_BALANCE, 2);
         canceled = true;

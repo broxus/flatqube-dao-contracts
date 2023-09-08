@@ -205,7 +205,7 @@ abstract contract VoteEscrowAccountDAO is VoteEscrowAccountHelpers {
         return builder.toCell();
     }
 
-    function _lockedTokens() private view returns (uint128 locked) {
+    function _lockedTokens() internal view returns (uint128 locked) {
         locked = 0;
         for ((,uint128 locked_val) : _tmp_proposals) {
             locked += locked_val;

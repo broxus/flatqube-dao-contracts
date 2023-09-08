@@ -209,6 +209,8 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         gaugesNum -= 1;
         delete gaugeWhitelist[gauge];
         delete gaugeDowntimes[gauge];
+        delete gaugeDaoApproved[gauge];
+        emit GaugeDAORemoveApprove(call_id, gauge);
         emit GaugeRemoveWhitelist(call_id, gauge);
     }
 
@@ -305,6 +307,11 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
 
     modifier onlyOwner() {
         require(msg.sender == owner, Errors.NOT_OWNER);
+        _;
+    }
+
+    modifier onlyOwnerOrDao() {
+        require (msg.sender == owner || msg.sender == dao, Errors.NOT_DAO_ROOT);
         _;
     }
 

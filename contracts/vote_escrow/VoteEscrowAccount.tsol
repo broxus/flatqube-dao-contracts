@@ -60,23 +60,36 @@ contract VoteEscrowAccount is VoteEscrowAccountBase {
     }
 
     function onCodeUpgrade(TvmCell upgrade_data) private {
-        tvm.resetStorage();
-        tvm.rawReserve(_reserve(), 0);
-
         TvmSlice s = upgrade_data.toSlice();
         (address root_, , address send_gas_to) = s.decode(address, uint8, address);
-        voteEscrow = root_;
 
-        platform_code = s.loadRef();
+        TvmCell _platform_code = s.loadRef();
 
         TvmSlice initialData = s.loadRefAsSlice();
-        user = initialData.decode(address);
+        address _user = initialData.decode(address);
 
         TvmSlice params = s.loadRefAsSlice();
-        (current_version,,dao_root) = params.decode(uint32, uint32, address);
+        uint32 prev_version;
+        uint32 new_version;
+        address _dao_root;
+        (new_version, prev_version, _dao_root) = params.decode(uint32, uint32, address);
 
-        IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
-            user, Callback.CallMeta(0, 0, send_gas_to)
-        );
+        if (new_version == prev_version) {
+            tvm.resetStorage();
+            tvm.rawReserve(_reserve(), 0);
+
+            platform_code = _platform_code;
+            voteEscrow = root_;
+            user = _user;
+            current_version = new_version;
+            dao_root = _dao_root;
+
+            IVoteEscrow(voteEscrow).onVoteEscrowAccountDeploy{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(
+                user, Callback.CallMeta(0, 0, send_gas_to)
+            );
+        } else {
+            tvm.rawReserve(_reserve(), 0);
+            send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+        }
     }
 }

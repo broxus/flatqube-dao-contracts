@@ -1,11 +1,12 @@
-import {expect} from "chai";
 import {deployUser, setupTokenRoot, setupVoteEscrow, tryIncreaseTime,sendAllEvers} from "../utils/common";
 import {VoteEscrow} from "../utils/wrappers/vote_ecsrow";
 import {Account} from 'locklift/everscale-client';
 import {VoteEscrowAccount} from "../utils/wrappers/ve_account";
 import {Token} from "../utils/wrappers/token";
 import {TokenWallet} from "../utils/wrappers/token_wallet";
-import {Address, getRandomNonce} from "locklift";
+import chai, { expect } from "chai";
+import { Address, lockliftChai, toNano, getRandomNonce } from "locklift";
+chai.use(lockliftChai);
 
 var should = require('chai').should();
 
@@ -30,7 +31,7 @@ describe("Main Vote Escrow scenarios", async function () {
     describe('Setup contracts', async function () {
         it('Deploy users', async function () {
             user = await deployUser(10);
-            owner = await deployUser(10);
+            owner = await deployUser(20);
             for (const i of [1, 2, 3, 4]) {
                 const account = await deployUser(3);
                 // @ts-ignore
@@ -116,15 +117,24 @@ describe("Main Vote Escrow scenarios", async function () {
                 for (const gauge of gauges) {
                     const price = 1000000;
                     const random_id = getRandomNonce();
-                    await locklift.tracing.trace(vote_escrow.whitelistDeposit(owner_qube_wallet, price, gauge.address, random_id));
+                    const {traceTree} = await locklift.tracing.trace(vote_escrow.whitelistDeposit(owner_qube_wallet, price, gauge.address, random_id));
                     const details = await vote_escrow.details();
-                    const event = await vote_escrow.getEvent('GaugeWhitelist') as any;
+
+                    expect(traceTree)
+                      .to.emit('GaugeWhitelist')
+                      .withNamedArgs({
+                          call_id: random_id.toString(),
+                          gauge: gauge.address.toString()
+                      })
+
+                    // const event = await vote_escrow.getEvent('GaugeWhitelist') as any;
                     payments += price;
 
-                    expect(event.call_id).to.be.eq(random_id.toString());
-                    expect(event.gauge.toString()).to.be.eq(gauge.address.toString());
-
                     expect(details._whitelistPayments.toString()).to.be.eq(payments.toString());
+
+                    await locklift.tracing.trace(vote_escrow.contract.methods.approveGaugeDAO({
+                        gauge: gauge.address
+                    }).send({from: vote_escrow._owner.address, amount: toNano(1)}));
                 }
 
                 const whitelisted = await vote_escrow.gaugeWhitelist();

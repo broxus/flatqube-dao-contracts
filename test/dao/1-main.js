@@ -125,7 +125,8 @@ describe('Test DAO in VoteEscrow', async function () {
             logger.log(`Depositing test tokens`);
 
             const tx = await voteEscrow.deposit(userTokenWallet0, DEPOSIT_VALUE * 2, lock_time, 1, false);
-            // await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
+            // const {traceTree} = await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
+            // await traceTree.beautyPrint();
 
             const tx1 = await voteEscrow.deposit(userTokenWallet1, DEPOSIT_VALUE, lock_time, 2, false);
             // await locklift.tracing.trace(tx1, {allowedCodes: {compute: [null]}});

@@ -229,6 +229,22 @@
 			]
 		},
 		{
+			"name": "approveGaugeDAO",
+			"inputs": [
+				{"name":"gauge","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "removeGaugeDAO",
+			"inputs": [
+				{"name":"gauge","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getVeAverage",
 			"inputs": [
 				{"name":"nonce","type":"uint32"}
@@ -733,6 +749,14 @@
 			]
 		},
 		{
+			"name": "gaugeDaoApproved",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"gaugeDaoApproved","type":"map(address,bool)"}
+			]
+		},
+		{
 			"name": "currentVotingVotes",
 			"inputs": [
 			],
@@ -815,6 +839,24 @@
 		},
 		{
 			"name": "GaugeRemoveWhitelist",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"gauge","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeDAOApprove",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"gauge","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "GaugeDAORemoveApprove",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
 				{"name":"gauge","type":"address"}
@@ -1138,6 +1180,7 @@
 		{"name":"maxGaugesPerVote","type":"uint32"},
 		{"name":"gaugesNum","type":"uint32"},
 		{"name":"gaugeWhitelist","type":"map(address,bool)"},
+		{"name":"gaugeDaoApproved","type":"map(address,bool)"},
 		{"name":"currentVotingVotes","type":"map(address,uint128)"},
 		{"name":"gaugeDowntimes","type":"map(address,uint8)"},
 		{"name":"gaugeWhitelistPrice","type":"uint128"},

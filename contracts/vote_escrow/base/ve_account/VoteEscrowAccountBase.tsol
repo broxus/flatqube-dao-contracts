@@ -55,8 +55,8 @@ abstract contract VoteEscrowAccountBase is VoteEscrowAccountDAO {
     function processWithdraw(Callback.CallMeta meta) external override onlyVoteEscrowOrSelf {
         tvm.rawReserve(_reserve(), 0);
 
-        // check gas only at beginning
-        if (msg.sender == voteEscrow && msg.value < calculateMinGas()) {
+        // check gas only at beginning + check user did not vote
+        if (msg.sender == voteEscrow && (msg.value < calculateMinGas() || _lockedTokens() > 0)) {
             IVoteEscrow(msg.sender).revertWithdraw{value: 0, flag: MsgFlag.ALL_NOT_RESERVED}(user, meta);
             return;
         }

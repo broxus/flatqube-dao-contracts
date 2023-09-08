@@ -18,11 +18,11 @@ PUSHCONT {
 IF
 LDMSGADDR
 ENDS
-.loc ../contracts/dao/test/TestTarget.sol, 15
+.loc ../contracts/dao/test/TestTarget.tsol, 15
 ACCEPT
-.loc ../contracts/dao/test/TestTarget.sol, 16
+.loc ../contracts/dao/test/TestTarget.tsol, 16
 SETGLOB 12
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -32,10 +32,10 @@ THROW 0
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc ../contracts/dao/test/TestTarget.sol, 19
+.loc ../contracts/dao/test/TestTarget.tsol, 19
 LDU 32
 ENDS
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 CALLREF {
 	CALL $call_b4deabe7_internal_macro$
 }
@@ -49,7 +49,7 @@ THROW 0
 CALL $call_b4deabe7_internal_macro$
 
 .macro call_b4deabe7_internal_macro
-.loc ../contracts/dao/test/TestTarget.sol, 20
+.loc ../contracts/dao/test/TestTarget.tsol, 20
 MYADDR
 NEWC
 STSLICECONST x62_
@@ -60,7 +60,7 @@ STU 32
 ENDC
 PUSHINT 64
 SENDRAWMSG
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 
 .macro addDelegate
 DROP
@@ -71,7 +71,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/dao/test/TestTarget.sol, 23
+.loc ../contracts/dao/test/TestTarget.tsol, 23
 OVER
 PUSHCONT {
 	LDREF
@@ -82,7 +82,7 @@ IF
 LDMSGADDR
 LDU 256
 ENDS
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 CALLREF {
 	CALL $addDelegate_5bcfd212_internal_macro$
 }
@@ -97,12 +97,12 @@ THROW 0
 CALL $addDelegate_5bcfd212_internal_macro$
 
 .macro addDelegate_5bcfd212_internal_macro
-.loc ../contracts/dao/test/TestTarget.sol, 24
+.loc ../contracts/dao/test/TestTarget.tsol, 24
 GETGLOB 9
 GETGLOB 12
 SDEQ
 THROWIFNOT 101
-.loc ../contracts/dao/test/TestTarget.sol, 25
+.loc ../contracts/dao/test/TestTarget.tsol, 25
 OVER
 GETGLOB 10
 PUSHINT 267
@@ -114,11 +114,11 @@ PUSHCONT {
 	PAIR
 }
 IF
-.loc ../contracts/dao/test/TestTarget.sol, 26
+.loc ../contracts/dao/test/TestTarget.tsol, 26
 DUP
 ISNULL
 PUSHCONT {
-	.loc ../contracts/dao/test/TestTarget.sol, 31
+	.loc ../contracts/dao/test/TestTarget.tsol, 31
 	OVER
 	PUSHINT 0
 	NEWDICT
@@ -138,11 +138,11 @@ PUSHCONT {
 	PAIR
 }
 PUSHCONT {
-	.loc ../contracts/dao/test/TestTarget.sol, 27
+	.loc ../contracts/dao/test/TestTarget.tsol, 27
 	BLKPUSH 2, 0
 	ISNULL
 	THROWIF 63
-	.loc ../contracts/dao/test/TestTarget.sol, 28
+	.loc ../contracts/dao/test/TestTarget.tsol, 28
 	PUSH S2
 	NEWC
 	STU 256
@@ -154,7 +154,7 @@ PUSHCONT {
 	PUSHINT 32
 	DICTUSETB
 	PAIR
-	.loc ../contracts/dao/test/TestTarget.sol, 29
+	.loc ../contracts/dao/test/TestTarget.tsol, 29
 }
 IFELSE
 PUSH S3
@@ -169,7 +169,7 @@ ROTREV
 PUSHINT 267
 DICTSETB
 SETGLOB 10
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 BLKDROP 3
 
 .macro onProposalSuccess
@@ -181,10 +181,10 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/dao/test/TestTarget.sol, 35
+.loc ../contracts/dao/test/TestTarget.tsol, 35
 LDU 32
 ENDS
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 CALLREF {
 	CALL $onProposalSuccess_3e91b767_internal_macro$
 }
@@ -199,27 +199,27 @@ THROW 0
 CALL $onProposalSuccess_3e91b767_internal_macro$
 
 .macro onProposalSuccess_3e91b767_internal_macro
-.loc ../contracts/dao/Delegate.sol, 12
+.loc ../contracts/dao/Delegate.tsol, 12
 CALLREF {
 	CALL $checkDelegate_c45d6a7d_internal_macro$
 }
-.loc ../contracts/dao/test/TestTarget.sol, 36
+.loc ../contracts/dao/test/TestTarget.tsol, 36
 DEPTH
 ADDCONST -2
 PICK
 SETGLOB 14
-.loc ../contracts/dao/test/TestTarget.sol, 37
+.loc ../contracts/dao/test/TestTarget.tsol, 37
 TRUE
 SETGLOB 13
-.loc ../contracts/dao/test/TestTarget.sol, 38
+.loc ../contracts/dao/test/TestTarget.tsol, 38
 SETGLOB 15
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 
 .macro encodePayload
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc ../contracts/dao/test/TestTarget.sol, 41
+.loc ../contracts/dao/test/TestTarget.tsol, 41
 OVER
 PUSHCONT {
 	LDREF
@@ -230,7 +230,7 @@ IF
 LDMSGADDR
 LDU 256
 ENDS
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 CALLREF {
 	CALL $encodePayload_e22034f7_internal_macro$
 }
@@ -266,23 +266,23 @@ THROW 0
 CALL $encodePayload_e22034f7_internal_macro$
 
 .macro encodePayload_e22034f7_internal_macro
-.loc ../contracts/dao/test/TestTarget.sol, 42
+.loc ../contracts/dao/test/TestTarget.tsol, 42
 SWAP
 NEWC
 STSLICECONST x438b85a7
 STSLICE
 STU 256
 ENDC
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 
 .macro getCallHash
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc ../contracts/dao/test/TestTarget.sol, 45
+.loc ../contracts/dao/test/TestTarget.tsol, 45
 LDU 32
 ENDS
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 CALLREF {
 	CALL $getCallHash_f48f6028_internal_macro$
 }
@@ -318,20 +318,20 @@ THROW 0
 CALL $getCallHash_f48f6028_internal_macro$
 
 .macro getCallHash_f48f6028_internal_macro
-.loc ../contracts/dao/test/TestTarget.sol, 46
+.loc ../contracts/dao/test/TestTarget.tsol, 46
 NEWC
 STSLICECONST x05419b99
 STU 32
 ENDC
 HASHCU
-.loc ../contracts/dao/test/TestTarget.sol, 0
+.loc ../contracts/dao/test/TestTarget.tsol, 0
 
 .globl	checkDelegate_c45d6a7d_internal
 .type	checkDelegate_c45d6a7d_internal, @function
 CALL $checkDelegate_c45d6a7d_internal_macro$
 
 .macro checkDelegate_c45d6a7d_internal_macro
-.loc ../contracts/dao/Delegate.sol, 17
+.loc ../contracts/dao/Delegate.tsol, 17
 GETGLOB 9
 GETGLOB 10
 PUSHINT 267
@@ -343,30 +343,30 @@ PUSHCONT {
 	PAIR
 }
 IF
-.loc ../contracts/dao/Delegate.sol, 18
+.loc ../contracts/dao/Delegate.tsol, 18
 DUP
 ISNULL
 THROWIF 1201
-.loc ../contracts/dao/Delegate.sol, 19
+.loc ../contracts/dao/Delegate.tsol, 19
 DUP
 ISNULL
 THROWIF 63
-.loc ../contracts/dao/Delegate.sol, 20
+.loc ../contracts/dao/Delegate.tsol, 20
 DUP
 FIRST
-.loc ../contracts/dao/Delegate.sol, 21
+.loc ../contracts/dao/Delegate.tsol, 21
 DUP
 THROWIFNOT 1202
-.loc ../contracts/dao/Delegate.sol, 22
+.loc ../contracts/dao/Delegate.tsol, 22
 DEPTH
 ADDCONST -4
 PICK
 HASHSU
-.loc ../contracts/dao/Delegate.sol, 23
+.loc ../contracts/dao/Delegate.tsol, 23
 OVER
 EQINT 1
 PUSHCONT {
-	.loc ../contracts/dao/Delegate.sol, 24
+	.loc ../contracts/dao/Delegate.tsol, 24
 	PUSHINT 0
 	PUSH S3
 	SECOND
@@ -377,7 +377,7 @@ PUSHCONT {
 	OVER
 	EQUAL
 	THROWIFNOT 1203
-	.loc ../contracts/dao/Delegate.sol, 25
+	.loc ../contracts/dao/Delegate.tsol, 25
 	GETGLOB 9
 	GETGLOB 10
 	PUSHINT 267
@@ -385,20 +385,20 @@ PUSHCONT {
 	DROP
 }
 PUSHCONT {
-	.loc ../contracts/dao/Delegate.sol, 27
+	.loc ../contracts/dao/Delegate.tsol, 27
 	FALSE
 	DUP
-	.loc ../contracts/dao/Delegate.sol, 28
+	.loc ../contracts/dao/Delegate.tsol, 28
 	NEWDICT
 	PAIR
-	.loc ../contracts/dao/Delegate.sol, 29
+	.loc ../contracts/dao/Delegate.tsol, 29
 	PUSHINT 0
 	PUSHCONT {
 		PUSH2 S0, S4
 		LESS
 	}
 	PUSHCONT {
-		.loc ../contracts/dao/Delegate.sol, 30
+		.loc ../contracts/dao/Delegate.tsol, 30
 		PUSH2 S0, S5
 		SECOND
 		PUSHINT 32
@@ -411,12 +411,12 @@ PUSHCONT {
 		NOT
 		AND
 		PUSHCONT {
-			.loc ../contracts/dao/Delegate.sol, 31
+			.loc ../contracts/dao/Delegate.tsol, 31
 			TRUE
 			POP S3
 		}
 		PUSHCONT {
-			.loc ../contracts/dao/Delegate.sol, 33
+			.loc ../contracts/dao/Delegate.tsol, 33
 			DUP2
 			PUSH S7
 			SECOND
@@ -437,16 +437,16 @@ PUSHCONT {
 			POP S2
 		}
 		IFELSE
-		.loc ../contracts/dao/Delegate.sol, 29
+		.loc ../contracts/dao/Delegate.tsol, 29
 		INC
-		.loc ../contracts/dao/Delegate.sol, 0
+		.loc ../contracts/dao/Delegate.tsol, 0
 	}
 	WHILE
 	DROP
-	.loc ../contracts/dao/Delegate.sol, 36
+	.loc ../contracts/dao/Delegate.tsol, 36
 	SWAP
 	THROWIFNOT 1203
-	.loc ../contracts/dao/Delegate.sol, 37
+	.loc ../contracts/dao/Delegate.tsol, 37
 	GETGLOB 9
 	GETGLOB 10
 	NEWC
@@ -461,7 +461,7 @@ PUSHCONT {
 }
 IFELSE
 SETGLOB 10
-.loc ../contracts/dao/Delegate.sol, 0
+.loc ../contracts/dao/Delegate.tsol, 0
 BLKDROP 3
 
 .macro c4_to_c7

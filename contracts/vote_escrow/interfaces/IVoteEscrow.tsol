@@ -12,6 +12,8 @@ interface IVoteEscrow is IAcceptTokensTransferCallback {
     event DepositRevert(uint32 call_id, address user, uint128 amount);
     event GaugeWhitelist(uint32 call_id, address gauge);
     event GaugeRemoveWhitelist(uint32 call_id, address gauge);
+    event GaugeDAOApprove(uint32 call_id, address gauge);
+    event GaugeDAORemoveApprove(uint32 call_id, address gauge);
     event WhitelistPriceUpdate(uint32 call_id, uint128 amount);
     event NormalizingTypeUpdate(uint32 call_id, VotingNormalizingType new_type);
     event DistributionSupplyIncrease(uint32 call_id, uint128 amount);

@@ -10,7 +10,7 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 ENDS
-.loc ../contracts/dao/test/TestUpgrade.sol, 0
+.loc ../contracts/dao/test/TestUpgrade.tsol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }
@@ -18,12 +18,12 @@ THROW 0
 
 .internal-alias :onCodeUpgrade, 2
 .internal :onCodeUpgrade
-.loc ../contracts/dao/test/TestUpgrade.sol, 12
+.loc ../contracts/dao/test/TestUpgrade.tsol, 12
 SETGLOB 10
-.loc ../contracts/dao/test/TestUpgrade.sol, 13
+.loc ../contracts/dao/test/TestUpgrade.tsol, 13
 TRUE
 SETGLOB 11
-.loc ../contracts/dao/test/TestUpgrade.sol, 0
+.loc ../contracts/dao/test/TestUpgrade.tsol, 0
 CALLREF {
 	CALL $c7_to_c4$
 }

@@ -20,7 +20,7 @@ THROW 0
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc ../contracts/dao/DaoCellEncoder.sol, 6
+.loc ../contracts/dao/DaoCellEncoder.tsol, 6
 LDI 8
 LDU 256
 LDU 32
@@ -30,7 +30,7 @@ ROTREV
 PAIR
 SWAP
 ENDS
-.loc ../contracts/dao/DaoCellEncoder.sol, 0
+.loc ../contracts/dao/DaoCellEncoder.tsol, 0
 CALLREF {
 	CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 }
@@ -66,7 +66,7 @@ THROW 0
 CALL $encodeDaoEthereumActionData_2394a3ac_internal_macro$
 
 .macro encodeDaoEthereumActionData_2394a3ac_internal_macro
-.loc ../contracts/dao/DaoCellEncoder.sol, 15
+.loc ../contracts/dao/DaoCellEncoder.tsol, 15
 REVERSE 4, 0
 NEWC
 STI 8
@@ -77,18 +77,18 @@ UNPAIR
 XCHG S2
 STU 32
 STDICT
-.loc ../contracts/dao/DaoCellEncoder.sol, 16
+.loc ../contracts/dao/DaoCellEncoder.tsol, 16
 ENDC
-.loc ../contracts/dao/DaoCellEncoder.sol, 0
+.loc ../contracts/dao/DaoCellEncoder.tsol, 0
 
 .macro decodeDaoEthereumActionData
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc ../contracts/dao/DaoCellEncoder.sol, 19
+.loc ../contracts/dao/DaoCellEncoder.tsol, 19
 LDREF
 ENDS
-.loc ../contracts/dao/DaoCellEncoder.sol, 0
+.loc ../contracts/dao/DaoCellEncoder.tsol, 0
 CALLREF {
 	CALL $decodeDaoEthereumActionData_a3d3c7a3_internal_macro$
 }
@@ -135,10 +135,10 @@ THROW 0
 CALL $decodeDaoEthereumActionData_a3d3c7a3_internal_macro$
 
 .macro decodeDaoEthereumActionData_a3d3c7a3_internal_macro
-.loc ../contracts/dao/DaoCellEncoder.sol, 19
+.loc ../contracts/dao/DaoCellEncoder.tsol, 19
 PUSHINT 0
 BLKPUSH 2, 0
-.loc ../contracts/dao/DaoCellEncoder.sol, 27
+.loc ../contracts/dao/DaoCellEncoder.tsol, 27
 ROLL 3
 CTOS
 LDI 8
@@ -151,7 +151,7 @@ REVERSE 4, 0
 POP S6
 POP S4
 POP S2
-.loc ../contracts/dao/DaoCellEncoder.sol, 0
+.loc ../contracts/dao/DaoCellEncoder.tsol, 0
 
 .macro c4_to_c7
 PUSHROOT
