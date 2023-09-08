@@ -9,7 +9,7 @@ import "../../../libraries/Errors.tsol";
 
 
 abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
-    function installPlatformCode(TvmCell code, Callback.CallMeta meta) external override onlyOwner {
+    function installPlatformCode(TvmCell code, Callback.CallMeta meta) external override onlyManager {
         require(platformCode.toSlice().empty(), Errors.ALREADY_INITIALIZED);
 
         tvm.rawReserve(_reserve(), 0);
@@ -19,7 +19,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
     }
 
-    function installOrUpdateVeAccountCode(TvmCell code, Callback.CallMeta meta) external override onlyOwner {
+    function installOrUpdateVeAccountCode(TvmCell code, Callback.CallMeta meta) external override onlyManager {
         tvm.rawReserve(_reserve(), 0);
 
         veAccountCode = code;
@@ -36,7 +36,7 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
     }
 
     // admin hook, no need for call_id or nonce
-    function forceUpgradeVeAccounts(address[] users, Callback.CallMeta meta) external view onlyOwner {
+    function forceUpgradeVeAccounts(address[] users, Callback.CallMeta meta) external view onlyManager {
         require (msg.value >= Gas.VE_ACC_UPGRADE_VALUE * (users.length + 1), Errors.LOW_MSG_VALUE);
 
         tvm.rawReserve(_reserve(), 0);

@@ -138,14 +138,6 @@ export class VoteEscrow {
             from: this._owner.address
         });
     }
-
-    async acceptOwnership(owner: Account) {
-        return this.contract.methods.acceptOwnership({meta: {call_id: 0, nonce: 0, send_gas_to: owner.address}}).send({
-            amount: toNano(5),
-            from: owner.address
-        });
-    }
-
     async installOrUpdateVeAccountCode(code: string) {
         return await this.contract.methods.installOrUpdateVeAccountCode(
             {code: code, meta: {call_id: 0, nonce: 0, send_gas_to: this._owner.address}}

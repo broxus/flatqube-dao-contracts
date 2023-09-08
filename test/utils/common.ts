@@ -347,8 +347,5 @@ export const setupVoteEscrow = async function ({
     const ve = await VoteEscrow.from_addr(ve_addr as Address, owner);
     logger.log(`Deployed and configured Vote Escrow: ${ve_addr?.toString()}`);
 
-    await ve.acceptOwnership(owner);
-    logger.log(`Accepted ownership`);
-
     return ve;
 }

@@ -15,18 +15,16 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
     function transferOwnership(address new_owner, Callback.CallMeta meta) external override onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        emit NewPendingOwner(meta.call_id, new_owner);
-        pendingOwner = new_owner;
+        emit NewOwner(meta.call_id, owner, new_owner);
+        owner = new_owner;
         meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 
-    function acceptOwnership(Callback.CallMeta meta) external {
-        require (msg.sender == pendingOwner, Errors.NOT_OWNER);
+    function setManager(address new_manager, Callback.CallMeta meta) external onlyOwner {
         tvm.rawReserve(_reserve(), 0);
 
-        emit NewOwner(meta.call_id, owner, pendingOwner);
-        owner = pendingOwner;
-        pendingOwner = address.makeAddrNone();
+        emit NewManager(meta.call_id, manager, new_manager);
+        manager = new_manager;
         meta.send_gas_to.transfer({ value: 0, bounce: false, flag: MsgFlag.ALL_NOT_RESERVED });
     }
 

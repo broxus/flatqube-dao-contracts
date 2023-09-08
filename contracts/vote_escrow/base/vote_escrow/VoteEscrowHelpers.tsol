@@ -16,7 +16,7 @@ import "../../../libraries/Errors.tsol";
 abstract contract VoteEscrowHelpers is VoteEscrowStorage {
     function getDetails() external view returns (
         address _owner,
-        address _pendingOwner,
+        address _manager,
         address _qube,
         address _dao,
         address _qubeWallet,
@@ -36,7 +36,7 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         bool _emergency
     ) {
         _owner = owner;
-        _pendingOwner = pendingOwner;
+        _manager = manager;
         _qube = qube;
         _dao = dao;
         _qubeWallet = qubeWallet;
@@ -307,6 +307,11 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
 
     modifier onlyOwner() {
         require(msg.sender == owner, Errors.NOT_OWNER);
+        _;
+    }
+
+    modifier onlyManager() {
+        require(msg.sender == owner || msg.sender == manager, Errors.NOT_OWNER);
         _;
     }
 

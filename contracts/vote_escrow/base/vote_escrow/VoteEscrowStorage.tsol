@@ -12,7 +12,7 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     uint32 ve_version;
 
     address owner;
-    address pendingOwner;
+    address manager;
     address qube;
     address qubeWallet;
     address dao;

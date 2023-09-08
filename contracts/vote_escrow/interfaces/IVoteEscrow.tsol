@@ -7,7 +7,7 @@ import "../../libraries/Callback.tsol";
 
 interface IVoteEscrow is IAcceptTokensTransferCallback {
     event NewOwner(uint32 call_id, address prev_owner, address new_owner);
-    event NewPendingOwner(uint32 call_id, address pending_owner);
+    event NewManager(uint32 call_id, address prev_manager, address new_manager);
     event Deposit(uint32 call_id, address user, uint128 amount, uint128 ve_amount, uint32 lock_time, uint64 key);
     event DepositRevert(uint32 call_id, address user, uint128 amount);
     event GaugeWhitelist(uint32 call_id, address gauge);

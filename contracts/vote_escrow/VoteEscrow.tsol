@@ -29,7 +29,7 @@ contract VoteEscrow is VoteEscrowBase {
             ve_account_version,
             ve_version,
             owner,
-            pendingOwner,
+            manager,
             dao,
             qube,
             qubeWallet,
@@ -86,6 +86,7 @@ contract VoteEscrow is VoteEscrowBase {
         tvm.resetStorage();
         tvm.rawReserve(_reserve(), 0);
 
+        address _pendingOwner;
         Callback.CallMeta meta;
         (
             meta,
@@ -95,7 +96,7 @@ contract VoteEscrow is VoteEscrowBase {
             ve_account_version,
             ve_version,
             owner,
-            pendingOwner,
+            _pendingOwner,
             dao,
             qube,
             qubeWallet,
