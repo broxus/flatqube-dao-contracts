@@ -242,6 +242,18 @@ abstract contract VoteEscrowBase is VoteEscrowEpochVoting {
         _removeFromWhitelist(gauge, 0);
     }
 
+    function removeGaugeDAOApproveOnly(address[] gauge, Callback.CallMeta meta) external onlyOwner {
+        tvm.rawReserve(_reserve(), 0);
+        for (address _gauge: gauge) {
+            require (gaugeDaoApproved.exists(_gauge), Errors.GAUGE_NOT_WHITELISTED);
+
+            delete gaugeDaoApproved[_gauge];
+            emit GaugeDAORemoveApprove(meta.call_id, _gauge);
+        }
+
+        meta.send_gas_to.transfer(0, false, MsgFlag.ALL_NOT_RESERVED);
+    }
+
     function getVeAverage(uint32 nonce) external override {
         tvm.rawReserve(_reserve(), 0);
 

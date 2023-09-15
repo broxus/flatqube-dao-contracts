@@ -2,6 +2,8 @@ import { LockliftConfig } from "locklift";
 import { FactorySource } from "./build/factorySource";
 import {GiverWallet, SimpleGiver, TestnetGiver} from "./giverSettings";
 import * as dotenv from "dotenv";
+import "@broxus/locklift-verifier";
+
 declare global {
     const locklift: import("locklift").Locklift<FactorySource>;
 }
@@ -21,6 +23,12 @@ const MAIN_NET_NETWORK_ENDPOINT = process.env.MAIN_NET_NETWORK_ENDPOINT || "http
 
 
 const config: LockliftConfig = {
+    verifier: {
+        verifierVersion: "latest", // contract verifier binary, see https://github.com/broxus/everscan-verify/releases
+        apiKey: process.env.VERIFIER_KEY || "",
+        secretKey: process.env.VERIFIER_SECRET || "",
+        // license: "AGPL-3.0-or-later", <- this is default value and can be overrided
+    },
     compiler: {
         // Specify path to your TON-Solidity-Compiler
         // path: "/mnt/o/projects/broxus/TON-Solidity-Compiler/build/solc/solc",
@@ -93,9 +101,6 @@ const config: LockliftConfig = {
                 address: "0:a4053fd2e9798d0457c9e8f012cef203e49da863d76f36d52d5e2e62c326b217",
                 key: "secret key",
             },
-            tracing: {
-                endpoint: DEV_NET_NETWORK_ENDPOINT,
-            },
             keys: {
                 // Use everdev to generate your phrase
                 // !!! Never commit it in your repos !!!
@@ -104,23 +109,11 @@ const config: LockliftConfig = {
             },
         },
         main: {
-            connection: {
-                id: 1000,
-                group: "group",
-                type: "jrpc",
-                data: {
-                    endpoint: process.env.MAIN_RPC_ENDPOINT || ""
-                },
-            },
+            connection: "mainnetJrpc",
             giver: {
                 // Mainnet giver has the same abi as testnet one
-                giverFactory: (ever, keyPair, address) => new TestnetGiver(ever, keyPair, address),
-                address: "0:73a868302a14a05ee6de24eed367bd42e7cd345406bb12e5fc6749de91a579ff",
-                phrase: process.env.MAIN_SEED_PHRASE ?? "",
-                accountId: 0
-            },
-            tracing: {
-                endpoint: process.env.MAIN_GQL_ENDPOINT ?? ""
+                address: "0:3bcef54ea5fe3e68ac31b17799cdea8b7cffd4da75b0b1a70b93a18b5c87f723",
+                key: process.env.MAIN_GIVER_KEY ?? ""
             },
             keys: {
                 phrase: process.env.MAIN_SEED_PHRASE ?? "",

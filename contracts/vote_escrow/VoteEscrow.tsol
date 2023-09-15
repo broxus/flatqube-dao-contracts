@@ -127,7 +127,7 @@ contract VoteEscrow is VoteEscrowBase {
             gaugeMaxVotesRatio,
             gaugeMinVotesRatio,
             gaugeMaxDowntime,
-            votingNormalizing, // new field
+            votingNormalizing, // new fieldn
             emissionDebt, // new field
             maxGaugesPerVote,
             gaugesNum,

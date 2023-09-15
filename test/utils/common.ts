@@ -284,10 +284,8 @@ export const setupGauge = async function ({
 
 
 export const setupVoteEscrow = async function ({
-    // @ts-ignore
-    owner,
-    // @ts-ignore
-    qube,
+    owner=zeroAddress,
+    qube=zeroAddress,
     dao = zeroAddress,
     start_offset = 5,
     min_lock = 1,
@@ -325,9 +323,9 @@ export const setupVoteEscrow = async function ({
 
     logger.log(`Set Test Vote Escrow code`);
     const tx2 = await locklift.tracing.trace(deployer.methods.deployTestVoteEscrow({
-        owner: owner.address,
-        qube: qube.address,
-        dao,
+        owner: owner,
+        qube: qube,
+        dao: dao,
         start_offset,
         min_lock,
         max_lock,
@@ -344,7 +342,7 @@ export const setupVoteEscrow = async function ({
     }).sendExternal({publicKey: signer?.publicKey as string}));
 
     const ve_addr = tx2?.output?._vote_escrow;
-    const ve = await VoteEscrow.from_addr(ve_addr as Address, owner);
+    const ve = await VoteEscrow.from_addr(ve_addr as Address, {address: owner} as Account);
     logger.log(`Deployed and configured Vote Escrow: ${ve_addr?.toString()}`);
 
     return ve;

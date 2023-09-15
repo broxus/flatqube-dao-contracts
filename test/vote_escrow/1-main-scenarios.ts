@@ -73,15 +73,18 @@ describe("Main Vote Escrow scenarios", async function () {
                 const lock_time = 10000;
 
                 const tx = vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 1, false);
-                await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
+                const {traceTree} = await locklift.tracing.trace(tx, {allowedCodes: {compute: [null]}});
 
-                const event = await vote_escrow.getEvent('Deposit') as any;
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
-                expect(event.call_id.toString()).to.be.eq('1');
-                expect(event.amount.toString()).to.be.eq('1000');
-                expect(event.lock_time.toString()).to.be.eq(lock_time.toString());
-                expect(event.ve_amount.toString()).to.be.eq(ve_expected.toString());
+                expect(traceTree)
+                  .to.emit('Deposit')
+                  .withNamedArgs({
+                      call_id: '1',
+                      amount: '1000',
+                      lock_time: lock_time.toString(),
+                      ve_amount: ve_expected.toString()
+                  })
 
                 ve_account = await vote_escrow.voteEscrowAccount(user.address);
                 await vote_escrow.checkQubeBalance(1000);
@@ -94,14 +97,17 @@ describe("Main Vote Escrow scenarios", async function () {
 
             it('Making 2nd deposit', async function () {
                 const lock_time = 9000;
-                await locklift.tracing.trace(vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 2));
-                const event = await vote_escrow.getEvent('Deposit') as any;
+                const {traceTree} = await locklift.tracing.trace(vote_escrow.deposit(user_qube_wallet, 1000, lock_time, 2));
                 const ve_expected = await vote_escrow.calculateVeMint(1000, lock_time);
 
-                expect(event.call_id).to.be.eq('2');
-                expect(event.amount).to.be.eq('1000');
-                expect(event.lock_time).to.be.eq(lock_time.toString());
-                expect(event.ve_amount).to.be.eq(ve_expected.toString());
+                expect(traceTree)
+                  .to.emit('Deposit')
+                  .withNamedArgs({
+                      call_id: '2',
+                      amount: '1000',
+                      lock_time: lock_time.toString(),
+                      ve_amount: ve_expected.toString()
+                  })
 
                 await vote_escrow.checkQubeBalance(2000);
                 const details = await ve_account.getDetails();
@@ -152,7 +158,7 @@ describe("Main Vote Escrow scenarios", async function () {
 
             it('Send QUBEs for distribution', async function () {
                 const supply = 6000000;
-                await vote_escrow.distributionDeposit(owner_qube_wallet, supply, 1);
+                await locklift.tracing.trace(vote_escrow.distributionDeposit(owner_qube_wallet, supply, 1));
                 const event = await vote_escrow.getEvent('DistributionSupplyIncrease') as any;
 
                 expect(event.call_id.toString()).to.be.eq('1');
@@ -184,13 +190,19 @@ describe("Main Vote Escrow scenarios", async function () {
 
                 // sleep a bit so that voting time starts
                 await tryIncreaseTime(time_to_sleep);
-                await vote_escrow.voteEpoch(user, votes_flat, 1);
+                const {traceTree} = await vote_escrow.voteEpoch(user, votes_flat, 1);
 
-                const start_event = await vote_escrow.getEvent('VotingStart') as any;
-                const vote_event = await vote_escrow.getEvent('Vote') as any;
+                expect(traceTree)
+                  .to.emit('VotingStart')
+                  .withNamedArgs({
+                      call_id: '1',
+                  });
 
-                expect(start_event.call_id).to.be.eq('1');
-                expect(vote_event.call_id).to.be.eq('1');
+                expect(traceTree)
+                  .to.emit('Vote')
+                  .withNamedArgs({
+                      call_id: '1',
+                  });
 
                 const epoch = await vote_escrow.getCurrentEpochDetails();
                 expect(epoch._currentVotingTotalVotes).to.be.eq(ve_balances._veQubeBalance);
@@ -208,33 +220,38 @@ describe("Main Vote Escrow scenarios", async function () {
                 let supply = details._distributionSupply;
 
                 const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
-                console.log(res);
+                // console.log(res);
 
-                await vote_escrow.endVoting(1);
+                const {traceTree} = await vote_escrow.endVoting(1);
                 current_epoch += 1;
 
                 const ve_balances = await ve_account.calculateVeAverage();
 
-                const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
-                const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
+                expect(traceTree)
+                  .to.emit('VotingEnd')
+                  .withNamedArgs({
+                      call_id: '1',
+                      new_epoch: current_epoch.toString(),
+                      total_votes: ve_balances._veQubeBalance.toString(),
+                      treasury_votes: '0'
+                  });
 
-                console.log(voting_end.votes);
-                console.log(epoch_distribution.farming_distribution);
+                expect(traceTree)
+                  .to.emit('EpochDistribution')
+                  .withNamedArgs({
+                      call_id: '1',
+                      epoch_num: (current_epoch - 1).toString(),
+                  });
+
+                const epoch_distribution = traceTree?.findEventsForContract({contract: vote_escrow.contract, name: 'EpochDistribution'})[0]! as any;
+                const voting_end = traceTree?.findEventsForContract({contract: vote_escrow.contract, name: 'VotingEnd'})[0]! as any;
 
                 const votes_map = vote_escrow.arr_to_map(voting_end.votes);
-
-                expect(voting_end.call_id).to.be.eq('1');
-                expect(voting_end.new_epoch).to.be.eq(current_epoch.toString());
-                expect(voting_end.treasury_votes).to.be.eq('0');
-                expect(voting_end.total_votes).to.be.eq(ve_balances._veQubeBalance);
                 for (const gauge of gauges) {
                     // @ts-ignore
                     const expected = ve_balances._veQubeBalance / 4;
                     expect(votes_map[gauge.address.toString()]).to.be.eq(expected.toString());
                 }
-
-                expect(epoch_distribution.call_id).to.be.eq('1');
-                expect(epoch_distribution.epoch_num).to.be.eq((current_epoch - 1).toString());
 
                 const distribution_map = vote_escrow.arr_to_map(epoch_distribution.farming_distribution);
 
@@ -308,7 +325,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 let supply = details._distributionSupply;
 
                 const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
-                console.log(res);
+                // console.log(res);
 
                 await vote_escrow.endVoting(2);
                 current_epoch += 1;
@@ -319,8 +336,8 @@ describe("Main Vote Escrow scenarios", async function () {
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
 
-                console.log(voting_end.votes);
-                console.log(epoch_distribution.farming_distribution);
+                // console.log(voting_end.votes);
+                // console.log(epoch_distribution.farming_distribution);
 
 
                 const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
@@ -418,7 +435,7 @@ describe("Main Vote Escrow scenarios", async function () {
                 let supply = details._distributionSupply;
 
                 const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
-                console.log(res);
+                // console.log(res);
 
 
                 await vote_escrow.endVoting(3);
@@ -435,8 +452,8 @@ describe("Main Vote Escrow scenarios", async function () {
                 const gauge_removal = await vote_escrow.getEvent('GaugeRemoveWhitelist') as any;
 
 
-                console.log(voting_end.votes);
-                console.log(epoch_distribution.farming_distribution);
+                // console.log(voting_end.votes);
+                // console.log(epoch_distribution.farming_distribution);
 
                 expect(gauge_removal.call_id).to.be.eq('3');
                 expect(gauge_removal.gauge.toString()).to.be.eq(gauges[3].address.toString());
@@ -535,7 +552,7 @@ describe("Main Vote Escrow scenarios", async function () {
 
 
                 const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
-                console.log(res);
+                // console.log(res);
 
 
                 await vote_escrow.endVoting(4);
@@ -545,8 +562,8 @@ describe("Main Vote Escrow scenarios", async function () {
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
 
 
-                console.log(voting_end.votes);
-                console.log(epoch_distribution.farming_distribution);
+                // console.log(voting_end.votes);
+                // console.log(epoch_distribution.farming_distribution);
 
                 const exceeded_votes = Math.floor(total_votes * 0.4);
                 const max_votes = Math.floor(total_votes * 0.3); // by default 30% is max
@@ -614,7 +631,7 @@ describe("Main Vote Escrow scenarios", async function () {
 
 
                 const res = await vote_escrow.contract.methods.getNormalizedVoting().call();
-                console.log(res);
+                // console.log(res);
 
 
                 await vote_escrow.endVoting(5);
@@ -623,8 +640,8 @@ describe("Main Vote Escrow scenarios", async function () {
                 const voting_end = await vote_escrow.getEvent('VotingEnd') as any;
                 const epoch_distribution = await vote_escrow.getEvent('EpochDistribution') as any;
 
-                console.log(voting_end.votes);
-                console.log(epoch_distribution.farming_distribution);
+                // console.log(voting_end.votes);
+                // console.log(epoch_distribution.farming_distribution);
 
                 let treasury_bonus = Math.floor(1000000 * 0.8);
 
