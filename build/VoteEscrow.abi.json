@@ -198,6 +198,15 @@
 			]
 		},
 		{
+			"name": "removeGaugeDAOApproveOnly",
+			"inputs": [
+				{"name":"gauge","type":"address[]"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getVeAverage",
 			"inputs": [
 				{"name":"nonce","type":"uint32"}
@@ -453,6 +462,15 @@
 			"name": "forceUpgradeVeAccounts",
 			"inputs": [
 				{"name":"users","type":"address[]"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "forceUpgradeVeAccountsByAddrs",
+			"inputs": [
+				{"name":"accs","type":"address[]"},
 				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
 			],
 			"outputs": [

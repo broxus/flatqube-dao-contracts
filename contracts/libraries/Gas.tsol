@@ -12,7 +12,7 @@ library Gas {
     uint128 constant VE_ACCOUNT_DEPLOY_VALUE = 0.6 ever;
     uint128 constant PER_GAUGE_VOTE_GAS = 0.02 ever;
     uint128 constant VOTING_TOKEN_TRANSFER_VALUE = 0.7 ever; // additional mechanics on token receive
-    uint128 constant VE_ACC_UPGRADE_VALUE = 1.5 ever;
+    uint128 constant VE_ACC_UPGRADE_VALUE = 1 ever;
     uint128 constant GAS_FOR_MAX_ITERATIONS = 1.6 ever;
 
     // VOTE ESCROW ACC

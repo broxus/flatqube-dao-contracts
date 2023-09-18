@@ -1,0 +1,1347 @@
+{
+  "map": {
+    "1369356a2a51338d7aae35cae50992c0fbe077a81132d543ea9638cd7135955e": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 22
+      },
+      "8": {
+        "filename": "TestFactory.code",
+        "line": 23
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 24
+      },
+      "48": {
+        "filename": "TestFactory.code",
+        "line": 25
+      },
+      "64": {
+        "filename": "TestFactory.code",
+        "line": 26
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 27
+      },
+      "88": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "104": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "120": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "128": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "144": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "152": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "168": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "184": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "192": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "208": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "216": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 17
+      },
+      "224": {
+        "filename": "TestFactory.code",
+        "line": 43
+      },
+      "240": {
+        "filename": "TestFactory.code",
+        "line": 46
+      },
+      "248": {
+        "filename": "TestFactory.code",
+        "line": 47
+      },
+      "264": {
+        "filename": "TestFactory.code",
+        "line": 50
+      }
+    },
+    "167cbcddb50e29cce7c28a14df73bae947a561cc10d9c38c298a1e02278eb4e6": {
+      "0": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "8": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "24": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "32": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "40": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "56": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "64": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "72": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "88": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "96": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "104": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "120": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "128": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "136": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "152": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "168": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "184": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "192": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      }
+    },
+    "17b6bd7e4b19532337ea68edf511aae9226a4f9c09d2a75a26aa86e479fcc728": {
+      "0": {
+        "filename": "<entry-selector>",
+        "line": 1
+      },
+      "8": {
+        "filename": "<entry-selector>",
+        "line": 2
+      },
+      "24": {
+        "filename": "<entry-selector>",
+        "line": 3
+      },
+      "32": {
+        "filename": "<entry-selector>",
+        "line": 4
+      },
+      "48": {
+        "filename": "<entry-selector>",
+        "line": 5
+      },
+      "56": {
+        "filename": "<entry-selector>",
+        "line": 6
+      },
+      "72": {
+        "filename": "<entry-selector>",
+        "line": 7
+      },
+      "88": {
+        "filename": "<entry-selector>",
+        "line": 8
+      },
+      "96": {
+        "filename": "<entry-selector>",
+        "line": 9
+      },
+      "112": {
+        "filename": "<entry-selector>",
+        "line": 10
+      },
+      "128": {
+        "filename": "<entry-selector>",
+        "line": 11
+      }
+    },
+    "34991383855855a1c15fd211ec1ce896d05a16301b15e3b404ad05cedc0d8afb": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 219
+      }
+    },
+    "40631584708daa69ba276fc1b317cd8060a6d6ca4aa1dd543f62c3dc386292f6": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 357
+      },
+      "8": {
+        "filename": "TestFactory.code",
+        "line": 358
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 359
+      },
+      "32": {
+        "filename": "TestFactory.code",
+        "line": 362
+      },
+      "48": {
+        "filename": "TestFactory.code",
+        "line": 363
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 364
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 365
+      },
+      "232": {
+        "filename": "TestFactory.code",
+        "line": 366
+      },
+      "240": {
+        "filename": "TestFactory.code",
+        "line": 367
+      },
+      "248": {
+        "filename": "TestFactory.code",
+        "line": 368
+      },
+      "264": {
+        "filename": "TestFactory.code",
+        "line": 369
+      },
+      "272": {
+        "filename": "TestFactory.code",
+        "line": 370
+      },
+      "280": {
+        "filename": "TestFactory.code",
+        "line": 371
+      },
+      "296": {
+        "filename": "TestFactory.code",
+        "line": 373
+      },
+      "304": {
+        "filename": "TestFactory.code",
+        "line": 374
+      }
+    },
+    "4330057e30b591e2136be21a683d1c9f5ab10260a52792a04a54ae54956a6883": {
+      "0": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 18
+      },
+      "8": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 18
+      },
+      "24": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 18
+      },
+      "40": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 18
+      },
+      "64": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 19
+      },
+      "80": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      },
+      "88": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      },
+      "96": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      },
+      "112": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      },
+      "128": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      },
+      "136": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      },
+      "152": {
+        "filename": "TestFactory.code",
+        "line": 174
+      },
+      "160": {
+        "filename": "TestFactory.code",
+        "line": 175
+      }
+    },
+    "44e79a18fa18742a43c8e96ae37dbafa28febd5985ea07aeb2f7c617e1c5c6f5": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 4
+      },
+      "8": {
+        "filename": "TestFactory.code",
+        "line": 5
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 6
+      },
+      "32": {
+        "filename": "TestFactory.code",
+        "line": 7
+      },
+      "48": {
+        "filename": "TestFactory.code",
+        "line": 10
+      },
+      "64": {
+        "filename": "TestFactory.code",
+        "line": 11
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 12
+      },
+      "88": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 13
+      },
+      "104": {
+        "filename": "TestFactory.code",
+        "line": 16
+      },
+      "120": {
+        "filename": "TestFactory.code",
+        "line": 19
+      }
+    },
+    "4de1f616782c0baf497f8239664ccaa31e0a7af1d89150db7fd62e86c40eb437": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 377
+      },
+      "8": {
+        "filename": "TestFactory.code",
+        "line": 378
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 379
+      },
+      "64": {
+        "filename": "TestFactory.code",
+        "line": 380
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 383
+      },
+      "88": {
+        "filename": "TestFactory.code",
+        "line": 384
+      },
+      "136": {
+        "filename": "TestFactory.code",
+        "line": 385
+      },
+      "144": {
+        "filename": "TestFactory.code",
+        "line": 386
+      },
+      "160": {
+        "filename": "TestFactory.code",
+        "line": 389
+      },
+      "168": {
+        "filename": "TestFactory.code",
+        "line": 390
+      },
+      "216": {
+        "filename": "TestFactory.code",
+        "line": 391
+      },
+      "224": {
+        "filename": "TestFactory.code",
+        "line": 392
+      },
+      "240": {
+        "filename": "TestFactory.code",
+        "line": 395
+      },
+      "248": {
+        "filename": "TestFactory.code",
+        "line": 396
+      },
+      "296": {
+        "filename": "TestFactory.code",
+        "line": 397
+      },
+      "304": {
+        "filename": "TestFactory.code",
+        "line": 398
+      }
+    },
+    "5d014841ff8ab44380beee15c4c03196563d2c47f4b3785a89adb8a8ccd0545a": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 240
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 241
+      },
+      "32": {
+        "filename": "TestFactory.code",
+        "line": 242
+      },
+      "48": {
+        "filename": "TestFactory.code",
+        "line": 243
+      },
+      "64": {
+        "filename": "TestFactory.code",
+        "line": 244
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 245
+      },
+      "88": {
+        "filename": "TestFactory.code",
+        "line": 246
+      },
+      "104": {
+        "filename": "TestFactory.code",
+        "line": 247
+      },
+      "120": {
+        "filename": "TestFactory.code",
+        "line": 248
+      },
+      "136": {
+        "filename": "TestFactory.code",
+        "line": 249
+      },
+      "152": {
+        "filename": "TestFactory.code",
+        "line": 250
+      },
+      "160": {
+        "filename": "TestFactory.code",
+        "line": 251
+      },
+      "176": {
+        "filename": "TestFactory.code",
+        "line": 252
+      },
+      "184": {
+        "filename": "TestFactory.code",
+        "line": 253
+      }
+    },
+    "66a72190f0d7a79e51a2ac1d2a5a4b9da0b78b8f4933ae7b95a1dd001c732db6": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 272
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 273
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 274
+      },
+      "40": {
+        "filename": "TestFactory.code",
+        "line": 275
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 276
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 277
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 278
+      },
+      "88": {
+        "filename": "TestFactory.code",
+        "line": 279
+      },
+      "112": {
+        "filename": "TestFactory.code",
+        "line": 280
+      },
+      "136": {
+        "filename": "TestFactory.code",
+        "line": 281
+      },
+      "144": {
+        "filename": "TestFactory.code",
+        "line": 282
+      },
+      "152": {
+        "filename": "TestFactory.code",
+        "line": 283
+      },
+      "168": {
+        "filename": "TestFactory.code",
+        "line": 284
+      },
+      "184": {
+        "filename": "TestFactory.code",
+        "line": 288
+      },
+      "192": {
+        "filename": "TestFactory.code",
+        "line": 289
+      },
+      "216": {
+        "filename": "TestFactory.code",
+        "line": 290
+      },
+      "232": {
+        "filename": "TestFactory.code",
+        "line": 291
+      },
+      "240": {
+        "filename": "TestFactory.code",
+        "line": 292
+      },
+      "256": {
+        "filename": "TestFactory.code",
+        "line": 296
+      },
+      "264": {
+        "filename": "TestFactory.code",
+        "line": 297
+      },
+      "280": {
+        "filename": "TestFactory.code",
+        "line": 300
+      }
+    },
+    "6c642994c19e38d8ca6f941835fe462f5d2d8183627cfbf58e2c5643c149f7d3": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 304
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 305
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 306
+      },
+      "40": {
+        "filename": "TestFactory.code",
+        "line": 307
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 308
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 309
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 310
+      },
+      "96": {
+        "filename": "TestFactory.code",
+        "line": 313
+      },
+      "112": {
+        "filename": "TestFactory.code",
+        "line": 314
+      },
+      "120": {
+        "filename": "TestFactory.code",
+        "line": 315
+      },
+      "128": {
+        "filename": "TestFactory.code",
+        "line": 316
+      },
+      "144": {
+        "filename": "TestFactory.code",
+        "line": 317
+      },
+      "160": {
+        "filename": "TestFactory.code",
+        "line": 318
+      },
+      "168": {
+        "filename": "TestFactory.code",
+        "line": 319
+      },
+      "184": {
+        "filename": "TestFactory.code",
+        "line": 320
+      },
+      "192": {
+        "filename": "TestFactory.code",
+        "line": 321
+      },
+      "208": {
+        "filename": "TestFactory.code",
+        "line": 322
+      },
+      "224": {
+        "filename": "TestFactory.code",
+        "line": 323
+      },
+      "240": {
+        "filename": "TestFactory.code",
+        "line": 325
+      },
+      "248": {
+        "filename": "TestFactory.code",
+        "line": 326
+      },
+      "264": {
+        "filename": "TestFactory.code",
+        "line": 327
+      },
+      "272": {
+        "filename": "stdlib.sol",
+        "line": 61
+      },
+      "288": {
+        "filename": "stdlib.sol",
+        "line": 61
+      },
+      "296": {
+        "filename": "stdlib.sol",
+        "line": 61
+      },
+      "304": {
+        "filename": "stdlib.sol",
+        "line": 61
+      },
+      "320": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "328": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "344": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "368": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "376": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "416": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "424": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "432": {
+        "filename": "stdlib.sol",
+        "line": 62
+      },
+      "448": {
+        "filename": "stdlib.sol",
+        "line": 63
+      },
+      "464": {
+        "filename": "TestFactory.code",
+        "line": 329
+      },
+      "480": {
+        "filename": "TestFactory.code",
+        "line": 330
+      },
+      "488": {
+        "filename": "TestFactory.code",
+        "line": 331
+      },
+      "504": {
+        "filename": "TestFactory.code",
+        "line": 334
+      }
+    },
+    "73867e37ec1ffb9ecb087a37d71892215b0b805a73c127da219a28729084e2e0": {
+      "0": {
+        "filename": "<internal-selector>",
+        "line": 1
+      },
+      "24": {
+        "filename": "<internal-selector>",
+        "line": 2
+      }
+    },
+    "78a8a58a3e857e6652acc2bb38cca792470227aa4f5ddf1b6e357b0ccbccdca0": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 337
+      },
+      "8": {
+        "filename": "TestFactory.code",
+        "line": 338
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 339
+      },
+      "32": {
+        "filename": "TestFactory.code",
+        "line": 342
+      },
+      "48": {
+        "filename": "TestFactory.code",
+        "line": 343
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 344
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 345
+      },
+      "232": {
+        "filename": "TestFactory.code",
+        "line": 346
+      },
+      "240": {
+        "filename": "TestFactory.code",
+        "line": 347
+      },
+      "248": {
+        "filename": "TestFactory.code",
+        "line": 348
+      },
+      "264": {
+        "filename": "TestFactory.code",
+        "line": 349
+      },
+      "272": {
+        "filename": "TestFactory.code",
+        "line": 350
+      },
+      "280": {
+        "filename": "TestFactory.code",
+        "line": 351
+      },
+      "296": {
+        "filename": "TestFactory.code",
+        "line": 353
+      },
+      "304": {
+        "filename": "TestFactory.code",
+        "line": 354
+      }
+    },
+    "90a4a4aacc77310bc62972a97f2e742e1e1c0ff59f63c7edb4cb34b2a9b30416": {
+      "0": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "16": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "40": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "56": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "72": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "88": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "104": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 21
+      }
+    },
+    "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7": {},
+    "ad700214bb133f2b0d931e083bfdb1aa2cbe6c79a2d2156c027c4fcbbd2113ee": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 196
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 197
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 198
+      },
+      "40": {
+        "filename": "TestFactory.code",
+        "line": 199
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 200
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 235
+      }
+    },
+    "b7ecd9c6c8e1a255e7fa60cb8cddab55c9bfe22d8787c44a833e4556a75e71d3": {
+      "0": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "8": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "16": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "32": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "40": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "48": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "64": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "80": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "96": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "104": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "120": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "128": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "136": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "152": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "168": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "176": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "192": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "200": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "216": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "224": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "248": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "264": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "280": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "296": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 22
+      },
+      "304": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "320": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "336": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "352": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "368": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "384": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "408": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "424": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "440": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "456": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "472": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "488": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "496": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "520": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "536": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "552": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "560": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "568": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "576": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "592": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "608": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "624": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "640": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "656": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "680": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "688": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "696": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "720": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "728": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "736": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "752": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "760": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "784": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "792": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "808": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "816": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "832": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "840": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "848": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "896": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "912": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "920": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "928": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "936": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 31
+      },
+      "952": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "968": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "984": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      },
+      "1000": {
+        "filename": "../contracts/test/TestFactory.tsol",
+        "line": 38
+      }
+    },
+    "b9084abd4f5111b8bd2c298229185321854f677d267a306e8de0bd41b8984cf2": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 201
+      },
+      "8": {
+        "filename": "TestFactory.code",
+        "line": 202
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 203
+      },
+      "32": {
+        "filename": "TestFactory.code",
+        "line": 204
+      },
+      "48": {
+        "filename": "TestFactory.code",
+        "line": 205
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 206
+      },
+      "64": {
+        "filename": "TestFactory.code",
+        "line": 207
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 208
+      },
+      "96": {
+        "filename": "TestFactory.code",
+        "line": 209
+      },
+      "112": {
+        "filename": "TestFactory.code",
+        "line": 210
+      },
+      "120": {
+        "filename": "TestFactory.code",
+        "line": 211
+      },
+      "144": {
+        "filename": "TestFactory.code",
+        "line": 213
+      },
+      "152": {
+        "filename": "TestFactory.code",
+        "line": 214
+      },
+      "160": {
+        "filename": "TestFactory.code",
+        "line": 215
+      },
+      "168": {
+        "filename": "TestFactory.code",
+        "line": 216
+      },
+      "184": {
+        "filename": "TestFactory.code",
+        "line": 217
+      },
+      "200": {
+        "filename": "TestFactory.code",
+        "line": 218
+      },
+      "216": {
+        "filename": "TestFactory.code",
+        "line": 222
+      },
+      "224": {
+        "filename": "TestFactory.code",
+        "line": 223
+      },
+      "232": {
+        "filename": "TestFactory.code",
+        "line": 224
+      },
+      "248": {
+        "filename": "TestFactory.code",
+        "line": 225
+      },
+      "264": {
+        "filename": "TestFactory.code",
+        "line": 226
+      },
+      "280": {
+        "filename": "TestFactory.code",
+        "line": 227
+      },
+      "296": {
+        "filename": "TestFactory.code",
+        "line": 228
+      },
+      "312": {
+        "filename": "TestFactory.code",
+        "line": 229
+      },
+      "328": {
+        "filename": "TestFactory.code",
+        "line": 230
+      },
+      "352": {
+        "filename": "TestFactory.code",
+        "line": 231
+      },
+      "368": {
+        "filename": "TestFactory.code",
+        "line": 232
+      },
+      "376": {
+        "filename": "TestFactory.code",
+        "line": 233
+      }
+    },
+    "ba524e713f19f7be55ecd1c5de02024d5dc920e23809941e3add31d680512b5d": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 179
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 180
+      },
+      "24": {
+        "filename": "TestFactory.code",
+        "line": 181
+      },
+      "40": {
+        "filename": "TestFactory.code",
+        "line": 182
+      },
+      "56": {
+        "filename": "TestFactory.code",
+        "line": 183
+      },
+      "72": {
+        "filename": "TestFactory.code",
+        "line": 184
+      },
+      "80": {
+        "filename": "TestFactory.code",
+        "line": 185
+      },
+      "96": {
+        "filename": "TestFactory.code",
+        "line": 186
+      },
+      "104": {
+        "filename": "TestFactory.code",
+        "line": 187
+      },
+      "120": {
+        "filename": "TestFactory.code",
+        "line": 188
+      },
+      "128": {
+        "filename": "TestFactory.code",
+        "line": 189
+      },
+      "144": {
+        "filename": "TestFactory.code",
+        "line": 190
+      },
+      "160": {
+        "filename": "TestFactory.code",
+        "line": 191
+      },
+      "176": {
+        "filename": "TestFactory.code",
+        "line": 192
+      },
+      "192": {
+        "filename": "TestFactory.code",
+        "line": 193
+      }
+    },
+    "f24e1e7aa04d89aad2945816b6e9b921f2b3892da9ba53e2383c148351b96d0c": {
+      "0": {
+        "filename": "TestFactory.code",
+        "line": 285
+      },
+      "16": {
+        "filename": "TestFactory.code",
+        "line": 286
+      }
+    }
+  }
+}

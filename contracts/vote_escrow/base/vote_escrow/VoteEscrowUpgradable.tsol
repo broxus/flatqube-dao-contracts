@@ -45,6 +45,16 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         }
     }
 
+    // admin hook, no need for call_id or nonce
+    function forceUpgradeVeAccountsByAddrs(address[] accs, Callback.CallMeta meta) external view onlyManager {
+        require (msg.value >= Gas.VE_ACC_UPGRADE_VALUE * (accs.length + 1), Errors.LOW_MSG_VALUE);
+
+        tvm.rawReserve(_reserve(), 0);
+        for (uint i = 0; i < accs.length; i++) {
+            _upgradeVeAccountByAddr(accs[i], Gas.VE_ACC_UPGRADE_VALUE, meta);
+        }
+    }
+
     function _upgradeVeAccount(address user, uint128 value, Callback.CallMeta meta) internal view {
         address ve_acc = getVoteEscrowAccountAddress(user);
 
@@ -54,6 +64,19 @@ abstract contract VoteEscrowUpgradable is VoteEscrowHelpers {
         }
 
         IVoteEscrowAccount(ve_acc).upgrade{ value: value, flag: flag }(
+            veAccountCode,
+            ve_account_version,
+            meta
+        );
+    }
+
+    function _upgradeVeAccountByAddr(address acc, uint128 value, Callback.CallMeta meta) internal view {
+        uint16 flag = 0;
+        if (value == 0) {
+            flag = MsgFlag.ALL_NOT_RESERVED;
+        }
+
+        IVoteEscrowAccount(acc).upgrade{ value: value, flag: flag }(
             veAccountCode,
             ve_account_version,
             meta

@@ -2,29 +2,17 @@ import {deployUser, deployUsers, sendAllEvers, setupTokenRoot, setupVoteEscrow} 
 import {Address, toNano} from "locklift";
 const logger = require("mocha-logger");
 
-const acc1 = '';
-const acc2 = '';
-
+const token = new Address('0:044ea4b4a7ebad8a24e1dfcec4d06f204e57119d43f4da4272156099d480c337');
+const owner = new Address('0:311fe8e7bfeb6a2622aaba02c21569ac1e6f01c81c33f2623e5d8f1a5ba232d7');
+const dao = new Address('0:d16cb4205125538a90a2f0fce6e71e949e33f1d6fbde8c263185996f707c3cc9');
 
 async function main() {
-    const token_holder = new Address(acc1);
-    const token_holder_2 = new Address(acc2);
-
-    const owner = await deployUser(50);
-    const qube = await setupTokenRoot('QUBE_1', 'QUBE_1', owner);
-    const gauges = await deployUsers(5, 1);
-
-    const owner_qube_wallet = await qube.mint('9999999999999999999999999999', owner);
-    // @ts-ignore
-    await qube.mint('9999999999999999999999999999', {address: token_holder});
-    // @ts-ignore
-    await qube.mint('9999999999999999999999999999', {address: token_holder_2});
-
-    logger.log('Minted qubes');
+    const tmp_owner = await deployUser(5);
 
     const vote_escrow = await setupVoteEscrow({
-        owner: owner,
-        qube: qube,
+        owner: tmp_owner.address,
+        qube: token,
+        dao: dao,
         max_lock: 4 * 365 * 24 * 3600,
         distribution: [1000000000000, 2000000000000, 3000000000000],
         distribution_scheme: [8000, 1000, 1000],
@@ -33,20 +21,14 @@ async function main() {
         time_before_voting: 24 * 3600
     });
 
-    await vote_escrow.distributionDeposit(owner_qube_wallet, 9000000000000, 1);
-    logger.log('Sent qubes to vote escrow');
+    const gauges = await deployUsers(3, 1);
 
     for (const gauge of gauges) {
         await vote_escrow.addToWhitelist(gauge.address);
     }
     logger.log('Added test gauges to whitelist');
 
-    await vote_escrow.contract.methods.transferOwnership({
-        new_owner: token_holder, meta: {call_id:0,nonce:0,send_gas_to:token_holder}
-    }).send({from: owner.address, amount: toNano(2)});
-    logger.log('Transferred ownership');
-
-    await sendAllEvers(owner, token_holder);
+    await vote_escrow.transferOwnership({address: owner});
 }
 
 main()
