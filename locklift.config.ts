@@ -131,7 +131,7 @@ const config: LockliftConfig = {
             giver: {
                 // Mainnet giver has the same abi as testnet one
                 address: process.env.VENOM_MAIN_GIVER_ADDRESS ?? "",
-                key: process.env.VENOM_MAIN_GIVER_PHRASE ?? ""
+                phrase: process.env.VENOM_MAIN_GIVER_PHRASE ?? ""
             },
             keys: {
                 phrase: process.env.VENOM_SEED ?? "",
