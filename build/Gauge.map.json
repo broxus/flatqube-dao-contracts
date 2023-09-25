@@ -533,39 +533,39 @@
     "07df50fb73ae369067787abcb7a8302246cbb0b18b5ce40c6b1cbf2036a08bfe": {
       "0": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "16": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "24": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "32": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "40": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "56": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "72": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "88": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       },
       "96": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 327
+        "line": 275
       }
     },
     "0a8d5270083f69e786484d692f47fc2fb77be8bae190ff0f6d320e40f713bcdf": {
@@ -3785,67 +3785,67 @@
     "2e05172230bc6992613fb82303fcfe74c8200957a94f5bf38e7ac0479ba17961": {
       "0": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "16": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "32": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "48": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "64": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "80": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "96": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "112": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "120": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "128": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "136": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "152": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "168": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "184": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "192": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "200": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       }
     },
     "2e91f06f6c6c906b93d95781b2968fd0e14ebe59c324ac599a375d2246f5e0ee": {
@@ -4524,24 +4524,6 @@
       "0": {
         "filename": "Gauge.code",
         "line": 7554
-      }
-    },
-    "362c2513e84c7248f8f8b9c8cb13b2ce43f35068cdac5e6f8642851451bf3be2": {
-      "40": {
-        "filename": "Gauge.code",
-        "line": 322
-      },
-      "48": {
-        "filename": "Gauge.code",
-        "line": 324
-      },
-      "64": {
-        "filename": "Gauge.code",
-        "line": 327
-      },
-      "80": {
-        "filename": "Gauge.code",
-        "line": 328
       }
     },
     "364778545e90bd65961efda58118591d76e9b7b3ee2a49d8430b99b31aeac1e9": {
@@ -6039,11 +6021,11 @@
     "41ace2a745e151539b1ff8a61354918bf1546524992b42244ff59b5a3e2af2b9": {
       "0": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "8": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       }
     },
     "42abfbf08df80c0534bb9c441d18a6c064716fbdc324ebf47964f9e47fc5af90": {
@@ -8412,6 +8394,24 @@
         "line": 259
       }
     },
+    "5883b553fcf82a3c84c4ab3a70ff4da347e0b43f15abb616e69c9cd76feae387": {
+      "4": {
+        "filename": "Gauge.code",
+        "line": 322
+      },
+      "12": {
+        "filename": "Gauge.code",
+        "line": 324
+      },
+      "28": {
+        "filename": "Gauge.code",
+        "line": 327
+      },
+      "44": {
+        "filename": "Gauge.code",
+        "line": 328
+      }
+    },
     "5adad8b4a773bbc294ba1f966f7746c5edf1e21ae30eb1a009dd97bce83f9d34": {
       "0": {
         "filename": "../contracts/gauge/base/gauge/GaugeHelpers.tsol",
@@ -9044,8 +9044,8 @@
     },
     "61ab4641fa30d9310391025086eec65d200d79268e1b7cd402565e01ba64be3c": {
       "0": {
-        "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "filename": "Gauge.code",
+        "line": 7823
       }
     },
     "6467dc993a31d3de2b746084fdbe4799a4be0344b321c8158a1104d2b9f5e3b3": {
@@ -14976,27 +14976,27 @@
     "9dca084e18e1ae57cc010b1803d7c9bfb295303877eebd416174c7b0c39ed055": {
       "0": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "8": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "16": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "32": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "40": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       },
       "56": {
         "filename": "../contracts/gauge/base/gauge/GaugeBase.tsol",
-        "line": 316
+        "line": 96
       }
     },
     "9f6df6a4be191c62bf68e3b8fd8d37ee691391d9fc6beac133b54c47e139f686": {

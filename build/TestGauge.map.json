@@ -19851,6 +19851,176 @@
         "line": 8467
       }
     },
+    "cf8b6cf10cad1a83c7f484b5338748f5f653e265506bc16fe0c8ebffd859ce3f": {
+      "40": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "48": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "64": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "72": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "88": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "96": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "104": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "120": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "136": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "144": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "160": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "168": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "184": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "192": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "208": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "216": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "232": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "240": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "256": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "264": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "280": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "288": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "304": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "312": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "328": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "336": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "352": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "360": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "376": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "384": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "400": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "408": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "424": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "432": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "448": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "456": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "472": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "480": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "488": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "496": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "504": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      },
+      "520": {
+        "filename": "../contracts/test/TestGauge.tsol",
+        "line": 74
+      }
+    },
     "d0a5956255db862cd755a61c41a4d1d66ec3d38ff99ebffc08e95b2fd8da0754": {
       "0": {
         "filename": "../contracts/gauge/base/gauge/GaugeRewards.tsol",
@@ -22531,176 +22701,6 @@
       "432": {
         "filename": "TestGauge.code",
         "line": 6475
-      }
-    },
-    "e406f4e9dcab91d4a4853a5c237070e80ceb150d1fc0a9700dd1c9a7fc610c2a": {
-      "38": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "46": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "62": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "70": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "86": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "94": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "102": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "118": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "134": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "142": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "158": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "166": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "182": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "190": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "206": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "214": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "230": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "238": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "254": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "262": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "278": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "286": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "302": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "310": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "326": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "334": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "350": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "358": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "374": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "382": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "398": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "406": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "422": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "430": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "446": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "454": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "470": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "478": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "486": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "494": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "502": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
-      },
-      "518": {
-        "filename": "../contracts/test/TestGauge.tsol",
-        "line": 74
       }
     },
     "e6936e8f0e7b8fe98c2ca66eee9d4e9dafcfc747defef9cb795288fabb1b7ef3": {

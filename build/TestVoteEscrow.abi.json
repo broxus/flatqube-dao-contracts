@@ -203,6 +203,15 @@
 			]
 		},
 		{
+			"name": "setAutoDaoApprove",
+			"inputs": [
+				{"name":"new_state","type":"bool"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "setWhitelistPrice",
 			"inputs": [
 				{"name":"new_price","type":"uint128"},
@@ -903,6 +912,15 @@
 			]
 		},
 		{
+			"name": "AutoDaoApproveUpdate",
+			"inputs": [
+				{"name":"call_id","type":"uint32"},
+				{"name":"new_state","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "DistributionSupplyIncrease",
 			"inputs": [
 				{"name":"call_id","type":"uint32"},
@@ -1205,6 +1223,7 @@
 		{"name":"gaugeDowntimes","type":"map(address,uint8)"},
 		{"name":"gaugeWhitelistPrice","type":"uint128"},
 		{"name":"whitelistPayments","type":"uint128"},
+		{"name":"autoDaoApprove","type":"bool"},
 		{"name":"deposit_nonce","type":"uint32"},
 		{"components":[{"name":"user","type":"address"},{"name":"amount","type":"uint128"},{"name":"ve_amount","type":"uint128"},{"name":"lock_time","type":"uint32"},{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}],"name":"pending_deposits","type":"map(uint32,tuple)"}
 	]

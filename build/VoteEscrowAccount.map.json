@@ -2358,176 +2358,6 @@
         "line": 57
       }
     },
-    "35e2b01e880644bbab9b99e109876e191f81edef8a15889547d8e4dc8867f040": {
-      "38": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 63
-      },
-      "46": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 64
-      },
-      "54": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 64
-      },
-      "70": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 64
-      },
-      "86": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 64
-      },
-      "102": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 64
-      },
-      "110": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 64
-      },
-      "118": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 66
-      },
-      "126": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 66
-      },
-      "134": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 66
-      },
-      "142": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 68
-      },
-      "150": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 68
-      },
-      "158": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 68
-      },
-      "166": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 68
-      },
-      "174": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 69
-      },
-      "190": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 69
-      },
-      "198": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 71
-      },
-      "214": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 71
-      },
-      "222": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 71
-      },
-      "230": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 72
-      },
-      "238": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 72
-      },
-      "246": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "254": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "270": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "286": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "302": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "310": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "318": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "326": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 75
-      },
-      "334": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 77
-      },
-      "342": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 77
-      },
-      "358": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 77
-      },
-      "366": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 77
-      },
-      "382": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 87
-      },
-      "398": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 92
-      },
-      "406": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 92
-      },
-      "414": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 92
-      },
-      "430": {
-        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
-        "line": 92
-      },
-      "446": {
-        "filename": "VoteEscrowAccount.code",
-        "line": 344
-      },
-      "462": {
-        "filename": "VoteEscrowAccount.code",
-        "line": 345
-      },
-      "478": {
-        "filename": "VoteEscrowAccount.code",
-        "line": 348
-      },
-      "494": {
-        "filename": "VoteEscrowAccount.code",
-        "line": 349
-      }
-    },
     "3643ffa68d6939306a2cd7e2afcf81ede197077635ea989148370f42d8cf8b4f": {
       "0": {
         "filename": "VoteEscrowAccount.code",
@@ -2764,6 +2594,176 @@
       "848": {
         "filename": "VoteEscrowAccount.code",
         "line": 2749
+      }
+    },
+    "374fdfa63ae772dcc6a27c459ed0c1c384f9604a5c82c5af0120655a0df57693": {
+      "4": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 63
+      },
+      "12": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 64
+      },
+      "20": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 64
+      },
+      "36": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 64
+      },
+      "52": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 64
+      },
+      "68": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 64
+      },
+      "76": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 64
+      },
+      "84": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 66
+      },
+      "92": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 66
+      },
+      "100": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 66
+      },
+      "108": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 68
+      },
+      "116": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 68
+      },
+      "124": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 68
+      },
+      "132": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 68
+      },
+      "140": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 69
+      },
+      "156": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 69
+      },
+      "164": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 71
+      },
+      "180": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 71
+      },
+      "188": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 71
+      },
+      "196": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 72
+      },
+      "204": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 72
+      },
+      "212": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "220": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "236": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "252": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "268": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "276": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "284": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "292": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 75
+      },
+      "300": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 77
+      },
+      "308": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 77
+      },
+      "324": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 77
+      },
+      "332": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 77
+      },
+      "348": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 87
+      },
+      "364": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 92
+      },
+      "372": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 92
+      },
+      "380": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 92
+      },
+      "396": {
+        "filename": "../contracts/vote_escrow/VoteEscrowAccount.tsol",
+        "line": 92
+      },
+      "412": {
+        "filename": "VoteEscrowAccount.code",
+        "line": 344
+      },
+      "428": {
+        "filename": "VoteEscrowAccount.code",
+        "line": 345
+      },
+      "444": {
+        "filename": "VoteEscrowAccount.code",
+        "line": 348
+      },
+      "460": {
+        "filename": "VoteEscrowAccount.code",
+        "line": 349
       }
     },
     "3b52d4450423ea4318319a70d481415754b8681c828037e3f09334b7b19837da": {
@@ -3887,7 +3887,7 @@
     "61ab4641fa30d9310391025086eec65d200d79268e1b7cd402565e01ba64be3c": {
       "0": {
         "filename": "VoteEscrowAccount.code",
-        "line": 3404
+        "line": 3545
       }
     },
     "641116dd18c7b3128357c9e505c810a55970a91cb76a5dbb7af3bc93936726da": {

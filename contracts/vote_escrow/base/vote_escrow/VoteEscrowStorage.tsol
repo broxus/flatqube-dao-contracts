@@ -77,6 +77,8 @@ abstract contract VoteEscrowStorage is IVoteEscrow {
     // amount of QUBEs available for withdraw as payments for whitelist
     uint128 whitelistPayments;
 
+    bool autoDaoApprove = true;
+
     uint128 constant SCALING_FACTOR = 10**18;
 
     uint32 deposit_nonce;

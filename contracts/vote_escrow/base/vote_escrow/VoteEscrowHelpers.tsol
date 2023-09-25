@@ -201,6 +201,11 @@ abstract contract VoteEscrowHelpers is VoteEscrowStorage {
         gaugesNum += 1;
         gaugeWhitelist[gauge] = true;
         emit GaugeWhitelist(call_id, gauge);
+
+        if (autoDaoApprove) {
+            gaugeDaoApproved[gauge] = true;
+            emit GaugeDAOApprove(0, gauge);
+        }
     }
 
     function _removeFromWhitelist(address gauge, uint32 call_id) internal {

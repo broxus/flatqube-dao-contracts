@@ -24,7 +24,6 @@
 				{"name":"owner","type":"address"},
 				{"name":"qube","type":"address"},
 				{"name":"dao","type":"address"},
-				{"name":"start_offset","type":"uint32"},
 				{"name":"min_lock","type":"uint32"},
 				{"name":"max_lock","type":"uint32"},
 				{"name":"distribution_scheme","type":"uint32[]"},

@@ -57,9 +57,10 @@ describe("Main Vote Escrow scenarios", async function () {
             }));
         });
 
+
         it('Deploy Vote Escrow', async function () {
             vote_escrow = await setupVoteEscrow({
-                owner, qube: qube_root, max_lock: 10000
+                owner: owner.address, qube: qube_root.address, max_lock: 10000
             });
 
             const details = await vote_escrow.getCurrentEpochDetails();

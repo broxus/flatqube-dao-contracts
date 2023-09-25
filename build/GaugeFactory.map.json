@@ -730,6 +730,24 @@
         "line": 2152
       }
     },
+    "36bc5bfd22b33bff5127f31e03c834852898ea99c446a12eff202f211f0693f5": {
+      "4": {
+        "filename": "GaugeFactory.code",
+        "line": 204
+      },
+      "12": {
+        "filename": "GaugeFactory.code",
+        "line": 206
+      },
+      "28": {
+        "filename": "GaugeFactory.code",
+        "line": 209
+      },
+      "44": {
+        "filename": "GaugeFactory.code",
+        "line": 210
+      }
+    },
     "3c42e1f33243ef809a4903732bc18eae58555eeb6b2ef377b5a63fab7577b08b": {
       "0": {
         "filename": "../contracts/gauge/base/gauge_factory/GaugeFactoryUpgradable.tsol",
@@ -2455,7 +2473,7 @@
     "61ab4641fa30d9310391025086eec65d200d79268e1b7cd402565e01ba64be3c": {
       "0": {
         "filename": "GaugeFactory.code",
-        "line": 1866
+        "line": 2032
       }
     },
     "6a8fb3669456b0764164d0475e578521d72022813aa17b67884eb59488716494": {
@@ -2696,24 +2714,6 @@
       "528": {
         "filename": "GaugeFactory.code",
         "line": 710
-      }
-    },
-    "71dfcdc3986da2f75abf73208a91fd1613d54d5082e6ec056ce91ad96c4efd74": {
-      "40": {
-        "filename": "GaugeFactory.code",
-        "line": 204
-      },
-      "48": {
-        "filename": "GaugeFactory.code",
-        "line": 206
-      },
-      "64": {
-        "filename": "GaugeFactory.code",
-        "line": 209
-      },
-      "80": {
-        "filename": "GaugeFactory.code",
-        "line": 210
       }
     },
     "72f0137bc5a2b40ab5366c4b8b8770970338e0894a1508912a9254b86452e86e": {

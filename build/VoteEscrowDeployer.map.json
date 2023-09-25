@@ -3,79 +3,79 @@
     "005d7eef4e851d16bf9f760d40530a77ed99332a7d0b112005aeeb26be4eeafd": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1043
+        "line": 1019
       },
       "16": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1044
+        "line": 1020
       },
       "24": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1045
+        "line": 1021
       },
       "40": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1046
+        "line": 1022
       },
       "56": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1047
+        "line": 1023
       },
       "72": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1048
+        "line": 1024
       },
       "80": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1049
+        "line": 1025
       },
       "96": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1050
+        "line": 1026
       },
       "112": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1051
+        "line": 1027
       },
       "120": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1052
+        "line": 1028
       },
       "128": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1053
+        "line": 1029
       },
       "136": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1054
+        "line": 1030
       },
       "144": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1055
+        "line": 1031
       },
       "160": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1056
+        "line": 1032
       },
       "176": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1057
+        "line": 1033
       },
       "192": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1058
+        "line": 1034
       },
       "208": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1059
+        "line": 1035
       },
       "224": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1060
+        "line": 1036
       },
       "240": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1061
+        "line": 1037
       }
     },
     "06f3439af1a2f1f0c6fabb9b0deef759564d35e069e490c73f0bd54ee0042ec7": {
@@ -174,606 +174,946 @@
         "line": 27
       }
     },
-    "0a80210c2d924864b76c28eec5b8aa149f665466ae5f96697e7d6d640d0e5c83": {
+    "0d7e294ccd1f8c8eb80e4fb11fa2c315a819673982da961f1347ffa309e3a359": {
       "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1285
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
       "8": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1286
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
-      "56": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1287
+      "168": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
-      "64": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1288
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
-      "80": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1314
+      "200": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
-      "88": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1315
+      "208": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
-      "136": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1316
+      "256": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       },
-      "144": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1317
+      "264": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "280": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "288": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "304": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "320": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "328": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "392": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "400": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "408": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "416": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "424": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "440": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "448": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "464": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "472": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "480": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "504": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "512": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "672": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "696": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "704": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "712": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "760": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "768": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "784": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "792": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "808": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "824": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "832": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "848": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "864": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "880": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "896": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "904": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "912": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "920": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "928": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 80
+      },
+      "944": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "952": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "968": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "984": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "992": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      }
+    },
+    "0db8cfd4121aa1a086d96607b80b0bc066040b8fe5bbe4baec23557756528f5a": {
+      "0": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "160": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "184": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "200": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "248": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "256": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "264": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "280": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "296": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "312": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "328": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "352": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "368": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
+      "384": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
       }
     },
     "167cbcddb50e29cce7c28a14df73bae947a561cc10d9c38c298a1e02278eb4e6": {
       "0": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "8": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "24": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "32": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "40": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "56": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "64": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "72": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "88": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "96": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "104": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "120": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "128": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "136": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "152": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "168": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "184": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       },
       "192": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 65
       }
     },
     "1fc22b821feb720843c7eceaa18392142a198a02d24e396414629d477fcfa365": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1245
+        "line": 1221
       },
       "8": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1246
+        "line": 1222
       },
       "16": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1247
+        "line": 1223
       },
       "32": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1250
+        "line": 1226
       },
       "48": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1251
+        "line": 1227
       },
       "56": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1252
+        "line": 1228
       },
       "72": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1253
+        "line": 1229
       },
       "232": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1254
+        "line": 1230
       },
       "240": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1255
+        "line": 1231
       },
       "248": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1256
+        "line": 1232
       },
       "264": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1257
+        "line": 1233
       },
       "272": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1258
+        "line": 1234
       },
       "280": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1259
+        "line": 1235
       },
       "296": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1261
+        "line": 1237
       },
       "304": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1262
+        "line": 1238
       }
     },
     "22154ec19f5fc6661934629865c8a2a24632ca1b09c6a14669d15a705d29c7f7": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1265
+        "line": 1241
       },
       "8": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1266
+        "line": 1242
       },
       "16": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1267
+        "line": 1243
       },
       "32": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1270
+        "line": 1246
       },
       "48": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1271
+        "line": 1247
       },
       "56": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1272
+        "line": 1248
       },
       "72": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1273
+        "line": 1249
       },
       "232": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1274
+        "line": 1250
       },
       "240": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1275
+        "line": 1251
       },
       "248": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1276
+        "line": 1252
       },
       "264": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1277
+        "line": 1253
       },
       "272": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1278
+        "line": 1254
       },
       "280": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1279
+        "line": 1255
       },
       "296": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1281
+        "line": 1257
       },
       "304": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1282
+        "line": 1258
+      }
+    },
+    "22662200e29a73d28c556ad1cc0a81b2156d7bfe1f265d2314ebdb62dd0d0837": {
+      "0": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1133
+      },
+      "16": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1134
+      },
+      "24": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1135
+      },
+      "40": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1136
+      },
+      "56": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1137
+      },
+      "72": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1138
+      },
+      "80": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1139
+      },
+      "88": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1140
+      },
+      "112": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1141
+      },
+      "136": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1142
+      },
+      "144": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1143
+      },
+      "152": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1144
+      },
+      "168": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1145
+      },
+      "184": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1149
+      },
+      "192": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1150
+      },
+      "216": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1151
+      },
+      "232": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1152
+      },
+      "240": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1153
+      },
+      "256": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1157
+      },
+      "264": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1158
+      },
+      "280": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1161
       }
     },
     "25531315c9b7fcc17ebe7be317ae2a581b4617a5ce7d8fad708d66b43a8442ba": {
       "0": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "8": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "168": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "192": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "200": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "208": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "256": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "264": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "280": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "288": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "304": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "320": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "328": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "344": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "360": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "376": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "392": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "400": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "408": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "416": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "424": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "440": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "448": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "464": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "472": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "480": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "504": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "512": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "672": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "696": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "704": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "712": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "760": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "768": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "784": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "792": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "808": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "824": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "832": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "848": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "864": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "880": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "896": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "904": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "912": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "920": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "928": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 81
+        "line": 135
       },
       "944": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "952": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "968": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "984": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "992": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       }
     },
     "34991383855855a1c15fd211ec1ce896d05a16301b15e3b404ad05cedc0d8afb": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1088
+        "line": 1064
       }
     },
     "372cab510cb1e6005554875a9eab35b8cac336fde7b12435e36290445744d6c7": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1069
+        "line": 1045
       },
       "8": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1070
+        "line": 1046
       },
       "24": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1071
+        "line": 1047
       },
       "32": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1072
+        "line": 1048
       },
       "48": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1073
+        "line": 1049
       },
       "56": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1074
+        "line": 1050
       },
       "64": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1075
+        "line": 1051
       },
       "80": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1076
+        "line": 1052
       },
       "96": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1077
+        "line": 1053
       },
       "112": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1078
+        "line": 1054
       },
       "120": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1079
+        "line": 1055
       },
       "144": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1081
+        "line": 1057
       },
       "152": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1082
+        "line": 1058
       },
       "160": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1083
+        "line": 1059
       },
       "168": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1084
+        "line": 1060
       },
       "176": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1085
+        "line": 1061
       },
       "192": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1086
+        "line": 1062
       },
       "208": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1087
+        "line": 1063
       },
       "224": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1091
+        "line": 1067
       },
       "232": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1092
+        "line": 1068
       },
       "240": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1093
+        "line": 1069
       },
       "248": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1094
+        "line": 1070
       },
       "264": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1095
+        "line": 1071
       },
       "280": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1096
+        "line": 1072
       },
       "296": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1100
+        "line": 1076
       },
       "304": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1101
+        "line": 1077
       },
       "312": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1103
+        "line": 1079
       },
       "328": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1104
+        "line": 1080
       },
       "344": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1105
+        "line": 1081
       },
       "360": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1106
+        "line": 1082
       },
       "376": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1107
+        "line": 1083
       },
       "392": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1108
+        "line": 1084
       },
       "408": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1109
+        "line": 1085
       },
       "424": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1110
+        "line": 1086
       },
       "440": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1111
+        "line": 1087
       },
       "464": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1112
+        "line": 1088
       },
       "480": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1113
+        "line": 1089
       },
       "488": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1114
+        "line": 1090
       }
     },
     "38dac1e32b3fa4debdb5deb49587dbea4c6d9994e3cfec8d44cfa1569163bb3b": {
@@ -845,638 +1185,218 @@
     "414de3f040b6e26774fa7e9c3953a1d4eda9622d737a4c3eedaa31ce33c35c40": {
       "0": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "160": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "184": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "192": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "208": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "216": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "232": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "248": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "256": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "304": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "312": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "320": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "328": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "336": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "344": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "352": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "360": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "368": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "376": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "384": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "392": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "400": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
+        "line": 120
       },
       "416": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 73
+        "line": 127
       },
       "424": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 73
+        "line": 127
       },
       "440": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 73
+        "line": 127
       },
       "456": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "464": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "480": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "488": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "496": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "520": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "528": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "688": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "712": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "720": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "728": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "776": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "784": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "792": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "808": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "824": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "840": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "856": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "864": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "872": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "880": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "888": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 74
+        "line": 128
       },
       "904": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "912": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "928": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "936": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "944": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "968": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       }
     },
-    "4cb82913a5fc987db82df619c6c351322d841a4239afabfc6520c6cc5975dc94": {
-      "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1064
-      },
-      "16": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1065
-      },
-      "24": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1066
-      },
-      "40": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1067
-      },
-      "56": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1068
-      },
-      "72": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1116
-      }
-    },
-    "4f91cf9eb13c8174e9d9a25841f39a994c0b3b67c296cb86a1614f5cdca74362": {
-      "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 990
-      },
-      "8": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 991
-      },
-      "24": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 992
-      },
-      "48": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 993
-      },
-      "64": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 994
-      },
-      "72": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 995
-      },
-      "88": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "96": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "104": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "112": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "120": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "128": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "136": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "152": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 33
-      },
-      "160": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1009
-      },
-      "176": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1012
-      },
-      "184": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1013
-      },
-      "200": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1016
-      }
-    },
-    "54072a2773103c1d0ba7a51cb844b61a238d664a796cd5b41361121901cde3e2": {
-      "0": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "16": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "24": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "32": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "40": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "48": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "56": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "64": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "80": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "88": {
-        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
-        "line": 14
-      },
-      "112": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 52
-      },
-      "128": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 53
-      },
-      "144": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 53
-      },
-      "152": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 53
-      },
-      "168": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 53
-      },
-      "192": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 54
-      },
-      "208": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 54
-      },
-      "216": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 54
-      },
-      "232": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 54
-      },
-      "256": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 55
-      },
-      "272": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 55
-      },
-      "280": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 55
-      },
-      "296": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 55
-      },
-      "320": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "336": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "344": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "360": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "368": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "376": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "392": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "408": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "424": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "440": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "448": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "464": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "472": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "480": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "496": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "512": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "520": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "536": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "544": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "560": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "568": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "592": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "608": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "624": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "640": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 57
-      },
-      "648": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "664": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "672": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "688": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "704": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "712": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "728": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "744": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "760": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "776": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "784": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "808": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "824": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "840": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "848": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "856": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "872": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "880": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "888": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      },
-      "912": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 66
-      }
-    },
-    "5d6978a11d8073ad8e06e20706bd1b0a31baa5961dfe38a1918375490f3da42e": {
-      "0": {
-        "filename": "<entry-selector>",
-        "line": 1
-      },
-      "8": {
-        "filename": "<entry-selector>",
-        "line": 2
-      },
-      "24": {
-        "filename": "<entry-selector>",
-        "line": 3
-      },
-      "32": {
-        "filename": "<entry-selector>",
-        "line": 4
-      },
-      "48": {
-        "filename": "<entry-selector>",
-        "line": 5
-      },
-      "56": {
-        "filename": "<entry-selector>",
-        "line": 6
-      },
-      "72": {
-        "filename": "<entry-selector>",
-        "line": 7
-      },
-      "88": {
-        "filename": "<entry-selector>",
-        "line": 8
-      },
-      "96": {
-        "filename": "<entry-selector>",
-        "line": 9
-      },
-      "112": {
-        "filename": "<entry-selector>",
-        "line": 10
-      },
-      "128": {
-        "filename": "<entry-selector>",
-        "line": 11
-      }
-    },
-    "5e915e9de94461bf8ec0454815cbef9af7300aa8dc10d14107c42466d610ef84": {
+    "4a15e2eca13824a33532393d76a3ee4d955dac6897670c48d0ebac0d8fe7afd1": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
         "line": 95
@@ -1581,7 +1501,7 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
-      "312": {
+      "304": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
@@ -1589,7 +1509,7 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
-      "336": {
+      "328": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
@@ -1601,7 +1521,7 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
-      "376": {
+      "368": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
@@ -1609,7 +1529,7 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
-      "400": {
+      "392": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
@@ -1641,6 +1561,10 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
+      "512": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 34
+      },
       "520": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
@@ -1649,23 +1573,19 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
-      "536": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 34
-      },
       "544": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 34
       },
-      "560": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 34
+      "552": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 145
       },
       "568": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 146
+        "line": 148
       },
-      "584": {
+      "576": {
         "filename": "VoteEscrowDeployer.code",
         "line": 149
       },
@@ -1673,11 +1593,11 @@
         "filename": "VoteEscrowDeployer.code",
         "line": 150
       },
-      "608": {
+      "600": {
         "filename": "VoteEscrowDeployer.code",
         "line": 151
       },
-      "616": {
+      "608": {
         "filename": "VoteEscrowDeployer.code",
         "line": 152
       },
@@ -1689,525 +1609,1005 @@
         "filename": "VoteEscrowDeployer.code",
         "line": 154
       },
-      "656": {
+      "648": {
         "filename": "VoteEscrowDeployer.code",
         "line": 155
       },
-      "664": {
+      "656": {
         "filename": "VoteEscrowDeployer.code",
         "line": 156
       },
-      "672": {
+      "664": {
         "filename": "VoteEscrowDeployer.code",
         "line": 157
       },
-      "680": {
+      "688": {
         "filename": "VoteEscrowDeployer.code",
         "line": 158
       },
-      "704": {
+      "696": {
         "filename": "VoteEscrowDeployer.code",
         "line": 159
       },
-      "712": {
+      "704": {
         "filename": "VoteEscrowDeployer.code",
         "line": 160
       },
-      "720": {
+      "728": {
         "filename": "VoteEscrowDeployer.code",
         "line": 161
       },
-      "744": {
+      "736": {
         "filename": "VoteEscrowDeployer.code",
         "line": 162
       },
-      "752": {
+      "744": {
         "filename": "VoteEscrowDeployer.code",
         "line": 163
       },
-      "760": {
+      "792": {
         "filename": "VoteEscrowDeployer.code",
         "line": 164
       },
-      "808": {
+      "800": {
         "filename": "VoteEscrowDeployer.code",
         "line": 165
       },
-      "816": {
+      "808": {
         "filename": "VoteEscrowDeployer.code",
         "line": 166
       },
-      "824": {
+      "816": {
         "filename": "VoteEscrowDeployer.code",
         "line": 167
       },
-      "832": {
+      "824": {
         "filename": "VoteEscrowDeployer.code",
         "line": 168
       },
       "840": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 169
+        "line": 170
       },
-      "856": {
+      "848": {
         "filename": "VoteEscrowDeployer.code",
         "line": 171
       },
-      "864": {
+      "856": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 172
+        "line": 173
       },
-      "872": {
+      "864": {
         "filename": "VoteEscrowDeployer.code",
         "line": 174
       },
       "880": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 175
-      },
-      "896": {
+        "line": 177
+      }
+    },
+    "4cb82913a5fc987db82df619c6c351322d841a4239afabfc6520c6cc5975dc94": {
+      "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 178
+        "line": 1040
+      },
+      "16": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1041
+      },
+      "24": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1042
+      },
+      "40": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1043
+      },
+      "56": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1044
+      },
+      "72": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1092
+      }
+    },
+    "4f91cf9eb13c8174e9d9a25841f39a994c0b3b67c296cb86a1614f5cdca74362": {
+      "0": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 966
+      },
+      "8": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 967
+      },
+      "24": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 968
+      },
+      "48": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 969
+      },
+      "64": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 970
+      },
+      "72": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 971
+      },
+      "88": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "96": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "104": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "112": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "120": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "128": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "136": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "152": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 33
+      },
+      "160": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 985
+      },
+      "176": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 988
+      },
+      "184": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 989
+      },
+      "200": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 992
+      }
+    },
+    "54072a2773103c1d0ba7a51cb844b61a238d664a796cd5b41361121901cde3e2": {
+      "0": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "16": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "24": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "32": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "40": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "48": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "56": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "64": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "80": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "88": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "112": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 106
+      },
+      "128": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 107
+      },
+      "144": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 107
+      },
+      "152": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 107
+      },
+      "168": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 107
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 108
+      },
+      "208": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 108
+      },
+      "216": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 108
+      },
+      "232": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 108
+      },
+      "256": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 109
+      },
+      "272": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 109
+      },
+      "280": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 109
+      },
+      "296": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 109
+      },
+      "320": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "368": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "392": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "408": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "424": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "440": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "448": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "464": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "472": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "480": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "496": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "512": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "520": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "536": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "544": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "560": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "568": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "592": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "608": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "624": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "640": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 111
+      },
+      "648": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "664": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "672": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "688": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "704": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "712": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "728": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "744": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "760": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "776": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "784": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "808": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "824": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "840": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "848": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "856": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "872": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "880": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "888": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      },
+      "912": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 120
+      }
+    },
+    "592304b99bcc5ab0c02343513a3d64541ada03a23d1d9b2b6a770206ea0443d4": {
+      "0": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1265
+      },
+      "8": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1266
+      },
+      "56": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1267
+      },
+      "64": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1268
+      },
+      "80": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1271
+      },
+      "88": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1272
+      },
+      "136": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1273
+      },
+      "144": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1274
+      },
+      "160": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1277
+      },
+      "168": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1278
+      },
+      "216": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1279
+      },
+      "224": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1280
+      },
+      "240": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1283
+      },
+      "248": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1284
+      },
+      "296": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1285
+      },
+      "304": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1286
       }
     },
     "615bd263a492aed9d01f9f0fdb3b59887075b8d40c85f7994ea5f585457b9fb7": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 532
+        "line": 508
       },
       "8": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 533
+        "line": 509
       },
       "24": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 534
+        "line": 510
       },
       "48": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 535
+        "line": 511
       },
       "64": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 536
+        "line": 512
       },
       "72": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 537
+        "line": 513
       },
       "88": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "96": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "104": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "112": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "120": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "128": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "136": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "152": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "160": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "168": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "176": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "192": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "200": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "208": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "216": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "232": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "248": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "264": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "280": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "296": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "312": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "320": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "336": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "344": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "360": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "376": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "384": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "400": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "408": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "424": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "440": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "456": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "472": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "488": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "504": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "520": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "528": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "536": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "544": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "560": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 89
+        "line": 88
       },
       "568": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 583
+        "line": 559
       },
       "584": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 586
+        "line": 562
       },
       "592": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 587
+        "line": 563
       },
       "608": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 588
+        "line": 564
       },
       "616": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 589
+        "line": 565
       },
       "624": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 590
+        "line": 566
       },
       "640": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 591
+        "line": 567
       },
       "656": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 592
+        "line": 568
       },
       "664": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 593
+        "line": 569
       },
       "672": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 594
+        "line": 570
       },
       "680": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 595
+        "line": 571
       },
       "704": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 596
+        "line": 572
       },
       "712": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 597
+        "line": 573
       },
       "720": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 598
+        "line": 574
       },
       "744": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 599
+        "line": 575
       },
       "752": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 600
+        "line": 576
       },
       "760": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 601
+        "line": 577
       },
       "808": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 602
+        "line": 578
       },
       "816": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 603
+        "line": 579
       },
       "824": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 604
+        "line": 580
       },
       "832": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 605
+        "line": 581
       },
       "840": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 606
+        "line": 582
       },
       "856": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 608
+        "line": 584
       },
       "864": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 609
+        "line": 585
       },
       "872": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 611
+        "line": 587
       },
       "880": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 612
+        "line": 588
       },
       "896": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 615
+        "line": 591
       }
     },
-    "6b2434db1eea090ce207b0ace79e9e993da72e07ccc6b6ff843ee157e772a331": {
+    "6c4e6ae7042034488b43cfdcb227f0bb8f33359dfcf38d0156d4152b47f3792a": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1189
+        "line": 1261
       },
-      "16": {
+      "8": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1190
-      },
-      "24": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1191
-      },
-      "40": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1192
+        "line": 1262
       },
       "56": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1193
+        "line": 1263
       },
-      "72": {
+      "64": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1194
+        "line": 1264
       },
       "80": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1195
+        "line": 1290
       },
-      "96": {
+      "88": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1198
-      },
-      "112": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1199
-      },
-      "120": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1200
+        "line": 1291
       },
       "136": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1201
+        "line": 1292
+      },
+      "144": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1293
+      }
+    },
+    "73867e37ec1ffb9ecb087a37d71892215b0b805a73c127da219a28729084e2e0": {
+      "0": {
+        "filename": "<internal-selector>",
+        "line": 1
+      },
+      "24": {
+        "filename": "<internal-selector>",
+        "line": 2
+      }
+    },
+    "73aa6a5977ea88d8c1bb23303398da45a240345eac55f03ff1749435678b7ecd": {
+      "0": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1165
+      },
+      "16": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1166
+      },
+      "24": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1167
+      },
+      "40": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1168
+      },
+      "56": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1169
+      },
+      "72": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1170
+      },
+      "80": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1171
+      },
+      "96": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1174
+      },
+      "112": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1175
+      },
+      "120": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1176
+      },
+      "136": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1177
       },
       "152": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1202
+        "line": 1178
       },
       "168": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1203
+        "line": 1179
       },
       "176": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1204
+        "line": 1180
       },
       "192": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1205
+        "line": 1181
       },
       "200": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1206
+        "line": 1182
       },
       "216": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1207
+        "line": 1183
       },
       "224": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1208
+        "line": 1184
       },
       "232": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1209
+        "line": 1185
       },
       "248": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1210
+        "line": 1186
       },
       "256": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1211
+        "line": 1187
       },
       "264": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1213
+        "line": 1189
       },
       "272": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1214
+        "line": 1190
       },
       "280": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1215
+        "line": 1191
       },
       "296": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1217
+        "line": 1193
       },
       "304": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1218
+        "line": 1194
       },
       "312": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1219
+        "line": 1195
       },
       "328": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1220
+        "line": 1196
       },
       "344": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1221
+        "line": 1197
       },
       "360": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1223
+        "line": 1199
       },
       "368": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1224
+        "line": 1200
       },
       "384": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1225
+        "line": 1201
       },
       "392": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1226
+        "line": 1202
       },
       "408": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1228
+        "line": 1204
       },
       "416": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1229
+        "line": 1205
       },
       "432": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1230
+        "line": 1206
       },
       "440": {
         "filename": "stdlib.sol",
@@ -2263,211 +2663,838 @@
       },
       "632": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1232
+        "line": 1208
       },
       "648": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1233
+        "line": 1209
       },
       "656": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1234
+        "line": 1210
       },
       "672": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1235
+        "line": 1211
       },
       "680": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1236
+        "line": 1212
       },
       "696": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1237
+        "line": 1213
       },
       "712": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1238
+        "line": 1214
       },
       "720": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1239
+        "line": 1215
       },
       "736": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1242
+        "line": 1218
       }
     },
-    "73867e37ec1ffb9ecb087a37d71892215b0b805a73c127da219a28729084e2e0": {
+    "790a18f915dcc9a81a8d8f392de7cefade8c601c557e2664adf3bb4536da8362": {
       "0": {
-        "filename": "<internal-selector>",
-        "line": 1
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
       },
-      "24": {
-        "filename": "<internal-selector>",
-        "line": 2
+      "160": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "184": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "208": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "216": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "232": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "248": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "256": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "304": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "312": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "320": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "328": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "352": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "368": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "384": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "392": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "400": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "416": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 72
+      },
+      "424": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 72
+      },
+      "440": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 72
+      },
+      "456": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "464": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "480": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "488": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "496": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "520": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "528": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "688": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "712": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "720": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "728": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "776": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "784": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "792": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "808": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "824": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "840": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "856": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "864": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "872": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "880": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "888": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 73
+      },
+      "904": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "912": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "928": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "936": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "944": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "968": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
       }
     },
     "7b53dd2e3a85660b24ca7abe3d66a6a5ad4e420a51c759e0eb6088cd0abe5b76": {
       "0": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "8": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "168": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "192": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "208": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "216": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "264": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "280": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "296": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "304": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "320": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "336": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "352": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "368": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "376": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "384": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "392": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "400": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 82
+        "line": 136
       },
       "416": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "424": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "440": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "448": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "456": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "480": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "488": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "648": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "672": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "680": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "688": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "736": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "752": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "760": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "776": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "792": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "808": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "824": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "832": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "840": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "848": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
       },
       "856": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 83
+        "line": 137
+      },
+      "872": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "880": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "896": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "904": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "912": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "936": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      }
+    },
+    "8abba2b2c488b17eaad3cc824e9020adf99626297fb16b93b5a7dbe2407e77ca": {
+      "0": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1097
+      },
+      "16": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1098
+      },
+      "32": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1099
+      },
+      "48": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1100
+      },
+      "64": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1101
+      },
+      "80": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1102
+      },
+      "96": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1103
+      },
+      "112": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1104
+      },
+      "120": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1105
+      },
+      "136": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1106
+      },
+      "152": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1107
+      },
+      "168": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1108
+      },
+      "184": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1109
+      },
+      "200": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1110
+      },
+      "208": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1111
+      },
+      "216": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1112
+      },
+      "224": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1113
+      },
+      "232": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1114
+      }
+    },
+    "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7": {},
+    "a25331182cb8465789abe880f47349f1957c8301ac30e5249dab57f92bd0dded": {
+      "0": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "160": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "184": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "200": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "248": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "264": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "272": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "288": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "304": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "320": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "352": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "368": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 138
+      },
+      "384": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "392": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "400": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "408": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "432": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "440": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "600": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "624": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "632": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "640": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "688": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "696": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "704": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "720": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "736": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "752": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "768": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "776": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "784": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "792": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "800": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "808": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "816": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      },
+      "824": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 139
+      }
+    },
+    "c99e45e976f892db5963e76f2a8e3af5a24743ca3ea7b4f6e6265b31729f50f7": {
+      "0": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "8": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "168": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "208": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "216": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "264": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "280": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "296": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "304": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "320": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "352": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "368": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "384": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "392": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "400": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 81
+      },
+      "416": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "424": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "440": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "448": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "456": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "480": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "488": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "648": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "672": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "680": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "688": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "736": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "752": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "760": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "776": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "792": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "808": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "824": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "832": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "840": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "848": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
+      },
+      "856": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 82
       },
       "872": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
@@ -2477,640 +3504,855 @@
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 84
       },
+      "888": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 84
+      },
       "896": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 84
       },
-      "904": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "912": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "936": {
+      "920": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
         "line": 84
       }
     },
-    "885602e827dc00a9d8f835d69f9f48dc37f621bc4297036481829f1b97bb8dda": {
+    "d4be204f1851a9020edb56fbee8829cd78257786853052827a7817f1a1c6da44": {
       "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1289
+        "filename": "<entry-selector>",
+        "line": 1
       },
       "8": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1290
+        "filename": "<entry-selector>",
+        "line": 2
       },
-      "56": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1291
-      },
-      "64": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1292
-      },
-      "80": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1295
-      },
-      "88": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1296
-      },
-      "136": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1297
-      },
-      "144": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1298
-      },
-      "160": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1301
-      },
-      "168": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1302
-      },
-      "216": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1303
-      },
-      "224": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1304
-      },
-      "240": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1307
-      },
-      "248": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1308
-      },
-      "296": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1309
-      },
-      "304": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1310
-      }
-    },
-    "89ed9d05230a55ff7af1a60c37822959c0d9d51afb77433e02cc41c94068b01f": {
-      "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1318
-      },
-      "8": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1319
-      },
-      "56": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1320
-      },
-      "64": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1321
-      },
-      "80": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1324
-      },
-      "88": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1325
-      },
-      "136": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1326
-      },
-      "144": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1327
-      },
-      "160": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1330
-      },
-      "168": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1331
-      },
-      "216": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1332
-      },
-      "224": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1333
-      }
-    },
-    "8abba2b2c488b17eaad3cc824e9020adf99626297fb16b93b5a7dbe2407e77ca": {
-      "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1121
-      },
-      "16": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1122
+      "24": {
+        "filename": "<entry-selector>",
+        "line": 3
       },
       "32": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1123
+        "filename": "<entry-selector>",
+        "line": 4
       },
       "48": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1124
+        "filename": "<entry-selector>",
+        "line": 5
       },
-      "64": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1125
+      "56": {
+        "filename": "<entry-selector>",
+        "line": 6
       },
-      "80": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1126
+      "72": {
+        "filename": "<entry-selector>",
+        "line": 7
+      },
+      "88": {
+        "filename": "<entry-selector>",
+        "line": 8
       },
       "96": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1127
+        "filename": "<entry-selector>",
+        "line": 9
       },
       "112": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1128
+        "filename": "<entry-selector>",
+        "line": 10
       },
-      "120": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1129
-      },
-      "136": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1130
-      },
-      "152": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1131
-      },
-      "168": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1132
-      },
-      "184": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1133
-      },
-      "200": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1134
-      },
-      "208": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1135
-      },
-      "216": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1136
-      },
-      "224": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1137
-      },
-      "232": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1138
-      }
-    },
-    "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7": {},
-    "a25331182cb8465789abe880f47349f1957c8301ac30e5249dab57f92bd0dded": {
-      "0": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "160": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "184": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "192": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "200": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "248": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "264": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "272": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "288": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "304": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "320": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "336": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "344": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "352": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "360": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "368": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 84
-      },
-      "384": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "392": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "400": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "408": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "432": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "440": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "600": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "624": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "632": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "640": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "688": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "696": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "704": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "720": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "736": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "752": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "768": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "776": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "784": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "792": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "800": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "808": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "816": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
-      },
-      "824": {
-        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 85
+      "128": {
+        "filename": "<entry-selector>",
+        "line": 11
       }
     },
     "d529efd348848d7a080dae3f90ebb82107f7840465e79afcb16782a80f48f628": {
       "0": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "160": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "184": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "192": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "200": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "248": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "256": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "264": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "280": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "296": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "312": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "328": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "336": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "344": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "352": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "360": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 75
+        "line": 129
       },
       "376": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "384": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "400": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "416": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "424": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "432": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "456": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "464": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "624": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "648": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "664": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "672": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "720": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "736": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "752": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "768": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "784": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "800": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "816": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "832": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "840": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "856": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "872": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "888": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "904": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "912": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "920": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "928": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "936": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 76
+        "line": 130
       },
       "952": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "960": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "976": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "984": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
       },
       "992": {
         "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
-        "line": 80
+        "line": 134
+      }
+    },
+    "d87789209d03c6c55ac9a7b22396722a1e494602033400c8a4e31d726376a203": {
+      "0": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "16": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "24": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "32": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "40": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "48": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "56": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "64": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "80": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "88": {
+        "filename": "../node_modules/@broxus/contracts/contracts/access/ExternalOwner.tsol",
+        "line": 14
+      },
+      "112": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 51
+      },
+      "128": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 52
+      },
+      "144": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 52
+      },
+      "152": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 52
+      },
+      "168": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 52
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 53
+      },
+      "208": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 53
+      },
+      "216": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 53
+      },
+      "232": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 53
+      },
+      "256": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 54
+      },
+      "272": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 54
+      },
+      "280": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 54
+      },
+      "296": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 54
+      },
+      "320": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "368": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "392": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "408": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "424": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "440": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "448": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "464": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "472": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "480": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "496": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "512": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "520": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "536": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "544": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "560": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "568": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "592": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "608": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "624": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "640": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 56
+      },
+      "648": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "664": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "672": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "688": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "704": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "712": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "728": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "744": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "760": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "776": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "784": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "808": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "824": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "840": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "848": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "856": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "872": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "880": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "888": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
+      },
+      "912": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 65
       }
     },
     "e6936e8f0e7b8fe98c2ca66eee9d4e9dafcfc747defef9cb795288fabb1b7ef3": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1141
+        "line": 1117
       },
       "16": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1142
+        "line": 1118
       },
       "24": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1143
+        "line": 1119
       },
       "40": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1144
+        "line": 1120
       },
       "56": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1145
+        "line": 1121
       },
       "64": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1146
+        "line": 1122
       },
       "80": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1147
+        "line": 1123
       },
       "88": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1148
+        "line": 1124
       },
       "96": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1149
+        "line": 1125
       },
       "112": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1150
+        "line": 1126
       },
       "128": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1151
+        "line": 1127
       },
       "136": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1152
+        "line": 1128
       },
       "144": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1153
+        "line": 1129
+      }
+    },
+    "eb910883aa740605dda0672d64a5ceb9e929ae2fa2f7c755123206570e060da5": {
+      "0": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1294
+      },
+      "8": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1295
+      },
+      "56": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1296
+      },
+      "64": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1297
+      },
+      "80": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1300
+      },
+      "88": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1301
+      },
+      "136": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1302
+      },
+      "144": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1303
+      },
+      "160": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1306
+      },
+      "168": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1307
+      },
+      "216": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1308
+      },
+      "224": {
+        "filename": "VoteEscrowDeployer.code",
+        "line": 1309
+      }
+    },
+    "f06387b5a6ea4e2534c24cb961d86cf4d696e0165c63fe4e08fc53f60c3432e2": {
+      "0": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "160": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "184": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "192": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "200": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "248": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "256": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "264": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "280": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "296": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "312": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "328": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "336": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "344": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "352": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "360": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 74
+      },
+      "376": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "384": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "400": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "416": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "424": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "432": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "456": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "464": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "624": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "648": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "664": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "672": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "720": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "736": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "752": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "768": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "784": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "800": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "816": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "832": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "840": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "856": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "872": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "888": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "904": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "912": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "920": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "928": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "936": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 75
+      },
+      "952": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "960": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "976": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "984": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
+      },
+      "992": {
+        "filename": "../contracts/vote_escrow/VoteEscrowDeployer.tsol",
+        "line": 79
       }
     },
     "f24e1e7aa04d89aad2945816b6e9b921f2b3892da9ba53e2383c148351b96d0c": {
       "0": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1170
+        "line": 1146
       },
       "16": {
         "filename": "VoteEscrowDeployer.code",
-        "line": 1171
+        "line": 1147
       }
     },
     "f4f4799c5738a6b78ca7757bee712f4fcb7963dcad35c0b8d4befe83394c8b0d": {
@@ -3291,92 +4533,6 @@
       "352": {
         "filename": "VoteEscrowDeployer.code",
         "line": 46
-      }
-    },
-    "ff8fbaa3db53fd6659d2c7c74b852fc423500574022eefa9ea5fe6e7f9b97330": {
-      "0": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1157
-      },
-      "16": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1158
-      },
-      "24": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1159
-      },
-      "40": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1160
-      },
-      "56": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1161
-      },
-      "72": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1162
-      },
-      "80": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1163
-      },
-      "88": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1164
-      },
-      "112": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1165
-      },
-      "136": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1166
-      },
-      "144": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1167
-      },
-      "152": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1168
-      },
-      "168": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1169
-      },
-      "184": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1173
-      },
-      "192": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1174
-      },
-      "216": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1175
-      },
-      "232": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1176
-      },
-      "240": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1177
-      },
-      "256": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1181
-      },
-      "264": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1182
-      },
-      "280": {
-        "filename": "VoteEscrowDeployer.code",
-        "line": 1185
       }
     }
   }

@@ -35,7 +35,6 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
         address owner,
         address qube,
         address dao,
-        uint32 start_offset,
         uint32 min_lock,
         uint32 max_lock,
         uint32[] distribution_scheme,
@@ -81,7 +80,7 @@ contract VoteEscrowDeployer is RandomNonce, ExternalOwner {
         IVoteEscrow(ve).setDistribution{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(distribution, meta);
         IVoteEscrow(ve).setQubeLockTimeLimits{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(min_lock, max_lock, meta);
         IVoteEscrow(ve).setWhitelistPrice{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(whitelist_price, meta);
-        IVoteEscrow(ve).initialize{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(start_offset, meta);
+//        IVoteEscrow(ve).initialize{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(start_offset, meta);
         IVoteEscrow(ve).transferOwnership{value: 0.5 ever, flag: MsgFlag.SENDER_PAYS_FEES}(owner, meta);
         return ve;
     }
