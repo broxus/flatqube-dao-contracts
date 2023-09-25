@@ -119,6 +119,24 @@ const config: LockliftConfig = {
                 phrase: process.env.MAIN_SEED_PHRASE ?? "",
                 amount: 500
             }
+        },
+        venom: {
+            connection: {
+                id: 1,
+                type: "jrpc",
+                data: {
+                    endpoint: process.env.VENOM_MAIN_JRPC_ENDPOINT ?? "",
+                },
+            },
+            giver: {
+                // Mainnet giver has the same abi as testnet one
+                address: process.env.VENOM_MAIN_GIVER_ADDRESS ?? "",
+                key: process.env.VENOM_MAIN_GIVER_PHRASE ?? ""
+            },
+            keys: {
+                phrase: process.env.VENOM_SEED ?? "",
+                amount: 500
+            }
         }
     },
     mocha: {
