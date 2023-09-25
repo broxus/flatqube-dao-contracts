@@ -120,6 +120,8 @@ PUSHINT 52
 GETGLOBVAR
 PUSHINT 51
 GETGLOBVAR
+PUSHINT 57
+GETGLOBVAR
 PUSHINT 50
 GETGLOBVAR
 PUSHINT 49
@@ -181,7 +183,7 @@ GETGLOB 12
 GETGLOB 11
 GETGLOB 10
 NEWC
-PUSHINT 50
+PUSHINT 51
 ROLLX
 UNTRIPLE
 REVERSE 4, 0
@@ -193,6 +195,10 @@ STREF
 STREF
 STU 32
 STU 32
+PUSHINT 45
+ROLLREVX
+NEWC
+STSLICE
 PUSHINT 44
 ROLLREVX
 NEWC
@@ -209,10 +215,6 @@ PUSHINT 41
 ROLLREVX
 NEWC
 STSLICE
-PUSHINT 40
-ROLLREVX
-NEWC
-STSLICE
 STU 128
 STU 128
 SWAP
@@ -221,7 +223,7 @@ XCHG S2
 STU 32
 STDICT
 STU 128
-PUSHINT 35
+PUSHINT 36
 ROLLREVX
 NEWC
 STU 128
@@ -252,11 +254,12 @@ STU 32
 STU 32
 STU 8
 STU 8
-ROLLREV 11
+ROLLREV 12
 NEWC
 STU 128
 STU 32
 STU 32
+STI 1
 STDICT
 STDICT
 STDICT
@@ -276,10 +279,10 @@ STBREFR
 STBREFR
 STBREFR
 ENDC
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 78
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 79
 OVER
 SETCODE
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 81
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 82
 SWAP
 CTOS
 DUP
@@ -294,7 +297,7 @@ PLDREF
 CTOS
 BLESS
 POP C3
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 82
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 83
 CALLREF {
 	CALL $:onCodeUpgrade$
 }
@@ -302,7 +305,7 @@ CALLREF {
 
 .internal-alias :onCodeUpgrade, 2
 .internal :onCodeUpgrade
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 86
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 87
 PUSHINT 0
 SETGLOB 10
 PUSHREF {
@@ -447,13 +450,13 @@ SETGLOBVAR
 NEWDICT
 PUSHINT 59
 SETGLOBVAR
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 87
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 88
 CALLREF {
 	CALL $_reserve_413ab4a8_internal_macro$
 }
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 91
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 92
 CTOS
 LDU 32
 LDU 32
@@ -620,12 +623,12 @@ PUSHINT 58
 SETGLOBVAR
 PUSHINT 59
 SETGLOBVAR
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 196
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 197
 PUSHINT 51
 GETGLOBVAR
 PUSHINT 52
 SETGLOBVAR
-.loc ../contracts/vote_escrow/VoteEscrow.tsol, 197
+.loc ../contracts/vote_escrow/VoteEscrow.tsol, 198
 PUSHINT 51
 GETGLOBVAR
 DUP
@@ -647,9 +650,9 @@ PUSHCONT {
 	NOT
 }
 PUSHCONT {
-	.loc ../contracts/vote_escrow/VoteEscrow.tsol, 198
+	.loc ../contracts/vote_escrow/VoteEscrow.tsol, 199
 	PUSHCONT {
-		.loc ../contracts/vote_escrow/VoteEscrow.tsol, 199
+		.loc ../contracts/vote_escrow/VoteEscrow.tsol, 200
 		DUP
 		PUSHREFSLICE {
 			.blob xc000000000000000000000000018d4e57500000000

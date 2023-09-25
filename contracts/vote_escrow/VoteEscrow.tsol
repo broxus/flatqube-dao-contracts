@@ -64,6 +64,7 @@ contract VoteEscrow is VoteEscrowBase {
             emissionDebt, // new field
             maxGaugesPerVote,
             gaugesNum,
+            autoDaoApprove,
             gaugeWhitelist,
             gaugeDaoApproved,
             currentVotingVotes,
