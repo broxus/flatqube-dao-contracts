@@ -26,12 +26,12 @@ const main = async () => {
             message: 'DAO root address',
             validate: (value: string) => isValidTonAddress(value) ? true : 'Invalid Everscale address'
         },
-        {
-            type: 'number',
-            name: 'start_offset',
-            message: 'Time before origin epoch starts (seconds), starting from deploy moment',
-            initial: 86400
-        },
+        // {
+        //     type: 'number',
+        //     name: 'start_offset',
+        //     message: 'Time before origin epoch starts (seconds), starting from deploy moment',
+        //     initial: 86400
+        // },
         {
             type: 'number',
             name: 'min_lock',
