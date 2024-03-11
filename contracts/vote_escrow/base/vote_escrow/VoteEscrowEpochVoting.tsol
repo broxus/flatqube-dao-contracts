@@ -345,6 +345,29 @@ abstract contract VoteEscrowEpochVoting is VoteEscrowDAO {
         );
     }
 
+    function distributeQubesManually(
+        address[] gauges,
+        uint128[] amount,
+        uint32 offset,
+        Callback.CallMeta meta
+    ) external onlyOwner {
+        require (gauges.length == amount.length, Errors.BAD_INPUT);
+        tvm.rawReserve(_reserve(), 0);
+
+        TvmBuilder builder;
+        builder.store(now + offset, epochTime);
+        TvmCell payload = builder.toCell();
+
+        for (uint8 i = 0; i < gauges.length; i++) {
+            address gauge = gauges[i];
+            uint128 qube_amount = amount[i];
+
+            qubeBalance -= qube_amount;
+            distributionSupply -= qube_amount;
+            _transferQubes(qube_amount, gauge, payload, meta.send_gas_to, MsgFlag.SENDER_PAYS_FEES);
+        }
+    }
+
     function distributeEpochQubesStep(
         address start_addr,
         uint128 overflow_votes,

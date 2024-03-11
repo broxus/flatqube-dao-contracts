@@ -352,6 +352,17 @@
 			]
 		},
 		{
+			"name": "distributeQubesManually",
+			"inputs": [
+				{"name":"gauges","type":"address[]"},
+				{"name":"amount","type":"uint128[]"},
+				{"name":"offset","type":"uint32"},
+				{"components":[{"name":"call_id","type":"uint32"},{"name":"nonce","type":"uint32"},{"name":"send_gas_to","type":"address"}],"name":"meta","type":"tuple"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "distributeEpochQubesStep",
 			"inputs": [
 				{"name":"start_addr","type":"address"},
